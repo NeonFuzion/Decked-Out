@@ -1,0 +1,13 @@
+using System.Collections;
+using System.Collections.Generic;
+using UnityEngine;
+
+[CreateAssetMenu(menuName = "Item/Weapon/MagicWeapon")]
+public class MagicWeapon : Weapon
+{
+    [SerializeField] GameObject prefabProjectile;
+    [SerializeField] Projectile projectile;
+
+    public GameObject PrefabProjectile { get => prefabProjectile; }
+    public Projectile Projectile { get => projectile; }
+}

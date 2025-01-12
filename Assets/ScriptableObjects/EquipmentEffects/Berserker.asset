@@ -1,0 +1,19 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 063266b61378ac543a2fc434312a4d2b, type: 3}
+  m_Name: Berserker
+  m_EditorClassIdentifier: 
+  description: Increases Critical Chance by 20% for 10 seconds after killing an enemy.
+    This effect cannot be activated for 5 seconds after the buff is applied.
+  criticalChanceIncrease: 20
+  duration: 10
+  cooldown: 5

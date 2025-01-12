@@ -1,0 +1,23 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: e5555a016c3944248b74ae1dc4810230, type: 3}
+  m_Name: RoyalCrown
+  m_EditorClassIdentifier: 
+  itemName: Royal Crown
+  description: A golden piece of headgear that gave a person authority in ancient
+    times.
+  sprite: {fileID: 1729119030, guid: 1529019942676c14784c63a0b641aa78, type: 3}
+  craftingRecipe: []
+  relicSlot: 0
+  mainStat: 3
+  setBonus: {fileID: 0}
+  statBoost: 25
