@@ -3,6 +3,7 @@ using System;
 using System.Collections;
 using System.Collections.Generic;
 using TMPro;
+using Unity.Mathematics;
 using UnityEngine;
 using UnityEngine.Events;
 using UnityEngine.UI;
@@ -14,7 +15,7 @@ public class Health : MonoBehaviour
     [SerializeField] bool invincible;
     [SerializeField] UnityEvent onDeath, onHit;
     [SerializeField] GameObject prefabDmgObj, prefabHitEffect, prefabHealth;
-    [SerializeField] Transform healthBarTarget;
+    [SerializeField] GameObject healthBarTarget, existingHealthBar;
 
     public int HP { get => hp; }
     public int MaxHP { get => maxHp; }
@@ -23,6 +24,7 @@ public class Health : MonoBehaviour
     public UnityEvent OnDeath { get => onDeath; }
 
     Slider slider;
+    GameObject healthBarCanvas, healthBar;
 
     // Start is called before the first frame update
     void Start()
@@ -34,6 +36,8 @@ public class Health : MonoBehaviour
     void Update()
     {
         if (!slider) return;
+        if (healthBarCanvas) healthBarCanvas.transform.position = healthBarTarget.transform.position;
+
         if (slider.value == hp) return;
         slider.value += (hp - slider.value) / 10;
 
@@ -63,6 +67,7 @@ public class Health : MonoBehaviour
         if (hp > 0) return;
         onDeath?.Invoke();
         Destroy(gameObject);
+        Destroy(healthBarCanvas);
     }
 
     public void Heal(int amount)
@@ -103,8 +108,15 @@ public class Health : MonoBehaviour
         this.maxHp = maxHP;
         hp = maxHP;
 
-        if (prefabHealth == null) return;
-        GameObject healthBar = Instantiate(prefabHealth, healthBarTarget);
+        if (existingHealthBar)
+        {
+            healthBar = existingHealthBar;
+        }
+        else
+        {
+            healthBarCanvas = Instantiate(prefabHealth, healthBarTarget.transform.position, Quaternion.identity);
+            healthBar = healthBarCanvas.transform.GetChild(0).gameObject;
+        }
         slider = healthBar.GetComponent<Slider>();
         slider.GetComponentInChildren<Image>().color = Color.green;
         slider.maxValue = maxHP;

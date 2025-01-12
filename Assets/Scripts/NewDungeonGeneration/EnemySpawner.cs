@@ -4,11 +4,14 @@ using UnityEngine.Events;
 public class EnemySpawner : MonoBehaviour
 {
     DungeonGenerator managerScript;
+    GameObject prefabEnemy;
+    Animator animator;
 
     // Start is called once before the first execution of Update after the MonoBehaviour is created
     void Start()
     {
         managerScript = GetComponentInParent<DungeonGenerator>();
+        animator = GetComponent<Animator>();
     }
 
     // Update is called once per frame
@@ -17,10 +20,16 @@ public class EnemySpawner : MonoBehaviour
         
     }
 
-    public void SpawnEnemy(GameObject prefabEnemy)
+    void EndAnimation()
     {
         GameObject enemy = Instantiate(prefabEnemy, transform.position, Quaternion.identity);
         Health script = enemy.GetComponent<Health>();
         script.OnDeath.AddListener(managerScript.IncrementEnemyQuota);
+    }
+
+    public void SpawnEnemy(GameObject prefabEnemy)
+    {
+        this.prefabEnemy = prefabEnemy;
+        animator.CrossFade("SpawnEnemy", 0, 0);
     }
 }

@@ -7,6 +7,7 @@ public class DungeonRoomLayout : MonoBehaviour
 {
     [SerializeField] List<TileInfo> floorTiles, wallTiles, northExitTiles, eastExitTiles, southExitTiles, westExitTiles;
     [SerializeField] List<Vector2> enemySpawnPositions, roomTransitionPositions;
+    [SerializeField] List<PrefabPositionPair> specialObjectPositions;
     [SerializeField] Vector2 chestPosition;
 
     public List<TileInfo> FloorTiles { get => floorTiles; set => floorTiles = value; }

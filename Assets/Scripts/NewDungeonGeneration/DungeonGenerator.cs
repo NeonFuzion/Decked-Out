@@ -9,17 +9,19 @@ public class DungeonGenerator : MonoBehaviour
     [SerializeField] int roomLength;
     [SerializeField] GameObject[] enemies;
     [SerializeField] Item[] lootPool;
-    [SerializeField] DungeonRoomLayout[] layouts;
+    [SerializeField] DungeonRoomLayout[] layouts, specialLayouts;
     [SerializeField] UnityEvent onRoomCleared;
     [SerializeField] Tilemap wallTilemap, floorTilemap;
     [SerializeField] Tilemap[] exitTilemaps;
     [SerializeField] GameObject[] roomTransitions, enemySpawners;
-    [SerializeField] GameObject chest, player;
+    [SerializeField] GameObject prefabChest, player;
 
     int enemyQuota, currentEnemyQuota;
 
     List<DungeonRoom> roomList;
     DungeonRoom currentRoom;
+
+    public bool IsRoomCleared { get => currentRoom.IsRoomCleared; }
 
     // Start is called once before the first execution of Update after the MonoBehaviour is created
     void Start()
@@ -132,9 +134,6 @@ public class DungeonGenerator : MonoBehaviour
         List<Direction> exits = currentRoom.Exits;
         DungeonRoomLayout roomLayout = currentRoom.DungeonRoomLayout;
 
-        chest.transform.position = roomLayout.ChestPosition;
-        chest.GetComponent<LootDrops>().CommonDrops = lootPool.ToList();
-
         SetPositions(roomLayout.EnemySpawnPositions, enemySpawners);
         SetPositions(roomLayout.RoomTransitionPositions, roomTransitions);
 
@@ -179,6 +178,7 @@ public class DungeonGenerator : MonoBehaviour
     {
         if (currentRoom.IsRoomCleared) return;
         currentEnemyQuota = 0;
+        enemyQuota = 0;
         foreach (GameObject enemySpawner in enemySpawners)
         {
             enemySpawner.GetComponent<EnemySpawner>().SpawnEnemy(enemies[Random.Range(0, enemies.Length)]);
@@ -192,6 +192,8 @@ public class DungeonGenerator : MonoBehaviour
 
         if (currentEnemyQuota < enemyQuota) return;
         currentRoom.IsRoomCleared = true;
+        GameObject chest = Instantiate(prefabChest, currentRoom.DungeonRoomLayout.ChestPosition, Quaternion.identity);
+        chest.GetComponent<LootDrops>().RareDrops = lootPool.ToList();
         onRoomCleared?.Invoke();
     }
 }
@@ -225,5 +227,20 @@ public class DungeonRoom
     {
         if (exits.Contains(direction)) return;
         exits.Add(direction);
+    }
+}
+
+public class PrefabPositionPair
+{
+    [SerializeField] GameObject prefab;
+    [SerializeField] Vector2 position;
+
+    public GameObject Prefab { get => prefab; }
+    public Vector2 Position { get => position; }
+
+    public PrefabPositionPair(GameObject prefab, Vector2 position)
+    {
+        this.prefab = prefab;
+        this.position = position;
     }
 }

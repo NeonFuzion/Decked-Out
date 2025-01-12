@@ -32,6 +32,6 @@ public class TreasureChest : MonoBehaviour
     void SpawnDrops()
     {
         onOpen.Invoke();
-        gameObject.SetActive(false);
+        Destroy(gameObject);
     }
 }

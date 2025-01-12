@@ -38,6 +38,11 @@ public class MainCamera : MonoBehaviour
         canvas.GetChild(2).GetComponent<Button>().onClick.AddListener(LoadMainMenu);
     }
 
+    public void MoveCameraNonlinear()
+    {
+        transform.position = target.position + offset;
+    }
+
     void LoadDungeon() => SceneHandler.SetScene(1);
     void LoadMainMenu() => SceneHandler.SetScene(0);
 }

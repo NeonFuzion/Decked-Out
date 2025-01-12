@@ -24,6 +24,7 @@ public class LootDrops : MonoBehaviour
 
     public void SpawnDrops()
     {
+        if (commonDrops.Count == 0) return;
         Vector2 offset = transform.position;
         for (int i = 0; i < Random.Range(1, 3); i++)
         {
