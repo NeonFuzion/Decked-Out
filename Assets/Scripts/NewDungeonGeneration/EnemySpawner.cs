@@ -10,8 +10,7 @@ public class EnemySpawner : MonoBehaviour
     // Start is called once before the first execution of Update after the MonoBehaviour is created
     void Start()
     {
-        managerScript = GetComponentInParent<DungeonGenerator>();
-        animator = GetComponent<Animator>();
+        Initialize();
     }
 
     // Update is called once per frame
@@ -31,5 +30,11 @@ public class EnemySpawner : MonoBehaviour
     {
         this.prefabEnemy = prefabEnemy;
         animator.CrossFade("SpawnEnemy", 0, 0);
+    }
+
+    public void Initialize()
+    {
+        managerScript = GetComponentInParent<DungeonGenerator>();
+        animator = GetComponent<Animator>();
     }
 }

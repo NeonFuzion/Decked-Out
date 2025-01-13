@@ -14,14 +14,15 @@ public class DungeonGenerator : MonoBehaviour
     [SerializeField] UnityEvent onRoomCleared;
     [SerializeField] Tilemap wallTilemap, floorTilemap;
     [SerializeField] Tilemap[] exitTilemaps;
-    [SerializeField] GameObject[] roomTransitions, enemySpawners;
-    [SerializeField] GameObject prefabChest, player, map;
+    [SerializeField] GameObject[] roomTransitions;
+    [SerializeField] GameObject prefabChest, prefabEnemySpawner, player, map;
 
     int enemyQuota, currentEnemyQuota;
 
     List<DungeonRoom> roomList;
     DungeonRoom currentRoom;
     GameObject existingChest;
+    List<GameObject> enemySpawners;
 
     public bool IsRoomCleared { get => currentRoom.IsRoomCleared; }
 
@@ -30,6 +31,7 @@ public class DungeonGenerator : MonoBehaviour
     {
         DungeonRoom oldRoom = new DungeonRoom(new Vector2(0, 0), new List<Direction>(), layouts[Random.Range(0, layouts.Length)]);
         roomList = new List<DungeonRoom>() { oldRoom };
+        enemySpawners = new List<GameObject>();
         /*for (int i = 0; i < roomLength; i++)
         {
             Vector2 direction = Vector2.zero;
@@ -132,14 +134,6 @@ public class DungeonGenerator : MonoBehaviour
         }
     }
 
-    void SetPositions(List<Vector2> positions, GameObject[] gameObjects)
-    {
-        for (int i = 0; i < positions.Count; i++)
-        {
-            gameObjects[i].transform.position = positions[i];
-        }
-    }
-
     void GeneratePath(DungeonRoom oldRoom, Vector2 lastDirection, int currentPathLength, int pathLength)
     {
         DungeonRoom newRoom = null;
@@ -199,8 +193,33 @@ public class DungeonGenerator : MonoBehaviour
         List<Direction> exits = currentRoom.Exits;
         DungeonRoomLayout roomLayout = currentRoom.DungeonRoomLayout;
 
-        SetPositions(roomLayout.EnemySpawnPositions, enemySpawners);
-        SetPositions(roomLayout.RoomTransitionPositions, roomTransitions);
+        List<Vector2> transitionPositions = roomLayout.RoomTransitionPositions;
+        for (int i = 0; i < transitionPositions.Count; i++)
+        {
+            roomTransitions[i].transform.position = transitionPositions[i];
+        }
+
+        List<Vector2> enemyPositions = roomLayout.EnemySpawnPositions;
+        while (enemyPositions.Count != enemySpawners.Count)
+        {
+            if (enemyPositions.Count > enemySpawners.Count)
+            {
+                GameObject spawner = Instantiate(prefabEnemySpawner, transform);
+                spawner.GetComponent<EnemySpawner>().Initialize();
+                spawner.transform.position = enemyPositions[enemySpawners.Count != 0 ? enemySpawners.Count : 0];
+                enemySpawners.Add(spawner);
+            }
+            else
+            {
+                int index = enemySpawners.Count - 1;
+                Destroy(enemySpawners[index]);
+                enemySpawners.RemoveAt(index);
+            }
+        }
+        for (int i = 0; i < enemyPositions.Count; i++)
+        {
+            if (enemySpawners.Count < i) continue;
+        }
 
         PlaceTiles(roomLayout.FloorTiles, floorTilemap);
         PlaceTiles(roomLayout.WallTiles, wallTilemap);
@@ -242,7 +261,7 @@ public class DungeonGenerator : MonoBehaviour
             }
         }
 
-        if (!currentRoom.IsRoomCleared) return;
+        if (!currentRoom.IsRoomCleared && currentRoom.DungeonRoomLayout.EnemySpawnPositions.Count > 0) return;
         foreach (GameObject roomTransition in roomTransitions)
         {
             roomTransition.GetComponent<RoomTransition>().UnlockBarrier();
