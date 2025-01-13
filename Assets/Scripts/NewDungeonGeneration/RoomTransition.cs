@@ -34,6 +34,8 @@ public class RoomTransition : MonoBehaviour
     public void SpawnPlayer(GameObject player)
     {
         player.transform.position = playerSpawn.position;
+        if (spriteRenderer) spriteRenderer.enabled = true;
+        if (boxCollider) boxCollider.isTrigger = false;
         onEnter?.Invoke();
     }
 
@@ -41,6 +43,6 @@ public class RoomTransition : MonoBehaviour
     {
         if (!gameObject.activeInHierarchy) return;
         if (spriteRenderer) spriteRenderer.enabled = false;
-        boxCollider.isTrigger = true;
+        if (boxCollider) boxCollider.isTrigger = true;
     }
 }
