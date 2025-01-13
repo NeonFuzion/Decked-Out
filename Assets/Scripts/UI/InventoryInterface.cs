@@ -82,7 +82,7 @@ public class InventoryInterface : MonoBehaviour
             Equipment equipment = item as Equipment;
             if (equipment.EquipmentEffect)
             {
-                effectDetails += $"{equipment.EquipmentEffect.GetComponent<EquipmentEffect>().Description}\n\n";
+                effectDetails += $"{equipment.EquipmentEffect.Description}\n\n";
             }
         }
 

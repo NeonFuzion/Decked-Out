@@ -54,6 +54,11 @@ public class PlayerInput : MonoBehaviour, PlayerInputConfig.ICombatActions, Play
     public void OnInventory(InputAction.CallbackContext context)
     {
         if (!IsClicked(context)) return;
+        InventorySetup();
+    }
+
+    public void InventorySetup()
+    {
         config.General.Disable();
         config.Combat.Disable();
         config.Menu.Enable();
@@ -77,6 +82,11 @@ public class PlayerInput : MonoBehaviour, PlayerInputConfig.ICombatActions, Play
     public void OnQuit(InputAction.CallbackContext context)
     {
         if (!IsClicked(context)) return;
+        QuitSetup();
+    }
+
+    public void QuitSetup()
+    {
         config.General.Enable();
         config.Combat.Enable();
         config.Menu.Disable();

@@ -610,7 +610,7 @@ AnimationClip:
   m_HasMotionFloatCurves: 0
   m_Events:
   - time: 0.41666666
-    functionName: SpawnDrops
+    functionName: OpenChest
     data: 
     objectReferenceParameter: {fileID: 0}
     floatParameter: 0

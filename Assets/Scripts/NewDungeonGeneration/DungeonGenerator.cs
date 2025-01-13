@@ -127,10 +127,9 @@ public class DungeonGenerator : MonoBehaviour
 
     public void LoadRoom(Direction direction)
     {
-        DungeonRoom newRoom = FindRoomAtPosition(currentRoom.Position + DirectionToVector(direction));
+        currentRoom = FindRoomAtPosition(currentRoom.Position + DirectionToVector(direction));
 
-        if (newRoom == null) return;
-        currentRoom = newRoom;
+        if (currentRoom == null) return;
         List<Direction> exits = currentRoom.Exits;
         DungeonRoomLayout roomLayout = currentRoom.DungeonRoomLayout;
 
@@ -193,7 +192,7 @@ public class DungeonGenerator : MonoBehaviour
         if (currentEnemyQuota < enemyQuota) return;
         currentRoom.IsRoomCleared = true;
         GameObject chest = Instantiate(prefabChest, currentRoom.DungeonRoomLayout.ChestPosition, Quaternion.identity);
-        chest.GetComponent<LootDrops>().RareDrops = lootPool.ToList();
+        chest.GetComponent<LootDrops>().SingleDrops = lootPool.ToList();
         onRoomCleared?.Invoke();
     }
 }

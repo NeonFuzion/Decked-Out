@@ -29,9 +29,9 @@ public class TreasureChest : MonoBehaviour
         GetComponent<Animator>().CrossFade("OpenChest", 0, 0);
     }
 
-    void SpawnDrops()
+    void OpenChest()
     {
-        onOpen.Invoke();
+        onOpen?.Invoke();
         Destroy(gameObject);
     }
 }
