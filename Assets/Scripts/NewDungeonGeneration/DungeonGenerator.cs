@@ -3,6 +3,7 @@ using System.Linq;
 using UnityEngine;
 using UnityEngine.Events;
 using UnityEngine.Tilemaps;
+using UnityEngine.UI;
 
 public class DungeonGenerator : MonoBehaviour
 {
@@ -14,12 +15,13 @@ public class DungeonGenerator : MonoBehaviour
     [SerializeField] Tilemap wallTilemap, floorTilemap;
     [SerializeField] Tilemap[] exitTilemaps;
     [SerializeField] GameObject[] roomTransitions, enemySpawners;
-    [SerializeField] GameObject prefabChest, player;
+    [SerializeField] GameObject prefabChest, player, map;
 
     int enemyQuota, currentEnemyQuota;
 
     List<DungeonRoom> roomList;
     DungeonRoom currentRoom;
+    GameObject existingChest;
 
     public bool IsRoomCleared { get => currentRoom.IsRoomCleared; }
 
@@ -27,10 +29,8 @@ public class DungeonGenerator : MonoBehaviour
     void Start()
     {
         DungeonRoom oldRoom = new DungeonRoom(new Vector2(0, 0), new List<Direction>(), layouts[Random.Range(0, layouts.Length)]);
-        DungeonRoom newRoom = null;
-        Vector2 lastDirection = Vector2.zero;
         roomList = new List<DungeonRoom>() { oldRoom };
-        for (int i = 0; i < roomLength; i++)
+        /*for (int i = 0; i < roomLength; i++)
         {
             Vector2 direction = Vector2.zero;
             while (true)
@@ -44,6 +44,7 @@ public class DungeonGenerator : MonoBehaviour
                 }
                 if (-direction != lastDirection) break;
             }
+            lastDirection = direction;
 
             Vector2 newPostion = oldRoom.Position + direction;
             Direction newExit = VectorToDirection(-direction);
@@ -59,11 +60,35 @@ public class DungeonGenerator : MonoBehaviour
                 roomList.Add(newRoom);
             }
             oldRoom.AddExit(VectorToDirection(direction));
+            oldRoom = newRoom;
+        }*/
+
+        GeneratePath(oldRoom, Vector2.zero, 0, roomLength);
+
+        foreach (DungeonRoom room in roomList)
+        {
+            GameObject roomImage = new GameObject();
+            roomImage.transform.SetParent(map.transform);
+
+            Image image = roomImage.AddComponent<Image>();
+            image.rectTransform.localScale = new Vector2(0.3f, 0.3f);
+            image.rectTransform.position = room.Position;
+
+            foreach (Direction exit in room.Exits)
+            {
+                Vector2 linePosition = room.Position + DirectionToVector(exit) / 2;
+
+                GameObject exitImage = new GameObject();
+                exitImage.transform.SetParent(map.transform);
+
+                Image line = exitImage.AddComponent<Image>();
+                line.rectTransform.localScale = (int)exit % 2 == 0 ? new Vector2(0.05f, 0.25f) : new Vector2(0.25f, 0.05f);
+                line.rectTransform.position = linePosition;
+            }
         }
 
         currentRoom = roomList[0];
         LoadRoom(Direction.None);
-        roomTransitions[2].GetComponent<RoomTransition>().SpawnPlayer(player);
     }
 
     // Update is called once per frame
@@ -115,6 +140,42 @@ public class DungeonGenerator : MonoBehaviour
         }
     }
 
+    void GeneratePath(DungeonRoom oldRoom, Vector2 lastDirection, int currentPathLength, int pathLength)
+    {
+        DungeonRoom newRoom = null;
+        Vector2 direction = Vector2.zero;
+        while (true)
+        {
+            switch (Random.Range(0, 4))
+            {
+                case 0: direction = Vector2.up; break;
+                case 1: direction = Vector2.right; break;
+                case 2: direction = Vector2.down; break;
+                case 3: direction = Vector2.left; break;
+            }
+            if (-direction != lastDirection) break;
+        }
+
+        Vector2 newPostion = oldRoom.Position + direction;
+        Direction newExit = VectorToDirection(-direction);
+        DungeonRoom exitingRoom = FindRoomAtPosition(newPostion);
+        if (exitingRoom != null)
+        {
+            exitingRoom.AddExit(newExit);
+            newRoom = exitingRoom;
+        }
+        else
+        {
+            newRoom = new DungeonRoom(newPostion, new List<Direction>() { newExit }, layouts[Random.Range(0, layouts.Length)]);
+            roomList.Add(newRoom);
+        }
+        oldRoom.AddExit(VectorToDirection(direction));
+
+        if (currentPathLength >= pathLength) return;
+        for (int i = 0; i < Random.Range(1, 3); i++)
+            GeneratePath(newRoom, direction, currentPathLength + 1, pathLength);
+    }
+
     public DungeonRoom FindRoomAtPosition(Vector2 position)
     {
         foreach (DungeonRoom room in roomList)
@@ -128,6 +189,11 @@ public class DungeonGenerator : MonoBehaviour
     public void LoadRoom(Direction direction)
     {
         currentRoom = FindRoomAtPosition(currentRoom.Position + DirectionToVector(direction));
+        Vector3 directionVector = DirectionToVector(direction);
+        for (int i = 0; i < map.transform.childCount; i++)
+        {
+            map.transform.GetChild(i).transform.position -= directionVector;
+        }
 
         if (currentRoom == null) return;
         List<Direction> exits = currentRoom.Exits;
@@ -143,7 +209,25 @@ public class DungeonGenerator : MonoBehaviour
         PlaceTiles(roomLayout.SouthExitTiles, exitTilemaps[2]);
         PlaceTiles(roomLayout.WestExitTiles, exitTilemaps[3]);
 
-        if (exits == null) return;
+        switch (direction)
+        {
+            case Direction.North: roomTransitions[2].GetComponent<RoomTransition>().SpawnPlayer(player); break;
+            case Direction.East: roomTransitions[3].GetComponent<RoomTransition>().SpawnPlayer(player); break;
+            case Direction.South: roomTransitions[0].GetComponent<RoomTransition>().SpawnPlayer(player); break;
+            case Direction.West: roomTransitions[1].GetComponent<RoomTransition>().SpawnPlayer(player); break;
+            case Direction.None: roomTransitions[2].GetComponent<RoomTransition>().SpawnPlayer(player); break;
+        }
+
+        if (currentRoom.IsChestOpened)
+        {
+            if (existingChest != null)
+            {
+                Destroy(existingChest);
+                existingChest = null;
+            }
+        }
+
+        if (exits == null || exits.Count == 0) return;
         for (int i = 0; i < exitTilemaps.Length; i++)
         {
             if (!exits.Contains((Direction)i))
@@ -156,14 +240,6 @@ public class DungeonGenerator : MonoBehaviour
                 exitTilemaps[i].gameObject.SetActive(false);
                 roomTransitions[i].SetActive(true);
             }
-        }
-
-        switch (direction)
-        {
-            case Direction.North: roomTransitions[2].GetComponent<RoomTransition>().SpawnPlayer(player); break;
-            case Direction.East: roomTransitions[3].GetComponent<RoomTransition>().SpawnPlayer(player); break;
-            case Direction.South: roomTransitions[0].GetComponent<RoomTransition>().SpawnPlayer(player); break;
-            case Direction.West: roomTransitions[1].GetComponent<RoomTransition>().SpawnPlayer(player); break;
         }
 
         if (!currentRoom.IsRoomCleared) return;
@@ -192,8 +268,15 @@ public class DungeonGenerator : MonoBehaviour
         if (currentEnemyQuota < enemyQuota) return;
         currentRoom.IsRoomCleared = true;
         GameObject chest = Instantiate(prefabChest, currentRoom.DungeonRoomLayout.ChestPosition, Quaternion.identity);
+        existingChest = chest;
         chest.GetComponent<LootDrops>().SingleDrops = lootPool.ToList();
         onRoomCleared?.Invoke();
+    }
+
+    public void SetChestOpened()
+    {
+        currentRoom.IsChestOpened = true;
+        existingChest = null;
     }
 }
 
@@ -201,13 +284,14 @@ public enum Direction { North, East, South, West, None }
 
 public class DungeonRoom
 {
-    bool isRoomCleared;
+    bool isRoomCleared, isChestOpened;
 
     Vector2 position;
     List<Direction> exits;
     DungeonRoomLayout layout;
 
     public bool IsRoomCleared { get => isRoomCleared; set => isRoomCleared = value; }
+    public bool IsChestOpened { get => isChestOpened; set => isChestOpened = value; }
 
     public Vector2 Position { get => position; }
     public List<Direction> Exits { get => exits; }
@@ -220,6 +304,7 @@ public class DungeonRoom
         this.layout = layout;
 
         isRoomCleared = false;
+        isChestOpened = false;
     }
 
     public void AddExit(Direction direction)
