@@ -1,5 +1,6 @@
 using UnityEngine;
 
+[CreateAssetMenu]
 public class Projectile : ScriptableObject
 {
     [SerializeField] float lifeSpan, speed;
@@ -15,8 +16,8 @@ public class Projectile : ScriptableObject
     public Sprite Sprite { get => sprite; }
     public Vector2 HitboxSize { get => hitboxSize; }
 
-    public virtual void Movement(Transform transform)
+    public virtual void Movement(Rigidbody2D rigidbody)
     {
-        transform.position += transform.right * speed * Time.deltaTime;
+        rigidbody.linearVelocity = Vector2.right * speed;
     }
 }

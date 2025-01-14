@@ -7,6 +7,7 @@ public class ProjectileObject : MonoBehaviour
     float curLifetime;
 
     Projectile projectile;
+    Rigidbody2D rigidbody;
 
     // Start is called before the first frame update
     void Start()
@@ -19,7 +20,7 @@ public class ProjectileObject : MonoBehaviour
     {
         curLifetime += Time.deltaTime;
         if (curLifetime >= projectile.Lifespan) Destroy(gameObject);
-        projectile.Movement(transform);
+        projectile.Movement(rigidbody);
 
         foreach (Collider2D col in Physics2D.OverlapCircleAll(transform.position, 1))
         {
@@ -36,6 +37,7 @@ public class ProjectileObject : MonoBehaviour
     {
         this.projectile = projectile;
         curLifetime = 0;
-        gameObject.AddComponent<SpriteRenderer>().sprite = projectile.Sprite;
+        GetComponent<SpriteRenderer>().sprite = projectile.Sprite;
+        rigidbody = GetComponent<Rigidbody2D>();
     }
 }

@@ -58,7 +58,7 @@ public class WeaponParent : MonoBehaviour
     public void MagicWeaponAnimHandle()
     {
         MagicWeapon mageWeapon = weapon as MagicWeapon;
-        GameObject projectile = Instantiate(mageWeapon.PrefabProjectile,  transform.GetChild(0).GetChild(0).position, Quaternion.identity);
+        GameObject projectile = Instantiate(mageWeapon.PrefabProjectile,  transform.GetChild(0).GetChild(0).position, transform.rotation);
         projectile.GetComponent<ProjectileObject>().Instantiate(mageWeapon.Projectile);
     }
 

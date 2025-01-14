@@ -15,7 +15,7 @@ public class Weapon : Equipment
 
     public int GetNextAnimationIndex(int index)
     {
-        return (index + 1) % animations.Count;
+        return index + 1 >= animations.Count ? 0 : index + 1;
     }
 
     public string GetAnimationByIndex(int index)
