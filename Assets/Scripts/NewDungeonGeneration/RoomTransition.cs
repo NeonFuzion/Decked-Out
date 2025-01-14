@@ -14,14 +14,18 @@ public class RoomTransition : MonoBehaviour
     // Start is called once before the first execution of Update after the MonoBehaviour is created
     void Start()
     {
-        boxCollider = GetComponent<BoxCollider2D>();
-        spriteRenderer = GetComponent<SpriteRenderer>();
+        
     }
 
     // Update is called once per frame
     void Update()
     {
         
+    }
+
+    private void Awake()
+    {
+        Initialize();
     }
 
     private void OnTriggerEnter2D(Collider2D other)
@@ -34,15 +38,25 @@ public class RoomTransition : MonoBehaviour
     public void SpawnPlayer(GameObject player)
     {
         player.transform.position = playerSpawn.position;
-        if (spriteRenderer) spriteRenderer.enabled = true;
-        if (boxCollider) boxCollider.isTrigger = false;
+        ResetBarrier();
         onEnter?.Invoke();
+    }
+
+    public void Initialize()
+    {
+        boxCollider = GetComponent<BoxCollider2D>();
+        spriteRenderer = GetComponent<SpriteRenderer>();
+    }
+
+    public void ResetBarrier()
+    {
+        spriteRenderer.enabled = true;
+        boxCollider.isTrigger = false;
     }
 
     public void UnlockBarrier()
     {
-        if (!gameObject.activeInHierarchy) return;
-        if (spriteRenderer) spriteRenderer.enabled = false;
-        if (boxCollider) boxCollider.isTrigger = true;
+        spriteRenderer.enabled = false;
+        boxCollider.isTrigger = true;
     }
 }

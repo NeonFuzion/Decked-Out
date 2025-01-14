@@ -10,6 +10,8 @@ public class TreasureChest : MonoBehaviour
 
     bool opening;
 
+    public UnityEvent OnOpen { get => onOpen; }
+
     // Start is called before the first frame update
     void Start()
     {
