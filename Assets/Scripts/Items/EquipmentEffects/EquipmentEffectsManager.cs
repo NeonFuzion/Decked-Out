@@ -47,6 +47,16 @@ public class EquipmentEffectsManager : MonoBehaviour
         timePairs.Add(new TimerPair(waitTime, unityEvent, equipmentEffect));
     }
 
+    public void RemoveAllEffects()
+    {
+        onDamageDealt.RemoveAllListeners();
+        onDamageTaken.RemoveAllListeners();
+        onDash.RemoveAllListeners();
+        onKill.RemoveAllListeners();
+
+        timePairs.Clear();
+    }
+
     public void InvokeOnDamageDealt() => onDamageDealt?.Invoke();
 
     public void InvokeOnDamageTaken() => onDamageTaken?.Invoke();

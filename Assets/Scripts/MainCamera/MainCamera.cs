@@ -7,7 +7,7 @@ using UnityEngine.UI;
 public class MainCamera : MonoBehaviour
 {
     [SerializeField] Transform target;
-    [SerializeField] GameObject prefabDeathObj;
+    [SerializeField] GameObject deathScreen;
     [SerializeField] Vector3 offset;
     [SerializeField] float dampening;
     [SerializeField] UnityEvent onLoadScene;
@@ -32,10 +32,7 @@ public class MainCamera : MonoBehaviour
 
     public void InitializeDeathScreen()
     {
-        GameObject deathObj = Instantiate(prefabDeathObj);
-        Transform canvas = deathObj.transform.GetChild(0);
-        canvas.GetChild(1).GetComponent<Button>().onClick.AddListener(LoadDungeon);
-        canvas.GetChild(2).GetComponent<Button>().onClick.AddListener(LoadMainMenu);
+        deathScreen.SetActive(true);
     }
 
     public void MoveCameraNonlinear()
@@ -43,6 +40,7 @@ public class MainCamera : MonoBehaviour
         transform.position = target.position + offset;
     }
 
-    void LoadDungeon() => SceneHandler.SetScene(1);
-    void LoadMainMenu() => SceneHandler.SetScene(0);
+    public void LoadMainMenu() => SceneHandler.SetScene(0);
+    public void LoadVillage() => SceneHandler.SetScene(1);
+    public void LoadDungeon() => SceneHandler.SetScene(2);
 }

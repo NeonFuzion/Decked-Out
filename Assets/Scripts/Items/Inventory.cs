@@ -15,8 +15,12 @@ public class Inventory : MonoBehaviour
     public Equipment[] Equiped { get => equiped; }
     public InventorySlots Items { get => items; }
 
+    EquipmentEffectsManager effectsManager;
+
     private void Start()
     {
+        effectsManager = GetComponent<EquipmentEffectsManager>();
+
         EventManager.AddOnInventoryUpdatedListener(UpdateInventory);
         UpdateInventory(equiped, items);
         EventManager.InvokeOnEquipmentUpdated(equiped);
@@ -73,6 +77,8 @@ public class Inventory : MonoBehaviour
     {
         this.equiped = equiped;
         this.items = items;
+
+        effectsManager.RemoveAllEffects();
 
         foreach (Transform child in equipmentEffects) Destroy(child.gameObject);
         foreach (Equipment equip in equiped)
