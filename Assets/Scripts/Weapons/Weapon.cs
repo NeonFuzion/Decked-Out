@@ -15,11 +15,11 @@ public class Weapon : Equipment
 
     public int GetNextAnimationIndex(int index)
     {
-        return index + 1 >= animations.Count ? 0 : index + 1;
+        return animations.Count > 1 ? (index + 1) % animations.Count : 0;
     }
 
     public string GetAnimationByIndex(int index)
     {
-        return animations[index];
+        return animations[index >= animations.Count ? animations.Count - 1 : index];
     }
 }

@@ -16,8 +16,8 @@ public class Projectile : ScriptableObject
     public Sprite Sprite { get => sprite; }
     public Vector2 HitboxSize { get => hitboxSize; }
 
-    public virtual void Movement(Rigidbody2D rigidbody)
+    public virtual void Movement(Rigidbody2D rigidbody, Transform transform)
     {
-        rigidbody.linearVelocity = Vector2.right * speed;
+        rigidbody.linearVelocity = transform.right * speed;
     }
 }

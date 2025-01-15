@@ -7,7 +7,7 @@ using UnityEngine.Events;
 public class WeaponParent : MonoBehaviour
 {
     [SerializeField] SpriteRenderer weaponSpriteRenderer;
-    [SerializeField] Transform slash;
+    [SerializeField] Transform slash, weaponTip;
     [SerializeField] UnityEvent<int, float> onAttack;
     [SerializeField] UnityEvent onEnemyHit, onKill;
 
@@ -58,7 +58,7 @@ public class WeaponParent : MonoBehaviour
     public void MagicWeaponAnimHandle()
     {
         MagicWeapon mageWeapon = weapon as MagicWeapon;
-        GameObject projectile = Instantiate(mageWeapon.PrefabProjectile,  transform.GetChild(0).GetChild(0).position, transform.rotation);
+        GameObject projectile = Instantiate(mageWeapon.PrefabProjectile,  weaponTip.position, transform.rotation);
         projectile.GetComponent<ProjectileObject>().Instantiate(mageWeapon.Projectile);
     }
 

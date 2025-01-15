@@ -1,6 +1,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.Tilemaps;
 
 public class ProjectileObject : MonoBehaviour
 {
@@ -15,12 +16,17 @@ public class ProjectileObject : MonoBehaviour
 
     }
 
+    private void OnCollisionEnter2D(Collision2D other) {
+        if (!other.gameObject.GetComponent<Tilemap>()) return;
+        Destroy(gameObject);    
+    }
+
     // Update is called once per frame
     void Update()
     {
         curLifetime += Time.deltaTime;
         if (curLifetime >= projectile.Lifespan) Destroy(gameObject);
-        projectile.Movement(rigidbody);
+        projectile.Movement(rigidbody, transform);
 
         foreach (Collider2D col in Physics2D.OverlapCircleAll(transform.position, 1))
         {
