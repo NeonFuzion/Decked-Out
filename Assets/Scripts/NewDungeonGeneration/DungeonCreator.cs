@@ -1,14 +1,17 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using Unity.Mathematics;
+using Unity.VisualScripting;
 using UnityEngine;
 using UnityEngine.Events;
 using UnityEngine.Tilemaps;
 
 public class DungeonCreator : MonoBehaviour
 {
-    [SerializeField] GameObject roomPrefab;
-    [SerializeField] Tilemap wallTilemap, floorTilemap, northExitTilemap, eastExitTilemap, southExitTilemap, westExitTilemap;
+    [SerializeField] GameObject roomPrefab, prefabEnemySpawner;
+    [SerializeField] Tilemap wallTilemap, floorTilemap;
+    [SerializeField] Tilemap[] exitTilemaps;
     [SerializeField] GameObject[] roomTransitions, enemySpawners;
     [SerializeField] GameObject chest;
 
@@ -47,20 +50,72 @@ public class DungeonCreator : MonoBehaviour
         return tileInfo;
     }
 
+    void PlaceTiles(List<TileInfo> tiles, Tilemap tilemap)
+    {
+        tilemap.ClearAllTiles();
+        foreach (TileInfo tile in tiles)
+        {
+            tilemap.SetTile(tile.Position, tile.Tile);
+            tilemap.SetTransformMatrix(tile.Position, Matrix4x4.Rotate(tile.Rotation));
+        }
+    }
+
+    List<Vector2> GetPositions(GameObject[] gameObjects)
+    {
+        List<Vector2> positions = new List<Vector2>();
+        foreach (GameObject gameObject in gameObjects)
+        {
+            if (!gameObject.activeInHierarchy) continue;
+            positions.Add(gameObject.transform.position);
+        }
+        return positions;
+    }
+
     public void SaveLayout()
     {
         DungeonRoomLayout roomLayout = roomPrefab.GetComponent<DungeonRoomLayout>();
-        if (chest) roomLayout.ChestPosition = chest.transform.position;
+        if (chest.activeInHierarchy) roomLayout.ChestPosition = chest.transform.position;
 
         roomLayout.FloorTiles = FindTiles(floorTilemap);
         roomLayout.WallTiles = FindTiles(wallTilemap);
-        roomLayout.NorthExitTiles = FindTiles(northExitTilemap);
-        roomLayout.EastExitTiles = FindTiles(eastExitTilemap);
-        roomLayout.SouthExitTiles = FindTiles(southExitTilemap);
-        roomLayout.WestExitTiles = FindTiles(westExitTilemap);
+        roomLayout.NorthExitTiles = FindTiles(exitTilemaps[0]);
+        roomLayout.EastExitTiles = FindTiles(exitTilemaps[1]);
+        roomLayout.SouthExitTiles = FindTiles(exitTilemaps[2]);
+        roomLayout.WestExitTiles = FindTiles(exitTilemaps[3]);
 
-        roomLayout.EnemySpawnPositions = enemySpawners.Select(gm => (Vector2)gm.transform.position).ToList();
-        roomLayout.RoomTransitionPositions = roomTransitions.Select(gm => (Vector2)gm.transform.position).ToList();
+        roomLayout.EnemySpawnPositions = GetPositions(enemySpawners);
+        roomLayout.RoomTransitionPositions = GetPositions(roomTransitions);
+    }
+
+    public void LoadLayout()
+    {
+        DungeonRoomLayout roomLayout = roomPrefab.GetComponent<DungeonRoomLayout>();
+        chest.transform.position = roomLayout.ChestPosition;
+
+        PlaceTiles(roomLayout.FloorTiles, floorTilemap);
+        PlaceTiles(roomLayout.WallTiles, wallTilemap);
+        PlaceTiles(roomLayout.NorthExitTiles, exitTilemaps[0]);
+        PlaceTiles(roomLayout.EastExitTiles, exitTilemaps[1]);
+        PlaceTiles(roomLayout.SouthExitTiles, exitTilemaps[2]);
+        PlaceTiles(roomLayout.WestExitTiles, exitTilemaps[3]);
+
+        for (int i = 0; i < enemySpawners.Length; i++)
+        {
+            if (i < roomLayout.EnemySpawnPositions.Count)
+            {
+                enemySpawners[i].SetActive(true);
+                enemySpawners[i].transform.position = roomLayout.EnemySpawnPositions[i];
+            }
+            else
+            {
+                enemySpawners[i].SetActive(false);
+            }
+        }
+
+        for (int i = 0; i < roomLayout.RoomTransitionPositions.Count; i++)
+        {
+            roomTransitions[i].transform.position = roomLayout.RoomTransitionPositions[i];
+        }
     }
 }
 

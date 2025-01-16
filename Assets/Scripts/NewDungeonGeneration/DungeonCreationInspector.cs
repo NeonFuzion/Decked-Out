@@ -22,5 +22,9 @@ public class DungeonCreationInspector : Editor
         {
             converter.SaveLayout();
         }
+        if (GUILayout.Button("Load Layout"))
+        {
+            converter.LoadLayout();
+        }
     }
 }
