@@ -17,6 +17,7 @@ public class WeaponParent : MonoBehaviour
     Animator animr, slashAnimr;
     Vector2 mousePos;
     Weapon weapon;
+    Shooter shooter;
 
     private void Awake()
     {
@@ -31,6 +32,7 @@ public class WeaponParent : MonoBehaviour
 
         animr = transform.GetChild(0).GetComponent<Animator>();
         slashAnimr = transform.GetChild(1).GetComponent<Animator>();
+        shooter = weaponTip.GetComponent<Shooter>();
         curAnimIndex = 0;
     }
 
@@ -58,8 +60,7 @@ public class WeaponParent : MonoBehaviour
     public void MagicWeaponAnimHandle()
     {
         MagicWeapon mageWeapon = weapon as MagicWeapon;
-        GameObject projectile = Instantiate(mageWeapon.PrefabProjectile,  weaponTip.position, transform.rotation);
-        projectile.GetComponent<ProjectileObject>().Instantiate(mageWeapon.Projectile);
+        shooter.FireProjectile(mageWeapon.ProjectileData, transform.right);
     }
 
     public void UpdateWeapon(Equipment[] equiped)

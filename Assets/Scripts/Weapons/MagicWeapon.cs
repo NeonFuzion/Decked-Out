@@ -6,8 +6,8 @@ using UnityEngine;
 public class MagicWeapon : Weapon
 {
     [SerializeField] GameObject prefabProjectile;
-    [SerializeField] Projectile projectile;
+    [SerializeField] ProjectileData projectileData;
 
     public GameObject PrefabProjectile { get => prefabProjectile; }
-    public Projectile Projectile { get => projectile; }
+    public ProjectileData ProjectileData { get => projectileData; }
 }

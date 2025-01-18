@@ -9,12 +9,83 @@ MonoBehaviour:
   m_GameObject: {fileID: 0}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 18e56cf497d061c41b57aa38e56af754, type: 3}
+  m_Script: {fileID: 0}
   m_Name: CloudStaveProjectile
-  m_EditorClassIdentifier: 
-  lifeSpan: 3
-  speed: 10
-  damage: 6
-  isPiercing: 0
-  sprite: {fileID: 21300000, guid: 29f9554ba815e8a47b4acc2f602b6b4b, type: 3}
-  hitboxSize: {x: 0.75, y: 0.75}
+  m_EditorClassIdentifier: Assembly-CSharp::ProjectileData
+  projectileMaxMoveSpeed: 10
+  projectileMaxHeight: 1
+  projectileMaxDistance: 10
+  isHoming: 0
+  trajectoryAnimationCurve:
+    serializedVersion: 2
+    m_Curve:
+    - serializedVersion: 3
+      time: 0
+      value: 0
+      inSlope: 0.0002975464
+      outSlope: 0.0002975464
+      tangentMode: 34
+      weightedMode: 0
+      inWeight: 0
+      outWeight: 0.33333334
+    - serializedVersion: 3
+      time: 1
+      value: 0.0002975464
+      inSlope: 0.0002975464
+      outSlope: 0.0002975464
+      tangentMode: 34
+      weightedMode: 0
+      inWeight: 0.33333334
+      outWeight: 0
+    m_PreInfinity: 2
+    m_PostInfinity: 2
+    m_RotationOrder: 4
+  axisCorrectionAnimationCurve:
+    serializedVersion: 2
+    m_Curve:
+    - serializedVersion: 3
+      time: 0
+      value: 0
+      inSlope: 0
+      outSlope: 0
+      tangentMode: 34
+      weightedMode: 0
+      inWeight: 0
+      outWeight: 0.33333334
+    - serializedVersion: 3
+      time: 1
+      value: 0
+      inSlope: 0
+      outSlope: 0
+      tangentMode: 34
+      weightedMode: 0
+      inWeight: 0.33333334
+      outWeight: 0
+    m_PreInfinity: 2
+    m_PostInfinity: 2
+    m_RotationOrder: 4
+  projectileSpeedAnimationCurve:
+    serializedVersion: 2
+    m_Curve:
+    - serializedVersion: 3
+      time: 0
+      value: 1
+      inSlope: 0
+      outSlope: 0
+      tangentMode: 34
+      weightedMode: 0
+      inWeight: 0
+      outWeight: 0
+    - serializedVersion: 3
+      time: 1
+      value: 1
+      inSlope: 0
+      outSlope: 0
+      tangentMode: 34
+      weightedMode: 0
+      inWeight: 0
+      outWeight: 0
+    m_PreInfinity: 2
+    m_PostInfinity: 2
+    m_RotationOrder: 4
+  projectileSprite: {fileID: 21300000, guid: 29f9554ba815e8a47b4acc2f602b6b4b, type: 3}
