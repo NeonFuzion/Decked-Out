@@ -10,31 +10,40 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: ccefeaff58ce65b4b9393a54b3790126, type: 3}
-  m_Name: CloudStaveProjectile
+  m_Name: SlimeStaffProjectile
   m_EditorClassIdentifier: Assembly-CSharp::ProjectileData
-  speed: 10
-  maxHeight: 0
+  speed: 6
+  maxHeight: 4
   maxDistance: 8
   homingSpeed: 5
   damageRadius: 0.5
-  sprite: {fileID: 21300000, guid: 29f9554ba815e8a47b4acc2f602b6b4b, type: 3}
+  sprite: {fileID: -5645770559910880998, guid: c520f021a9d5bdc45ba7de1e3145718f, type: 3}
   trajectoryCurve:
     serializedVersion: 2
     m_Curve:
     - serializedVersion: 3
       time: 0
       value: 0
-      inSlope: 0
-      outSlope: 0
+      inSlope: 2
+      outSlope: 2
       tangentMode: 34
       weightedMode: 0
       inWeight: 0
       outWeight: 0.33333334
     - serializedVersion: 3
-      time: 1
-      value: 0
+      time: 0.5
+      value: 1
       inSlope: 0
       outSlope: 0
+      tangentMode: 34
+      weightedMode: 0
+      inWeight: 0.33333334
+      outWeight: 0.33333334
+    - serializedVersion: 3
+      time: 1
+      value: 0
+      inSlope: -2
+      outSlope: -2
       tangentMode: 34
       weightedMode: 0
       inWeight: 0.33333334

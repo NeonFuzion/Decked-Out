@@ -11,12 +11,9 @@ public class Shooter : MonoBehaviour
 
     }
 
-    public void FireProjectile(ProjectileData projectileData, Vector3 direction = new Vector3(), Transform target = null)
+    public void FireProjectile(ProjectileData projectileData, ProjectileTargetType projectileType, Vector3 targetPosition, int damage, int critChance)
     {
         Projectile projectile = Instantiate(projectilePrefab, transform.position, Quaternion.identity).GetComponent<Projectile>();
-
-        projectile.InitializeProjectile(direction * projectileData.ProjectileMaxDistance, projectileData.IsHoming, projectileData.ProjectileMaxMoveSpeed, projectileData.ProjectileMaxHeight, target);
-        projectile.InitializeAnimationCurves(projectileData.TrajectoryAnimationCurve, projectileData.AxisCorrectionAnimationCurve, projectileData.ProjectileSpeedAnimationCurve);
-        projectile.InitializeProjectileSprites(projectileData.ProjectileSprite);
+        projectile.Initialize(projectileData, targetPosition, damage, critChance);
     }
 }

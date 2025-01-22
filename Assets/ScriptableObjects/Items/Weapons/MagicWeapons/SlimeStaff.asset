@@ -10,17 +10,17 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 901b8f89decb8d94981f65f27fbeb7f8, type: 3}
-  m_Name: CloudStave
+  m_Name: SlimeStaff
   m_EditorClassIdentifier: 
-  itemName: Cloud Stave
-  description: A magic staff that can fire cloud projectiles.
-  sprite: {fileID: 21300000, guid: 5a801395482ca1a49b73b4bbeed24e9a, type: 3}
+  itemName: Slime Staff
+  description: A magical staff that launches a ball of slime.
+  sprite: {fileID: -1312359660109418695, guid: c520f021a9d5bdc45ba7de1e3145718f, type: 3}
   craftingRecipe: []
   equipmentEffect: {fileID: 0}
-  attack: 15
+  attack: 22
   attackSpeed: 1
   knockback: 0
   animations:
-  - MagicCast0
+  - MagicCast1
   prefabProjectile: {fileID: 1391803176948481848, guid: 2966367f374e53645920ef66d1f507ed, type: 3}
-  projectileData: {fileID: 11400000, guid: 76974f33ac2412642877c9b6ec6574f6, type: 2}
+  projectileData: {fileID: 11400000, guid: a33c179326721d2479f77d5787793021, type: 2}

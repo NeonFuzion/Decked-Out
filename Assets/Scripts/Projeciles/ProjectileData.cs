@@ -3,21 +3,17 @@ using UnityEngine;
 [CreateAssetMenu]
 public class ProjectileData : ScriptableObject
 {
-    [SerializeField] private float projectileMaxMoveSpeed;
-    [SerializeField] private float projectileMaxHeight;
-    [SerializeField] private float projectileMaxDistance;
-    [SerializeField] private bool isHoming;
-    [SerializeField] private AnimationCurve trajectoryAnimationCurve;
-    [SerializeField] private AnimationCurve axisCorrectionAnimationCurve;
-    [SerializeField] private AnimationCurve projectileSpeedAnimationCurve;
-    [SerializeField] private Sprite projectileSprite;
+    [SerializeField] float speed, maxHeight, maxDistance, homingSpeed, damageRadius;
+    [SerializeField] Sprite sprite;
+    [SerializeField] AnimationCurve trajectoryCurve;
+    [SerializeField] ProjectileEffect projectileEffect;
 
-    public float ProjectileMaxMoveSpeed { get => projectileMaxMoveSpeed; }
-    public float ProjectileMaxHeight { get => projectileMaxHeight; }
-    public float ProjectileMaxDistance { get => projectileMaxDistance; }
-    public bool IsHoming { get => isHoming; }
-    public AnimationCurve TrajectoryAnimationCurve { get => trajectoryAnimationCurve; }
-    public AnimationCurve AxisCorrectionAnimationCurve { get => axisCorrectionAnimationCurve; }
-    public AnimationCurve ProjectileSpeedAnimationCurve { get => projectileSpeedAnimationCurve; }
-    public Sprite ProjectileSprite { get => projectileSprite; }
+    public float Speed { get => speed; }
+    public float MaxHeight { get => maxHeight; }
+    public float MaxDistance { get => maxDistance; }
+    public float HomingSpeed { get => homingSpeed; }
+    public float DamageRadius { get => damageRadius; }
+    public Sprite Sprite { get => sprite; }
+    public AnimationCurve TrajectoryCurve { get => trajectoryCurve; }
+    public ProjectileEffect ProjectileEffect { get => projectileEffect; }
 }
