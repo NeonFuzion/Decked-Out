@@ -20,7 +20,13 @@ public class WeaponAnimHandle : MonoBehaviour
         
     }
 
-    void OnAttackFinish() => onAttackFinished?.Invoke();
+    void OnAttackFinish()
+    {
+        onAttackFinished?.Invoke();
+    }
 
-    void DetectEntities() => onDamageInflicted?.Invoke();
+    void DealDamage()
+    {
+        onDamageInflicted?.Invoke();
+    }
 }

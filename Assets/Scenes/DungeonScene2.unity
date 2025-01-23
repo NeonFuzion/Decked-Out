@@ -29170,7 +29170,7 @@ MonoBehaviour:
       m_Calls:
       - m_Target: {fileID: 630787387}
         m_TargetAssemblyTypeName: WeaponParent, Assembly-CSharp
-        m_MethodName: DetectEntities
+        m_MethodName: DealDamage
         m_Mode: 0
         m_Arguments:
           m_ObjectArgument: {fileID: 0}

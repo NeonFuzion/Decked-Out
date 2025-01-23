@@ -22,5 +22,7 @@ MonoBehaviour:
   knockback: 0
   animations:
   - MagicCast1
+  projectileCount: 1
+  projectileSpread: 0
   prefabProjectile: {fileID: 1391803176948481848, guid: 2966367f374e53645920ef66d1f507ed, type: 3}
   projectileData: {fileID: 11400000, guid: a33c179326721d2479f77d5787793021, type: 2}

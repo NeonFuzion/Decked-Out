@@ -1,8 +1,8 @@
-using System;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.Events;
+using UnityEngine.LightTransport;
 
 public class WeaponParent : MonoBehaviour
 {
@@ -42,6 +42,39 @@ public class WeaponParent : MonoBehaviour
         mousePos = Camera.main.ScreenToWorldPoint(Input.mousePosition);
     }
 
+    void DetectEnemies(int damage, bool isCrit)
+    {
+        Sword sword = weapon as Sword;
+        Vector3 hitPos = transform.right * sword.AttackRange * 0.5f;
+        foreach (Collider2D col in Physics2D.OverlapCircleAll(transform.position + hitPos, sword.AttackRange))
+        {
+            if (col.GetComponent<Player>()) continue;
+            Health health = col.GetComponent<Health>();
+
+            if (!health) continue;
+            health.TakeDamage(damage, transform.parent.position, isCrit, sword.Knockback);
+
+            if (health.HP > 0) continue;
+            onKill?.Invoke();
+        }
+    }
+
+    void LaunchProjectiles(int damage, bool isCrit)
+    {
+        MagicWeapon magicWeapon = weapon as MagicWeapon;
+        shooterPoint.position = weaponTip.position;
+    
+        int range = magicWeapon.ProjectileSpread;
+        Vector2 offset = Vector2.zero;
+        
+        for (int i = 0; i < magicWeapon.ProjectileCount; i++)
+        {
+            if (magicWeapon.ProjectileCount > 1)
+                offset = new Vector2(Random.Range(-range, range), Random.Range(-range, range));
+            shooter.FireProjectile(magicWeapon.ProjectileData, ProjectileTargetType.Friendly, mousePos + offset, damage, isCrit, InvokeOnKill);
+        }
+    }
+
     public void OnEnemyHit()
     {
         onEnemyHit.Invoke();
@@ -55,13 +88,6 @@ public class WeaponParent : MonoBehaviour
 
         slashAnimr.SetFloat("AtkSpdMulti", sword.AttackSpeed);
         slashAnimr.CrossFade(sword.GetSlashAnimationByIndex(curAnimIndex), 0, 0);
-    }
-
-    public void MagicWeaponAnimHandle()
-    {
-        MagicWeapon mageWeapon = weapon as MagicWeapon;
-        shooterPoint.position = weaponTip.position;
-        shooter.FireProjectile(mageWeapon.ProjectileData, ProjectileTargetType.Friendly, mousePos, (int)mageWeapon.Attack, 0);
     }
 
     public void UpdateWeapon(Equipment[] equiped)
@@ -84,7 +110,6 @@ public class WeaponParent : MonoBehaviour
         animr.CrossFade(weapon.GetAnimationByIndex(curAnimIndex), 0, 0);
 
         if (weapon as Sword) SwordAnimHandle();
-        else if (weapon as MagicWeapon) MagicWeaponAnimHandle();
 
         curAnimIndex = weapon.GetNextAnimationIndex(curAnimIndex);
     }
@@ -95,25 +120,16 @@ public class WeaponParent : MonoBehaviour
         animr.CrossFade("WeaponIdle", 0, 0);
     }
 
-    public void DetectEntities(int damage, bool isCrit)
+    public void DealDamage(int damage, bool isCrit)
     {
-        Sword sword = weapon as Sword;
-        Vector3 hitPos = transform.right * sword.AttackRange * 0.5f;
-        foreach (Collider2D col in Physics2D.OverlapCircleAll(transform.position + hitPos, sword.AttackRange))
-        {
-            if (col.GetComponent<Player>()) continue;
-            Health health = col.GetComponent<Health>();
-
-            if (!health) continue;
-            health.TakeDamage(damage, transform.parent.position, isCrit, sword.Knockback);
-
-            if (health.HP > 0) continue;
-            onKill?.Invoke();
-        }
+        if (weapon as Sword) DetectEnemies(damage, isCrit);
+        else if (weapon as MagicWeapon) LaunchProjectiles(damage, isCrit);
     }
 
     public void AddOnAttackListener(UnityAction<int, float> unityAction)
     {
         onAttack?.AddListener(unityAction);
     }
+
+    public void InvokeOnKill() => onKill?.Invoke();
 }

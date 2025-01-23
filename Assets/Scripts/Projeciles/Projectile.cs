@@ -1,16 +1,19 @@
 using UnityEngine;
 using UnityEngine.AI;
+using UnityEngine.Events;
 
 public class Projectile : MonoBehaviour
 {
     [SerializeField] Transform projectileVisual, projectileShadow;
 
     float totalDistance, groundDirection;
-    int damage, critChance;
+    int damage;
+    bool isCrit;
 
     ProjectileData projectileData;
     Vector2 targetPosition, startPosition;
     SpriteRenderer visualSpriteRenderer, shadowSpriteRenderer;
+    UnityEvent onKill;
     
 
     // Start is called once before the first execution of Update after the MonoBehaviour is created
@@ -49,18 +52,36 @@ public class Projectile : MonoBehaviour
     void DestroyProjectile()
     {
         if (projectileData.ProjectileEffect) projectileData.ProjectileEffect.ActivateEffect(targetPosition);
+        DealDamage();
         Destroy(gameObject);
     }
 
-    public void Initialize(ProjectileData projectileData, Vector2 targetPosition, int damage, int critChance)
+    void DealDamage()
+    {
+        foreach (Collider2D col in Physics2D.OverlapCircleAll(transform.position, projectileData.DamageRadius))
+        {
+            if (col.GetComponent<Player>()) continue;
+            Health health = col.GetComponent<Health>();
+
+            if (!health) continue;
+            health.TakeDamage(damage, transform.parent.position, isCrit);
+
+            if (health.HP > 0) continue;
+            onKill?.Invoke();
+        }
+    }
+
+    public void Initialize(ProjectileData projectileData, Vector2 targetPosition, int damage, bool isCrit, UnityAction killReaction)
     {
         this.projectileData = projectileData;
         this.damage = damage;
-        this.critChance = critChance;
+        this.isCrit = isCrit;
 
         Vector3 correctedTargetPosition = ((Vector3)targetPosition - transform.position).normalized * projectileData.MaxDistance + transform.position;
         this.targetPosition = projectileData.MaxHeight == 0 ? correctedTargetPosition : targetPosition;
         
+        onKill = new UnityEvent();
+        onKill.AddListener(killReaction);
         startPosition = transform.position;
         visualSpriteRenderer = projectileVisual.GetComponent<SpriteRenderer>();
         shadowSpriteRenderer = projectileShadow.GetComponent<SpriteRenderer>();
