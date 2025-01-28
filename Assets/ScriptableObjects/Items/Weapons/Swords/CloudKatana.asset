@@ -20,6 +20,7 @@ MonoBehaviour:
   attack: 12
   attackSpeed: 1.2
   knockback: 3
+  weaponHoldStyle: 1
   animations:
   - SwordSwing0
   - SwordSwing1

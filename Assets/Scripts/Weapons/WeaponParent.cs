@@ -102,13 +102,22 @@ public class WeaponParent : MonoBehaviour
 
         attacking = true;
         weaponSpriteRenderer.sprite = weapon.Sprite;
-        transform.right = ((Vector3)mousePos - transform.position).normalized;
 
         onAttack?.Invoke(curAnimIndex, weapon.AttackSpeed);
 
         animr.SetFloat("AttackSwingSpeed", weapon.AttackSpeed);
         animr.CrossFade(weapon.GetAnimationByIndex(curAnimIndex), 0, 0);
 
+        switch (weapon.WeaponHoldStyle)
+        {
+            case WeaponHoldStyle.Mouse:
+                transform.right = ((Vector3)mousePos - transform.position).normalized;
+                break;
+            case WeaponHoldStyle.Static:
+                transform.right = Vector2.right * (mousePos.x > 0 ? 1 : -1);
+                break;
+        }
+        
         if (weapon as Sword) SwordAnimHandle();
 
         curAnimIndex = weapon.GetNextAnimationIndex(curAnimIndex);
