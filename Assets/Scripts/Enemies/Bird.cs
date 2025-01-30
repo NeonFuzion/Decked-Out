@@ -49,7 +49,11 @@ public class Bird : Enemy
     {
         if (birdState != BirdState.Charging) return;
         if (collision.transform == target) collision.GetComponent<Health>().TakeDamage(atk);
-        else if (collision.GetComponent<Tilemap>()) rb.linearVelocity = Vector2.zero;
+
+        Rigidbody2D rigidbody = collision.GetComponent<Rigidbody2D>();
+        if (!rigidbody) return;
+        if (rigidbody.bodyType != RigidbodyType2D.Static) return;
+        rb.linearVelocity = Vector2.zero;
     }
 
     IEnumerator ChargeCoroutine()

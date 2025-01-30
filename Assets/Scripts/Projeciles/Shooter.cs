@@ -12,9 +12,9 @@ public class Shooter : MonoBehaviour
 
     }
 
-    public void FireProjectile(ProjectileData projectileData, ProjectileTargetType projectileType, Vector3 targetPosition, int damage, bool isCrit, UnityAction killReaction)
+    public void FireProjectile(ProjectileData projectileData, ProjectileTargetType projectileType, Vector3 targetPosition, int damage, bool isCrit)
     {
         Projectile projectile = Instantiate(projectilePrefab, transform.position, Quaternion.identity).GetComponent<Projectile>();
-        projectile.Initialize(projectileData, targetPosition, damage, isCrit, killReaction);
+        projectile.Initialize(projectileData, targetPosition, damage, isCrit);
     }
 }

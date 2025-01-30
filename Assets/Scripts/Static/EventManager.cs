@@ -11,6 +11,7 @@ public static class EventManager
     static UnityEvent<int, bool, Transform> onFocusItem = new UnityEvent<int, bool, Transform>();
     static UnityEvent<int, bool> onEquipItem = new UnityEvent<int, bool>();
     static UnityEvent onRoomCleared = new UnityEvent();
+    static UnityEvent onKill = new UnityEvent();
 
     public static void AddOnInventoryUpdatedListener(UnityAction<Equipment[], InventorySlots> listener)
     {
@@ -60,5 +61,15 @@ public static class EventManager
     public static void InvokeOnRoomCleared()
     {
         onRoomCleared?.Invoke();
+    }
+
+    public static void AddOnKillListener(UnityAction action)
+    {
+        onKill?.AddListener(action);
+    }
+
+    public static void InvokeOnKill()
+    {
+        onKill?.Invoke();
     }
 }

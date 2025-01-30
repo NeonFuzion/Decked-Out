@@ -43,4 +43,6 @@ public class MainCamera : MonoBehaviour
     public void LoadMainMenu() => SceneHandler.SetScene(0);
     public void LoadVillage() => SceneHandler.SetScene(1);
     public void LoadDungeon() => SceneHandler.SetScene(2);
+
+    public static Vector2 MousePosition { get => Camera.main.ScreenToWorldPoint(Input.mousePosition); }
 }

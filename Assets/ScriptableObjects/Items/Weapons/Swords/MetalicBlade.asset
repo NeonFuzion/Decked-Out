@@ -1,0 +1,30 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: fcbddfe4f83299941bf0138c5a751033, type: 3}
+  m_Name: MetalicBlade
+  m_EditorClassIdentifier: 
+  itemName: Metalic Blade
+  description: A simple sword forged of Metal Plating.
+  sprite: {fileID: -2678282062104484318, guid: ecc2cbf93925a9848b888c967141dc79, type: 3}
+  craftingRecipe: []
+  equipmentEffect: {fileID: 0}
+  attack: 13
+  attackSpeed: 1.1
+  knockback: 3
+  weaponHoldStyle: 1
+  animations:
+  - SwordSwing0
+  - SwordSwing1
+  attackRange: 1.1
+  slashAnimations:
+  - SlashEffect0
+  - SlashEffect1

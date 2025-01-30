@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.Events;
 
-public class Weapon : Equipment
+public abstract class Weapon : Equipment
 {
     [SerializeField] float attack, attackSpeed, knockback;
     [SerializeField] WeaponHoldStyle weaponHoldStyle;
@@ -24,6 +24,10 @@ public class Weapon : Equipment
     {
         return animations[index >= animations.Count ? animations.Count - 1 : index];
     }
+
+    public abstract void AttackActionHandle(int damage, bool isCrit, Transform transform);
+    
+    public abstract void AttackAnimationHandle(int animationIndex, Transform transform);
 }
 
 public enum WeaponHoldStyle { Static, Mouse }

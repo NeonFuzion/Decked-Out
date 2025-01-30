@@ -23,7 +23,7 @@ MonoBehaviour:
   weaponHoldStyle: 1
   animations:
   - MagicCast0
-  projectileCount: 2
+  projectileCount: 1
   projectileSpread: 0
   prefabProjectile: {fileID: 1391803176948481848, guid: 2966367f374e53645920ef66d1f507ed, type: 3}
   projectileData: {fileID: 11400000, guid: 76974f33ac2412642877c9b6ec6574f6, type: 2}

@@ -13,7 +13,6 @@ public class Projectile : MonoBehaviour
     ProjectileData projectileData;
     Vector2 targetPosition, startPosition;
     SpriteRenderer visualSpriteRenderer, shadowSpriteRenderer;
-    UnityEvent onKill;
     
 
     // Start is called once before the first execution of Update after the MonoBehaviour is created
@@ -64,14 +63,14 @@ public class Projectile : MonoBehaviour
             Health health = col.GetComponent<Health>();
 
             if (!health) continue;
-            health.TakeDamage(damage, transform.parent.position, isCrit);
+            health.TakeDamage(damage, transform.position, isCrit);
 
             if (health.HP > 0) continue;
-            onKill?.Invoke();
+            EventManager.InvokeOnKill();
         }
     }
 
-    public void Initialize(ProjectileData projectileData, Vector2 targetPosition, int damage, bool isCrit, UnityAction killReaction)
+    public void Initialize(ProjectileData projectileData, Vector2 targetPosition, int damage, bool isCrit)
     {
         this.projectileData = projectileData;
         this.damage = damage;
@@ -80,8 +79,6 @@ public class Projectile : MonoBehaviour
         Vector3 correctedTargetPosition = ((Vector3)targetPosition - transform.position).normalized * projectileData.MaxDistance + transform.position;
         this.targetPosition = projectileData.MaxHeight == 0 ? correctedTargetPosition : targetPosition;
         
-        onKill = new UnityEvent();
-        onKill.AddListener(killReaction);
         startPosition = transform.position;
         visualSpriteRenderer = projectileVisual.GetComponent<SpriteRenderer>();
         shadowSpriteRenderer = projectileShadow.GetComponent<SpriteRenderer>();
