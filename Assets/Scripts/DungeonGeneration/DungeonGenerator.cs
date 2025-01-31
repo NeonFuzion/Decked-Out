@@ -10,17 +10,17 @@ public class DungeonGenerator : MonoBehaviour
     [SerializeField] int roomLength;
     [SerializeField] GameObject[] enemies;
     [SerializeField] Item[] lootPool;
-    [SerializeField] DungeonRoomLayout[] layouts, specialLayouts;
     [SerializeField] UnityEvent onRoomCleared;
     [SerializeField] Tilemap wallTilemap, floorTilemap;
     [SerializeField] Tilemap[] exitTilemaps;
-    [SerializeField] GameObject[] roomTransitions;
+    [SerializeField] GameObject[] roomTransitions, layoutPrefabs, specialLayoutPrefabs;
     [SerializeField] GameObject prefabChest, prefabEnemySpawner, player, map;
 
     int enemyQuota, currentEnemyQuota;
 
     List<DungeonRoom> roomList;
     DungeonRoom currentRoom;
+    DungeonRoomLayout[] layouts, specialLayouts;
     GameObject existingChest;
     List<GameObject> enemySpawners;
 
@@ -29,6 +29,9 @@ public class DungeonGenerator : MonoBehaviour
     // Start is called once before the first execution of Update after the MonoBehaviour is created
     void Start()
     {
+        layouts = layoutPrefabs.Select(prefab => prefab.GetComponent<DungeonRoomLayout>()).ToArray();
+        specialLayouts = specialLayoutPrefabs.Select(prefab => prefab.GetComponent<DungeonRoomLayout>()).ToArray();
+
         DungeonRoom oldRoom = new DungeonRoom(new Vector2(0, 0), new List<Direction>(), specialLayouts[0]);
         roomList = new List<DungeonRoom>() { oldRoom };
         enemySpawners = new List<GameObject>();

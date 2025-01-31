@@ -2364,11 +2364,6 @@ MonoBehaviour:
   - {fileID: 11400000, guid: 8a2aa7d254434064185493ff77be73ad, type: 2}
   - {fileID: 11400000, guid: e7c5e078198eea54e89ac34f4618188c, type: 2}
   - {fileID: 11400000, guid: e063420b637182a43987679886f939a4, type: 2}
-  layouts:
-  - {fileID: 7897442569279910869, guid: 725e25b45e071ae41aa682840216bb93, type: 3}
-  - {fileID: 1677396720359958173, guid: b266c71988c29cb499dbfb8b44a3eca6, type: 3}
-  specialLayouts:
-  - {fileID: 6788718470188900152, guid: e18f4da85b0a3f44994958d34be45439, type: 3}
   onRoomCleared:
     m_PersistentCalls:
       m_Calls:
@@ -2432,6 +2427,11 @@ MonoBehaviour:
   - {fileID: 418625839}
   - {fileID: 1261435936}
   - {fileID: 1425540263}
+  layoutPrefabs:
+  - {fileID: 0}
+  - {fileID: 0}
+  specialLayoutPrefabs:
+  - {fileID: 0}
   prefabChest: {fileID: 8731708309190630192, guid: cfd8588df695c394b87acd8b39ae6ec6, type: 3}
   prefabEnemySpawner: {fileID: 3456724229446359741, guid: 0ce2a61468e43b04fa8c5862cec60ce7, type: 3}
   player: {fileID: 1899806075}

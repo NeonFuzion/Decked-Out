@@ -6,7 +6,7 @@ using UnityEngine.Tilemaps;
 public class Bird : Enemy
 {
     [SerializeField] int chargeSpeed, minChargeDistance, chargeCooldown;
-    [SerializeField] float chargeDuration;
+    [SerializeField] float chargeDuration, telegraphDuration;
 
     BirdState birdState;
     BoxCollider2D boxCollider;
@@ -27,12 +27,11 @@ public class Bird : Enemy
     {
         SearchTarget(transform.position, detectDistance);
         if (!target) return;
-        if (birdState == BirdState.Charging) return;
+        if (birdState == BirdState.Charging || birdState == BirdState.Telegraphing) return;
         if (Vector2.Distance(transform.position, target.position) < minChargeDistance)
         {
             if (birdState != BirdState.Resting)
             {
-                rb.linearVelocity = (target.position - transform.position).normalized * chargeSpeed;
                 animator.CrossFade("Charging", 0, 0);
                 StartCoroutine(ChargeCoroutine());
             }
@@ -58,6 +57,11 @@ public class Bird : Enemy
 
     IEnumerator ChargeCoroutine()
     {
+        birdState = BirdState.Telegraphing;
+        rb.linearVelocity = Vector2.zero;
+        yield return new WaitForSeconds(telegraphDuration);
+        rb.linearVelocity = (target.position - transform.position).normalized * chargeSpeed;
+
         birdState = BirdState.Charging;
         boxCollider.isTrigger = true;
         yield return new WaitForSeconds(chargeDuration);
@@ -69,4 +73,4 @@ public class Bird : Enemy
     }
 }
 
-enum BirdState { Idle, Charging, Resting };
+enum BirdState { Idle, Charging, Resting, Telegraphing };

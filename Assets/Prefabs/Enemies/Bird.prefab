@@ -375,6 +375,7 @@ MonoBehaviour:
   minChargeDistance: 3
   chargeCooldown: 2
   chargeDuration: 0.5
+  telegraphDuration: 0.75
 --- !u!50 &5377081864401813991
 Rigidbody2D:
   serializedVersion: 5
@@ -464,6 +465,7 @@ MonoBehaviour:
   commonDrops:
   - {fileID: 11400000, guid: ac8a4917d60e2bc408f124a969e4762e, type: 2}
   rareDrops: []
+  singleDrops: []
 --- !u!1 &5552379924877162038
 GameObject:
   m_ObjectHideFlags: 0
