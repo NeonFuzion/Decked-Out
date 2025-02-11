@@ -3,17 +3,19 @@ using System.Collections.Generic;
 using System.Linq;
 using Unity.Mathematics;
 using Unity.VisualScripting;
+using UnityEditor;
 using UnityEngine;
 using UnityEngine.Events;
 using UnityEngine.Tilemaps;
 
 public class DungeonCreator : MonoBehaviour
 {
-    [SerializeField] GameObject roomPrefab, prefabEnemySpawner;
+    [SerializeField] DungeonRoomLayout roomLayout;
+    [SerializeField] GameObject prefabEnemySpawner;
     [SerializeField] Tilemap wallTilemap, floorTilemap;
     [SerializeField] Tilemap[] exitTilemaps;
     [SerializeField] GameObject[] roomTransitions, enemySpawners;
-    [SerializeField] GameObject chest;
+    [SerializeField] GameObject chest, specialObjectsParent;
 
     private void Awake()
     {
@@ -73,7 +75,6 @@ public class DungeonCreator : MonoBehaviour
 
     public void SaveLayout()
     {
-        DungeonRoomLayout roomLayout = roomPrefab.GetComponent<DungeonRoomLayout>();
         if (chest.activeInHierarchy) roomLayout.ChestPosition = chest.transform.position;
 
         roomLayout.FloorTiles = FindTiles(floorTilemap);
@@ -85,11 +86,21 @@ public class DungeonCreator : MonoBehaviour
 
         roomLayout.EnemySpawnPositions = GetPositions(enemySpawners);
         roomLayout.RoomTransitionPositions = GetPositions(roomTransitions);
+
+        List<PrefabPositionPair> specialObjectPositions = new List<PrefabPositionPair>();
+        for (int i = 0; i < specialObjectsParent.transform.childCount; i++)
+        {
+            Transform specialObject = specialObjectsParent.transform.GetChild(i);
+            specialObjectPositions.Add(new PrefabPositionPair(specialObject.gameObject, specialObject.position));
+        }
+        roomLayout.SpecialObjectPositions = specialObjectPositions;
+
+        EditorUtility.SetDirty(roomLayout);
+        AssetDatabase.SaveAssets();
     }
 
     public void LoadLayout()
     {
-        DungeonRoomLayout roomLayout = roomPrefab.GetComponent<DungeonRoomLayout>();
         chest.transform.position = roomLayout.ChestPosition;
 
         PlaceTiles(roomLayout.FloorTiles, floorTilemap);
@@ -115,6 +126,16 @@ public class DungeonCreator : MonoBehaviour
         for (int i = 0; i < roomLayout.RoomTransitionPositions.Count; i++)
         {
             roomTransitions[i].transform.position = roomLayout.RoomTransitionPositions[i];
+        }
+
+        while (specialObjectsParent.transform.childCount > 0)
+        {
+            Destroy(specialObjectsParent.transform.GetChild(0).gameObject);
+        }
+        foreach (PrefabPositionPair pair in roomLayout.SpecialObjectPositions)
+        {
+            GameObject specialObject = Instantiate(pair.Prefab, pair.Position, Quaternion.identity);
+            specialObject.transform.SetParent(specialObjectsParent.transform, true);
         }
     }
 }
