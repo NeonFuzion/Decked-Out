@@ -369,7 +369,7 @@ MonoBehaviour:
   hp: 70
   def: 4
   spd: 7
-  detectDistance: 10
+  detectDistance: 7
   animator: {fileID: 5885953514244015234}
   chargeSpeed: 15
   minChargeDistance: 3

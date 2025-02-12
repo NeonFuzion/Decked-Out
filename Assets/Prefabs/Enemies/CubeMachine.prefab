@@ -502,6 +502,7 @@ MonoBehaviour:
   - {fileID: 11400000, guid: 621998c626019dc49b577c5cf80ca132, type: 2}
   rareDrops:
   - {fileID: 11400000, guid: 5eafae53c60d3b944acebd40d7d022f0, type: 2}
+  singleDrops: []
 --- !u!114 &836850378006409831
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -570,7 +571,7 @@ MonoBehaviour:
   hp: 75
   def: 10
   spd: 5
-  detectDistance: 10
+  detectDistance: 7
   animator: {fileID: 2313024853081663727}
   laser: {fileID: 2123333649283610715}
 --- !u!1 &8717145214605688304

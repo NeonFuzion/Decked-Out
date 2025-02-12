@@ -213,7 +213,7 @@ MonoBehaviour:
   hp: 60
   def: 2
   spd: 6
-  detectDistance: 10
+  detectDistance: 7
   animator: {fileID: 3957268082418657055}
   jumpTime: 1
   jumpCD: 2
@@ -285,6 +285,7 @@ MonoBehaviour:
   commonDrops:
   - {fileID: 11400000, guid: cf70870c58229aa4fb12cbe201809414, type: 2}
   rareDrops: []
+  singleDrops: []
 --- !u!1 &3537721062858203233
 GameObject:
   m_ObjectHideFlags: 0
