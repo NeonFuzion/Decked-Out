@@ -9,7 +9,7 @@
                     "name": "Attack",
                     "type": "Button",
                     "id": "44ce65c8-a358-4414-bc1d-c139ee0851a0",
-                    "expectedControlType": "Button",
+                    "expectedControlType": "",
                     "processors": "",
                     "interactions": "",
                     "initialStateCheck": false
@@ -37,7 +37,7 @@
                     "name": "Inventory",
                     "type": "Button",
                     "id": "ddef6c1c-5e42-4378-bfa0-a4f452c3255b",
-                    "expectedControlType": "Button",
+                    "expectedControlType": "",
                     "processors": "",
                     "interactions": "",
                     "initialStateCheck": false
@@ -65,6 +65,15 @@
                     "type": "Button",
                     "id": "ce386b1a-e53b-4933-b363-953cf7f898ce",
                     "expectedControlType": "Button",
+                    "processors": "",
+                    "interactions": "",
+                    "initialStateCheck": false
+                },
+                {
+                    "name": "Map",
+                    "type": "Button",
+                    "id": "c374782c-cb5f-4742-ac25-64408c41ab92",
+                    "expectedControlType": "",
                     "processors": "",
                     "interactions": "",
                     "initialStateCheck": false
@@ -158,6 +167,17 @@
                     "action": "Menu",
                     "isComposite": false,
                     "isPartOfComposite": false
+                },
+                {
+                    "name": "",
+                    "id": "df6381c6-e8ce-403d-bcba-141eeda63a12",
+                    "path": "<Keyboard>/m",
+                    "interactions": "",
+                    "processors": "",
+                    "groups": "",
+                    "action": "Map",
+                    "isComposite": false,
+                    "isPartOfComposite": false
                 }
             ]
         },
@@ -169,7 +189,7 @@
                     "name": "Quit",
                     "type": "Button",
                     "id": "c49b56b1-4c84-4606-8629-5a1d28aa5859",
-                    "expectedControlType": "Button",
+                    "expectedControlType": "",
                     "processors": "",
                     "interactions": "",
                     "initialStateCheck": false

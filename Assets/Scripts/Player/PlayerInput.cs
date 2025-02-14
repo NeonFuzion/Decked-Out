@@ -6,7 +6,7 @@ using UnityEngine.InputSystem;
 
 public class PlayerInput : MonoBehaviour, PlayerInputConfig.ICombatActions, PlayerInputConfig.IGeneralActions, PlayerInputConfig.IMenuActions
 {
-    [SerializeField] UnityEvent onAttack, onDash, onInventory, onMenu, onQuit;
+    [SerializeField] UnityEvent onAttack, onDash, onInventory, onMenu, onQuit, onMap;
     [SerializeField] UnityEvent<Vector2> onMovement;
 
     PlayerInputConfig config;
@@ -91,5 +91,13 @@ public class PlayerInput : MonoBehaviour, PlayerInputConfig.ICombatActions, Play
         config.Combat.Enable();
         config.Menu.Disable();
         onQuit?.Invoke();
+    }
+
+    public void OnMap(InputAction.CallbackContext context)
+    {
+        config.General.Disable();
+        config.Combat.Disable();
+        config.Menu.Enable();
+        onMap?.Invoke();
     }
 }

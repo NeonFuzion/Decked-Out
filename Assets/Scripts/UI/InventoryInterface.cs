@@ -100,7 +100,7 @@ public class InventoryInterface : MonoBehaviour
         foreach (Transform child in itemSlots) Destroy(child.gameObject);
         foreach (Transform child in equipmentSlots) Destroy(child.gameObject);
 
-        for (int i = 0; i < 6; i++)
+        for (int i = 0; i < equiped.Length; i++)
         {
             if (!equiped[i]) continue;
             GameObject equipSlot = Instantiate(prefabEquipSlot, equipmentSlots);
