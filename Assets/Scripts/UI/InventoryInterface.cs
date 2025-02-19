@@ -1,10 +1,7 @@
 using System.Collections;
 using System.Collections.Generic;
-using System.Linq;
 using TMPro;
-using Unity.VisualScripting;
 using UnityEngine;
-using UnityEngine.Events;
 using UnityEngine.UI;
 
 public class InventoryInterface : MonoBehaviour
@@ -31,15 +28,6 @@ public class InventoryInterface : MonoBehaviour
 
         EventManager.AddOnFocusItemListener(FocusOnItem);
         EventManager.AddOnEquipListener(EquipItem);
-    }
-
-    private void OnEnable()
-    {
-        if (items != null && equiped != null) return;
-        Inventory script = playerGameObject.GetComponent<Inventory>();
-        player = script.GetComponent<Player>();
-        items = script.Items;
-        equiped = script.Equiped;
     }
 
     public void FocusOnItem(int index, bool isEquiped, Transform itemSlot)
@@ -100,6 +88,8 @@ public class InventoryInterface : MonoBehaviour
         foreach (Transform child in itemSlots) Destroy(child.gameObject);
         foreach (Transform child in equipmentSlots) Destroy(child.gameObject);
 
+        SetInventory();
+
         for (int i = 0; i < equiped.Length; i++)
         {
             if (!equiped[i]) continue;
@@ -145,5 +135,14 @@ public class InventoryInterface : MonoBehaviour
             }
         }
         UpdateInventory();
+    }
+
+    public void SetInventory()
+    {
+        if (items != null && equiped != null) return;
+        Inventory script = playerGameObject.GetComponent<Inventory>();
+        player = script.GetComponent<Player>();
+        items = script.Items;
+        equiped = script.Equiped;
     }
 }

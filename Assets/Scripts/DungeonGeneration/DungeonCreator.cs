@@ -91,6 +91,7 @@ public class DungeonCreator : MonoBehaviour
         for (int i = 0; i < specialObjectsParent.transform.childCount; i++)
         {
             Transform specialObject = specialObjectsParent.transform.GetChild(i);
+            if (!specialObject.gameObject.activeInHierarchy) continue;
             specialObjectPositions.Add(new PrefabPositionPair(specialObject.gameObject, specialObject.position));
         }
         roomLayout.SpecialObjectPositions = specialObjectPositions;

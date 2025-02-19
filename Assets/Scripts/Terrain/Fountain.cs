@@ -4,6 +4,8 @@ using UnityEngine;
 
 public class Fountain : MonoBehaviour
 {
+    [SerializeField] bool oneShot;
+
     int roomCountdown;
 
     Animator animator;
@@ -35,6 +37,7 @@ public class Fountain : MonoBehaviour
 
     public void AddRoomCount()
     {
+        if (oneShot) return;
         roomCountdown--;
     }
 }

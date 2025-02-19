@@ -23,7 +23,7 @@ public class UIManager : MonoBehaviour
 
     public void OpenMenu(GameObject menu)
     {
-        menu.SetActive(false);
+        if (this.menu) this.menu.SetActive(false);
         this.menu = menu;
 
         menu.SetActive(true);
