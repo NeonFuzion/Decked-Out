@@ -8,7 +8,7 @@ public class InventoryInterface : MonoBehaviour
 {
     [SerializeField] GameObject playerGameObject, prefabItemSlot, prefabEquipSlot;
     [SerializeField] Transform equipmentSlots, itemSlots;
-    [SerializeField] TextMeshProUGUI statsDisplay;
+    [SerializeField] TextMeshProUGUI statsDisplay, focusName, focusType, focusAmount, focusStats, focusDescription, focusAbility;
 
     InventorySlots items;
     Equipment[] equiped;
@@ -51,31 +51,45 @@ public class InventoryInterface : MonoBehaviour
         lastSelected = itemSlot;
         lastSelected.GetComponentInChildren<Image>().color = inventoryColors[3];
 
-        string equipmentDetails = "\n";
-        string descriptionText = $"{item.ItemName} {(itemAmount > 1 ? $"x{itemAmount}\n" : equipmentDetails)}";
+        focusAmount.gameObject.SetActive(itemAmount > 1);
+        if (itemAmount > 1)
+        {
+            focusAmount.SetText($"x{itemAmount}");
+            focusType.SetText("Material");
+        }
+
+        focusName.SetText(item.ItemName);
+
+        focusStats.gameObject.SetActive(false);
+        focusAbility.gameObject.SetActive(false);
 
         if (item as Weapon)
         {
-            equipmentDetails += $"Weapon\nAttack - {(item as Weapon).Attack}\n\n";
+            focusType.SetText("Weapon");
+            focusStats.SetText($"Attack - {(item as Weapon).Attack}");
         }
         else if (item as Accessory)
         {
             Accessory accessory = item as Accessory;
-            equipmentDetails += $"{accessory.RelicSlot}\n{accessory.MainStat} - {accessory.StatBoost}%\n\n";
+            focusType.SetText($"Accessory - {accessory.RelicSlot}");
+            focusStats.SetText($"{accessory.MainStat} - {accessory.StatBoost}%");
         }
 
-        string effectDetails = "";
         if (item as Equipment)
         {
+            focusStats.gameObject.SetActive(true);
+
             Equipment equipment = item as Equipment;
+            focusAbility.gameObject.SetActive(equipment.EquipmentEffect);
             if (equipment.EquipmentEffect)
             {
-                effectDetails += $"{equipment.EquipmentEffect.Description}\n\n";
+                focusAbility.gameObject.SetActive(true);
+                focusAbility.SetText($"{equipment.EquipmentEffect.Description}");
             }
         }
 
-        descriptionText += $"{equipmentDetails}{effectDetails}{item.Description}";
-        description.GetComponentInChildren<TextMeshProUGUI>().SetText(descriptionText);
+
+        focusDescription.SetText(item.Description);
 
         Image img = description.GetChild(0).GetComponent<Image>();
         img.sprite = item.Sprite;
