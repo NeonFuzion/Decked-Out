@@ -12,6 +12,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 66c069fbc8c1b7b4aa53981df40e9188, type: 3}
   m_Name: HealthRegen
   m_EditorClassIdentifier: 
+  abilityName: Regeneration
   description: Regenerates 5% of the current character's health every 2 seconds.
   regenerationRate: 0.05
   intervalDuration: 2

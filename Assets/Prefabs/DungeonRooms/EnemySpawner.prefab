@@ -9,9 +9,9 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 3290984209275283367}
-  - component: {fileID: 3946378904962323000}
   - component: {fileID: 359509456384311169}
   - component: {fileID: 6584884284800617006}
+  - component: {fileID: 3776458985442398992}
   m_Layer: 0
   m_Name: EnemySpawner
   m_TagString: Untagged
@@ -34,18 +34,6 @@ Transform:
   m_Children: []
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!114 &3946378904962323000
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 3456724229446359741}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 1b1a4ab24a8a50e4cbd3a0b3a05c920b, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
 --- !u!212 &359509456384311169
 SpriteRenderer:
   m_ObjectHideFlags: 0
@@ -123,3 +111,15 @@ Animator:
   m_AllowConstantClipSamplingOptimization: 1
   m_KeepAnimatorStateOnDisable: 0
   m_WriteDefaultValuesOnDisable: 0
+--- !u!114 &3776458985442398992
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 3456724229446359741}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 1b1a4ab24a8a50e4cbd3a0b3a05c920b, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 

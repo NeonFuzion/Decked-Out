@@ -12,6 +12,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 063266b61378ac543a2fc434312a4d2b, type: 3}
   m_Name: Berserker
   m_EditorClassIdentifier: 
+  abilityName: Berserker
   description: Increases Critical Chance by 20% for 10 seconds after killing an enemy.
     This effect cannot be activated for 5 seconds after the buff is applied.
   criticalChanceIncrease: 20

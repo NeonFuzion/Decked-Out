@@ -16,7 +16,7 @@ MonoBehaviour:
   description: An adventurer's concealable weapon of choice.
   sprite: {fileID: 21300000, guid: d9d1311d84feeb74c9794c82d839d3d7, type: 3}
   craftingRecipe: []
-  equipmentEffect: {fileID: 11400000, guid: 92c91d688743f624daff6f5141da915f, type: 2}
+  equipmentEffect: {fileID: 0}
   attack: 10
   attackSpeed: 1
   knockback: 2

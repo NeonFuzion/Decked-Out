@@ -6,11 +6,12 @@ using UnityEngine.Events;
 
 public abstract class EquipmentEffect : ScriptableObject
 {
-    [SerializeField] string description;
+    [SerializeField] string abilityName, description;
 
     protected GameObject player;
     protected EquipmentEffectsManager equipmentEffectsManager;
 
+    public string Name { get => name; }
     public string Description { get => description; }
 
     public virtual void Instantiate(GameObject player)

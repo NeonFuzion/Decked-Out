@@ -81,10 +81,12 @@ public class InventoryInterface : MonoBehaviour
 
             Equipment equipment = item as Equipment;
             focusAbility.gameObject.SetActive(equipment.EquipmentEffect);
-            if (equipment.EquipmentEffect)
+
+            EquipmentEffect ability = equipment.EquipmentEffect;
+            if (ability)
             {
                 focusAbility.gameObject.SetActive(true);
-                focusAbility.SetText($"{equipment.EquipmentEffect.Description}");
+                focusAbility.SetText($"{ability.Name}:\n{ability.Description}");
             }
         }
 
