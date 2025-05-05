@@ -120,12 +120,15 @@ NavMeshSettings:
       m_Flags: 0
   m_NavMeshData: {fileID: 0}
 <<<<<<< Updated upstream
+<<<<<<< Updated upstream
 --- !u!1 &56701701 stripped
 GameObject:
   m_CorrespondingSourceObject: {fileID: 5827616950241082388, guid: 85bbc98f859bafa489c726edb0044f00, type: 3}
   m_PrefabInstance: {fileID: 674923344}
   m_PrefabAsset: {fileID: 0}
 =======
+=======
+>>>>>>> Stashed changes
 --- !u!1 &37742167
 GameObject:
   m_ObjectHideFlags: 0
@@ -162,6 +165,9 @@ RectTransform:
   m_AnchoredPosition: {x: 0, y: 0}
   m_SizeDelta: {x: -20, y: -20}
   m_Pivot: {x: 0.5, y: 0.5}
+<<<<<<< Updated upstream
+>>>>>>> Stashed changes
+=======
 >>>>>>> Stashed changes
 --- !u!1 &57307903
 GameObject:
@@ -2066,6 +2072,9 @@ CanvasRenderer:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 449591206}
   m_CullTransparentMesh: 1
+<<<<<<< Updated upstream
+>>>>>>> Stashed changes
+=======
 >>>>>>> Stashed changes
 --- !u!1 &449954064
 GameObject:
@@ -2155,6 +2164,7 @@ SpriteRenderer:
   m_WasSpriteAssigned: 1
   m_MaskInteraction: 0
   m_SpriteSortPoint: 0
+<<<<<<< Updated upstream
 <<<<<<< Updated upstream
 --- !u!1 &486564847
 GameObject:
@@ -2438,11 +2448,16 @@ CanvasRenderer:
   m_GameObject: {fileID: 511870659}
   m_CullTransparentMesh: 1
 =======
+=======
+>>>>>>> Stashed changes
 --- !u!1 &502581927 stripped
 GameObject:
   m_CorrespondingSourceObject: {fileID: 3456724229446359741, guid: 0ce2a61468e43b04fa8c5862cec60ce7, type: 3}
   m_PrefabInstance: {fileID: 2045167653}
   m_PrefabAsset: {fileID: 0}
+<<<<<<< Updated upstream
+>>>>>>> Stashed changes
+=======
 >>>>>>> Stashed changes
 --- !u!1 &512696742
 GameObject:
@@ -3131,6 +3146,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
 <<<<<<< Updated upstream
+<<<<<<< Updated upstream
   roomLayout: {fileID: 0}
   prefabEnemySpawner: {fileID: 0}
   wallTilemap: {fileID: 0}
@@ -3274,6 +3290,8 @@ CanvasRenderer:
   m_GameObject: {fileID: 605028792}
   m_CullTransparentMesh: 1
 =======
+=======
+>>>>>>> Stashed changes
   roomLayout: {fileID: 11400000, guid: d718ab0f0cda47a49b0f1c8ddddee6a0, type: 2}
   prefabEnemySpawner: {fileID: 3456724229446359741, guid: 0ce2a61468e43b04fa8c5862cec60ce7, type: 3}
   wallTilemap: {fileID: 1201236125}
@@ -3302,6 +3320,9 @@ GameObject:
   m_CorrespondingSourceObject: {fileID: 3456724229446359741, guid: 0ce2a61468e43b04fa8c5862cec60ce7, type: 3}
   m_PrefabInstance: {fileID: 930559053}
   m_PrefabAsset: {fileID: 0}
+<<<<<<< Updated upstream
+>>>>>>> Stashed changes
+=======
 >>>>>>> Stashed changes
 --- !u!1 &624561795
 GameObject:
@@ -3793,6 +3814,9 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
 --- !u!1 &694992375
+<<<<<<< Updated upstream
+>>>>>>> Stashed changes
+=======
 >>>>>>> Stashed changes
 GameObject:
   m_ObjectHideFlags: 0
@@ -3986,6 +4010,9 @@ CanvasRenderer:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 794838229}
   m_CullTransparentMesh: 1
+<<<<<<< Updated upstream
+>>>>>>> Stashed changes
+=======
 >>>>>>> Stashed changes
 --- !u!1 &808357076
 GameObject:
@@ -49335,8 +49362,11 @@ MonoBehaviour:
   - {fileID: 0}
   items:
 <<<<<<< Updated upstream
+<<<<<<< Updated upstream
     items: []
 =======
+=======
+>>>>>>> Stashed changes
     items:
     - item: {fileID: 11400000, guid: c7cb9ef21156b85499a02df96eb32612, type: 2}
       amount: 1
