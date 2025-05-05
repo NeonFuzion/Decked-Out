@@ -20,9 +20,9 @@ public class DungeonGenerator : MonoBehaviour
     int enemyQuota, currentEnemyQuota;
 
     List<DungeonRoom> roomList;
+    List<GameObject> enemySpawners, currentSpecialObjects;
     DungeonRoom currentRoom;
     GameObject existingChest;
-    List<GameObject> enemySpawners;
 
     public bool IsRoomCleared { get => currentRoom.IsRoomCleared; }
 
@@ -32,6 +32,7 @@ public class DungeonGenerator : MonoBehaviour
         DungeonRoom oldRoom = new DungeonRoom(new Vector2(0, 0), new List<Direction>(), specialLayouts[0]);
         roomList = new List<DungeonRoom>() { oldRoom };
         enemySpawners = new List<GameObject>();
+        currentSpecialObjects = new ();
         
         GeneratePath(oldRoom, Vector2.zero, 0, roomLength);
 
@@ -158,6 +159,7 @@ public class DungeonGenerator : MonoBehaviour
 
     public void LoadRoom(Direction direction)
     {
+        currentSpecialObjects.Clear();
         currentRoom = FindRoomAtPosition(currentRoom.Position + DirectionToVector(direction));
         Vector3 directionVector = DirectionToVector(direction);
         for (int i = 0; i < map.transform.childCount; i++)
@@ -197,12 +199,16 @@ public class DungeonGenerator : MonoBehaviour
         for (int i = 0; i < enemyPositions.Count; i++)
         {
             if (enemySpawners.Count < i) continue;
+            enemySpawners[i].transform.position = enemyPositions[i];
         }
 
         foreach (PrefabPositionPair pair in roomLayout.SpecialObjectPositions)
         {
             GameObject specialObject = Instantiate(pair.Prefab, pair.Position, Quaternion.identity);
             specialObject.transform.SetParent(specialObjectsParent.transform, true);
+            currentSpecialObjects.Add(specialObject);
+            bool isActive = currentRoom.GetActiveObject(currentSpecialObjects.Count - 1);
+            specialObject.GetComponent<TerrainObject>().Initialize(isActive, UnactivateSpecialObject);
         }
 
         PlaceTiles(roomLayout.FloorTiles, floorTilemap);
@@ -286,6 +292,12 @@ public class DungeonGenerator : MonoBehaviour
         currentRoom.IsChestOpened = true;
         existingChest = null;
     }
+
+    public void UnactivateSpecialObject(GameObject specialObject)
+    {
+        int index = currentSpecialObjects.IndexOf(specialObject);
+        currentRoom.UnactivateObject(index);
+    }
 }
 
 public enum Direction { North, East, South, West, None }
@@ -294,8 +306,9 @@ public class DungeonRoom
 {
     bool isRoomCleared, isChestOpened;
 
-    Vector2 position;
     List<Direction> exits;
+    List<bool> activeObjects;
+    Vector2 position;
     DungeonRoomLayout layout;
 
     public bool IsRoomCleared { get => isRoomCleared; set => isRoomCleared = value; }
@@ -314,12 +327,24 @@ public class DungeonRoom
         bool isSafe = layout.EnemySpawnPositions.Count == 0;
         isRoomCleared = isSafe;
         isChestOpened = isSafe;
+
+        activeObjects = layout.SpecialObjectPositions.Select(x => true).ToList();
     }
 
     public void AddExit(Direction direction)
     {
         if (exits.Contains(direction)) return;
         exits.Add(direction);
+    }
+
+    public void UnactivateObject(int index)
+    {
+        activeObjects[index] = false;
+    }
+
+    public bool GetActiveObject(int index)
+    {
+        return activeObjects[index];
     }
 }
 

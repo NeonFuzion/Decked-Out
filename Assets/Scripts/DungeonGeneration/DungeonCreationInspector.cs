@@ -1,8 +1,8 @@
+#if UNITY_EDITOR
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEditor;
-using UnityEditor.TerrainTools;
 using System;
 
 [CustomEditor(typeof(DungeonCreator))]
@@ -28,3 +28,4 @@ public class DungeonCreationInspector : Editor
         }
     }
 }
+#endif

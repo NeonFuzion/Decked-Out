@@ -3,10 +3,12 @@ using System.Collections.Generic;
 using System.Linq;
 using Unity.Mathematics;
 using Unity.VisualScripting;
-using UnityEditor;
 using UnityEngine;
 using UnityEngine.Events;
 using UnityEngine.Tilemaps;
+
+#if UNITY_EDITOR
+using UnityEditor;
 
 public class DungeonCreator : MonoBehaviour
 {
@@ -140,6 +142,7 @@ public class DungeonCreator : MonoBehaviour
         }
     }
 }
+#endif
 
 [Serializable]
 public class TileInfo
