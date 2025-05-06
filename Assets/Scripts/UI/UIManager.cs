@@ -32,7 +32,7 @@ public class UIManager : MonoBehaviour
 
     public void CloseMenu()
     {
-        quitButton.onClick.RemoveAllListeners();
+        if (quitButton) quitButton.onClick.RemoveAllListeners();
         menu.SetActive(false);
 
         onMenuClosed?.Invoke();
