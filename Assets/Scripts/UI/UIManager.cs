@@ -5,6 +5,7 @@ using UnityEngine.UI;
 public class UIManager : MonoBehaviour
 {
     [SerializeField] Button quitButton;
+    [SerializeField] GameObject defaultMenu;
     [SerializeField] UnityEvent onMenuOpened, onMenuClosed;
 
     GameObject menu;
@@ -12,7 +13,8 @@ public class UIManager : MonoBehaviour
     // Start is called once before the first execution of Update after the MonoBehaviour is created
     void Start()
     {
-        
+        if (!defaultMenu) return;
+        OpenMenu(defaultMenu);
     }
 
     // Update is called once per frame
