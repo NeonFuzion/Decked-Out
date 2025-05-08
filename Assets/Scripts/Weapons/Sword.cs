@@ -25,7 +25,7 @@ public class Sword : Weapon
             Health health = col.GetComponent<Health>();
 
             if (!health) continue;
-            health.TakeDamage(damage, transform.parent.position, isCrit, Knockback);
+            health.TakeDamage(damage, Element, transform.parent.position, isCrit, Knockback);
 
             if (health.HP > 0) continue;
             EventManager.InvokeOnKill();

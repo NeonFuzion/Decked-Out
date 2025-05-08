@@ -63,7 +63,7 @@ public class CubeMachine : Enemy
             if (!hit.collider.GetComponent<Player>()) continue;
             Vector3 laserEndPoint = hit.transform.position - transform.position;
             laser.SetPosition(1, laserEndPoint + Vector3.back);
-            hit.collider.GetComponent<Health>().TakeDamage(atk);
+            hit.collider.GetComponent<Health>().TakeDamage(atk, Element.Fire);
             break;
         }
 

@@ -80,7 +80,7 @@ public class Slime : Enemy
             Player script = col.gameObject.GetComponent<Player>();
 
             if (!script) continue;
-            col.GetComponent<Health>()?.TakeDamage(atk);
+            col.GetComponent<Health>()?.TakeDamage(atk, Element.Water);
             break;
         }
     }

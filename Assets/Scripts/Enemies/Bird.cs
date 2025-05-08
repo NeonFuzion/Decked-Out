@@ -47,7 +47,7 @@ public class Bird : Enemy
     private void OnTriggerEnter2D(Collider2D collision)
     {
         if (birdState != BirdState.Charging) return;
-        if (collision.transform == target) collision.GetComponent<Health>().TakeDamage(atk);
+        if (collision.transform == target) collision.GetComponent<Health>().TakeDamage(atk, Element.Wind);
 
         Rigidbody2D rigidbody = collision.GetComponent<Rigidbody2D>();
         if (!rigidbody) return;

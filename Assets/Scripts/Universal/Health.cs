@@ -47,7 +47,7 @@ public class Health : MonoBehaviour
         if (hp < maxHp * 0.2f) image.color = Color.red;
     }
 
-    public void TakeDamage(int amount, Vector2 incomingAttack = new Vector2(), bool isCrit = false, float knockback = 1)
+    public void TakeDamage(int amount, Element element, Vector2 incomingAttack = new Vector2(), bool isCrit = false, float knockback = 1)
     {
         onHit.Invoke();
         if (invincible) return;
@@ -56,7 +56,7 @@ public class Health : MonoBehaviour
 
         Instantiate(prefabHitEffect).GetComponent<HitEfect>().Initialize(transform.position);
 
-        if (prefabDmgObj) UpdateHealthBar(incomingAttack, finalDamage, isCrit);
+        if (prefabDmgObj) SpawnDamageNumber(incomingAttack, element, finalDamage, isCrit);
         if (amount < 0) return;
         if (incomingAttack != Vector2.zero)
         {
@@ -75,7 +75,7 @@ public class Health : MonoBehaviour
         hp += amount;
         if (hp > maxHp) hp = maxHp;
 
-        if (prefabDmgObj) UpdateHealthBar(Vector2.down, -amount, false);
+        if (prefabDmgObj) SpawnDamageNumber(Vector2.down, Element.Physical, -amount, false);
     }
 
     public void SetInvincibility()
@@ -83,13 +83,11 @@ public class Health : MonoBehaviour
         invincible = !invincible;
     }
 
-    void UpdateHealthBar(Vector2 incomingAttack, int amount, bool isCrit)
+    void SpawnDamageNumber(Vector2 incomingAttack, Element element, int amount, bool isCrit)
     {
         Vector2 direction = incomingAttack == new Vector2() ? (Vector2)transform.position : (incomingAttack - (Vector2)transform.position);
         GameObject dmgObj = Instantiate(prefabDmgObj, transform.position, Quaternion.identity);
-        dmgObj.GetComponent<DamageObject>().Instantiate(amount, direction);
-        if (isCrit) dmgObj.GetComponent<TextMeshPro>().color = Color.red;
-        if (amount < 0) dmgObj.GetComponent<TextMeshPro>().color = Color.green;
+        dmgObj.GetComponent<DamageObject>().Instantiate(amount, isCrit, false, direction, element);
     }
 
     IEnumerator ApplyKnockback(Vector2 incomingAttack, float knockback)

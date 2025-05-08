@@ -7,12 +7,14 @@ public abstract class Weapon : Equipment
 {
     [SerializeField] float attack, attackSpeed, knockback;
     [SerializeField] WeaponHoldStyle weaponHoldStyle;
+    [SerializeField] Element element;
     [SerializeField] List<string> animations;
 
     public float Attack { get => attack; }
     public float AttackSpeed { get => attackSpeed; }
     public float Knockback { get => knockback; }
     public WeaponHoldStyle WeaponHoldStyle { get => weaponHoldStyle; }
+    public Element Element { get => element; }
     public List<string> Animations { get => animations; }
 
     public int GetNextAnimationIndex(int index)
@@ -31,3 +33,4 @@ public abstract class Weapon : Equipment
 }
 
 public enum WeaponHoldStyle { Static, Mouse }
+public enum Element { Physical, Fire, Water, Wind, Earth, Electric, Nature, Ice }

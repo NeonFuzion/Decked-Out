@@ -2,11 +2,14 @@ using System.Collections;
 using System.Collections.Generic;
 using TMPro;
 using UnityEngine;
+using UnityEngine.Analytics;
 
 public class DamageObject : MonoBehaviour
 {
-    float lifeTime;
-    int speed;
+    [SerializeField] int criticalHitFontSize, speed, criticalHitSpeed, lifeTime;
+    [SerializeField] Color physicalDamageColor, fireDamageColor, waterDamageColor, windDamageColor, earthDamageColor, electricDamageColor, natureDamageColor, iceDamageColor, healingColor;
+
+    float currentLifetime;
 
     TextMeshPro tmp;
     RectTransform rectTransform;
@@ -14,9 +17,6 @@ public class DamageObject : MonoBehaviour
 
     void Awake()
     {
-        speed = 5;
-        lifeTime = 1;
-
         tmp = GetComponent<TextMeshPro>();
         rectTransform = GetComponent<RectTransform>();
     }
@@ -30,17 +30,35 @@ public class DamageObject : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        lifeTime -= Time.deltaTime;
-        rectTransform.localScale = Vector3.one * lifeTime;
+        currentLifetime -= Time.deltaTime;
+        rectTransform.localScale = Vector3.one * currentLifetime;
         transform.position -= (Vector3)direction.normalized * Time.deltaTime * speed * lifeTime;
-        if (lifeTime > 0) return;
+        if (currentLifetime > 0) return;
 
         Destroy(gameObject);
     }
 
-    public void Instantiate(int amount, Vector2 direction)
+    public void Instantiate(int amount, bool isCrit, bool isHeal, Vector2 direction, Element element)
     {
         GetComponent<TextMeshPro>().SetText(Mathf.Abs(amount).ToString());
         this.direction = direction;
+
+        Color color = new ();
+        switch (element)
+        {
+            case Element.Physical: color = physicalDamageColor; break;
+            case Element.Fire: color = fireDamageColor; break;
+            case Element.Water: color = waterDamageColor; break;
+            case Element.Wind: color = windDamageColor; break;
+            case Element.Earth: color = earthDamageColor; break;
+            case Element.Electric: color = electricDamageColor; break;
+            case Element.Nature: color = natureDamageColor; break;
+        }
+        tmp.color = isHeal ? healingColor : color;
+
+        if (!isCrit) return;
+        tmp.fontSize = criticalHitFontSize;
     }
 }
+
+public enum DamageType { None, CriticalHit, Heal }

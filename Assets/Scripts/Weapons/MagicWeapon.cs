@@ -25,7 +25,7 @@ public class MagicWeapon : Weapon
         {
             if (projectileCount > 1)
                 offset = new Vector2(Random.Range(-range, range), Random.Range(-range, range));
-            script.FireProjectile(projectileData, ProjectileTargetType.Friendly, mousePos + offset, damage, isCrit);
+            script.FireProjectile(projectileData, ProjectileTargetType.Friendly, mousePos + offset, Element, damage, isCrit);
         }
     }
 

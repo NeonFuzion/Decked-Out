@@ -21,6 +21,7 @@ MonoBehaviour:
   attackSpeed: 1
   knockback: 0
   weaponHoldStyle: 1
+  element: 3
   animations:
   - MagicCast0
   projectileCount: 1

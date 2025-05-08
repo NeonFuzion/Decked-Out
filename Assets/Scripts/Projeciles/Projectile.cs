@@ -11,6 +11,7 @@ public class Projectile : MonoBehaviour
     bool isCrit;
 
     ProjectileData projectileData;
+    Element element;
     Vector2 targetPosition, startPosition;
     SpriteRenderer visualSpriteRenderer, shadowSpriteRenderer;
     
@@ -63,16 +64,17 @@ public class Projectile : MonoBehaviour
             Health health = col.GetComponent<Health>();
 
             if (!health) continue;
-            health.TakeDamage(damage, transform.position, isCrit);
+            health.TakeDamage(damage, element, transform.position, isCrit);
 
             if (health.HP > 0) continue;
             EventManager.InvokeOnKill();
         }
     }
 
-    public void Initialize(ProjectileData projectileData, Vector2 targetPosition, int damage, bool isCrit)
+    public void Initialize(ProjectileData projectileData, Vector2 targetPosition, Element element, int damage, bool isCrit)
     {
         this.projectileData = projectileData;
+        this.element = element;
         this.damage = damage;
         this.isCrit = isCrit;
 
