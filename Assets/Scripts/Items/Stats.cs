@@ -37,4 +37,11 @@ public static class Stats
 }
 
 public enum PieceType { Headpiece, Chestpiece, Leggings, Hands }
-public enum PlayerStat { Attack, Defense, Health, CriticalChance, CriticalDamage, EnergyRecharge }
+public enum PlayerStat
+{
+    Attack, Defense, Health,
+    CriticalChance, CriticalDamage, EnergyRecharge,
+    PhysicalDamageBonus, FireDamageBonus, WaterDamageBonus,
+    WindDamageBonus, EarthDamageBonus, ElectricDamageBonus,
+    NatureDamageBonus, IceDamageBonus
+}
