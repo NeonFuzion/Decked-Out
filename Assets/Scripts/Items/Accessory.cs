@@ -2,18 +2,24 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-[CreateAssetMenu(menuName = "Item/Accessory")]
+[CreateAssetMenu(menuName = "Item/Equipment/Accessory")]
 public class Accessory : Equipment
 {
-    [SerializeField] RelicSlot relicSlot;
     [SerializeField] PlayerStat mainStat;
     [SerializeField] SetBonus setBonus;
-    [SerializeField] float statBoost;
+    [SerializeField] StatBoost[] statBoosts;
 
-    public RelicSlot RelicSlot { get => relicSlot; }
     public PlayerStat MainStat { get => mainStat; }
     public SetBonus SetBonus { get => setBonus; }
-    public float StatBoost {  get => statBoost; }
+    public StatBoost[] StatBoost { get => statBoosts; }
 }
 
-public enum RelicSlot { Headpiece, Chestpiece, Timepiece, Leggings, Flower }
+[System.Serializable]
+public class StatBoost
+{
+    [SerializeField] PlayerStat stat;
+    [SerializeField] float amount;
+    
+    public PlayerStat Stat { get => stat; }
+    public float Amount { get => amount; }
+}

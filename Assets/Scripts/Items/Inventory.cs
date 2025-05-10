@@ -6,18 +6,15 @@ public class Inventory : MonoBehaviour
 {
     [SerializeField] Canvas itemCanvas;
     [SerializeField] Transform itemParent, equipmentEffects;
+    [SerializeField] EquipmentEffectsManager effectsManager;
     [SerializeField] Equipment[] equiped;
     [SerializeField] InventorySlots items;
 
     public Equipment[] Equiped { get => equiped; }
     public InventorySlots Items { get => items; }
 
-    EquipmentEffectsManager effectsManager;
-
     private void Start()
     {
-        effectsManager = GetComponent<EquipmentEffectsManager>();
-
         EventManager.AddOnInventoryUpdatedListener(UpdateInventory);
         UpdateInventory(equiped, items);
         EventManager.InvokeOnEquipmentUpdated(equiped);
@@ -48,7 +45,11 @@ public class Inventory : MonoBehaviour
         Accessory relic = equipment as Accessory;
         if (relic)
         {
-            index = 1 + (int)relic.RelicSlot;
+            index = 3;
+            while (true)
+            {
+                if (equiped[index++] != null || index >= equiped.Length) break; 
+            }
 
             int setCount = 1;
             SetBonus curPieceSet = relic.SetBonus;
