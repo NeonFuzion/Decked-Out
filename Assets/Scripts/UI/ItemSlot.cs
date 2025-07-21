@@ -1,47 +1,30 @@
-using System.Collections;
-using System.Collections.Generic;
 using TMPro;
 using UnityEngine;
-using UnityEngine.Events;
-using UnityEngine.EventSystems;
-using UnityEngine.UI;
 
-public class ItemSlot : MonoBehaviour, IPointerClickHandler
+public class ItemSlot : Slot
 {
-    [SerializeField] Image image;
     [SerializeField] TextMeshProUGUI amountText;
 
-    int index;
-    bool isEquipment, isEquiped;
-
-    public void OnPointerClick(PointerEventData eventData)
-    {
-        if (eventData.button == PointerEventData.InputButton.Left) OnFocus();
-        if (eventData.button == PointerEventData.InputButton.Right) OnEquip();
-    }
-
-    public void Initialize(Sprite sprite, int amount, int index, bool isEquipment, bool isEquiped)
+    public void Initialize(Sprite sprite, int amount, int index, bool isEquipment)
     {
         this.index = index;
         this.isEquipment = isEquipment;
-        this.isEquiped = isEquiped;
+
+        isEquiped = false;
         image.sprite = sprite;
 
         if (isEquipment || amount == 1) return;
         amountText.text = amount.ToString();
     }
 
-    public void OnFocus()
+    public override void OnLeftClick()
     {
-        EventManager.InvokeOnFocusItem(index, isEquiped, transform);
+        EventManager.InvokeOnFocusItem(index, false, transform);
     }
 
-    public void OnEquip()
+    public override void OnRightClick()
     {
         if (!isEquipment) return;
-        if (isEquiped && index == 0) return;
-
-        EventManager.InvokeOnEquip(index, isEquiped);
-        isEquiped = !isEquiped;
+        EventManager.InvokeOnEquip(index, false);
     }
 }

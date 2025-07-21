@@ -7,25 +7,18 @@ using UnityEngine.UI;
 public class InventoryInterface : MonoBehaviour
 {
     [SerializeField] GameObject playerGameObject, prefabItemSlot, prefabEquipSlot;
-    [SerializeField] Transform equipmentSlots, itemSlots;
+    [SerializeField] Transform equipmentSlots, itemSlots, description;
     [SerializeField] TextMeshProUGUI statsDisplay, focusName, focusType, focusAmount, focusStats, focusDescription, focusAbility;
+    [SerializeField] Color32[] inventoryColors;
 
     InventorySlots items;
     Equipment[] equiped;
     Transform lastSelected;
     Player player;
-    Color32[] inventoryColors;
 
     // Start is called before the first frame update
     void Start()
     {
-        inventoryColors = new Color32[] {
-            new Color32(255, 255, 200, 255),
-            new Color32(255, 240, 170, 255),
-            new Color32(255, 220, 120, 255),
-            new Color32(255, 200, 80, 255)
-        };
-
         EventManager.AddOnFocusItemListener(FocusOnItem);
         EventManager.AddOnEquipListener(EquipItem);
     }
@@ -44,8 +37,6 @@ public class InventoryInterface : MonoBehaviour
             item = slot.Item;
             itemAmount = slot.Amount;
         }
-
-        Transform description = transform.GetChild(2);
 
         if (lastSelected && lastSelected != itemSlot) lastSelected.GetComponentInChildren<Image>().color = inventoryColors[2];
         lastSelected = itemSlot;
@@ -71,8 +62,8 @@ public class InventoryInterface : MonoBehaviour
         else if (item as Accessory)
         {
             Accessory accessory = item as Accessory;
-            focusType.SetText($"Accessory - {accessory.RelicSlot}");
-            focusStats.SetText($"{accessory.MainStat} - {accessory.StatBoost}%");
+            focusType.SetText($"Accessory");
+            focusStats.SetText($"{accessory.MainStat.Stat} - {accessory.MainStat.Amount}%");
         }
 
         if (item as Equipment)
@@ -80,20 +71,18 @@ public class InventoryInterface : MonoBehaviour
             focusStats.gameObject.SetActive(true);
 
             Equipment equipment = item as Equipment;
-            focusAbility.gameObject.SetActive(equipment.EquipmentEffect);
-
             EquipmentEffect ability = equipment.EquipmentEffect;
+            focusAbility.gameObject.SetActive(ability);
+
             if (ability)
             {
-                focusAbility.gameObject.SetActive(true);
                 focusAbility.SetText($"{ability.Name}:\n{ability.Description}");
             }
         }
 
-
         focusDescription.SetText(item.Description);
 
-        Image img = description.GetChild(0).GetComponent<Image>();
+        Image img = description.GetChild(1).GetChild(0).GetComponent<Image>();
         img.sprite = item.Sprite;
         img.color = Color.white;
         img.SetNativeSize();
@@ -102,22 +91,26 @@ public class InventoryInterface : MonoBehaviour
     public void UpdateInventory()
     {
         foreach (Transform child in itemSlots) Destroy(child.gameObject);
-        foreach (Transform child in equipmentSlots) Destroy(child.gameObject);
 
         SetInventory();
 
-        for (int i = 0; i < equiped.Length; i++)
+        for (int i = 0; i < equipmentSlots.childCount; i++)
         {
-            if (!equiped[i]) continue;
-            GameObject equipSlot = Instantiate(prefabEquipSlot, equipmentSlots);
-            equipSlot.GetComponent<ItemSlot>().Initialize(equiped[i].Sprite, 1, i, true, true);
+            Transform equipSlot = equipmentSlots.GetChild(i);
+            EquipmentSlot script = equipSlot.GetComponent<EquipmentSlot>();
+
+            if (!equiped[i]) script.ResetSprite();
+            else script.UpdateSprite(equiped[i].Sprite);
         }
         for (int i = 0; i < items.Items.Count; i++)
         {
             InventorySlot slot = items.Items[i];
             GameObject itemSlot = Instantiate(prefabItemSlot, itemSlots);
-            itemSlot.GetComponent<ItemSlot>().Initialize(slot.Item.Sprite, slot.Amount, i, slot.Item as Equipment, false);
-            itemSlot.transform.GetChild(0).GetComponent<Image>().SetNativeSize();
+            itemSlot.GetComponent<ItemSlot>().Initialize(slot.Item.Sprite, slot.Amount, i, slot.Item as Equipment);
+
+            Transform itemImage = itemSlot.transform.GetChild(0);
+            itemImage.GetComponent<Image>().SetNativeSize();
+            itemImage.GetComponent<RectTransform>().sizeDelta *= 3;
         }
 
         EventManager.InvokeOnInventoryUpdated(equiped, items);
@@ -135,9 +128,17 @@ public class InventoryInterface : MonoBehaviour
         else
         {
             Equipment equipment = items.Items[index].Item as Equipment;
-            int equipmentSlot = 1;
-            if (equipment as Weapon) equipmentSlot--;
-            else equipmentSlot += (int)(equipment as Accessory).RelicSlot;
+            int equipmentSlot = -1;
+            if (equipment as Weapon) equipmentSlot = 0;
+            else
+            {
+                for (int i = 3; i < equiped.Length; i++)
+                {
+                    if (equiped[i] != null) continue;
+                    equipmentSlot = i;
+                    break;
+                }
+            }
 
             if (equiped[equipmentSlot])
             {

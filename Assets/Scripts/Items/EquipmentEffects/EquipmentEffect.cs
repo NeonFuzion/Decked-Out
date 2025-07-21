@@ -11,7 +11,7 @@ public abstract class EquipmentEffect : ScriptableObject
     protected GameObject player;
     protected EquipmentEffectsManager equipmentEffectsManager;
 
-    public string Name { get => name; }
+    public string Name { get => abilityName; }
     public string Description { get => description; }
 
     public virtual void Instantiate(GameObject player)

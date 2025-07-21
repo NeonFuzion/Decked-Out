@@ -1,5 +1,6 @@
 using System.Collections;
 using System.Collections.Generic;
+using Unity.VisualScripting;
 using UnityEngine;
 
 public class Inventory : MonoBehaviour
@@ -7,17 +8,23 @@ public class Inventory : MonoBehaviour
     [SerializeField] Canvas itemCanvas;
     [SerializeField] Transform itemParent, equipmentEffects;
     [SerializeField] EquipmentEffectsManager effectsManager;
-    [SerializeField] Equipment[] equiped;
+    [SerializeField] Equipment[] startingEquipment;
     [SerializeField] InventorySlots items;
+
+    Equipment[] equiped;
 
     public Equipment[] Equiped { get => equiped; }
     public InventorySlots Items { get => items; }
 
     private void Start()
     {
-        EventManager.AddOnInventoryUpdatedListener(UpdateInventory);
+        EquipStartingEquipment();
         UpdateInventory(equiped, items);
+
+        EventManager.AddOnInventoryUpdatedListener(UpdateInventory);
         EventManager.InvokeOnEquipmentUpdated(equiped);
+
+        GetComponent<Player>().UpdateStats(equiped);
     }
 
     private void OnTriggerEnter2D(Collider2D col)
@@ -26,6 +33,32 @@ public class Inventory : MonoBehaviour
         if (!itemObj) return;
         AddItem(itemObj.Item);
         Destroy(col.gameObject);
+    }
+
+    void EquipStartingEquipment()
+    {
+        equiped = new Equipment[9];
+        foreach (Equipment equipment in startingEquipment)
+        {
+            if (equipment as Weapon)
+            {
+                equiped[0] = equipment;
+            }
+            else if (equipment as Accessory)
+            {
+                for (int i = 3; i < 9; i++)
+                {
+                    if (equiped[i]) continue;
+                    equiped[i] = equipment;
+                    break;
+                }
+            }
+            else if (equipment as SkillCharm)
+            {
+                SkillCharm charm = equipment as SkillCharm;
+                equiped[charm.CharmType == CharmType.Skill ? 1 : 2] = equipment;
+            }
+        }
     }
 
     public void AddItem(Item item)
@@ -79,8 +112,10 @@ public class Inventory : MonoBehaviour
         effectsManager.RemoveAllEffects();
 
         foreach (Transform child in equipmentEffects) Destroy(child.gameObject);
-        foreach (Equipment equip in equiped)
+        for (int i = 0; i < 9; i++)
         {
+            Equipment equip = equiped[i];
+
             if (!equip) continue;
             EquipmentEffect equipmentEffect = equip.EquipmentEffect;
 

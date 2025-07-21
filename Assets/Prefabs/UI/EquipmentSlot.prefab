@@ -86,7 +86,7 @@ GameObject:
   - component: {fileID: 1916678612816119525}
   - component: {fileID: 3568202604719847041}
   - component: {fileID: 2987539017858288884}
-  - component: {fileID: -6970873944130222393}
+  - component: {fileID: 8643816727503272998}
   m_Layer: 0
   m_Name: EquipmentSlot
   m_TagString: Untagged
@@ -152,7 +152,7 @@ MonoBehaviour:
   m_FillOrigin: 0
   m_UseSpriteMesh: 0
   m_PixelsPerUnitMultiplier: 1
---- !u!114 &-6970873944130222393
+--- !u!114 &8643816727503272998
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -161,8 +161,7 @@ MonoBehaviour:
   m_GameObject: {fileID: 7623929655716398588}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 9001113b5ff178044acb776544584457, type: 3}
+  m_Script: {fileID: 11500000, guid: 0a58c6cf7b6e43a4bbb95b6ab29d0194, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
   image: {fileID: 8031014349764507521}
-  amountText: {fileID: 0}

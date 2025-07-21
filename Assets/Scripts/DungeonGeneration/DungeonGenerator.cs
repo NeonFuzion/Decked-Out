@@ -29,9 +29,9 @@ public class DungeonGenerator : MonoBehaviour
     // Start is called once before the first execution of Update after the MonoBehaviour is created
     void Start()
     {
-        DungeonRoom oldRoom = new DungeonRoom(new Vector2(0, 0), new List<Direction>(), specialLayouts[0]);
-        roomList = new List<DungeonRoom>() { oldRoom };
-        enemySpawners = new List<GameObject>();
+        DungeonRoom oldRoom = new DungeonRoom(new Vector2(0, 0), new (), specialLayouts[0]);
+        roomList = new() { oldRoom };
+        enemySpawners = new ();
         currentSpecialObjects = new ();
         
         GeneratePath(oldRoom, Vector2.zero, 0, roomLength);
@@ -105,20 +105,11 @@ public class DungeonGenerator : MonoBehaviour
 
     void GeneratePath(DungeonRoom oldRoom, Vector2 lastDirection, int currentPathLength, int pathLength)
     {
-        DungeonRoom newRoom = null;
-        Vector2 direction = Vector2.zero;
-        while (true)
-        {
-            switch (Random.Range(0, 4))
-            {
-                case 0: direction = Vector2.up; break;
-                case 1: direction = Vector2.right; break;
-                case 2: direction = Vector2.down; break;
-                case 3: direction = Vector2.left; break;
-            }
-            if (-direction != lastDirection) break;
-        }
+        List<Vector2> availableDirections = new () { Vector2.up, Vector2.right, Vector2.down, Vector2.left };
+        if (availableDirections.Contains(-lastDirection)) availableDirections.Remove(-lastDirection);
+        Vector2 direction = availableDirections[Random.Range(0, 3)];
 
+        DungeonRoom newRoom;
         Vector2 newPostion = oldRoom.Position + direction;
         Direction newExit = VectorToDirection(-direction);
         DungeonRoom exitingRoom = FindRoomAtPosition(newPostion);
@@ -129,7 +120,7 @@ public class DungeonGenerator : MonoBehaviour
         }
         else
         {
-            newRoom = new DungeonRoom(newPostion, new List<Direction>() { newExit }, layouts[Random.Range(0, layouts.Length)]);
+            newRoom = new DungeonRoom(newPostion, new () { newExit }, layouts[Random.Range(0, layouts.Length)]);
             roomList.Add(newRoom);
         }
         oldRoom.AddExit(VectorToDirection(direction));
@@ -149,12 +140,7 @@ public class DungeonGenerator : MonoBehaviour
 
     public DungeonRoom FindRoomAtPosition(Vector2 position)
     {
-        foreach (DungeonRoom room in roomList)
-        {
-            if (room.Position != position) continue;
-            return room;
-        }
-        return null;
+        return roomList.Where(room => room.Position == position).FirstOrDefault();
     }
 
     public void LoadRoom(Direction direction)
@@ -208,7 +194,7 @@ public class DungeonGenerator : MonoBehaviour
             specialObject.transform.SetParent(specialObjectsParent.transform, true);
             currentSpecialObjects.Add(specialObject);
             bool isActive = currentRoom.GetActiveObject(currentSpecialObjects.Count - 1);
-            specialObject.GetComponent<TerrainObject>().Initialize(isActive, UnactivateSpecialObject);
+            specialObject.GetComponent<TerrainObject>().Initialize(isActive, DeactivateSpecialObject);
         }
 
         PlaceTiles(roomLayout.FloorTiles, floorTilemap);
@@ -269,12 +255,8 @@ public class DungeonGenerator : MonoBehaviour
     {
         if (currentRoom.IsRoomCleared) return;
         currentEnemyQuota = 0;
-        enemyQuota = 0;
-        foreach (GameObject enemySpawner in enemySpawners)
-        {
-            enemySpawner.GetComponent<EnemySpawner>().SpawnEnemy(enemies[Random.Range(0, enemies.Length)]);
-            enemyQuota++;
-        }
+        enemyQuota = enemySpawners.Count;
+        enemySpawners.ForEach(spawner => spawner.GetComponent<EnemySpawner>().SpawnEnemy(enemies[Random.Range(0, enemies.Length)]));
     }
 
     public void IncrementEnemyQuota()
@@ -293,10 +275,10 @@ public class DungeonGenerator : MonoBehaviour
         existingChest = null;
     }
 
-    public void UnactivateSpecialObject(GameObject specialObject)
+    public void DeactivateSpecialObject(GameObject specialObject)
     {
         int index = currentSpecialObjects.IndexOf(specialObject);
-        currentRoom.UnactivateObject(index);
+        currentRoom.DeactivateObject(index);
     }
 }
 
@@ -337,7 +319,7 @@ public class DungeonRoom
         exits.Add(direction);
     }
 
-    public void UnactivateObject(int index)
+    public void DeactivateObject(int index)
     {
         activeObjects[index] = false;
     }

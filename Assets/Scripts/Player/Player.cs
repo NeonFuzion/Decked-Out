@@ -129,9 +129,9 @@ public class Player : MonoBehaviour
             if (equipment as Accessory)
             {
                 Accessory accessory = equipment as Accessory;
-                if (percentageStatBoosts.ContainsKey(accessory.MainStat))
-                    percentageStatBoosts[accessory.MainStat] += accessory.StatBoost;
-                else percentageStatBoosts.Add(accessory.MainStat, accessory.StatBoost);
+                if (percentageStatBoosts.ContainsKey(accessory.MainStat.Stat))
+                    percentageStatBoosts[accessory.MainStat.Stat] += accessory.MainStat.Amount;
+                else percentageStatBoosts.Add(accessory.MainStat.Stat, accessory.MainStat.Amount);
             }
         }
 

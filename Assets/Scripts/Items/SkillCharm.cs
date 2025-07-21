@@ -1,8 +1,11 @@
 using UnityEngine;
 
-public class SkillCharm : ScriptableObject
+public class SkillCharm : Equipment
 {
     protected GameObject player;
+    protected CharmType charmType;
+
+    public CharmType CharmType { get => charmType; }
 
     public virtual void Activate()
     {

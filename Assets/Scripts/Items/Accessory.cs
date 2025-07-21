@@ -5,11 +5,11 @@ using UnityEngine;
 [CreateAssetMenu(menuName = "Item/Equipment/Accessory")]
 public class Accessory : Equipment
 {
-    [SerializeField] PlayerStat mainStat;
+    [SerializeField] StatBoost mainStat;
     [SerializeField] SetBonus setBonus;
     [SerializeField] StatBoost[] statBoosts;
 
-    public PlayerStat MainStat { get => mainStat; }
+    public StatBoost MainStat { get => mainStat; }
     public SetBonus SetBonus { get => setBonus; }
     public StatBoost[] StatBoost { get => statBoosts; }
 }
