@@ -16,7 +16,9 @@ MonoBehaviour:
   description: A heavy metal chestplate adorn with gems.
   sprite: {fileID: -1416208706, guid: 1529019942676c14784c63a0b641aa78, type: 3}
   craftingRecipe: []
-  relicSlot: 1
-  mainStat: 1
+  equipmentEffect: {fileID: 0}
+  mainStat:
+    stat: 1
+    amount: 20
   setBonus: {fileID: 0}
-  statBoost: 30
+  statBoosts: []

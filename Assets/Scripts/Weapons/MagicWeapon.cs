@@ -19,12 +19,14 @@ public class MagicWeapon : Weapon
         int range = projectileSpread;
         Vector2 offset = Vector2.zero;
         Vector2 mousePos = MainCamera.MousePosition;
-        Shooter script = transform.GetChild(0).GetChild(0).GetComponentInChildren<Shooter>();
-        
+        Shooter script = transform.GetComponent<Shooter>();
+
         for (int i = 0; i < projectileCount; i++)
         {
             if (projectileCount > 1)
-                offset = new Vector2(Random.Range(-range, range), Random.Range(-range, range));
+                offset = new Vector2((Random.value * 2) - 1, (Random.value * 2) - 1) * range;
+            if (projectileData.MaxHeight == 0)
+                offset = (mousePos - (Vector2)transform.position).normalized * 100 + offset * 50;
             script.FireProjectile(projectileData, ProjectileTargetType.Friendly, mousePos + offset, Element, damage, isCrit);
         }
     }

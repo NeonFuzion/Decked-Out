@@ -43,10 +43,11 @@ public class Projectile : MonoBehaviour
         projectileShadow.transform.eulerAngles = Vector3.forward * groundDirection;
 
         if (distanceProgress > 0.95f) DestroyProjectile();
-
         Collider2D collider = Physics2D.OverlapCircle(transform.position, projectileData.DamageRadius);
+
         if (!collider) return;
-        if (collider.gameObject != gameObject) DestroyProjectile();
+        if (collider.gameObject == gameObject) return;
+        DestroyProjectile();
     }
 
     void DestroyProjectile()

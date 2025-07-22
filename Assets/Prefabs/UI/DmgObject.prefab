@@ -193,12 +193,12 @@ MonoBehaviour:
   speed: 5
   criticalHitSpeed: 8
   lifeTime: 1
-  physicalDamageColor: {r: 1, g: 1, b: 1, a: 0}
-  fireDamageColor: {r: 1, g: 0.34385628, b: 0.216981, a: 0}
-  waterDamageColor: {r: 0, g: 0.36116934, b: 1, a: 0}
-  windDamageColor: {r: 0.3238992, g: 1, b: 0.6785056, a: 0}
-  earthDamageColor: {r: 0.57232696, g: 0.21110421, b: 0, a: 0}
-  electricDamageColor: {r: 1, g: 0.7702483, b: 0, a: 0}
-  natureDamageColor: {r: 0.015185518, g: 0.6037736, b: 0, a: 0}
-  iceDamageColor: {r: 0.51886785, g: 0.91339606, b: 1, a: 0}
-  healingColor: {r: 0, g: 1, b: 0, a: 0}
+  physicalDamageColor: {r: 1, g: 1, b: 1, a: 1}
+  fireDamageColor: {r: 1, g: 0.34385628, b: 0.216981, a: 1}
+  waterDamageColor: {r: 0, g: 0.36116934, b: 1, a: 1}
+  windDamageColor: {r: 0.3238992, g: 1, b: 0.6785056, a: 1}
+  earthDamageColor: {r: 0.57232696, g: 0.21110421, b: 0, a: 1}
+  electricDamageColor: {r: 1, g: 0.7702483, b: 0, a: 1}
+  natureDamageColor: {r: 0.015185518, g: 0.6037736, b: 0, a: 1}
+  iceDamageColor: {r: 0.51886785, g: 0.91339606, b: 1, a: 1}
+  healingColor: {r: 0, g: 1, b: 0, a: 1}

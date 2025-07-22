@@ -1,5 +1,6 @@
 using System.Collections;
 using System.Collections.Generic;
+using System.Linq;
 using TMPro;
 using UnityEngine;
 using UnityEngine.UI;
@@ -19,6 +20,11 @@ public class InventoryInterface : MonoBehaviour
     // Start is called before the first frame update
     void Start()
     {
+        for (int i = 0; i < equipmentSlots.childCount; i++)
+        {
+            equipmentSlots.GetChild(i).GetComponent<EquipmentSlot>().Initialize(i);
+        }
+
         EventManager.AddOnFocusItemListener(FocusOnItem);
         EventManager.AddOnEquipListener(EquipItem);
     }
@@ -107,10 +113,6 @@ public class InventoryInterface : MonoBehaviour
             InventorySlot slot = items.Items[i];
             GameObject itemSlot = Instantiate(prefabItemSlot, itemSlots);
             itemSlot.GetComponent<ItemSlot>().Initialize(slot.Item.Sprite, slot.Amount, i, slot.Item as Equipment);
-
-            Transform itemImage = itemSlot.transform.GetChild(0);
-            itemImage.GetComponent<Image>().SetNativeSize();
-            itemImage.GetComponent<RectTransform>().sizeDelta *= 3;
         }
 
         EventManager.InvokeOnInventoryUpdated(equiped, items);
@@ -124,13 +126,14 @@ public class InventoryInterface : MonoBehaviour
         {
             items.AddItem(equiped[index]);
             equiped[index] = null;
+            equipmentSlots.GetChild(index).GetComponent<Image>().color = inventoryColors[2];
         }
         else
         {
             Equipment equipment = items.Items[index].Item as Equipment;
             int equipmentSlot = -1;
             if (equipment as Weapon) equipmentSlot = 0;
-            else
+            else if (equipment as Accessory && !equiped.ToList().Find(x => x && x.Equals(equipment)))
             {
                 for (int i = 3; i < equiped.Length; i++)
                 {

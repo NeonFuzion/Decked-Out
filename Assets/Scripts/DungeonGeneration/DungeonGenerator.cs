@@ -8,6 +8,7 @@ using UnityEngine.UI;
 public class DungeonGenerator : MonoBehaviour
 {
     [SerializeField] int roomLength;
+    [SerializeField] float chestSpawnChance;
     [SerializeField] GameObject[] enemies;
     [SerializeField] Item[] lootPool;
     [SerializeField] UnityEvent onRoomCleared;
@@ -265,7 +266,8 @@ public class DungeonGenerator : MonoBehaviour
 
         if (currentEnemyQuota < enemyQuota) return;
         currentRoom.IsRoomCleared = true;
-        SpawnChest();
+        if (Random.value < chestSpawnChance) SpawnChest();
+        else SetChestOpened();
         onRoomCleared?.Invoke();
     }
 

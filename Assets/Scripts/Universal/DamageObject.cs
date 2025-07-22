@@ -42,6 +42,7 @@ public class DamageObject : MonoBehaviour
     {
         GetComponent<TextMeshPro>().SetText(Mathf.Abs(amount).ToString());
         this.direction = direction;
+        currentLifetime = lifeTime;
 
         Color color = new ();
         switch (element)

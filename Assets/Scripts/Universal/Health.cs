@@ -56,7 +56,7 @@ public class Health : MonoBehaviour
 
         Instantiate(prefabHitEffect).GetComponent<HitEfect>().Initialize(transform.position);
 
-        if (prefabDmgObj) SpawnDamageNumber(incomingAttack, element, finalDamage, isCrit);
+        if (prefabDmgObj) SpawnDamageNumber(incomingAttack, element, finalDamage, isCrit, false);
         if (amount < 0) return;
         if (incomingAttack != Vector2.zero)
         {
@@ -75,7 +75,7 @@ public class Health : MonoBehaviour
         hp += amount;
         if (hp > maxHp) hp = maxHp;
 
-        if (prefabDmgObj) SpawnDamageNumber(Vector2.down, Element.Physical, -amount, false);
+        if (prefabDmgObj) SpawnDamageNumber(Vector2.down, Element.Physical, amount, false, true);
     }
 
     public void SetInvincibility()
@@ -83,11 +83,11 @@ public class Health : MonoBehaviour
         invincible = !invincible;
     }
 
-    void SpawnDamageNumber(Vector2 incomingAttack, Element element, int amount, bool isCrit)
+    void SpawnDamageNumber(Vector2 incomingAttack, Element element, int amount, bool isCrit, bool isHeal)
     {
         Vector2 direction = incomingAttack == new Vector2() ? (Vector2)transform.position : (incomingAttack - (Vector2)transform.position);
         GameObject dmgObj = Instantiate(prefabDmgObj, transform.position, Quaternion.identity);
-        dmgObj.GetComponent<DamageObject>().Instantiate(amount, isCrit, false, direction, element);
+        dmgObj.GetComponent<DamageObject>().Instantiate((isHeal ? -1 : 1) * amount, isCrit, isHeal, direction, element);
     }
 
     IEnumerator ApplyKnockback(Vector2 incomingAttack, float knockback)

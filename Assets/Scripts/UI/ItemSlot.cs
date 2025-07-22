@@ -13,8 +13,10 @@ public class ItemSlot : Slot
         isEquiped = false;
         image.sprite = sprite;
 
-        if (isEquipment || amount == 1) return;
-        amountText.text = amount.ToString();
+        image.SetNativeSize();
+        image.GetComponent<RectTransform>().sizeDelta *= 2.5f;
+        
+        amountText.SetText(isEquipment || amount == 1 ? "" : amount.ToString());
     }
 
     public override void OnLeftClick()

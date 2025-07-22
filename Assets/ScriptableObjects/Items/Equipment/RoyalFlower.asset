@@ -16,8 +16,9 @@ MonoBehaviour:
   description: A flower crafted of gold and gems.
   sprite: {fileID: 455125575, guid: 1529019942676c14784c63a0b641aa78, type: 3}
   craftingRecipe: []
-  equipmentEffect: {fileID: 11400000, guid: 92c91d688743f624daff6f5141da915f, type: 2}
-  relicSlot: 4
-  mainStat: 2
+  equipmentEffect: {fileID: 0}
+  mainStat:
+    stat: 2
+    amount: 20
   setBonus: {fileID: 0}
-  statBoost: 30
+  statBoosts: []

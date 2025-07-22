@@ -17,7 +17,9 @@ MonoBehaviour:
     times.
   sprite: {fileID: 1729119030, guid: 1529019942676c14784c63a0b641aa78, type: 3}
   craftingRecipe: []
-  relicSlot: 0
-  mainStat: 3
+  equipmentEffect: {fileID: 0}
+  mainStat:
+    stat: 3
+    amount: 20
   setBonus: {fileID: 0}
-  statBoost: 25
+  statBoosts: []

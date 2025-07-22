@@ -4,6 +4,11 @@ public class EquipmentSlot : Slot
 {
     [SerializeField] Sprite emptySprite;
 
+    public void Initialize(int index)
+    {
+        this.index = index;
+    }
+
     public void UpdateSprite(Sprite sprite)
     {
         image.sprite = sprite;

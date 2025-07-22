@@ -36,36 +36,34 @@ public class Slime : Enemy
     void Update()
     {
         SearchTarget(transform.position, detectDistance);
-        if (!target) return;
+
         if (curJumpCD > 0)
         {
             curJumpCD -= Time.deltaTime;
-            return;
         }
-        if (jumping)
+        else if (jumping)
         {
             curJumpTime -= Time.deltaTime;
-            if (curJumpTime < 0 || Vector3.Distance(target.position, transform.position) < 1.75f)
+            if (curJumpTime < 0 || Vector3.Distance(target.position, transform.position) < 1.75f
+                || Physics2D.Raycast(transform.position, rb.linearVelocity, 1, LayerMask.GetMask("Wall")))
                 animator.CrossFade("SlimeLanding", 0, 0);
-            return;
         }
-        animator.CrossFade("SlimeBounce", 0, 0);
-        targetPos = target.position;
-        Movement();
-        bc.enabled = false;
-        sr.enabled = true;
-        curJumpTime = jumpTime;
-        jumping = true;
+        else if (target)
+        {
+            animator.CrossFade("SlimeBounce", 0, 0);
+            targetPos = target.position;
+            Movement();
+            bc.enabled = false;
+            sr.enabled = true;
+            curJumpTime = jumpTime;
+            jumping = true;
+        }
     }
 
     private void FixedUpdate()
     {
-        if (!jumping)
-        {
-            rb.linearVelocity = Vector3.zero;
-            return;
-        }
-        if (Vector3.Distance(targetPos, transform.position) < 0.2f) return;
+        if (jumping) return;
+        rb.linearVelocity = Vector3.zero;
     }
 
     public void OnLanding()

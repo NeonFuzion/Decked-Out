@@ -16,7 +16,9 @@ MonoBehaviour:
   description: Gold-platted boots adorn with gems.
   sprite: {fileID: -888290317, guid: 1529019942676c14784c63a0b641aa78, type: 3}
   craftingRecipe: []
-  relicSlot: 3
-  mainStat: 0
+  equipmentEffect: {fileID: 0}
+  mainStat:
+    stat: 3
+    amount: 20
   setBonus: {fileID: 0}
-  statBoost: 30
+  statBoosts: []

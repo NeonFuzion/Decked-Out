@@ -25,6 +25,7 @@ public class Inventory : MonoBehaviour
         EventManager.InvokeOnEquipmentUpdated(equiped);
 
         GetComponent<Player>().UpdateStats(equiped);
+        
     }
 
     private void OnTriggerEnter2D(Collider2D col)
