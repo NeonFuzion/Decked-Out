@@ -7,11 +7,9 @@ public class Fountain : TerrainObject
 {
     [SerializeField] Sprite activeSprite, inactiveSprite;
 
-    bool isActive;
-
     Animator animator;
     SpriteRenderer spriteRenderer;
-    UnityEvent<GameObject> onUnactivate;
+    RoomObjectData objectData;
 
     // Start is called before the first frame update
     void Start()
@@ -27,7 +25,7 @@ public class Fountain : TerrainObject
 
     void OnMouseDown()
     {
-        if (!isActive) return;
+        if (!objectData.IsActive) return;
         Collider2D player = Physics2D.OverlapCircle(transform.position, 5, LayerMask.GetMask("Player"));
 
         if (!player) return;
@@ -35,15 +33,19 @@ public class Fountain : TerrainObject
         animator.CrossFade("Empty", 0, 0);
     }
 
-    public override void Initialize(bool isActive, UnityAction<GameObject> unityAction)
+    public override RoomObjectData Initialize()
     {
-        this.isActive = isActive;
-        
+        objectData = new(true);
+        return objectData;
+    }
+
+    public override void LoadData(RoomObjectData roomObjectData)
+    {
+        objectData = roomObjectData;
+
         animator = GetComponent<Animator>();
         spriteRenderer = GetComponent<SpriteRenderer>();
-        onUnactivate = new ();
-        onUnactivate.AddListener(unityAction);
 
-        spriteRenderer.sprite = isActive ? activeSprite : inactiveSprite;
+        spriteRenderer.sprite = objectData.IsActive ? activeSprite : inactiveSprite;
     }
 }

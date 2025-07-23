@@ -13,6 +13,8 @@ public static class EventManager
     static UnityEvent onRoomCleared = new UnityEvent();
     static UnityEvent onKill = new UnityEvent();
     static UnityEvent onRoomChanged = new UnityEvent();
+    static UnityEvent onCombatStarted = new UnityEvent();
+    static UnityEvent onCombatEnded = new UnityEvent();
 
     public static void AddOnInventoryUpdatedListener(UnityAction<Equipment[], InventorySlots> listener)
     {
@@ -82,5 +84,25 @@ public static class EventManager
     public static void InvokeOnRoomChanged()
     {
         onRoomChanged?.Invoke();
+    }
+
+    public static void AddOnCombatStartedListener(UnityAction action)
+    {
+        onCombatStarted?.AddListener(action);
+    }
+
+    public static void InvokeOnCombatStarted()
+    {
+        onCombatStarted?.Invoke();
+    }
+
+    public static void AddOnCombatEndedListener(UnityAction action)
+    {
+        onCombatEnded?.AddListener(action);
+    }
+
+    public static void InvokeOnCombatEnded()
+    {
+        onCombatEnded?.Invoke();
     }
 }

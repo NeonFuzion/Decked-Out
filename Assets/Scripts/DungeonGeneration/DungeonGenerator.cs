@@ -194,8 +194,7 @@ public class DungeonGenerator : MonoBehaviour
             GameObject specialObject = Instantiate(pair.Prefab, pair.Position, Quaternion.identity);
             specialObject.transform.SetParent(specialObjectsParent.transform, true);
             currentSpecialObjects.Add(specialObject);
-            bool isActive = currentRoom.GetActiveObject(currentSpecialObjects.Count - 1);
-            specialObject.GetComponent<TerrainObject>().Initialize(isActive, DeactivateSpecialObject);
+            //specialObject.GetComponent<TerrainObject>().LoadData(currentRoom.GetRoomObject(pair.Prefab));
         }
 
         PlaceTiles(roomLayout.FloorTiles, floorTilemap);
@@ -276,12 +275,6 @@ public class DungeonGenerator : MonoBehaviour
         currentRoom.IsChestOpened = true;
         existingChest = null;
     }
-
-    public void DeactivateSpecialObject(GameObject specialObject)
-    {
-        int index = currentSpecialObjects.IndexOf(specialObject);
-        currentRoom.DeactivateObject(index);
-    }
 }
 
 public enum Direction { North, East, South, West, None }
@@ -291,7 +284,7 @@ public class DungeonRoom
     bool isRoomCleared, isChestOpened;
 
     List<Direction> exits;
-    List<bool> activeObjects;
+    List<RoomObjectData> roomObjects;
     Vector2 position;
     DungeonRoomLayout layout;
 
@@ -312,7 +305,7 @@ public class DungeonRoom
         isRoomCleared = isSafe;
         isChestOpened = isSafe;
 
-        activeObjects = layout.SpecialObjectPositions.Select(x => true).ToList();
+        roomObjects = layout.SpecialObjectPositions.Select(x => x.Prefab.GetComponent<TerrainObject>().Initialize()).ToList();
     }
 
     public void AddExit(Direction direction)
@@ -321,14 +314,9 @@ public class DungeonRoom
         exits.Add(direction);
     }
 
-    public void DeactivateObject(int index)
+    public RoomObjectData GetRoomObject(int index)
     {
-        activeObjects[index] = false;
-    }
-
-    public bool GetActiveObject(int index)
-    {
-        return activeObjects[index];
+        return roomObjects[index];
     }
 }
 
