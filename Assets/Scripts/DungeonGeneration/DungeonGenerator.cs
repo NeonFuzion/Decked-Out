@@ -16,26 +16,30 @@ public class DungeonGenerator : MonoBehaviour
     [SerializeField] Tilemap[] exitTilemaps;
     [SerializeField] GameObject[] roomTransitions;
     [SerializeField] DungeonRoomLayout[] layouts, specialLayouts;
-    [SerializeField] GameObject prefabChest, prefabEnemySpawner, player, map, specialObjectsParent;
+    [SerializeField] GameObject player, map, roomObjectParent;
 
     int enemyQuota, currentEnemyQuota;
 
     List<DungeonRoom> roomList;
-    List<GameObject> enemySpawners, currentSpecialObjects;
     DungeonRoom currentRoom;
-    GameObject existingChest;
 
-    public bool IsRoomCleared { get => currentRoom.IsRoomCleared; }
+    public bool IsRoomCleared { get => currentRoom.IsSafe; set => currentRoom.IsSafe = value; }
+
+    public Item[] LootPool { get => lootPool; }
+    public GameObject[] EnemyPool { get => enemies; }
 
     // Start is called once before the first execution of Update after the MonoBehaviour is created
     void Start()
     {
-        DungeonRoom oldRoom = new DungeonRoom(new Vector2(0, 0), new (), specialLayouts[0]);
+        DungeonRoom oldRoom = new(new Vector2(0, 0), new(), specialLayouts[0], this);
         roomList = new() { oldRoom };
-        enemySpawners = new ();
-        currentSpecialObjects = new ();
-        
+
         GeneratePath(oldRoom, Vector2.zero, 0, roomLength);
+
+        while (roomObjectParent.transform.childCount > 0)
+        {
+            DestroyImmediate(roomObjectParent.transform.GetChild(0).gameObject);
+        }
 
         foreach (DungeonRoom room in roomList)
         {
@@ -66,7 +70,7 @@ public class DungeonGenerator : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        
+
     }
 
     Direction VectorToDirection(Vector2 vector)
@@ -106,7 +110,7 @@ public class DungeonGenerator : MonoBehaviour
 
     void GeneratePath(DungeonRoom oldRoom, Vector2 lastDirection, int currentPathLength, int pathLength)
     {
-        List<Vector2> availableDirections = new () { Vector2.up, Vector2.right, Vector2.down, Vector2.left };
+        List<Vector2> availableDirections = new() { Vector2.up, Vector2.right, Vector2.down, Vector2.left };
         if (availableDirections.Contains(-lastDirection)) availableDirections.Remove(-lastDirection);
         Vector2 direction = availableDirections[Random.Range(0, 3)];
 
@@ -121,7 +125,7 @@ public class DungeonGenerator : MonoBehaviour
         }
         else
         {
-            newRoom = new DungeonRoom(newPostion, new () { newExit }, layouts[Random.Range(0, layouts.Length)]);
+            newRoom = new DungeonRoom(newPostion, new() { newExit }, layouts[Random.Range(0, layouts.Length)], this);
             roomList.Add(newRoom);
         }
         oldRoom.AddExit(VectorToDirection(direction));
@@ -131,14 +135,6 @@ public class DungeonGenerator : MonoBehaviour
             GeneratePath(newRoom, direction, currentPathLength + 1, pathLength);
     }
 
-    void SpawnChest()
-    {
-        GameObject chest = Instantiate(prefabChest, currentRoom.DungeonRoomLayout.ChestPosition, Quaternion.identity);
-        existingChest = chest;
-        chest.GetComponent<LootDrops>().SingleDrops = lootPool.ToList();
-        chest.GetComponent<TreasureChest>().OnOpen.AddListener(SetChestOpened);
-    }
-
     public DungeonRoom FindRoomAtPosition(Vector2 position)
     {
         return roomList.Where(room => room.Position == position).FirstOrDefault();
@@ -146,7 +142,6 @@ public class DungeonGenerator : MonoBehaviour
 
     public void LoadRoom(Direction direction)
     {
-        currentSpecialObjects.Clear();
         currentRoom = FindRoomAtPosition(currentRoom.Position + DirectionToVector(direction));
         Vector3 directionVector = DirectionToVector(direction);
         for (int i = 0; i < map.transform.childCount; i++)
@@ -166,37 +161,6 @@ public class DungeonGenerator : MonoBehaviour
             transition.GetComponent<RoomTransition>().ResetBarrier();
         }
 
-        List<Vector2> enemyPositions = roomLayout.EnemySpawnPositions;
-        while (enemyPositions.Count != enemySpawners.Count)
-        {
-            if (enemyPositions.Count > enemySpawners.Count)
-            {
-                GameObject spawner = Instantiate(prefabEnemySpawner, transform);
-                spawner.GetComponent<EnemySpawner>().Initialize();
-                spawner.transform.position = enemyPositions[enemySpawners.Count != 0 ? enemySpawners.Count : 0];
-                enemySpawners.Add(spawner);
-            }
-            else
-            {
-                int index = enemySpawners.Count - 1;
-                Destroy(enemySpawners[index]);
-                enemySpawners.RemoveAt(index);
-            }
-        }
-        for (int i = 0; i < enemyPositions.Count; i++)
-        {
-            if (enemySpawners.Count < i) continue;
-            enemySpawners[i].transform.position = enemyPositions[i];
-        }
-
-        foreach (PrefabPositionPair pair in roomLayout.SpecialObjectPositions)
-        {
-            GameObject specialObject = Instantiate(pair.Prefab, pair.Position, Quaternion.identity);
-            specialObject.transform.SetParent(specialObjectsParent.transform, true);
-            currentSpecialObjects.Add(specialObject);
-            //specialObject.GetComponent<TerrainObject>().LoadData(currentRoom.GetRoomObject(pair.Prefab));
-        }
-
         PlaceTiles(roomLayout.FloorTiles, floorTilemap);
         PlaceTiles(roomLayout.WallTiles, wallTilemap);
         PlaceTiles(roomLayout.NorthExitTiles, exitTilemaps[0]);
@@ -213,67 +177,55 @@ public class DungeonGenerator : MonoBehaviour
             case Direction.None: roomTransitions[2].GetComponent<RoomTransition>().SpawnPlayer(player); break;
         }
 
-        if (!currentRoom.IsRoomCleared || currentRoom.IsChestOpened)
-        {
-            if (existingChest != null)
-            {
-                Destroy(existingChest);
-                existingChest = null;
-            }
-        }
-        else if (currentRoom.IsRoomCleared && !currentRoom.IsChestOpened)
-        {
-            if (existingChest == null)
-            {
-                SpawnChest();
-            }
-        }
-
         if (exits == null || exits.Count == 0) return;
         for (int i = 0; i < exitTilemaps.Length; i++)
         {
-            if (!exits.Contains((Direction)i))
-            {
-                exitTilemaps[i].gameObject.SetActive(true);
-                roomTransitions[i].SetActive(false);
-            }
-            else
-            {
-                exitTilemaps[i].gameObject.SetActive(false);
-                roomTransitions[i].SetActive(true);
-            }
+            bool containsExit = exits.Contains((Direction)i);
+            exitTilemaps[i].gameObject.SetActive(!containsExit);
+            roomTransitions[i].SetActive(containsExit);
         }
 
-        if (!currentRoom.IsRoomCleared) return;
-        foreach (GameObject roomTransition in roomTransitions)
+        for (int i = roomObjectParent.transform.childCount - 1; i >= 0; i--)
         {
-            roomTransition.GetComponent<RoomTransition>().UnlockBarrier();
+            GameObject roomObject = roomObjectParent.transform.GetChild(i).gameObject;
+            Destroy(roomObject);
+        }
+
+        List<PrefabPositionPair> dataPairs = currentRoom.DungeonRoomLayout.RoomObjectPositions;
+        for (int i = 0; i < dataPairs.Count; i++)
+        {
+            GameObject roomObject = Instantiate(dataPairs[i].Prefab, roomObjectParent.transform);
+            roomObject.transform.position = dataPairs[i].Position;
+            TerrainObject script = roomObject.GetComponent<TerrainObject>();
+            script.LoadData(currentRoom.RoomObjects[i], this);
+        }
+
+        if (!currentRoom.IsSafe)
+        {
+            EventManager.InvokeOnCombatStarted();
+        }
+        else
+        {
+            foreach (GameObject roomTransition in roomTransitions)
+            {
+                roomTransition.GetComponent<RoomTransition>().UnlockBarrier();
+            }
         }
     }
 
-    public void SpawnEnemies()
-    {
-        if (currentRoom.IsRoomCleared) return;
-        currentEnemyQuota = 0;
-        enemyQuota = enemySpawners.Count;
-        enemySpawners.ForEach(spawner => spawner.GetComponent<EnemySpawner>().SpawnEnemy(enemies[Random.Range(0, enemies.Length)]));
-    }
-
-    public void IncrementEnemyQuota()
+    public void IncrementCurrentEnemyQuota()
     {
         currentEnemyQuota++;
 
         if (currentEnemyQuota < enemyQuota) return;
-        currentRoom.IsRoomCleared = true;
-        if (Random.value < chestSpawnChance) SpawnChest();
-        else SetChestOpened();
+        currentRoom.IsSafe = true;
         onRoomCleared?.Invoke();
+        EventManager.InvokeOnCombatEnded();
     }
 
-    public void SetChestOpened()
+    public void IncrementEnemyQuota()
     {
-        currentRoom.IsChestOpened = true;
-        existingChest = null;
+        enemyQuota++;
     }
 }
 
@@ -281,42 +233,36 @@ public enum Direction { North, East, South, West, None }
 
 public class DungeonRoom
 {
-    bool isRoomCleared, isChestOpened;
+    bool isSafe;
 
     List<Direction> exits;
     List<RoomObjectData> roomObjects;
     Vector2 position;
     DungeonRoomLayout layout;
 
-    public bool IsRoomCleared { get => isRoomCleared; set => isRoomCleared = value; }
-    public bool IsChestOpened { get => isChestOpened; set => isChestOpened = value; }
+    public bool IsSafe { get => isSafe; set => isSafe = value; }
 
     public Vector2 Position { get => position; }
     public List<Direction> Exits { get => exits; }
+    public List<RoomObjectData> RoomObjects { get => roomObjects; }
+
     public DungeonRoomLayout DungeonRoomLayout { get => layout; set => layout = value; }
 
-    public DungeonRoom(Vector2 position, List<Direction> exits, DungeonRoomLayout layout)
+    public DungeonRoom(Vector2 position, List<Direction> exits, DungeonRoomLayout layout, DungeonGenerator dungeonGenerator)
     {
         this.position = position;
         this.exits = exits;
         this.layout = layout;
 
-        bool isSafe = layout.EnemySpawnPositions.Count == 0;
-        isRoomCleared = isSafe;
-        isChestOpened = isSafe;
+        isSafe = true;
 
-        roomObjects = layout.SpecialObjectPositions.Select(x => x.Prefab.GetComponent<TerrainObject>().Initialize()).ToList();
+        roomObjects = layout.RoomObjectPositions.Select(x => x.Prefab.GetComponent<TerrainObject>().Initialize(dungeonGenerator)).ToList();
     }
 
     public void AddExit(Direction direction)
     {
         if (exits.Contains(direction)) return;
         exits.Add(direction);
-    }
-
-    public RoomObjectData GetRoomObject(int index)
-    {
-        return roomObjects[index];
     }
 }
 

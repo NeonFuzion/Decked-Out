@@ -3,8 +3,8 @@ using UnityEngine.Events;
 
 public abstract class TerrainObject : MonoBehaviour
 {
-    public abstract RoomObjectData Initialize();
-    public abstract void LoadData(RoomObjectData roomObjectData);
+    public abstract RoomObjectData Initialize(DungeonGenerator dungeonGenerator);
+    public abstract void LoadData(RoomObjectData roomObjectData, DungeonGenerator dungeonGenerator);
 }
 
 public class RoomObjectData

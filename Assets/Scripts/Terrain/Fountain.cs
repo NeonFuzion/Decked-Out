@@ -33,13 +33,12 @@ public class Fountain : TerrainObject
         animator.CrossFade("Empty", 0, 0);
     }
 
-    public override RoomObjectData Initialize()
+    public override RoomObjectData Initialize(DungeonGenerator dungeonGenerator)
     {
-        objectData = new(true);
-        return objectData;
+        return new(true);
     }
 
-    public override void LoadData(RoomObjectData roomObjectData)
+    public override void LoadData(RoomObjectData roomObjectData, DungeonGenerator dungeonGenerator)
     {
         objectData = roomObjectData;
 

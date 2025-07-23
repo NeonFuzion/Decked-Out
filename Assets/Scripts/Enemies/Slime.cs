@@ -44,7 +44,7 @@ public class Slime : Enemy
         else if (jumping)
         {
             curJumpTime -= Time.deltaTime;
-            if (curJumpTime < 0 || Vector3.Distance(target.position, transform.position) < 1.75f
+            if (curJumpTime < 0 || !target || Vector3.Distance(target.position, transform.position) < 1.75f
                 || Physics2D.Raycast(transform.position, rb.linearVelocity, 1, LayerMask.GetMask("Wall")))
                 animator.CrossFade("SlimeLanding", 0, 0);
         }

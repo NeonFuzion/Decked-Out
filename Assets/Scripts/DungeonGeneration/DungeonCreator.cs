@@ -13,11 +13,9 @@ using UnityEditor;
 public class DungeonCreator : MonoBehaviour
 {
     [SerializeField] DungeonRoomLayout roomLayout;
-    [SerializeField] GameObject prefabEnemySpawner;
-    [SerializeField] Tilemap wallTilemap, floorTilemap;
-    [SerializeField] Tilemap[] exitTilemaps;
-    [SerializeField] GameObject[] roomTransitions, enemySpawners;
-    [SerializeField] GameObject chest, specialObjectsParent;
+    [SerializeField] Tilemap wallTilemap, floorTilemap, northExitTilemap, southExitTilemap, eastExitTilemap, westExitTilemap;
+    [SerializeField] GameObject[] roomTransitions;
+    [SerializeField] GameObject roomObjectParent;
 
     private void Awake()
     {
@@ -77,26 +75,23 @@ public class DungeonCreator : MonoBehaviour
 
     public void SaveLayout()
     {
-        if (chest.activeInHierarchy) roomLayout.ChestPosition = chest.transform.position;
-
         roomLayout.FloorTiles = FindTiles(floorTilemap);
         roomLayout.WallTiles = FindTiles(wallTilemap);
-        roomLayout.NorthExitTiles = FindTiles(exitTilemaps[0]);
-        roomLayout.EastExitTiles = FindTiles(exitTilemaps[1]);
-        roomLayout.SouthExitTiles = FindTiles(exitTilemaps[2]);
-        roomLayout.WestExitTiles = FindTiles(exitTilemaps[3]);
+        roomLayout.NorthExitTiles = FindTiles(northExitTilemap);
+        roomLayout.EastExitTiles = FindTiles(eastExitTilemap);
+        roomLayout.SouthExitTiles = FindTiles(southExitTilemap);
+        roomLayout.WestExitTiles = FindTiles(westExitTilemap);
 
-        roomLayout.EnemySpawnPositions = GetPositions(enemySpawners);
         roomLayout.RoomTransitionPositions = GetPositions(roomTransitions);
 
-        List<PrefabPositionPair> specialObjectPositions = new List<PrefabPositionPair>();
-        for (int i = 0; i < specialObjectsParent.transform.childCount; i++)
+        List<PrefabPositionPair> roomObjectPositions = new List<PrefabPositionPair>();
+        for (int i = 0; i < roomObjectParent.transform.childCount; i++)
         {
-            Transform specialObject = specialObjectsParent.transform.GetChild(i);
-            if (!specialObject.gameObject.activeInHierarchy) continue;
-            specialObjectPositions.Add(new PrefabPositionPair(specialObject.gameObject, specialObject.position));
+            Transform roomObject = roomObjectParent.transform.GetChild(i);
+            GameObject prefabRoomObject = PrefabUtility.GetCorrespondingObjectFromSource(roomObject).gameObject;
+            roomObjectPositions.Add(new PrefabPositionPair(prefabRoomObject, roomObject.position));
         }
-        roomLayout.SpecialObjectPositions = specialObjectPositions;
+        roomLayout.RoomObjectPositions = roomObjectPositions;
 
         EditorUtility.SetDirty(roomLayout);
         AssetDatabase.SaveAssets();
@@ -104,41 +99,26 @@ public class DungeonCreator : MonoBehaviour
 
     public void LoadLayout()
     {
-        chest.transform.position = roomLayout.ChestPosition;
-
         PlaceTiles(roomLayout.FloorTiles, floorTilemap);
         PlaceTiles(roomLayout.WallTiles, wallTilemap);
-        PlaceTiles(roomLayout.NorthExitTiles, exitTilemaps[0]);
-        PlaceTiles(roomLayout.EastExitTiles, exitTilemaps[1]);
-        PlaceTiles(roomLayout.SouthExitTiles, exitTilemaps[2]);
-        PlaceTiles(roomLayout.WestExitTiles, exitTilemaps[3]);
-
-        for (int i = 0; i < enemySpawners.Length; i++)
-        {
-            if (i < roomLayout.EnemySpawnPositions.Count)
-            {
-                enemySpawners[i].SetActive(true);
-                enemySpawners[i].transform.position = roomLayout.EnemySpawnPositions[i];
-            }
-            else
-            {
-                enemySpawners[i].SetActive(false);
-            }
-        }
+        PlaceTiles(roomLayout.NorthExitTiles, northExitTilemap);
+        PlaceTiles(roomLayout.EastExitTiles, eastExitTilemap);
+        PlaceTiles(roomLayout.SouthExitTiles, southExitTilemap);
+        PlaceTiles(roomLayout.WestExitTiles, westExitTilemap);
 
         for (int i = 0; i < roomLayout.RoomTransitionPositions.Count; i++)
         {
             roomTransitions[i].transform.position = roomLayout.RoomTransitionPositions[i];
         }
 
-        while (specialObjectsParent.transform.childCount > 0)
+        while (roomObjectParent.transform.childCount > 0)
         {
-            Destroy(specialObjectsParent.transform.GetChild(0).gameObject);
+            DestroyImmediate(roomObjectParent.transform.GetChild(0).gameObject);
         }
-        foreach (PrefabPositionPair pair in roomLayout.SpecialObjectPositions)
+        foreach (PrefabPositionPair pair in roomLayout.RoomObjectPositions)
         {
             GameObject specialObject = Instantiate(pair.Prefab, pair.Position, Quaternion.identity);
-            specialObject.transform.SetParent(specialObjectsParent.transform, true);
+            specialObject.transform.SetParent(roomObjectParent.transform, true);
         }
     }
 }
