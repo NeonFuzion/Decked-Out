@@ -114,6 +114,11 @@ public class Player : MonoBehaviour
         animr.CrossFade("PlayerDash" + (direction.x > 0 ? "Right" : "Left"), 0, 0);
     }
 
+    public void OnDeath()
+    {
+        gameObject.SetActive(false);
+    }
+
     public void UpdateStats(Equipment[] equiped)
     {
         stats = SetToBaseStats();

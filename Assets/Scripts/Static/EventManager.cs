@@ -8,6 +8,7 @@ public static class EventManager
 {
     static UnityEvent<Equipment[], InventorySlots> onInventoryUpdated = new UnityEvent<Equipment[], InventorySlots>();
     static UnityEvent<Equipment[]> onEquipmentUpdated = new UnityEvent<Equipment[]>();
+    static UnityEvent<DialogueData[]> onDialogueStarted = new UnityEvent<DialogueData[]>();
     static UnityEvent<int, bool, Transform> onFocusItem = new UnityEvent<int, bool, Transform>();
     static UnityEvent<int, bool> onEquipItem = new UnityEvent<int, bool>();
     static UnityEvent onRoomCleared = new UnityEvent();
@@ -24,6 +25,16 @@ public static class EventManager
     public static void InvokeOnInventoryUpdated(Equipment[] equiped, InventorySlots items)
     {
         onInventoryUpdated?.Invoke(equiped, items);
+    }
+
+    public static void AddOnDialogueStartedListener(UnityAction<DialogueData[]> listener)
+    {
+        onDialogueStarted?.AddListener(listener);
+    }
+
+    public static void InvokeOnDialogueStarted(DialogueData[] data)
+    {
+        onDialogueStarted?.Invoke(data);
     }
 
     public static void AddOnEquipmentUpdatedListener(UnityAction<Equipment[]> listener)

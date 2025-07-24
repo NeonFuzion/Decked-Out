@@ -12,6 +12,7 @@ GameObject:
   - component: {fileID: 7447910727239030560}
   - component: {fileID: 1883488115954191402}
   - component: {fileID: 3859966842055112338}
+  - component: {fileID: 6867830979382144232}
   - component: {fileID: -4655520597267600497}
   m_Layer: 0
   m_Name: Fountain
@@ -150,6 +151,33 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   activeSprite: {fileID: -407663240, guid: e49e12823b35c584c91f4b12fe59a60e, type: 3}
   inactiveSprite: {fileID: -1075842369, guid: e49e12823b35c584c91f4b12fe59a60e, type: 3}
+--- !u!114 &6867830979382144232
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 5500366910197520889}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 9efb2e1af67b8544589b7f9a71f66244, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  onClick:
+    m_PersistentCalls:
+      m_Calls:
+      - m_Target: {fileID: 3859966842055112338}
+        m_TargetAssemblyTypeName: Fountain, Assembly-CSharp
+        m_MethodName: OnClick
+        m_Mode: 1
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 2
 --- !u!95 &-4655520597267600497
 Animator:
   serializedVersion: 7

@@ -44,9 +44,9 @@ public class InventoryInterface : MonoBehaviour
             itemAmount = slot.Amount;
         }
 
-        if (lastSelected && lastSelected != itemSlot) lastSelected.GetComponentInChildren<Image>().color = inventoryColors[2];
+        if (lastSelected && lastSelected != itemSlot) lastSelected.GetComponent<Slot>().Unhighlight();
         lastSelected = itemSlot;
-        lastSelected.GetComponentInChildren<Image>().color = inventoryColors[3];
+        lastSelected.GetComponent<Slot>().Highlight();
 
         focusAmount.gameObject.SetActive(itemAmount > 1);
         if (itemAmount > 1)
@@ -126,7 +126,7 @@ public class InventoryInterface : MonoBehaviour
         {
             items.AddItem(equiped[index]);
             equiped[index] = null;
-            equipmentSlots.GetChild(index).GetComponent<Image>().color = inventoryColors[2];
+            equipmentSlots.GetChild(index).GetComponent<Slot>().Unhighlight();
         }
         else
         {
@@ -143,15 +143,18 @@ public class InventoryInterface : MonoBehaviour
                 }
             }
 
-            if (equiped[equipmentSlot])
+            if (equipmentSlot != -1)
             {
-                items.Items[index] = new InventorySlot(equiped[equipmentSlot]);
-                equiped[equipmentSlot] = equipment;
-            }
-            else
-            {
-                equiped[equipmentSlot] = equipment;
-                items.RemoveItem(equipment);
+                if (equiped[equipmentSlot])
+                {
+                    items.Items[index] = new InventorySlot(equiped[equipmentSlot]);
+                    equiped[equipmentSlot] = equipment;
+                }
+                else
+                {
+                    equiped[equipmentSlot] = equipment;
+                    items.RemoveItem(equipment);
+                }
             }
         }
         UpdateInventory();

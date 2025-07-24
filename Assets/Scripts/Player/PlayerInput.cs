@@ -1,12 +1,13 @@
 using System.Collections;
 using System.Collections.Generic;
+using System.Runtime.CompilerServices;
 using UnityEngine;
 using UnityEngine.Events;
 using UnityEngine.InputSystem;
 
-public class PlayerInput : MonoBehaviour, PlayerInputConfig.ICombatActions, PlayerInputConfig.IGeneralActions, PlayerInputConfig.IMenuActions
+public class PlayerInput : MonoBehaviour, PlayerInputConfig.ICombatActions, PlayerInputConfig.IGeneralActions, PlayerInputConfig.IMenuActions, PlayerInputConfig.IDialogueActions
 {
-    [SerializeField] UnityEvent onAttack, onDash, onInventory, onMenu, onQuit, onMap;
+    [SerializeField] UnityEvent onAttack, onDash, onInventory, onMenu, onQuit, onMap, onDialogue, onContinue;
     [SerializeField] UnityEvent<Vector2> onMovement;
 
     PlayerInputConfig config;
@@ -39,6 +40,13 @@ public class PlayerInput : MonoBehaviour, PlayerInputConfig.ICombatActions, Play
         return context.phase == InputActionPhase.Started;
     }
 
+    void MenuSetup()
+    {
+        config.General.Disable();
+        config.Combat.Disable();
+        config.Menu.Enable();
+    }
+
     public void OnAttack(InputAction.CallbackContext context)
     {
         if (!IsClicked(context)) return;
@@ -59,18 +67,14 @@ public class PlayerInput : MonoBehaviour, PlayerInputConfig.ICombatActions, Play
 
     public void InventorySetup()
     {
-        config.General.Disable();
-        config.Combat.Disable();
-        config.Menu.Enable();
+        MenuSetup();
         onInventory?.Invoke();
     }
 
     public void OnMenu(InputAction.CallbackContext context)
     {
         if (!IsClicked(context)) return;
-        config.General.Disable();
-        config.Combat.Disable();
-        config.Menu.Enable();
+        MenuSetup();
         onMenu?.Invoke();
     }
 
@@ -95,9 +99,22 @@ public class PlayerInput : MonoBehaviour, PlayerInputConfig.ICombatActions, Play
 
     public void OnMap(InputAction.CallbackContext context)
     {
+        MenuSetup();
+        onMap?.Invoke();
+    }
+
+    public void OnContinue(InputAction.CallbackContext context)
+    {
+        if (!IsClicked(context)) return;
         config.General.Disable();
         config.Combat.Disable();
-        config.Menu.Enable();
-        onMap?.Invoke();
+        config.Menu.Disable();
+        config.Dialogue.Enable();
+        onContinue?.Invoke();
+    }
+
+    public void QuitDialogue()
+    {
+
     }
 }

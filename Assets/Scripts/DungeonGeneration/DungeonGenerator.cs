@@ -125,7 +125,9 @@ public class DungeonGenerator : MonoBehaviour
         }
         else
         {
-            newRoom = new DungeonRoom(newPostion, new() { newExit }, layouts[Random.Range(0, layouts.Length)], this);
+            float specialRoomChance = Random.Range(0, 100);
+            DungeonRoomLayout layout = specialRoomChance < 20 ? specialLayouts[Random.Range(1, specialLayouts.Length)] : layouts[Random.Range(0, layouts.Length)];
+            newRoom = new DungeonRoom(newPostion, new() { newExit }, layout, this);
             roomList.Add(newRoom);
         }
         oldRoom.AddExit(VectorToDirection(direction));
@@ -196,7 +198,7 @@ public class DungeonGenerator : MonoBehaviour
         {
             GameObject roomObject = Instantiate(dataPairs[i].Prefab, roomObjectParent.transform);
             roomObject.transform.position = dataPairs[i].Position;
-            TerrainObject script = roomObject.GetComponent<TerrainObject>();
+            RoomObject script = roomObject.GetComponent<RoomObject>();
             script.LoadData(currentRoom.RoomObjects[i], this);
         }
 
@@ -256,7 +258,7 @@ public class DungeonRoom
 
         isSafe = true;
 
-        roomObjects = layout.RoomObjectPositions.Select(x => x.Prefab.GetComponent<TerrainObject>().Initialize(dungeonGenerator)).ToList();
+        roomObjects = layout.RoomObjectPositions.Select(x => x.Prefab.GetComponent<RoomObject>().Initialize(dungeonGenerator)).ToList();
     }
 
     public void AddExit(Direction direction)

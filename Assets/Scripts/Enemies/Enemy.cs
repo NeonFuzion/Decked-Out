@@ -20,7 +20,7 @@ public class Enemy : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        
+
     }
 
     protected void SearchTarget(Vector2 detectPoint, int radius)
@@ -43,5 +43,10 @@ public class Enemy : MonoBehaviour
     protected void Telegraph()
     {
 
+    }
+
+    public void OnDeath()
+    {
+        Destroy(gameObject);
     }
 }

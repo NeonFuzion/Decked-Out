@@ -66,7 +66,6 @@ public class Health : MonoBehaviour
 
         if (hp > 0) return;
         onDeath?.Invoke();
-        Destroy(gameObject);
         Destroy(healthBarCanvas);
     }
 

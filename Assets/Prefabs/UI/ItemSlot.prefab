@@ -90,7 +90,10 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 9001113b5ff178044acb776544584457, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  backgroundImage: {fileID: 539908277252066555}
   image: {fileID: 270957660022465040}
+  highlightedColor: {r: 1, g: 0.7508227, b: 0.27358478, a: 1}
+  unhighlightedColor: {r: 1, g: 0.86274517, b: 0.47058827, a: 1}
   amountText: {fileID: 551918936120916175}
 --- !u!1 &3669178904465706099
 GameObject:

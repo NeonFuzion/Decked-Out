@@ -164,4 +164,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 0a58c6cf7b6e43a4bbb95b6ab29d0194, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  backgroundImage: {fileID: 2987539017858288884}
   image: {fileID: 8031014349764507521}
+  highlightedColor: {r: 1, g: 0.76238155, b: 0.26100624, a: 1}
+  unhighlightedColor: {r: 1, g: 0.86274517, b: 0.47058827, a: 1}
+  emptySprite: {fileID: 0}

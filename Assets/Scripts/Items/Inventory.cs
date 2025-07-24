@@ -62,9 +62,9 @@ public class Inventory : MonoBehaviour
         }
     }
 
-    public void AddItem(Item item)
+    public void AddItem(Item item, int amount = 1)
     {
-        items.AddItem(item);
+        items.AddItem(item, amount);
     }
 
     public void EquipItem(Item item)
@@ -123,5 +123,85 @@ public class Inventory : MonoBehaviour
             if (!equipmentEffect) continue;
             equipmentEffect.Instantiate(gameObject);
         }
+    }
+}
+
+
+[System.Serializable]
+public class InventorySlots
+{
+    [SerializeField] List<InventorySlot> items;
+
+    public List<InventorySlot> Items { get => items; }
+
+    public bool AddItem(Item item, int amount = 1)
+    {
+        if (item is not Equipment)
+        {
+            foreach (InventorySlot slot in items)
+            {
+                if (slot.Item != item) continue;
+                slot.AddItems(amount);
+                return false;
+            }
+        }
+        items.Add(new InventorySlot(item, 1));
+        return true;
+    }
+
+    public bool RemoveItem(Item item, int amount = 1)
+    {
+        foreach (InventorySlot slot in items)
+        {
+            if (slot.Item != item) continue;
+            if (slot.Amount < amount) return false;
+            else if (slot.Amount == amount)
+            {
+                items.Remove(slot);
+                return true;
+            }
+            else if (slot.Amount > amount)
+            {
+                slot.RemoveItems(amount);
+                return true;
+            }
+        }
+        return false;
+    }
+
+    public InventorySlot FindItem(Item target)
+    {
+        foreach (InventorySlot slot in items)
+        {
+            if (slot.Item != target) continue;
+            return slot;
+        }
+        return null;
+    }
+}
+
+[System.Serializable]
+public class InventorySlot
+{
+    [SerializeField] Item item;
+    [SerializeField] int amount;
+
+    public Item Item { get => item; }
+    public int Amount { get => amount; }
+
+    public InventorySlot(Item item, int amount = 1)
+    {
+        this.item = item;
+        this.amount = amount;
+    }
+
+    public void AddItems(int amount)
+    {
+        this.amount += amount;
+    }
+
+    public void RemoveItems(int amount)
+    {
+        this.amount -= amount;
     }
 }

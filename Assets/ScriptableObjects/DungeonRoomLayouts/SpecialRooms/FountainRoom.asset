@@ -12051,13 +12051,11 @@ MonoBehaviour:
   - tile: {fileID: 11400000, guid: 3d631a75835ae8142bb53f1f1c6c514f, type: 2}
     position: {x: -12, y: 2, z: 0}
     rotation: {x: 0, y: 0, z: 1, w: -0.00000004371139}
-  enemySpawnPositions: []
   roomTransitionPositions:
   - {x: 0, y: 13}
   - {x: 12, y: 0}
   - {x: 0, y: -12}
   - {x: -12, y: 0}
-  specialObjectPositions:
+  roomObjectPositions:
   - prefab: {fileID: 5500366910197520889, guid: 7be7ba15b3389cf459dc9cfa73a5410e, type: 3}
-    position: {x: 0, y: 3}
-  chestPosition: {x: 0, y: 0}
+    position: {x: 0, y: 2}
