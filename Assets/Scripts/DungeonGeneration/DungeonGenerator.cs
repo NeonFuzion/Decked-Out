@@ -9,14 +9,13 @@ public class DungeonGenerator : MonoBehaviour
 {
     [SerializeField] int roomLength;
     [SerializeField] float chestSpawnChance;
+    [SerializeField] Tilemap wallTilemap, floorTilemap;
+    [SerializeField] GameObject player, map, roomObjectParent, dungeonCreator;
     [SerializeField] GameObject[] enemies;
     [SerializeField] Item[] lootPool;
     [SerializeField] UnityEvent onRoomCleared;
-    [SerializeField] Tilemap wallTilemap, floorTilemap;
-    [SerializeField] Tilemap[] exitTilemaps;
     [SerializeField] GameObject[] roomTransitions;
     [SerializeField] DungeonRoomLayout[] layouts, specialLayouts;
-    [SerializeField] GameObject player, map, roomObjectParent;
 
     int enemyQuota, currentEnemyQuota;
 
@@ -31,6 +30,7 @@ public class DungeonGenerator : MonoBehaviour
     // Start is called once before the first execution of Update after the MonoBehaviour is created
     void Start()
     {
+        dungeonCreator.SetActive(false);
         DungeonRoom oldRoom = new(new Vector2(0, 0), new(), specialLayouts[0], this);
         roomList = new() { oldRoom };
 
@@ -100,11 +100,9 @@ public class DungeonGenerator : MonoBehaviour
 
     void PlaceTiles(List<TileInfo> tiles, Tilemap tilemap)
     {
-        tilemap.ClearAllTiles();
         foreach (TileInfo tile in tiles)
         {
             tilemap.SetTile(tile.Position, tile.Tile);
-            tilemap.SetTransformMatrix(tile.Position, Matrix4x4.Rotate(tile.Rotation));
         }
     }
 
@@ -126,8 +124,8 @@ public class DungeonGenerator : MonoBehaviour
         else
         {
             float specialRoomChance = Random.Range(0, 100);
-            DungeonRoomLayout layout = specialRoomChance < 20 ? specialLayouts[Random.Range(1, specialLayouts.Length)] : layouts[Random.Range(0, layouts.Length)];
-            newRoom = new DungeonRoom(newPostion, new() { newExit }, layout, this);
+            DungeonRoomLayout layout = specialRoomChance < 15 ? specialLayouts[Random.Range(1, specialLayouts.Length)] : layouts[Random.Range(0, layouts.Length)];
+            newRoom = new (newPostion, new() { newExit }, layout, this);
             roomList.Add(newRoom);
         }
         oldRoom.AddExit(VectorToDirection(direction));
@@ -163,12 +161,14 @@ public class DungeonGenerator : MonoBehaviour
             transition.GetComponent<RoomTransition>().ResetBarrier();
         }
 
+        wallTilemap.ClearAllTiles();
+        floorTilemap.ClearAllTiles();
         PlaceTiles(roomLayout.FloorTiles, floorTilemap);
         PlaceTiles(roomLayout.WallTiles, wallTilemap);
-        PlaceTiles(roomLayout.NorthExitTiles, exitTilemaps[0]);
-        PlaceTiles(roomLayout.EastExitTiles, exitTilemaps[1]);
-        PlaceTiles(roomLayout.SouthExitTiles, exitTilemaps[2]);
-        PlaceTiles(roomLayout.WestExitTiles, exitTilemaps[3]);
+        if (!exits.Contains(Direction.North)) PlaceTiles(roomLayout.NorthExitTiles, wallTilemap);
+        if (!exits.Contains(Direction.East)) PlaceTiles(roomLayout.EastExitTiles, wallTilemap);
+        if (!exits.Contains(Direction.South)) PlaceTiles(roomLayout.SouthExitTiles, wallTilemap);
+        if (!exits.Contains(Direction.West)) PlaceTiles(roomLayout.WestExitTiles, wallTilemap);
 
         switch (direction)
         {
@@ -178,12 +178,10 @@ public class DungeonGenerator : MonoBehaviour
             case Direction.West: roomTransitions[1].GetComponent<RoomTransition>().SpawnPlayer(player); break;
             case Direction.None: roomTransitions[2].GetComponent<RoomTransition>().SpawnPlayer(player); break;
         }
-
-        if (exits == null || exits.Count == 0) return;
-        for (int i = 0; i < exitTilemaps.Length; i++)
+        
+        for (int i = 0; i < 4; i++)
         {
             bool containsExit = exits.Contains((Direction)i);
-            exitTilemaps[i].gameObject.SetActive(!containsExit);
             roomTransitions[i].SetActive(containsExit);
         }
 

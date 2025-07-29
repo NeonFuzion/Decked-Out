@@ -3,6 +3,7 @@ using UnityEngine.Events;
 
 public abstract class RoomObject : MonoBehaviour
 {
+
     public abstract RoomObjectData Initialize(DungeonGenerator dungeonGenerator);
     public abstract void LoadData(RoomObjectData roomObjectData, DungeonGenerator dungeonGenerator);
 }

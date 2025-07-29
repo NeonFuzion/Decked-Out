@@ -17,8 +17,8 @@ MonoBehaviour:
   sprite: {fileID: -1312359660109418695, guid: c520f021a9d5bdc45ba7de1e3145718f, type: 3}
   craftingRecipe: []
   equipmentEffect: {fileID: 0}
-  attack: 17
-  attackSpeed: 1
+  attack: 15
+  attackSpeed: 0.4
   knockback: 0
   weaponHoldStyle: 0
   element: 2

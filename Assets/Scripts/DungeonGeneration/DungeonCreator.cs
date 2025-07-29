@@ -1,8 +1,6 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
-using Unity.Mathematics;
-using Unity.VisualScripting;
 using UnityEngine;
 using UnityEngine.Events;
 using UnityEngine.Tilemaps;
@@ -43,10 +41,9 @@ public class DungeonCreator : MonoBehaviour
             {
                 Vector3Int position = new Vector3Int(x, y);
                 TileBase tile = tilemap.GetTile(position);
-                Quaternion rotation = tilemap.GetTransformMatrix(position).rotation;
                 if (!tile) continue;
 
-                tileInfo.Add(new TileInfo(tile, position, rotation));
+                tileInfo.Add(new TileInfo(tile, position));
             }
         }
         return tileInfo;
@@ -55,10 +52,10 @@ public class DungeonCreator : MonoBehaviour
     void PlaceTiles(List<TileInfo> tiles, Tilemap tilemap)
     {
         tilemap.ClearAllTiles();
+        if (tiles == null) return;
         foreach (TileInfo tile in tiles)
         {
             tilemap.SetTile(tile.Position, tile.Tile);
-            tilemap.SetTransformMatrix(tile.Position, Matrix4x4.Rotate(tile.Rotation));
         }
     }
 
@@ -88,7 +85,8 @@ public class DungeonCreator : MonoBehaviour
         for (int i = 0; i < roomObjectParent.transform.childCount; i++)
         {
             Transform roomObject = roomObjectParent.transform.GetChild(i);
-            GameObject prefabRoomObject = PrefabUtility.GetCorrespondingObjectFromSource(roomObject).gameObject;
+            GameObject prefabRoomObject = roomObject.gameObject;
+            prefabRoomObject = PrefabUtility.GetCorrespondingObjectFromOriginalSource(prefabRoomObject).gameObject;
             roomObjectPositions.Add(new PrefabPositionPair(prefabRoomObject, roomObject.position));
         }
         roomLayout.RoomObjectPositions = roomObjectPositions;
@@ -118,6 +116,7 @@ public class DungeonCreator : MonoBehaviour
         foreach (PrefabPositionPair pair in roomLayout.RoomObjectPositions)
         {
             GameObject specialObject = Instantiate(pair.Prefab, pair.Position, Quaternion.identity);
+            PrefabUtility.ConvertToPrefabInstance(specialObject, pair.Prefab, new ConvertToPrefabInstanceSettings(), InteractionMode.UserAction);
             specialObject.transform.SetParent(roomObjectParent.transform, true);
         }
     }
@@ -129,16 +128,13 @@ public class TileInfo
 {
     [SerializeField] TileBase tile;
     [SerializeField] Vector3Int position;
-    [SerializeField] Quaternion rotation;
 
     public TileBase Tile { get => tile; }
     public Vector3Int Position { get => position; }
-    public Quaternion Rotation { get => rotation; }
 
-    public TileInfo(TileBase tile, Vector3Int position, Quaternion rotation)
+    public TileInfo(TileBase tile, Vector3Int position)
     {
         this.tile = tile;
         this.position = position;
-        this.rotation = rotation;
     }
 }

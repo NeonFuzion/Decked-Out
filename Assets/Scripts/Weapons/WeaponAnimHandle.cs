@@ -5,8 +5,7 @@ using UnityEngine.Events;
 
 public class WeaponAnimHandle : MonoBehaviour
 {
-    [SerializeField] UnityEvent onDamageInflicted;
-    [SerializeField] UnityEvent onAttackFinished;
+    [SerializeField] UnityEvent onDamageInflicted, onAttackFinished, onWeaponIdled;
 
     // Start is called before the first frame update
     void Start()
@@ -17,7 +16,7 @@ public class WeaponAnimHandle : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        
+
     }
 
     void OnAttackFinish()
@@ -28,5 +27,10 @@ public class WeaponAnimHandle : MonoBehaviour
     void DealDamage()
     {
         onDamageInflicted?.Invoke();
+    }
+
+    void IdleWeapon()
+    {
+        onWeaponIdled?.Invoke();
     }
 }

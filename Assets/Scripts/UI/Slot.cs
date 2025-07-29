@@ -19,12 +19,12 @@ public abstract class Slot : MonoBehaviour, IPointerClickHandler
 
     public void Highlight()
     {
-        backgroundImage.color = highlightedColor;
+        //backgroundImage.color = highlightedColor;
     }
 
     public void Unhighlight()
     {
-        backgroundImage.color = unhighlightedColor;
+        //backgroundImage.color = unhighlightedColor;
     }
 
     public abstract void OnLeftClick();

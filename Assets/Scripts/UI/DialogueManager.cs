@@ -69,6 +69,7 @@ public class DialogueManager : MonoBehaviour
     }
 }
 
+[System.Serializable]
 public class DialogueData
 {
     [SerializeField] string text;
@@ -78,6 +79,7 @@ public class DialogueData
     public DialogueButtonData[] ButtonData { get => buttonData; }
 }
 
+[System.Serializable]
 public class DialogueButtonData
 {
     [SerializeField] string text;

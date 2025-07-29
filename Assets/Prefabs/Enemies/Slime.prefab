@@ -210,7 +210,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   atk: 18
-  hp: 60
+  hp: 80
   def: 2
   spd: 6
   detectDistance: 7

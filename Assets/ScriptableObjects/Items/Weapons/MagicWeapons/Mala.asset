@@ -1,0 +1,31 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 901b8f89decb8d94981f65f27fbeb7f8, type: 3}
+  m_Name: Mala
+  m_EditorClassIdentifier: 
+  itemName: Mala
+  description: The staff you have been using since you were little. It works well
+    enough that you can work.
+  sprite: {fileID: -2844889155589413693, guid: d9cf4145b1ab3d641a0f8fa39ed08cf6, type: 3}
+  craftingRecipe: []
+  equipmentEffect: {fileID: 0}
+  attack: 9
+  attackSpeed: 0.6
+  knockback: 0
+  weaponHoldStyle: 0
+  element: 0
+  animations:
+  - MagicCast1
+  projectileCount: 1
+  projectileSpread: 0
+  prefabProjectile: {fileID: 1391803176948481848, guid: 2966367f374e53645920ef66d1f507ed, type: 3}
+  projectileData: {fileID: 11400000, guid: f010e99fe7d42df498cb15764e6b1677, type: 2}

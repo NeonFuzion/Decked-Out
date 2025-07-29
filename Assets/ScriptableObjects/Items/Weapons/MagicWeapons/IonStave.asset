@@ -1,0 +1,30 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 901b8f89decb8d94981f65f27fbeb7f8, type: 3}
+  m_Name: IonStave
+  m_EditorClassIdentifier: 
+  itemName: Ion Stave
+  description: A magic staff that can fire cloud projectiles.
+  sprite: {fileID: -3690721624951990323, guid: f420a45982adcf345ae892b699337aac, type: 3}
+  craftingRecipe: []
+  equipmentEffect: {fileID: 0}
+  attack: 2
+  attackSpeed: 0.8
+  knockback: 0
+  weaponHoldStyle: 1
+  element: 5
+  animations:
+  - MagicCast0
+  projectileCount: 3
+  projectileSpread: 1
+  prefabProjectile: {fileID: 1391803176948481848, guid: 2966367f374e53645920ef66d1f507ed, type: 3}
+  projectileData: {fileID: 11400000, guid: f27a40facfe33244480ee4793e7d8d5c, type: 2}

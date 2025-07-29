@@ -40,13 +40,6 @@ public class PlayerInput : MonoBehaviour, PlayerInputConfig.ICombatActions, Play
         return context.phase == InputActionPhase.Started;
     }
 
-    void MenuSetup()
-    {
-        config.General.Disable();
-        config.Combat.Disable();
-        config.Menu.Enable();
-    }
-
     public void OnAttack(InputAction.CallbackContext context)
     {
         if (!IsClicked(context)) return;
@@ -78,6 +71,13 @@ public class PlayerInput : MonoBehaviour, PlayerInputConfig.ICombatActions, Play
         onMenu?.Invoke();
     }
 
+    public void MenuSetup()
+    {
+        config.General.Disable();
+        config.Combat.Disable();
+        config.Menu.Enable();
+    }
+
     public void OnMovement(InputAction.CallbackContext context)
     {
         onMovement?.Invoke(context.ReadValue<Vector2>());
@@ -106,15 +106,14 @@ public class PlayerInput : MonoBehaviour, PlayerInputConfig.ICombatActions, Play
     public void OnContinue(InputAction.CallbackContext context)
     {
         if (!IsClicked(context)) return;
+        onContinue?.Invoke();
+    }
+
+    public void StartDialogue()
+    {
         config.General.Disable();
         config.Combat.Disable();
         config.Menu.Disable();
         config.Dialogue.Enable();
-        onContinue?.Invoke();
-    }
-
-    public void QuitDialogue()
-    {
-
     }
 }

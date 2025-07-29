@@ -5,6 +5,8 @@ public class Clickable : MonoBehaviour
 {
     [SerializeField] UnityEvent onClick;
 
+    public UnityEvent OnClick { get => onClick; }
+
     // Start is called once before the first execution of Update after the MonoBehaviour is created
     void Start()
     {

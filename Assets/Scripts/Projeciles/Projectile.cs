@@ -46,6 +46,8 @@ public class Projectile : MonoBehaviour
         Collider2D collider = Physics2D.OverlapCircle(transform.position, projectileData.DamageRadius);
 
         if (!collider) return;
+        if (collider.GetComponent<Player>()) return;
+        if (!collider.GetComponent<Health>()) return;
         if (collider.gameObject == gameObject) return;
         DestroyProjectile();
     }

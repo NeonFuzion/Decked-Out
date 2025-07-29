@@ -82,6 +82,11 @@ public class WeaponParent : MonoBehaviour
         animr.CrossFade("WeaponIdle", 0, 0);
     }
 
+    public void OnWeaponIdle()
+    {
+        if (attacking) attacking = false;
+    }
+
     public void DealDamage(int damage, bool isCrit)
     {
         weapon.AttackActionHandle(damage, isCrit, transform);
