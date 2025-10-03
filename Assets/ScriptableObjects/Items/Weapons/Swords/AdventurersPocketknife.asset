@@ -25,7 +25,9 @@ MonoBehaviour:
   animations:
   - SwordSwing0
   - SwordSwing1
+  - SwordSwing2
   attackRange: 1
   slashAnimations:
   - SlashEffect0
   - SlashEffect1
+  - SlashEffect2

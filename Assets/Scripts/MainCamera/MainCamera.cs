@@ -10,14 +10,13 @@ public class MainCamera : MonoBehaviour
     [SerializeField] GameObject deathScreen;
     [SerializeField] Vector3 offset;
     [SerializeField] float dampening;
-    [SerializeField] UnityEvent onLoadScene;
 
     Vector3 velocity;
 
     // Start is called before the first frame update
     void Start()
     {
-        onLoadScene.Invoke();
+        EventManager.AddOnRoomChangedListener(MoveCameraNonlinear);
 
         velocity = Vector3.zero;
     }
@@ -26,7 +25,8 @@ public class MainCamera : MonoBehaviour
     void Update()
     {
         if (target == null) return;
-        Vector3 movePos = target.position + offset;
+        Vector3 mouseBias = ((Vector3)MousePosition - target.position) * 0.2f;
+        Vector3 movePos = target.position + mouseBias + offset;
         transform.position = Vector3.SmoothDamp(transform.position, movePos, ref velocity, dampening);
     }
 

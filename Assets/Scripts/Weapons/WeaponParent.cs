@@ -76,6 +76,11 @@ public class WeaponParent : MonoBehaviour
         curAnimIndex = weapon.GetNextAnimationIndex(curAnimIndex);
     }
 
+    public void SetSlashDistance(int size)
+    {
+        slash.localScale = Vector3.one * size;
+    }
+
     public void OnAttackFinish()
     {
         attacking = false;

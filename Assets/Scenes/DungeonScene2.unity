@@ -277,7 +277,7 @@ PrefabInstance:
       objectReference: {fileID: 1411862115}
     - target: {fileID: 5412322040207766502, guid: b2ee695fbaf22ec429a8373efbdd8d2e, type: 3}
       propertyPath: items.items.Array.size
-      value: 1
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 5412322040207766502, guid: b2ee695fbaf22ec429a8373efbdd8d2e, type: 3}
       propertyPath: startingEquipment.Array.size
@@ -638,10 +638,7 @@ MonoBehaviour:
   target: {fileID: 115057390}
   deathScreen: {fileID: 191870369}
   offset: {x: 0, y: 0, z: -10}
-  dampening: 0
-  onLoadScene:
-    m_PersistentCalls:
-      m_Calls: []
+  dampening: 0.13
 --- !u!82 &102092807
 AudioSource:
   m_ObjectHideFlags: 0
