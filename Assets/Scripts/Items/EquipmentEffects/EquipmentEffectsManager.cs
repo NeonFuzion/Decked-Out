@@ -9,7 +9,7 @@ public class EquipmentEffectsManager : MonoBehaviour
     [SerializeField] UnityEvent onDamageDealt, onDamageTaken, onDash, onKill;
 
     List<TimerPair> timePairs;
-    List<EquipmentEffect> equipmentEffects;
+    List<PassiveEffect> passiveEffects;
     List<SetBonus> setBonuses;
 
     public UnityEvent OnDamageDealt { get => onDamageDealt; }
@@ -20,6 +20,7 @@ public class EquipmentEffectsManager : MonoBehaviour
     private void Awake()
     {
         timePairs = new List<TimerPair>();
+        passiveEffects = new List<PassiveEffect>();
     }
 
     // Start is called before the first frame update
@@ -43,9 +44,9 @@ public class EquipmentEffectsManager : MonoBehaviour
         }
     }
 
-    public void AddTimerPair(UnityAction unityEvent, float waitTime, EquipmentEffect equipmentEffect)
+    public void AddTimerPair(UnityAction unityEvent, float waitTime, PassiveEffect equipmentEffect)
     {
-        timePairs.Add(new TimerPair(waitTime, unityEvent, equipmentEffect));
+        timePairs.Add(new (waitTime, unityEvent, equipmentEffect));
     }
 
     public void RemoveAllEffects()
@@ -56,16 +57,17 @@ public class EquipmentEffectsManager : MonoBehaviour
         onKill.RemoveAllListeners();
 
         timePairs.Clear();
+        passiveEffects.Clear();
     }
 
-    public void AddEquipmentEffect(EquipmentEffect equipmentEffect)
+    public void AddPassiveEffect(PassiveEffect equipmentEffect)
     {
-        equipmentEffects.Add(equipmentEffect);
+        passiveEffects.Add(equipmentEffect);
     }
 
-    public void RemoveEquipmentEffect(EquipmentEffect equipmentEffect)
+    public void RemovePassiveEffect(PassiveEffect equipmentEffect)
     {
-        equipmentEffects.Remove(equipmentEffect);
+        passiveEffects.Remove(equipmentEffect);
     }
 
     public void AddSetBonusEffect(SetBonus setBonus)
@@ -91,12 +93,12 @@ public class TimerPair
 {
     float time;
     UnityEvent onFinish;
-    EquipmentEffect equipmentEffect;
+    PassiveEffect passiveEffect;
 
-    public TimerPair(float time, UnityAction unityAction, EquipmentEffect equipmentEffect)
+    public TimerPair(float time, UnityAction unityAction, PassiveEffect passiveEffect)
     {
         this.time = time;
-        this.equipmentEffect = equipmentEffect;
+        this.passiveEffect = passiveEffect;
 
         onFinish = new UnityEvent();
         onFinish.AddListener(unityAction);
@@ -104,7 +106,7 @@ public class TimerPair
 
     public float Time { get => time; }
     public UnityEvent OnFinish { get => onFinish; }
-    public EquipmentEffect EquipmentEffect { get => equipmentEffect; }
+    public PassiveEffect PassiveEffect { get => passiveEffect; }
 
     public void IncrementTime(float increment)
     {

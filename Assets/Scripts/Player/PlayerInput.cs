@@ -1,26 +1,23 @@
-using System.Collections;
-using System.Collections.Generic;
-using System.Runtime.CompilerServices;
 using UnityEngine;
 using UnityEngine.Events;
 using UnityEngine.InputSystem;
 
-public class PlayerInput : MonoBehaviour, PlayerInputConfig.ICombatActions, PlayerInputConfig.IGeneralActions, PlayerInputConfig.IMenuActions, PlayerInputConfig.IDialogueActions
+public class PlayerInput : MonoBehaviour, PlayerInputConfig.ICombatActions, PlayerInputConfig.IMenuActions, PlayerInputConfig.IDialogueActions, PlayerInputConfig.IPlayerActions
 {
     [SerializeField] UnityEvent onAttack, onDash, onInventory, onMenu, onQuit, onMap, onDialogue, onContinue;
-    [SerializeField] UnityEvent<Vector2> onMovement;
+    [SerializeField] UnityEvent<Vector2> onMovement, onMouse;
 
     PlayerInputConfig config;
 
     void Awake()
     {
         config = new PlayerInputConfig();
-        config.General.SetCallbacks(this);
         config.Menu.SetCallbacks(this);
         config.Combat.SetCallbacks(this);
+        config.Player.SetCallbacks(this);
 
-        config.General.Enable();
         config.Combat.Enable();
+        config.Player.Enable();
     }
 
     // Start is called before the first frame update
@@ -73,7 +70,7 @@ public class PlayerInput : MonoBehaviour, PlayerInputConfig.ICombatActions, Play
 
     public void MenuSetup()
     {
-        config.General.Disable();
+        config.Player.Disable();
         config.Combat.Disable();
         config.Menu.Enable();
     }
@@ -91,7 +88,7 @@ public class PlayerInput : MonoBehaviour, PlayerInputConfig.ICombatActions, Play
 
     public void QuitSetup()
     {
-        config.General.Enable();
+        config.Player.Enable();
         config.Combat.Enable();
         config.Menu.Disable();
         onQuit?.Invoke();
@@ -111,9 +108,15 @@ public class PlayerInput : MonoBehaviour, PlayerInputConfig.ICombatActions, Play
 
     public void StartDialogue()
     {
-        config.General.Disable();
+        config.Player.Disable();
         config.Combat.Disable();
         config.Menu.Disable();
         config.Dialogue.Enable();
+    }
+
+    public void OnMouse(InputAction.CallbackContext context)
+    {
+        Vector2 position = context.ReadValue<Vector2>();
+        onMouse?.Invoke(position);
     }
 }

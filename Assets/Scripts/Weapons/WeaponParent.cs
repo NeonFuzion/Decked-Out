@@ -1,24 +1,26 @@
 using System.Collections;
 using System.Collections.Generic;
+using System.Linq;
 using UnityEngine;
 using UnityEngine.Events;
 
 public class WeaponParent : MonoBehaviour
 {
     [SerializeField] SpriteRenderer weaponSpriteRenderer;
-    [SerializeField] Transform slash, weaponTip;
-    [SerializeField] UnityEvent<int, float> onAttack;
-    [SerializeField] UnityEvent onEnemyHit, onKill;
+    [SerializeField] Transform slash, damageOrigin;
+    [SerializeField] Animator slashAnimator;
+    [SerializeField] UnityEvent onAttack, onEnemyHit, onKill;
 
     bool attacking;
-    int curAnimIndex;
+    int curAnimIndex, currentHotbarIndex;
 
-    Animator animr;
     Weapon weapon;
+    Inventory inventory;
+    Vector2 mousePosition;
 
     private void Awake()
     {
-        EventManager.AddOnEquipmentUpdatedListener(UpdateWeapon);
+        EventManager.AddOnInventoryUpdatedListener(UpdateWeapon);
         EventManager.AddOnKillListener(InvokeOnKill);
     }
 
@@ -26,28 +28,51 @@ public class WeaponParent : MonoBehaviour
     void Start()
     {
         attacking = false;
-
-        animr = transform.GetChild(0).GetComponent<Animator>();
         curAnimIndex = 0;
+        
+        inventory = Inventory.Instance;
     }
 
     // Update is called once per frame
     void Update()
     {
-    
+        mousePosition = MainCamera.MouseWorldPosition();
+
+        switch (weapon.WeaponHoldStyle)
+        {
+            case WeaponHoldStyle.Mouse:
+                if (attacking) break;
+                Vector2 direction = (Vector3)mousePosition - transform.position;
+                //weaponSpriteRenderer.flipX = direction.x < 0;
+                weaponSpriteRenderer.sortingOrder = -(int)Mathf.Sign(direction.y);
+                transform.right = direction.normalized;
+                break;
+            case WeaponHoldStyle.Static:
+                transform.right = Vector2.right * (mousePosition.x > 0 ? 1 : -1);
+                break;
+        }
     }
 
-    public void OnEnemyHit()
+    void UpdateWeapon()
     {
-        onEnemyHit.Invoke();
+        Equipment[] weapons = inventory.Equiped.Where(equip => equip as Weapon).ToArray();
+        
+        if (weapons.Length == 0) return;
+        weapon = weapons[currentHotbarIndex] as Weapon;
+
+        if (weapon as Sword)
+        {
+            Sword sword = weapon as Sword;
+            slash.parent.localPosition = Vector3.right * sword.AttackRange;
+            slash.localScale = Vector3.one * sword.AttackRange;
+        }
     }
 
-    public void UpdateWeapon(Equipment[] equiped)
+    void InvokeOnKill()
     {
-        if (!equiped[0]) return;
-        weapon = equiped[0] as Weapon;
+        onKill?.Invoke();
     }
-    
+
     public void Attack()
     {
         if (attacking) return;
@@ -55,36 +80,19 @@ public class WeaponParent : MonoBehaviour
         attacking = true;
         weaponSpriteRenderer.sprite = weapon.Sprite;
 
-        onAttack?.Invoke(curAnimIndex, weapon.AttackSpeed);
-
-        animr.SetFloat("AttackSwingSpeed", weapon.AttackSpeed);
-        animr.CrossFade(weapon.GetAnimationByIndex(curAnimIndex), 0, 0);
-
-        Vector2 mousePos = MainCamera.MousePosition;
-
-        switch (weapon.WeaponHoldStyle)
-        {
-            case WeaponHoldStyle.Mouse:
-                transform.right = ((Vector3)mousePos - transform.position).normalized;
-                break;
-            case WeaponHoldStyle.Static:
-                transform.right = Vector2.right * (mousePos.x > 0 ? 1 : -1);
-                break;
-        }
-        
         weapon.AttackAnimationHandle(curAnimIndex, transform);
         curAnimIndex = weapon.GetNextAnimationIndex(curAnimIndex);
     }
 
-    public void SetSlashDistance(int size)
+    public void OnAttackHit()
     {
-        slash.localScale = Vector3.one * size;
+        weapon.AttackActionHandle(curAnimIndex, slash, mousePosition);
     }
 
     public void OnAttackFinish()
     {
         attacking = false;
-        animr.CrossFade("WeaponIdle", 0, 0);
+        slashAnimator.CrossFade("Idle", 0, 0);
     }
 
     public void OnWeaponIdle()
@@ -92,15 +100,8 @@ public class WeaponParent : MonoBehaviour
         if (attacking) attacking = false;
     }
 
-    public void DealDamage(int damage, bool isCrit)
+    public void SetHotbarIndex(int index)
     {
-        weapon.AttackActionHandle(damage, isCrit, transform);
+        currentHotbarIndex = index;
     }
-
-    public void AddOnAttackListener(UnityAction<int, float> unityAction)
-    {
-        onAttack?.AddListener(unityAction);
-    }
-
-    public void InvokeOnKill() => onKill?.Invoke();
 }

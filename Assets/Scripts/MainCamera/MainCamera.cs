@@ -2,6 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.Events;
+using UnityEngine.InputSystem;
 using UnityEngine.UI;
 
 public class MainCamera : MonoBehaviour
@@ -24,8 +25,13 @@ public class MainCamera : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
+        
+    }
+
+    void FixedUpdate()
+    {
         if (target == null) return;
-        Vector3 mouseBias = ((Vector3)MousePosition - target.position) * 0.2f;
+        Vector3 mouseBias = ((Vector3)MouseWorldPosition() - target.position) * 0.2f;
         Vector3 movePos = target.position + mouseBias + offset;
         transform.position = Vector3.SmoothDamp(transform.position, movePos, ref velocity, dampening);
     }
@@ -44,5 +50,13 @@ public class MainCamera : MonoBehaviour
     public void LoadVillage() => SceneHandler.SetScene(1);
     public void LoadDungeon() => SceneHandler.SetScene(2);
 
-    public static Vector2 MousePosition { get => Camera.main.ScreenToWorldPoint(Input.mousePosition); }
+    public static Vector2 MousePixelPosition()
+    {
+        return Mouse.current.position.ReadValue();
+    }
+
+    public static Vector2 MouseWorldPosition()
+    {
+        return Camera.main.ScreenToWorldPoint(MousePixelPosition());
+    }
 }

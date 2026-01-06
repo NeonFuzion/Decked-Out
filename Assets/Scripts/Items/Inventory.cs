@@ -1,92 +1,114 @@
 using System.Collections;
 using System.Collections.Generic;
+using System.Linq;
 using Unity.VisualScripting;
 using UnityEngine;
 
 public class Inventory : MonoBehaviour
 {
-    [SerializeField] Canvas itemCanvas;
-    [SerializeField] Transform itemParent, equipmentEffects;
-    [SerializeField] EquipmentEffectsManager effectsManager;
-    [SerializeField] Equipment[] startingEquipment;
-    [SerializeField] InventorySlots items;
+    static Inventory inventory;
 
+    public static Inventory Instance { get => inventory; }
+
+    [SerializeField] int max;
+    [SerializeField] Canvas itemCanvas;
+    [SerializeField] Transform itemParent;
+    [SerializeField] EquipmentEffectsManager equipmentEffectsManager;
+    [SerializeField] Equipment[] startingEquipment;
+    [SerializeField] InventorySlot[] startingItems;
+
+    int itemCount;
+
+    InventorySlot[] items;
     Equipment[] equiped;
 
-    public Equipment[] Equiped { get => equiped; }
-    public InventorySlots Items { get => items; }
+    public IList<InventorySlot> Items { get => items.AsReadOnlyList(); }
+    public IList<Equipment> Equiped { get => equiped.AsReadOnlyList(); }
+
+    private void Awake()
+    {
+        inventory = this;
+    }
 
     private void Start()
     {
-        EquipStartingEquipment();
-        UpdateInventory(equiped, items);
+        Initialize();
+        UpdateInventory();
 
-        EventManager.AddOnInventoryUpdatedListener(UpdateInventory);
-        EventManager.InvokeOnEquipmentUpdated(equiped);
-
-        GetComponent<Player>().UpdateStats(equiped);
-        
+        EventManager.InvokeOnInventoryUpdated();
     }
 
     private void OnTriggerEnter2D(Collider2D col)
     {
         ItemObject itemObj = col.gameObject.GetComponent<ItemObject>();
+        
         if (!itemObj) return;
-        AddItem(itemObj.Item);
+        if (!AddItem(itemObj.Item)) return;
         Destroy(col.gameObject);
     }
 
-    void EquipStartingEquipment()
+    void Initialize()
     {
-        equiped = new Equipment[9];
+        equiped = new Equipment[12];
         foreach (Equipment equipment in startingEquipment)
         {
-            if (equipment as Weapon)
+            int start = GetEquipmentIndex(equipment);
+            for (int i = start; i < start + 4; i++)
             {
-                equiped[0] = equipment;
+                if (equiped[i]) continue;
+                equiped[i] = equipment;
+                break;
             }
-            else if (equipment as Accessory)
-            {
-                for (int i = 3; i < 9; i++)
-                {
-                    if (equiped[i]) continue;
-                    equiped[i] = equipment;
-                    break;
-                }
-            }
-            else if (equipment as SkillCharm)
-            {
-                SkillCharm charm = equipment as SkillCharm;
-                equiped[charm.CharmType == CharmType.Skill ? 1 : 2] = equipment;
-            }
+        }
+
+        items = new InventorySlot[max];
+        for (int i = 0; i < startingItems.Length; i++)
+        {
+            items[i] = startingItems[i];
         }
     }
 
-    public void AddItem(Item item, int amount = 1)
+    int GetEquipmentIndex(Item item)
     {
-        items.AddItem(item, amount);
+        if (item as Weapon) return 0;
+        if (item as Armor) return 4;
+        if (item as Accessory) return 8;
+        return -1;
     }
 
-    public void EquipItem(Item item)
+    public bool EquipItem(Item item)
     {
-        Equipment equipment = item as Equipment;
-        if (!equipment) return;
+        // Creating specific equipment types for later
+        Weapon weapon = item as Weapon;
+        Armor armor = item as Armor;
+        Accessory accessory = item as Accessory;
+        
+        // Figuring out start index for correct index searching later
+        int startIndex = GetEquipmentIndex(item);
 
-        EquipmentEffect equipEffect = equipment.EquipmentEffect;
-        if (equipEffect) equipEffect.Instantiate(gameObject);
+        // Exiting function is item isn't equipment
+        if (startIndex == -1) return false;
 
+        // Finding index
         int index = 0;
-        Accessory relic = equipment as Accessory;
-        if (relic)
+        if (armor)
         {
-            index = 3;
-            while (true)
+            index = startIndex + (int)armor.ArmorPiece;
+        }
+        else
+        {
+            for (int i = startIndex; i < startIndex + 4; i++)
             {
-                if (equiped[index++] != null || index >= equiped.Length) break; 
+                if (equiped[startIndex] != null) continue;
+                index = i;
             }
+        }
 
+        // Set bonuses for accessories
+        if (accessory)
+        {
             int setCount = 1;
-            SetBonus curPieceSet = relic.SetBonus;
+            SetBonus curPieceSet = accessory.SetBonus;
             foreach (Equipment equip in equiped)
             {
                 if (equip is not Accessory) continue;
@@ -98,66 +120,69 @@ public class Inventory : MonoBehaviour
             if (setCount >= 4) curPieceSet.FourPieceBonus();
         }
 
-        if (!equiped[index]) items.RemoveItem(item);
-        else items.AddItem(equiped[index]);
-        equiped[index] = equipment;
+        // Moving equipment from items into equipment array
+        RemoveItem(item);
+        equiped[index] = item as Equipment;
 
-        EventManager.InvokeOnEquipmentUpdated(equiped);
+        // Telling everybody else to update
+        UpdateInventory();
+        EventManager.InvokeOnInventoryUpdated();
+        
+        // Done
+        return true;
     }
 
-    public void UpdateInventory(Equipment[] equiped, InventorySlots items)
+    public void UpdateInventory()
     {
-        this.equiped = equiped;
-        this.items = items;
+        equipmentEffectsManager.RemoveAllEffects();
 
-        effectsManager.RemoveAllEffects();
-
-        foreach (Transform child in equipmentEffects) Destroy(child.gameObject);
-        for (int i = 0; i < 9; i++)
+        equiped.ToList().ForEach(equip =>
         {
-            Equipment equip = equiped[i];
+            if (!equip) return;
+            Accessory accessory = equip as Accessory;
 
-            if (!equip) continue;
-            EquipmentEffect equipmentEffect = equip.EquipmentEffect;
-
-            if (!equipmentEffect) continue;
-            equipmentEffect.Instantiate(gameObject);
-        }
+            if (!accessory) return;
+            PassiveEffect passiveEffect = accessory.PassiveEffectSO.Initialize(gameObject, equipmentEffectsManager);
+            equipmentEffectsManager.AddPassiveEffect(passiveEffect);
+        });
     }
-}
 
-
-[System.Serializable]
-public class InventorySlots
-{
-    [SerializeField] List<InventorySlot> items;
-
-    public List<InventorySlot> Items { get => items; }
+    public void UpdateItems(InventorySlot[] items)
+    {
+        this.items = items;
+    }
 
     public bool AddItem(Item item, int amount = 1)
     {
-        if (item is not Equipment)
+        if (itemCount == max) return false;
+        for (int i = 0; i < max; i++)
         {
-            foreach (InventorySlot slot in items)
+            InventorySlot slot = items[i];
+            if (slot == null)
+            {
+                items[i] = new (item, amount);
+            }
+            else
             {
                 if (slot.Item != item) continue;
                 slot.AddItems(amount);
-                return false;
             }
+            return true;
         }
-        items.Add(new InventorySlot(item, 1));
-        return true;
+        return false;
     }
 
     public bool RemoveItem(Item item, int amount = 1)
     {
-        foreach (InventorySlot slot in items)
+        for (int i = 0; i < max; i++)
         {
+            InventorySlot slot = items[i];
+
             if (slot.Item != item) continue;
             if (slot.Amount < amount) return false;
             else if (slot.Amount == amount)
             {
-                items.Remove(slot);
+                items[i] = null;
                 return true;
             }
             else if (slot.Amount > amount)

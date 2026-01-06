@@ -4,27 +4,43 @@ using UnityEngine;
 
 public static class Stats
 {
-    static Dictionary<PlayerStat, float> statBoosts = new Dictionary<PlayerStat, float>()
-    {
-        { PlayerStat.Attack, 0.1f },
-        { PlayerStat.Defense, 0.1f },
-        { PlayerStat.Health, 0.1f },
-        { PlayerStat.CriticalChance, 0.2f },
-        { PlayerStat.CriticalDamage, 0.4f },
-        { PlayerStat.EnergyRecharge, 0.3f }
-    };
-
     public static bool IsPercentage(PlayerStat stat)
     {
-        return (int)stat >= 3;
+        return stat >= PlayerStat.StaggerMultiplier;
     }
 }
 
 public enum PlayerStat
 {
-    Attack, Defense, Health,
-    CriticalChance, CriticalDamage, EnergyRecharge,
+    None,
+    Attack, Magic, Defense, Health,
+    ReactionAffinity, Mana,
+    StaggerMultiplier, DefensePenetration, ManaRegeneration,
     PhysicalDamageBonus, FireDamageBonus, WaterDamageBonus,
-    WindDamageBonus, EarthDamageBonus, ElectricDamageBonus,
+    WindDamageBonus, EarthDamageBonus, LightningDamageBonus,
     NatureDamageBonus, IceDamageBonus
+}
+
+[System.Serializable]
+public class StatBoost
+{
+    [SerializeField] PlayerStat stat;
+    [SerializeField] float amount;
+
+    public StatBoost(PlayerStat stat, float amount)
+    {
+        this.stat = stat;
+        this.amount = amount;
+    }
+
+    public void ChangeAmount(float amount) => this.amount += amount;
+    public void SetAmount(float amount) => this.amount = amount;
+    
+    public PlayerStat Stat { get => stat; }
+    public float Amount { get => amount; }
+    public override string ToString()
+    {
+        string amountStr = Stats.IsPercentage(stat) ? amount * 100 + "%" : amount + "";
+        return $"{stat} +{amountStr}";
+    }
 }

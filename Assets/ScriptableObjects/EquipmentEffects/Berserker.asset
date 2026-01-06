@@ -15,6 +15,6 @@ MonoBehaviour:
   abilityName: Berserker
   description: Increases Critical Chance by 20% for 10 seconds after killing an enemy.
     This effect has a cooldown of 15s.
-  criticalChanceIncrease: 20
+  attackBoost: 0.2
   duration: 10
   cooldown: 5

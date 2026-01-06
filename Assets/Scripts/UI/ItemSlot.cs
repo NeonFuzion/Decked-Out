@@ -18,15 +18,4 @@ public class ItemSlot : Slot
         
         amountText.SetText(isEquipment || amount == 1 ? "" : amount.ToString());
     }
-
-    public override void OnLeftClick()
-    {
-        EventManager.InvokeOnFocusItem(index, false, transform);
-    }
-
-    public override void OnRightClick()
-    {
-        if (!isEquipment) return;
-        EventManager.InvokeOnEquip(index, false);
-    }
 }

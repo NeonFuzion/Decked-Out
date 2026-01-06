@@ -1,36 +1,59 @@
-using System.Collections;
-using System.Collections.Generic;
+using System;
 using UnityEngine;
 using UnityEngine.Events;
 
 public abstract class Weapon : Equipment
 {
-    [SerializeField] float attack, attackSpeed, knockback;
+    [SerializeField] int attack;
+    [SerializeField] float attackSpeed, knockback;
+    [SerializeField] StatBoost substat;
     [SerializeField] WeaponHoldStyle weaponHoldStyle;
     [SerializeField] Element element;
-    [SerializeField] List<string> animations;
+    [SerializeField] AttackSequenceData[] attackComboData;
 
-    public float Attack { get => attack; }
     public float AttackSpeed { get => attackSpeed; }
     public float Knockback { get => knockback; }
+    
+    public int Attack { get => attack; }
+    public StatBoost Substat { get => substat; }
     public WeaponHoldStyle WeaponHoldStyle { get => weaponHoldStyle; }
     public Element Element { get => element; }
-    public List<string> Animations { get => animations; }
+    public AttackSequenceData[] Animations { get => attackComboData; }
 
     public int GetNextAnimationIndex(int index)
     {
-        return animations.Count > 1 ? (index + 1) % animations.Count : 0;
+        return attackComboData.Length > 1 ? (index + 1) % attackComboData.Length : 0;
+    }
+
+    public AttackSequenceData GetAttackSequenceDataByIndex(int index)
+    {
+        return attackComboData[index >= attackComboData.Length ? attackComboData.Length - 1 : index];
     }
 
     public string GetAnimationByIndex(int index)
     {
-        return animations[index >= animations.Count ? animations.Count - 1 : index];
+        return GetAttackSequenceDataByIndex(index).Animation;
     }
 
-    public abstract void AttackActionHandle(int damage, bool isCrit, Transform transform);
+    public StatBoost[] GetMultipliersByIndex(int index)
+    {
+        return GetAttackSequenceDataByIndex(index).Multipliers;
+    }
+
+    public abstract void AttackActionHandle(int attackIndex, Transform transform, Vector2 mousePosition);
     
     public abstract void AttackAnimationHandle(int animationIndex, Transform transform);
 }
 
 public enum WeaponHoldStyle { Static, Mouse }
 public enum Element { Physical, Fire, Water, Wind, Earth, Electric, Nature, Ice }
+
+[Serializable]
+public class AttackSequenceData
+{
+    [SerializeField] string animation;
+    [SerializeField] StatBoost[] multipliers;
+
+    public string Animation { get => animation; }
+    public StatBoost[] Multipliers { get => multipliers; }
+}

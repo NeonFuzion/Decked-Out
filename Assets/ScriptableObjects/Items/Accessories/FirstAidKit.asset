@@ -10,15 +10,11 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: e5555a016c3944248b74ae1dc4810230, type: 3}
-  m_Name: RoyalBreastplate
+  m_Name: FirstAidKit
   m_EditorClassIdentifier: 
-  itemName: Royal Breastplate
-  description: A heavy metal chestplate adorn with gems.
-  sprite: {fileID: -1416208706, guid: 1529019942676c14784c63a0b641aa78, type: 3}
+  itemName: First-Aid Kit
+  description: A portable box containing medical supplies for minor injuries.
+  sprite: {fileID: 6579135910917660434, guid: 0d31d071e10729949971a7a0606aeb13, type: 3}
   craftingRecipe: []
-  equipmentEffect: {fileID: 0}
-  mainStat:
-    stat: 1
-    amount: 20
   setBonus: {fileID: 0}
-  statBoosts: []
+  passiveEffectSO: {fileID: 11400000, guid: 92c91d688743f624daff6f5141da915f, type: 2}

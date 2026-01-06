@@ -6,66 +6,17 @@ using UnityEngine.Events;
 
 public static class EventManager
 {
-    static UnityEvent<Equipment[], InventorySlots> onInventoryUpdated = new UnityEvent<Equipment[], InventorySlots>();
-    static UnityEvent<Equipment[]> onEquipmentUpdated = new UnityEvent<Equipment[]>();
-    static UnityEvent<DialogueData[]> onDialogueStarted = new UnityEvent<DialogueData[]>();
-    static UnityEvent<int, bool, Transform> onFocusItem = new UnityEvent<int, bool, Transform>();
-    static UnityEvent<int, bool> onEquipItem = new UnityEvent<int, bool>();
     static UnityEvent onRoomCleared = new UnityEvent();
     static UnityEvent onKill = new UnityEvent();
     static UnityEvent onRoomChanged = new UnityEvent();
     static UnityEvent onCombatStarted = new UnityEvent();
     static UnityEvent onCombatEnded = new UnityEvent();
-
-    public static void AddOnInventoryUpdatedListener(UnityAction<Equipment[], InventorySlots> listener)
-    {
-        onInventoryUpdated?.AddListener(listener);
-    }
-
-    public static void InvokeOnInventoryUpdated(Equipment[] equiped, InventorySlots items)
-    {
-        onInventoryUpdated?.Invoke(equiped, items);
-    }
-
-    public static void AddOnDialogueStartedListener(UnityAction<DialogueData[]> listener)
-    {
-        onDialogueStarted?.AddListener(listener);
-    }
-
-    public static void InvokeOnDialogueStarted(DialogueData[] data)
-    {
-        onDialogueStarted?.Invoke(data);
-    }
-
-    public static void AddOnEquipmentUpdatedListener(UnityAction<Equipment[]> listener)
-    {
-        onEquipmentUpdated?.AddListener(listener);
-    }
-
-    public static void InvokeOnEquipmentUpdated(Equipment[] equiped)
-    {
-        onEquipmentUpdated?.Invoke(equiped);
-    }
-
-    public static void AddOnFocusItemListener(UnityAction<int, bool, Transform> focusAction)
-    {
-        onFocusItem?.AddListener(focusAction);
-    }
-
-    public static void InvokeOnFocusItem(int index, bool isEquipment, Transform item)
-    {
-        onFocusItem?.Invoke(index, isEquipment, item);
-    }
-
-    public static void AddOnEquipListener(UnityAction<int, bool> equipAction)
-    {
-        onEquipItem?.AddListener(equipAction);
-    }
-
-    public static void InvokeOnEquip(int index, bool isEquiped)
-    {
-        onEquipItem?.Invoke(index, isEquiped);
-    }
+    static UnityEvent onMenuOpened = new UnityEvent();
+    static UnityEvent onInventoryUpdated = new UnityEvent();
+    static UnityEvent onUnfocusItem = new ();
+    static UnityEvent<int, bool, Transform> onFocusItem = new UnityEvent<int, bool, Transform>();
+    static UnityEvent<DialogueData[]> onDialogueStarted = new UnityEvent<DialogueData[]>();
+    static UnityEvent<Collider2D[], AttackData> onEnemyDataAcquired = new ();
 
     public static void AddOnRoomClearedListener(UnityAction action)
     {
@@ -115,5 +66,65 @@ public static class EventManager
     public static void InvokeOnCombatEnded()
     {
         onCombatEnded?.Invoke();
+    }
+
+    public static void AddOnMenuOpenedListener(UnityAction action)
+    {
+        onMenuOpened?.AddListener(action);
+    }
+
+    public static void InvokeOnMenuOpened()
+    {
+        onMenuOpened?.Invoke();
+    }
+
+    public static void AddOnInventoryUpdatedListener(UnityAction unityAction)
+    {
+        onInventoryUpdated?.AddListener(unityAction);
+    }
+
+    public static void InvokeOnInventoryUpdated()
+    {
+        onInventoryUpdated?.Invoke();
+    }
+
+    public static void AddOnUnfocusItemListener(UnityAction unityAction)
+    {
+        onUnfocusItem?.AddListener(unityAction);
+    }
+
+    public static void InvokeOnUnfocusItem()
+    {
+        onUnfocusItem?.Invoke();
+    }
+    
+    public static void AddOnFocusItemListener(UnityAction<int, bool, Transform> focusAction)
+    {
+        onFocusItem?.AddListener(focusAction);
+    }
+
+    public static void InvokeOnFocusItem(int index, bool isEquipment, Transform item)
+    {
+        onFocusItem?.Invoke(index, isEquipment, item);
+    }
+
+    public static void AddOnDialogueStartedListener(UnityAction<DialogueData[]> listener)
+    {
+        onDialogueStarted?.AddListener(listener);
+    }
+
+    public static void InvokeOnDialogueStarted(DialogueData[] data)
+    {
+        onDialogueStarted?.Invoke(data);
+    }
+
+    public static void AddOnEnemyDataAcquiredListener(UnityAction<Collider2D[], AttackData> listener)
+    {
+        onEnemyDataAcquired?.AddListener(listener);
+    }
+
+    public static void InvokeOnEnemyDataAcquired(Collider2D[] colliders, AttackData attackData)
+    {
+        onEnemyDataAcquired?.Invoke(colliders, attackData);
     }
 }

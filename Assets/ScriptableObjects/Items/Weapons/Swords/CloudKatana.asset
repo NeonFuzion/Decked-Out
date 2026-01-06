@@ -16,15 +16,23 @@ MonoBehaviour:
   description: An eastern-style blade forged with Cloud Essence.
   sprite: {fileID: 21300000, guid: f174fa1b72429b44dba575f909e3bfc4, type: 3}
   craftingRecipe: []
-  equipmentEffect: {fileID: 11400000, guid: 40532c6ac1e579f478c62adb16ec905b, type: 2}
   attack: 12
   attackSpeed: 1.2
   knockback: 3
+  substat:
+    stat: 0
+    amount: 0
   weaponHoldStyle: 1
   element: 3
-  animations:
-  - SwordSwing0
-  - SwordSwing1
+  attackComboData:
+  - animation: SwordSwing0
+    multipliers:
+    - stat: 1
+      amount: 0.7
+  - animation: SwordSwing1
+    multipliers:
+    - stat: 1
+      amount: 0.7
   attackRange: 1.1
   slashAnimations:
   - SlashEffect0

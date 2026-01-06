@@ -47,7 +47,7 @@ public class Health : MonoBehaviour
         if (hp < maxHp * 0.2f) image.color = Color.red;
     }
 
-    public void TakeDamage(int amount, Element element, Vector2 incomingAttack = new Vector2(), bool isCrit = false, float knockback = 1)
+    public void TakeDamage(int amount, Element element, Vector2 incomingAttack = new Vector2(), float knockback = 1)
     {
         onHit.Invoke();
         if (invincible) return;
@@ -56,7 +56,7 @@ public class Health : MonoBehaviour
 
         Instantiate(prefabHitEffect).GetComponent<HitEfect>().Initialize(transform.position);
 
-        if (prefabDmgObj) SpawnDamageNumber(incomingAttack, element, finalDamage, isCrit, false);
+        if (prefabDmgObj) SpawnDamageNumber(incomingAttack, element, finalDamage, false);
         if (amount < 0) return;
         if (incomingAttack != Vector2.zero)
         {
@@ -74,7 +74,7 @@ public class Health : MonoBehaviour
         hp += amount;
         if (hp > maxHp) hp = maxHp;
 
-        if (prefabDmgObj) SpawnDamageNumber(Vector2.down, Element.Physical, amount, false, true);
+        if (prefabDmgObj) SpawnDamageNumber(Vector2.down, Element.Physical, amount, true);
     }
 
     public void SetInvincibility()
@@ -82,11 +82,11 @@ public class Health : MonoBehaviour
         invincible = !invincible;
     }
 
-    void SpawnDamageNumber(Vector2 incomingAttack, Element element, int amount, bool isCrit, bool isHeal)
+    void SpawnDamageNumber(Vector2 incomingAttack, Element element, int amount, bool isHeal)
     {
         Vector2 direction = incomingAttack == new Vector2() ? (Vector2)transform.position : (incomingAttack - (Vector2)transform.position);
         GameObject dmgObj = Instantiate(prefabDmgObj, transform.position, Quaternion.identity);
-        dmgObj.GetComponent<DamageObject>().Instantiate((isHeal ? -1 : 1) * amount, isCrit, isHeal, direction, element);
+        dmgObj.GetComponent<DamageObject>().Instantiate((isHeal ? -1 : 1) * amount, isHeal, direction, element);
     }
 
     IEnumerator ApplyKnockback(Vector2 incomingAttack, float knockback)
@@ -99,11 +99,11 @@ public class Health : MonoBehaviour
         enemy.enabled = true;
     }
 
-    public void Initialize(int maxHP, int def)
+    public void Initialize(int maxHp, int def)
     {
         this.def = def;
-        this.maxHp = maxHP;
-        hp = maxHP;
+        this.maxHp = maxHp;
+        hp = maxHp;
 
         if (existingHealthBar)
         {
@@ -116,7 +116,7 @@ public class Health : MonoBehaviour
         }
         slider = healthBar.GetComponent<Slider>();
         slider.GetComponentInChildren<Image>().color = Color.green;
-        slider.maxValue = maxHP;
+        slider.maxValue = maxHp;
         slider.value = hp;
     }
 }

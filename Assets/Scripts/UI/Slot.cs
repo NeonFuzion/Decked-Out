@@ -3,19 +3,14 @@ using UnityEngine;
 using UnityEngine.EventSystems;
 using UnityEngine.UI;
 
-public abstract class Slot : MonoBehaviour, IPointerClickHandler
+public abstract class Slot : MonoBehaviour, IPointerEnterHandler, IPointerExitHandler
 {
+    [SerializeField] protected Sprite emptySprite;
     [SerializeField] protected Image backgroundImage, image;
     [SerializeField] Color highlightedColor, unhighlightedColor;
 
     protected int index;
     protected bool isEquiped, isEquipment;
-
-    public void OnPointerClick(PointerEventData eventData)
-    {
-        if (eventData.button == PointerEventData.InputButton.Left) OnLeftClick();
-        if (eventData.button == PointerEventData.InputButton.Right) OnRightClick();
-    }
 
     public void Highlight()
     {
@@ -27,7 +22,15 @@ public abstract class Slot : MonoBehaviour, IPointerClickHandler
         //backgroundImage.color = unhighlightedColor;
     }
 
-    public abstract void OnLeftClick();
+    public void OnPointerEnter(PointerEventData eventData)
+    {
+        if (image.sprite == emptySprite) return;
+        EventManager.InvokeOnFocusItem(index, isEquiped, transform);
+    }
 
-    public abstract void OnRightClick();
+    public void OnPointerExit(PointerEventData eventData)
+    {
+        if (image.sprite == emptySprite) return;
+        EventManager.InvokeOnUnfocusItem();
+    }
 }

@@ -7,11 +7,10 @@ public class Projectile : MonoBehaviour
     [SerializeField] Transform projectileVisual, projectileShadow;
 
     float totalDistance, groundDirection;
-    int damage;
-    bool isCrit;
 
-    ProjectileData projectileData;
     Element element;
+    StatBoost[] multipliers;
+    ProjectileData projectileData;
     Vector2 targetPosition, startPosition;
     SpriteRenderer visualSpriteRenderer, shadowSpriteRenderer;
     
@@ -55,31 +54,15 @@ public class Projectile : MonoBehaviour
     void DestroyProjectile()
     {
         if (projectileData.ProjectileEffect) projectileData.ProjectileEffect.ActivateEffect(targetPosition);
-        DealDamage();
+        EventManager.InvokeOnEnemyDataAcquired(Physics2D.OverlapCircleAll(transform.position, projectileData.DamageRadius), new (element, transform.position, multipliers));
         Destroy(gameObject);
     }
 
-    void DealDamage()
-    {
-        foreach (Collider2D col in Physics2D.OverlapCircleAll(transform.position, projectileData.DamageRadius))
-        {
-            if (col.GetComponent<Player>()) continue;
-            Health health = col.GetComponent<Health>();
-
-            if (!health) continue;
-            health.TakeDamage(damage, element, transform.position, isCrit);
-
-            if (health.HP > 0) continue;
-            EventManager.InvokeOnKill();
-        }
-    }
-
-    public void Initialize(ProjectileData projectileData, Vector2 targetPosition, Element element, int damage, bool isCrit)
+    public void Initialize(ProjectileData projectileData, Vector2 targetPosition, Element element, StatBoost[] multipliers)
     {
         this.projectileData = projectileData;
         this.element = element;
-        this.damage = damage;
-        this.isCrit = isCrit;
+        this.multipliers = multipliers;
 
         Vector3 correctedTargetPosition = ((Vector3)targetPosition - transform.position).normalized * projectileData.MaxDistance + transform.position;
         this.targetPosition = projectileData.MaxHeight == 0 ? correctedTargetPosition : targetPosition;

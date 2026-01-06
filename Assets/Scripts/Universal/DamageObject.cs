@@ -38,7 +38,7 @@ public class DamageObject : MonoBehaviour
         Destroy(gameObject);
     }
 
-    public void Instantiate(int amount, bool isCrit, bool isHeal, Vector2 direction, Element element)
+    public void Instantiate(int amount, bool isHeal, Vector2 direction, Element element)
     {
         GetComponent<TextMeshPro>().SetText(Mathf.Abs(amount).ToString());
         this.direction = direction;
@@ -56,9 +56,6 @@ public class DamageObject : MonoBehaviour
             case Element.Nature: color = natureDamageColor; break;
         }
         tmp.color = isHeal ? healingColor : color;
-
-        if (!isCrit) return;
-        tmp.fontSize = criticalHitFontSize;
     }
 }
 

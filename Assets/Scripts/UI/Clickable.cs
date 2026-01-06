@@ -1,9 +1,12 @@
 using UnityEngine;
 using UnityEngine.Events;
+using UnityEngine.EventSystems;
 
-public class Clickable : MonoBehaviour
+public class Clickable : MonoBehaviour, IPointerEnterHandler, IPointerExitHandler, IPointerClickHandler
 {
-    [SerializeField] UnityEvent onClick;
+    [SerializeField] UnityEvent onClick, onEnter, onExit;
+
+    bool isMouseOver;
 
     public UnityEvent OnClick { get => onClick; }
 
@@ -19,8 +22,21 @@ public class Clickable : MonoBehaviour
 
     }
 
-    void OnMouseDown()
+    public void OnPointerEnter(PointerEventData eventData)
     {
+        isMouseOver = true;
+        onEnter?.Invoke();
+    }
+
+    public void OnPointerExit(PointerEventData eventData)
+    {
+        isMouseOver = false;
+        onExit?.Invoke();
+    }
+
+    public void OnPointerClick(PointerEventData eventData)
+    {
+        if (!isMouseOver) return;
         onClick?.Invoke();
     }
 }

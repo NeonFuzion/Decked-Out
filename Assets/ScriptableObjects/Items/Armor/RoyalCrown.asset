@@ -9,17 +9,16 @@ MonoBehaviour:
   m_GameObject: {fileID: 0}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: e5555a016c3944248b74ae1dc4810230, type: 3}
+  m_Script: {fileID: 11500000, guid: 837deb2943aa0a74f9f32b89824e0e02, type: 3}
   m_Name: RoyalCrown
-  m_EditorClassIdentifier: 
+  m_EditorClassIdentifier: Assembly-CSharp::Armor
   itemName: Royal Crown
-  description: A golden piece of headgear that gave a person authority in ancient
-    times.
+  description: A headpiece meant to signify status.
   sprite: {fileID: 1729119030, guid: 1529019942676c14784c63a0b641aa78, type: 3}
   craftingRecipe: []
-  equipmentEffect: {fileID: 0}
-  mainStat:
-    stat: 3
-    amount: 20
+  defense: 3
+  secondaryStat:
+    stat: 0
+    amount: 0
+  armorPiece: 0
   setBonus: {fileID: 0}
-  statBoosts: []

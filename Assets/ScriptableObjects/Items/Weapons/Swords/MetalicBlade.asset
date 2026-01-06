@@ -16,15 +16,27 @@ MonoBehaviour:
   description: A simple sword forged of Metal Plating.
   sprite: {fileID: -2678282062104484318, guid: ecc2cbf93925a9848b888c967141dc79, type: 3}
   craftingRecipe: []
-  equipmentEffect: {fileID: 0}
   attack: 13
   attackSpeed: 1.1
   knockback: 3
+  substat:
+    stat: 0
+    amount: 0
   weaponHoldStyle: 1
   element: 5
-  animations:
-  - SwordSwing0
-  - SwordSwing1
+  attackComboData:
+  - animation: SwordSwing0
+    multipliers:
+    - stat: 1
+      amount: 0.5
+    - stat: 5
+      amount: 0.4
+  - animation: SwordSwing1
+    multipliers:
+    - stat: 1
+      amount: 0.5
+    - stat: 5
+      amount: 0.4
   attackRange: 1.1
   slashAnimations:
   - SlashEffect0

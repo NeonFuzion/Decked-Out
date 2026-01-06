@@ -15,9 +15,9 @@ public class Shooter : MonoBehaviour
 
     }
 
-    public void FireProjectile(ProjectileData projectileData, ProjectileTargetType projectileType, Vector3 targetPosition, Element element, int damage, bool isCrit)
+    public void FireProjectile(ProjectileData projectileData, ProjectileTargetType projectileType, Vector3 targetPosition, Element element, StatBoost[] multipliers)
     {
         Projectile projectile = Instantiate(projectilePrefab, firePoint.position, Quaternion.identity).GetComponent<Projectile>();
-        projectile.Initialize(projectileData, targetPosition, element, damage, isCrit);
+        projectile.Initialize(projectileData, targetPosition, element, multipliers);
     }
 }
