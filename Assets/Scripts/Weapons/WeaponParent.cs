@@ -12,30 +12,31 @@ public class WeaponParent : MonoBehaviour
     [SerializeField] UnityEvent onAttack, onEnemyHit, onKill;
 
     bool attacking;
-    int curAnimIndex, currentHotbarIndex;
+    int curAnimIndex;
 
     Weapon weapon;
+    Shooter shooter;
     Inventory inventory;
+    Animator animator;
     Vector2 mousePosition;
 
     private void Awake()
     {
-        EventManager.AddOnInventoryUpdatedListener(UpdateWeapon);
-        EventManager.AddOnKillListener(InvokeOnKill);
+        
     }
 
     // Start is called before the first frame update
     void Start()
     {
-        attacking = false;
-        curAnimIndex = 0;
-        
         inventory = Inventory.Instance;
+        animator = transform.GetChild(1).GetComponent<Animator>();
+        shooter = GetComponent<Shooter>();
     }
 
     // Update is called once per frame
     void Update()
     {
+        if (!weapon) return;
         mousePosition = MainCamera.MouseWorldPosition();
 
         switch (weapon.WeaponHoldStyle)
@@ -53,55 +54,52 @@ public class WeaponParent : MonoBehaviour
         }
     }
 
-    void UpdateWeapon()
-    {
-        Equipment[] weapons = inventory.Equiped.Where(equip => equip as Weapon).ToArray();
-        
-        if (weapons.Length == 0) return;
-        weapon = weapons[currentHotbarIndex] as Weapon;
-
-        if (weapon as Sword)
-        {
-            Sword sword = weapon as Sword;
-            slash.parent.localPosition = Vector3.right * sword.AttackRange;
-            slash.localScale = Vector3.one * sword.AttackRange;
-        }
-    }
-
-    void InvokeOnKill()
-    {
-        onKill?.Invoke();
-    }
-
     public void Attack()
     {
         if (attacking) return;
 
         attacking = true;
-        weaponSpriteRenderer.sprite = weapon.Sprite;
 
-        weapon.AttackAnimationHandle(curAnimIndex, transform);
-        curAnimIndex = weapon.GetNextAnimationIndex(curAnimIndex);
+        weapon.AttackAnimationHandle(curAnimIndex, transform, animator);
     }
 
     public void OnAttackHit()
     {
-        weapon.AttackActionHandle(curAnimIndex, slash, mousePosition);
+        weapon.AttackActionHandle(curAnimIndex, slash, mousePosition, shooter);
     }
 
     public void OnAttackFinish()
     {
-        attacking = false;
+        OnWeaponIdle();
         slashAnimator.CrossFade("Idle", 0, 0);
     }
 
     public void OnWeaponIdle()
     {
-        if (attacking) attacking = false;
+        if (!attacking) return;
+        attacking = false;
+        string lastAnimation = weapon.GetAnimationByIndex(curAnimIndex);
+        curAnimIndex = weapon.GetNextAnimationIndex(curAnimIndex);
+
+        if (!lastAnimation.Equals(weapon.GetAnimationByIndex(curAnimIndex))) return;
+        animator.CrossFade("WeaponIdle", 0, 0);
     }
 
-    public void SetHotbarIndex(int index)
+    public void UpdateWeapon(Weapon weapon)
     {
-        currentHotbarIndex = index;
+        this.weapon = weapon;
+
+        animator?.CrossFade("WeaponIdle", 0, 0);
+        attacking = false;
+        curAnimIndex = 0;
+        weaponSpriteRenderer.sprite = weapon.Sprite;
+
+        if (weapon as Sword)
+        {
+            Sword sword = weapon as Sword;
+            damageOrigin.localPosition = Vector3.right * sword.AttackRange;
+            slash.parent.localPosition = Vector3.right * sword.AttackRange;
+            slash.localScale = Vector3.one * sword.AttackRange;
+        }
     }
 }

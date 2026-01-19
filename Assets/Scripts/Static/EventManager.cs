@@ -14,6 +14,8 @@ public static class EventManager
     static UnityEvent onMenuOpened = new UnityEvent();
     static UnityEvent onInventoryUpdated = new UnityEvent();
     static UnityEvent onUnfocusItem = new ();
+    static UnityEvent<int, bool> onPickupItem = new ();
+    static UnityEvent<int, bool> onDropItem = new ();
     static UnityEvent<int, bool, Transform> onFocusItem = new UnityEvent<int, bool, Transform>();
     static UnityEvent<DialogueData[]> onDialogueStarted = new UnityEvent<DialogueData[]>();
     static UnityEvent<Collider2D[], AttackData> onEnemyDataAcquired = new ();
@@ -96,6 +98,26 @@ public static class EventManager
     public static void InvokeOnUnfocusItem()
     {
         onUnfocusItem?.Invoke();
+    }
+
+    public static void AddOnPickupItemListener(UnityAction<int, bool> unityAction)
+    {
+        onPickupItem?.AddListener(unityAction);
+    }
+
+    public static void InvokeOnPickupItem(int index, bool isEquiped)
+    {
+        onPickupItem?.Invoke(index, isEquiped);
+    }
+
+    public static void AddOnDropItemListener(UnityAction<int, bool> unityAction)
+    {
+        onDropItem?.AddListener(unityAction);
+    }
+
+    public static void InvokeOnDropItem(int index, bool isEquiped)
+    {
+        onDropItem?.Invoke(index, isEquiped);
     }
     
     public static void AddOnFocusItemListener(UnityAction<int, bool, Transform> focusAction)

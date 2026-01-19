@@ -17,18 +17,15 @@ public class Sword : Weapon
         return slashAnimations[index];
     }
 
-    public override void AttackActionHandle(int attackIndex, Transform transform, Vector2 mousePosition)
+    public override void AttackActionHandle(int attackIndex, Transform transform, Vector2 mousePosition, Shooter shooter)
     {
         Vector3 hitPos = transform.right * (attackRange + 1);
         EventManager.InvokeOnEnemyDataAcquired(Physics2D.OverlapCircleAll(transform.position + hitPos, attackRange), new (Element, transform.position, GetMultipliersByIndex(attackIndex)));
     }
 
-    public override void AttackAnimationHandle(int animationIndex, Transform weaponParent)
+    public override void AttackAnimationHandle(int animationIndex, Transform weaponParent, Animator animator)
     {
         // sword animations
-        Transform weaponHandle = weaponParent.GetChild(1);
-        Animator animator = weaponHandle.GetComponent<Animator>();
-
         animator.SetFloat("AttackSwingSpeed", AttackSpeed);
         animator.CrossFade(GetAnimationByIndex(animationIndex), 0, 0);
 

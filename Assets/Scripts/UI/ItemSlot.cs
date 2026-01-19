@@ -1,21 +1,20 @@
 using TMPro;
 using UnityEngine;
+using UnityEngine.Events;
+using UnityEngine.EventSystems;
 
-public class ItemSlot : Slot
+public class ItemSlot : Slot, IDropHandler
 {
-    [SerializeField] TextMeshProUGUI amountText;
+    [SerializeField] UnityEvent<int, bool> onSetData;
 
-    public void Initialize(Sprite sprite, int amount, int index, bool isEquipment)
+    public override void Initialize(int index, bool isEquiped)
     {
-        this.index = index;
-        this.isEquipment = isEquipment;
+        base.Initialize(index, isEquiped);
+        onSetData?.Invoke(index, isEquiped);
+    }
 
-        isEquiped = false;
-        image.sprite = sprite;
-
-        image.SetNativeSize();
-        image.GetComponent<RectTransform>().sizeDelta *= 2.5f;
-        
-        amountText.SetText(isEquipment || amount == 1 ? "" : amount.ToString());
+    public void OnDrop(PointerEventData eventData)
+    {
+        EventManager.InvokeOnDropItem(index, isEquiped);
     }
 }

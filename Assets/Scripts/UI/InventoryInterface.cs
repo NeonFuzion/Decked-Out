@@ -1,8 +1,13 @@
 using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
+using NUnit.Framework;
 using TMPro;
+using Unity.VisualScripting;
 using UnityEngine;
+using UnityEngine.EventSystems;
+using UnityEngine.InputSystem;
+using UnityEngine.UI;
 
 public class InventoryInterface : MonoBehaviour
 {
@@ -16,45 +21,43 @@ public class InventoryInterface : MonoBehaviour
     Player player;
     Inventory inventory;
 
+    bool isHoldingItem, isLastHeldItemEquiped;
+    int lastHeldItemIndex;
+
     void Awake()
     {
         EventManager.AddOnFocusItemListener(FocusOnItem);
         EventManager.AddOnInventoryUpdatedListener(UpdateInventory);
+        EventManager.AddOnPickupItemListener(PickupItem);
+        EventManager.AddOnDropItemListener(DropItem);
     }
 
     // Start is called before the first frame update
     void Start()
     {
+        Initialize();
+    }
+
+    void Update()
+    {
+        
+    }
+
+    void Initialize()
+    {
         for (int i = 0; i < equipmentSlots.childCount; i++)
         {
-            equipmentSlots.GetChild(i).GetComponent<EquipmentSlot>().Initialize(i);
+            ItemSlot slot = equipmentSlots.GetChild(i).GetComponent<ItemSlot>();
+            slot.Initialize(i, true);
+        }
+        for (int i = 0; i < itemSlots.childCount; i++) 
+        {
+            ItemSlot slot = itemSlots.GetChild(i).GetComponent<ItemSlot>();
+            slot.Initialize(i, false);
         }
     }
 
-    public void FocusOnItem(int index, bool isEquiped, Transform itemSlot)
-    {
-        int itemAmount = 1;
-        Item item;
-        if (isEquiped)
-        {
-            item = inventory.Equiped[index];
-        }
-        else
-        {
-            InventorySlot slot = inventory.Items[index];
-            item = slot.Item;
-            itemAmount = slot.Amount;
-        }
-
-        if (lastSelected && lastSelected != itemSlot) lastSelected.GetComponent<Slot>().Unhighlight();
-        lastSelected = itemSlot;
-        lastSelected.GetComponent<Slot>().Highlight();
-
-        itemFocus.gameObject.SetActive(true);
-        itemFocus.DisplayItemStats(item, itemAmount);
-    }
-
-    public void UpdateInventory()
+    void UpdateInventory()
     {
         if (!inventory)
         {
@@ -64,62 +67,105 @@ public class InventoryInterface : MonoBehaviour
 
         for (int i = 0; i < equipmentSlots.childCount; i++)
         {
-            Transform equipSlot = equipmentSlots.GetChild(i);
-            EquipmentSlot script = equipSlot.GetComponent<EquipmentSlot>();
-            
-            if (!inventory.Equiped[i]) script.ResetSprite();
-            else script.UpdateSprite(inventory.Equiped[i].Sprite);
+            Equipment item = inventory.GetEquipment(i);
+            ItemSlot slot = equipmentSlots.GetChild(i).GetComponent<ItemSlot>();
 
-            script.Initialize(i);
+            if (item == null) slot.ResetItem();
+            else slot.UpdateItem(item.Sprite, 1);
         }
-        for (int i = 0; i < inventory.Items.Count; i++) 
+        for (int i = 0; i < itemSlots.childCount; i++) 
         {
-            InventorySlot slot = inventory.Items[i];
+            ItemStack stack = inventory.GetItem(i);
+            ItemSlot slot = itemSlots.GetChild(i).GetComponent<ItemSlot>();
 
-            if (slot == null) continue;
-            itemSlots.GetChild(i).GetComponent<ItemSlot>().Initialize(slot.Item.Sprite, slot.Amount, i, slot.Item as Equipment);
+            if (stack == null || stack.Amount <= 0 || !stack.Item) slot.ResetItem();
+            else slot.UpdateItem(stack.Item.Sprite, stack.Amount);
         }
 
         statsDisplay.SetText(player.GetStats());
     }
 
-    public void EquipItem(int index, bool isEquiped)
+    void PickupItem(int index, bool isEquiped)
     {
-        if (isEquiped)
+        lastHeldItemIndex = index;
+        isLastHeldItemEquiped = isEquiped;
+        isHoldingItem = true;
+    }
+
+    void DropItem(int index, bool isEquiped)
+    {
+        //Debug.Log($"{lastHeldItemIndex} + {isLastHeldItemEquiped} -> {index} + {isEquiped}");
+        isHoldingItem = false;
+
+        if (index == lastHeldItemIndex && isEquiped == isLastHeldItemEquiped) return;
+
+        ItemStack oldItem = isLastHeldItemEquiped ? new (inventory.GetEquipment(lastHeldItemIndex)) : inventory.GetItem(lastHeldItemIndex);
+        ItemStack newItem = isEquiped ? new (inventory.GetEquipment(index)) : inventory.GetItem(index);
+        
+        if (newItem != null && !newItem.Item) newItem = null;
+        //Debug.Log($"{oldItem != null} -> {newItem != null}");
+
+        // A bunch of filters to prevent equiping materials
+        if (isEquiped && !(oldItem.Item as Equipment)) return;
+        if (newItem != null && isLastHeldItemEquiped && !(newItem.Item as Equipment)) return;
+
+        if (isLastHeldItemEquiped)
         {
-            inventory.AddItem(inventory.Equiped[index]);
-            inventory.Equiped[index] = null;
-            equipmentSlots.GetChild(index).GetComponent<Slot>().Unhighlight();
+            inventory.RemoveEquipmentAtIndex(lastHeldItemIndex);
         }
         else
         {
-            Equipment equipment = inventory.Items[index].Item as Equipment;
-            int equipmentSlot = -1;
-            if (equipment as Weapon) equipmentSlot = 0;
-            else if (equipment as Accessory && !inventory.Equiped.ToList().Find(x => x && x.Equals(equipment)))
-            {
-                for (int i = 3; i < inventory.Equiped.Count; i++)
-                {
-                    if (inventory.Equiped[i] != null) continue;
-                    equipmentSlot = i;
-                    break;
-                }
-            }
-
-            if (equipmentSlot != -1)
-            {
-                if (inventory.Equiped[equipmentSlot])
-                {
-                    inventory.Items[index] = new InventorySlot(inventory.Equiped[equipmentSlot]);
-                    inventory.Equiped[equipmentSlot] = equipment;
-                }
-                else
-                {
-                    inventory.Equiped[equipmentSlot] = equipment;
-                    inventory.RemoveItem(equipment);
-                }
-            }
+            inventory.RemoveItemAtIndex(lastHeldItemIndex);
         }
-        UpdateInventory();
+        
+        if (isEquiped)
+        {
+            inventory.RemoveEquipmentAtIndex(index);
+            inventory.AddEquipmentAtIndex(oldItem.Item as Equipment, index);
+        }
+        else
+        {
+            inventory.RemoveItemAtIndex(index);
+            inventory.AddItemAtIndex(oldItem.Item, index, oldItem.Amount);
+        }
+
+        if (newItem == null)
+        {
+            EventManager.InvokeOnInventoryUpdated();
+            return;
+        }
+        
+        if (isLastHeldItemEquiped)
+        {
+            inventory.AddEquipmentAtIndex(newItem.Item as Equipment, lastHeldItemIndex);
+        }
+        else
+        {
+            inventory.AddItemAtIndex(newItem.Item, lastHeldItemIndex, newItem.Amount);
+        }
+        EventManager.InvokeOnInventoryUpdated();
+    }
+
+    void FocusOnItem(int index, bool isEquiped, Transform itemSlot)
+    {
+        int itemAmount = 1;
+        Item item;
+        if (isEquiped)
+        {
+            item = inventory.GetEquipment(index);
+        }
+        else
+        {
+            if (inventory.GetItem(index) == null) return;
+            ItemStack slot = inventory.GetItem(index);
+            item = slot.Item;
+            itemAmount = slot.Amount;
+        }
+
+        if (lastSelected && lastSelected != itemSlot) lastSelected.GetComponent<Slot>().Unhighlight();
+        lastSelected = itemSlot;
+        lastSelected.GetComponent<Slot>().Highlight();
+
+        itemFocus.DisplayItemStats(item, itemAmount);
     }
 }

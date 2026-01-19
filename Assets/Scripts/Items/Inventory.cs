@@ -15,26 +15,22 @@ public class Inventory : MonoBehaviour
     [SerializeField] Transform itemParent;
     [SerializeField] EquipmentEffectsManager equipmentEffectsManager;
     [SerializeField] Equipment[] startingEquipment;
-    [SerializeField] InventorySlot[] startingItems;
+    [SerializeField] ItemStack[] startingItems;
 
     int itemCount;
 
-    InventorySlot[] items;
+    ItemStack[] items;
     Equipment[] equiped;
-
-    public IList<InventorySlot> Items { get => items.AsReadOnlyList(); }
-    public IList<Equipment> Equiped { get => equiped.AsReadOnlyList(); }
 
     private void Awake()
     {
         inventory = this;
+        Initialize();
     }
 
     private void Start()
     {
-        Initialize();
-        UpdateInventory();
-
+        EventManager.AddOnInventoryUpdatedListener(UpdateInventory);
         EventManager.InvokeOnInventoryUpdated();
     }
 
@@ -52,7 +48,7 @@ public class Inventory : MonoBehaviour
         equiped = new Equipment[12];
         foreach (Equipment equipment in startingEquipment)
         {
-            int start = GetEquipmentIndex(equipment);
+            int start = Equipment.GetEquipmentIndex(equipment);
             for (int i = start; i < start + 4; i++)
             {
                 if (equiped[i]) continue;
@@ -61,77 +57,12 @@ public class Inventory : MonoBehaviour
             }
         }
 
-        items = new InventorySlot[max];
+        items = new ItemStack[max];
         for (int i = 0; i < startingItems.Length; i++)
         {
             items[i] = startingItems[i];
         }
     }
-
-    int GetEquipmentIndex(Item item)
-    {
-        if (item as Weapon) return 0;
-        if (item as Armor) return 4;
-        if (item as Accessory) return 8;
-        return -1;
-    }
-
-    public bool EquipItem(Item item)
-    {
-        // Creating specific equipment types for later
-        Weapon weapon = item as Weapon;
-        Armor armor = item as Armor;
-        Accessory accessory = item as Accessory;
-        
-        // Figuring out start index for correct index searching later
-        int startIndex = GetEquipmentIndex(item);
-
-        // Exiting function is item isn't equipment
-        if (startIndex == -1) return false;
-
-        // Finding index
-        int index = 0;
-        if (armor)
-        {
-            index = startIndex + (int)armor.ArmorPiece;
-        }
-        else
-        {
-            for (int i = startIndex; i < startIndex + 4; i++)
-            {
-                if (equiped[startIndex] != null) continue;
-                index = i;
-            }
-        }
-
-        // Set bonuses for accessories
-        if (accessory)
-        {
-            int setCount = 1;
-            SetBonus curPieceSet = accessory.SetBonus;
-            foreach (Equipment equip in equiped)
-            {
-                if (equip is not Accessory) continue;
-                SetBonus setBonus = (equip as Accessory).SetBonus;
-                if (setBonus == curPieceSet) setCount++;
-            }
-
-            if (setCount >= 2) curPieceSet.TwoPieceBonus();
-            if (setCount >= 4) curPieceSet.FourPieceBonus();
-        }
-
-        // Moving equipment from items into equipment array
-        RemoveItem(item);
-        equiped[index] = item as Equipment;
-
-        // Telling everybody else to update
-        UpdateInventory();
-        EventManager.InvokeOnInventoryUpdated();
-        
-        // Done
-        return true;
-    }
-
     public void UpdateInventory()
     {
         equipmentEffectsManager.RemoveAllEffects();
@@ -144,69 +75,202 @@ public class Inventory : MonoBehaviour
             if (!accessory) return;
             PassiveEffect passiveEffect = accessory.PassiveEffectSO.Initialize(gameObject, equipmentEffectsManager);
             equipmentEffectsManager.AddPassiveEffect(passiveEffect);
+
+            // Set bonuses for accessories
+            if (!accessory.SetBonus) return;
+            int setCount = 1;
+            SetBonus curPieceSet = accessory.SetBonus;
+            foreach (Equipment otherEquip in equiped)
+            {
+                if (otherEquip is not Accessory) continue;
+                SetBonus setBonus = (otherEquip as Accessory).SetBonus;
+                if (setBonus == curPieceSet) setCount++;
+            }
+
+            if (setCount >= 2) curPieceSet.TwoPieceBonus();
+            if (setCount >= 4) curPieceSet.FourPieceBonus();
         });
+
+        //Debug.Log("Actual equips: " + string.Join(", ", equiped.ToList().Select(x => x ? x.ItemName : "?")));
+        //Debug.Log("Actual items: " + string.Join(", ", items.ToList().Select(x => x != null ? x.Item.ItemName : "?")));
     }
 
-    public void UpdateItems(InventorySlot[] items)
+    public ItemStack GetItem(int index)
+    {
+        ItemStack stack = items[index];
+
+        if (stack == null) return null;
+        if (!stack.Item) return null;
+        return stack;
+    }
+
+    public Equipment GetEquipment(int index)
+    {
+        return equiped[index];
+    }
+
+    public int GetItemCount() => items.Length;
+    public int GetEquipmentCount() => equiped.Length;
+
+    public void UpdateItems(ItemStack[] items)
     {
         this.items = items;
     }
 
-    public bool AddItem(Item item, int amount = 1)
+    public bool AddEquipmentAtIndex(Equipment equipment, int index)
     {
-        if (itemCount == max) return false;
-        for (int i = 0; i < max; i++)
+        if (!equipment) return false;
+
+        // Creating specific equipment types for later
+        MainHand mainHand = equipment as MainHand;
+        Armor armor = equipment as Armor;
+        Accessory accessory = equipment as Accessory;
+
+        int armorIndex = Equipment.GetEquipmentIndex(armor);
+        int accessoryIndex = Equipment.GetEquipmentIndex(accessory);
+        int mainHandIndex = Equipment.GetEquipmentIndex(mainHand);
+
+        // Filtering for incorrect equipment index
+        if (armor && index != armorIndex + (int)armor.ArmorPiece) return false;
+        if (accessory && index >= accessoryIndex + 4 && index < accessoryIndex) return false;
+        if (mainHand && index >= mainHandIndex + 4 && index < mainHandIndex) return false;
+        
+        //Debug.Log(item.ItemName + " | " + index);
+
+        // Moving equipment from items into equipment array
+        equiped[index] = equipment;
+        return true;
+    }
+
+    public bool AddEquipment(Equipment equipment)
+    {
+        // Setting useful variables
+        int index = -1;
+        int startIndex = Equipment.GetEquipmentIndex(equipment);
+        Armor armor = equipment as Armor;
+
+        // Finding correct index
+        if (armor)
         {
-            InventorySlot slot = items[i];
-            if (slot == null)
+            index = startIndex + (int)armor.ArmorPiece;
+        }
+        else
+        {
+            for (int i = startIndex; i < startIndex + 4; i++)
             {
-                items[i] = new (item, amount);
+                if (equiped[i] != null) continue;
+                index = i;
+                break;
             }
-            else
-            {
-                if (slot.Item != item) continue;
-                slot.AddItems(amount);
-            }
+        }
+
+        // Adding equipment if index is found
+        if (index == -1) return false;
+        equiped[index] = equipment;
+        return true;
+    }
+
+    public bool AddItemAtIndex(Item item, int index, int amount = 1)
+    {
+        if (!item) return false;
+        ItemStack slot = items[index];
+        if (slot == null)
+        {
+            items[index] = new (item, amount);
+            return true;
+        }
+        else if (slot.Item == item)
+        {
+            if (item as Equipment) return false;
+            slot.AddItems(amount);
             return true;
         }
         return false;
     }
 
-    public bool RemoveItem(Item item, int amount = 1)
+    public bool AddItem(Item item, int amount = 1)
+    {
+        if (!item) return false;
+        if (item as Equipment && itemCount == max) return false;
+        int index = -1;
+        bool isSlotNull = true;
+        for (int i = 0; i < max; i++)
+        {
+            ItemStack slot = items[i];
+            if (slot == null)
+            {
+                index = i;
+                isSlotNull = true;
+                if (item as Equipment) break;
+            }
+            else if (slot.Item == item)
+            {
+                index = i;
+                isSlotNull = false;
+                break;
+            }
+        }
+
+        if (index == -1) return false;
+        if (isSlotNull) items[index] = new (item, amount);
+        else items[index].AddItems(amount);
+        return true;
+    }
+
+    public bool RemoveItem(Item item, int amount = -1)
     {
         for (int i = 0; i < max; i++)
         {
-            InventorySlot slot = items[i];
-
+            ItemStack slot = items[i];
             if (slot.Item != item) continue;
-            if (slot.Amount < amount) return false;
-            else if (slot.Amount == amount)
-            {
-                items[i] = null;
-                return true;
-            }
-            else if (slot.Amount > amount)
-            {
-                slot.RemoveItems(amount);
-                return true;
-            }
+            bool result = RemoveItemAtIndex(i, amount);
+            if (result) return true;
         }
         return false;
     }
 
-    public InventorySlot FindItem(Item target)
+    public bool RemoveItemAtIndex(int index, int amount = -1)
     {
-        foreach (InventorySlot slot in items)
+        ItemStack stack = items[index];
+
+        if (stack == null) return false;
+        if (stack.Amount < amount) return false;
+        else if (stack.Amount == amount || amount == -1)
         {
-            if (slot.Item != target) continue;
-            return slot;
+            items[index] = null;
+            return true;
         }
-        return null;
+        else if (stack.Amount > amount)
+        {
+            stack.RemoveItems(amount);
+            return true;
+        }
+        return false;
+    }
+
+    public bool RemoveEquipment(Equipment target)
+    {
+        for (int i = 0; i < equiped.Length; i++)
+        {
+            Equipment equipment = equiped[i];
+
+            if (equipment != target) continue;
+            bool result = RemoveEquipmentAtIndex(i);
+            if (result) return true;
+        }
+        return false;
+    }
+
+    public bool RemoveEquipmentAtIndex(int index)
+    {
+        bool result = equiped[index] != null;
+        equiped[index] = null;
+        return result;
     }
 }
 
 [System.Serializable]
-public class InventorySlot
+public class ItemStack
 {
     [SerializeField] Item item;
     [SerializeField] int amount;
@@ -214,7 +278,7 @@ public class InventorySlot
     public Item Item { get => item; }
     public int Amount { get => amount; }
 
-    public InventorySlot(Item item, int amount = 1)
+    public ItemStack(Item item, int amount = 1)
     {
         this.item = item;
         this.amount = amount;

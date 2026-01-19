@@ -5067,4 +5067,16 @@ MonoBehaviour:
   - {x: 17, y: -4}
   - {x: 9, y: -12}
   - {x: -17, y: -4}
-  roomObjectPositions: []
+  roomObjectPositions:
+  - prefab: {fileID: 3789489369730254920, guid: 08d57c32797eeed47897d08a736d4ea0, type: 3}
+    position: {x: -12, y: 2}
+  - prefab: {fileID: 3789489369730254920, guid: 08d57c32797eeed47897d08a736d4ea0, type: 3}
+    position: {x: -10, y: 7}
+  - prefab: {fileID: 3789489369730254920, guid: 08d57c32797eeed47897d08a736d4ea0, type: 3}
+    position: {x: -6, y: 9}
+  - prefab: {fileID: 3789489369730254920, guid: 08d57c32797eeed47897d08a736d4ea0, type: 3}
+    position: {x: 1, y: 8}
+  - prefab: {fileID: 3789489369730254920, guid: 08d57c32797eeed47897d08a736d4ea0, type: 3}
+    position: {x: 11, y: 7}
+  - prefab: {fileID: 3789489369730254920, guid: 08d57c32797eeed47897d08a736d4ea0, type: 3}
+    position: {x: 12, y: 3}

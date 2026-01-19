@@ -14,16 +14,21 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   itemName: Slime Staff
   description: A magical staff that launches a ball of slime.
-  sprite: {fileID: -1312359660109418695, guid: c520f021a9d5bdc45ba7de1e3145718f, type: 3}
+  sprite: {fileID: 1035848079, guid: c520f021a9d5bdc45ba7de1e3145718f, type: 3}
   craftingRecipe: []
-  equipmentEffect: {fileID: 0}
   attack: 15
   attackSpeed: 0.4
   knockback: 0
+  substat:
+    stat: 0
+    amount: 0
   weaponHoldStyle: 0
   element: 2
-  animations:
-  - MagicCast1
+  attackComboData:
+  - animation: MagicCast0
+    multipliers:
+    - stat: 1
+      amount: 0.9
   projectileCount: 1
   projectileSpread: 0
   prefabProjectile: {fileID: 1391803176948481848, guid: 2966367f374e53645920ef66d1f507ed, type: 3}

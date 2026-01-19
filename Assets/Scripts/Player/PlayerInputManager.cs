@@ -2,9 +2,10 @@ using UnityEngine;
 using UnityEngine.Events;
 using UnityEngine.InputSystem;
 
-public class PlayerInput : MonoBehaviour, PlayerInputConfig.ICombatActions, PlayerInputConfig.IMenuActions, PlayerInputConfig.IDialogueActions, PlayerInputConfig.IPlayerActions
+public class PlayerInputManager : MonoBehaviour, PlayerInputConfig.ICombatActions, PlayerInputConfig.IMenuActions, PlayerInputConfig.IDialogueActions, PlayerInputConfig.IPlayerActions
 {
-    [SerializeField] UnityEvent onAttack, onDash, onInventory, onMenu, onQuit, onMap, onDialogue, onContinue;
+    [SerializeField] UnityEvent onAttack, onDash, onInventory, onMenu, onQuit, onMap, onDialogue, onContinue, onMouseDown, onMouseUp;
+    [SerializeField] UnityEvent<int> onHotbar;
     [SerializeField] UnityEvent<Vector2> onMovement, onMouse;
 
     PlayerInputConfig config;
@@ -35,6 +36,12 @@ public class PlayerInput : MonoBehaviour, PlayerInputConfig.ICombatActions, Play
     bool IsClicked(InputAction.CallbackContext context)
     {
         return context.phase == InputActionPhase.Started;
+    }
+
+    void OnHotbar(InputAction.CallbackContext context, int index)
+    {
+        if (!IsClicked(context)) return;
+        onHotbar?.Invoke(index);
     }
 
     public void OnAttack(InputAction.CallbackContext context)
@@ -118,5 +125,31 @@ public class PlayerInput : MonoBehaviour, PlayerInputConfig.ICombatActions, Play
     {
         Vector2 position = context.ReadValue<Vector2>();
         onMouse?.Invoke(position);
+    }
+
+    public void OnHotbar1(InputAction.CallbackContext context)
+    {
+        OnHotbar(context, 1);
+    }
+
+    public void OnHotbar2(InputAction.CallbackContext context)
+    {
+        OnHotbar(context, 2);
+    }
+
+    public void OnHotbar3(InputAction.CallbackContext context)
+    {
+        OnHotbar(context, 3);
+    }
+
+    public void OnHotbar4(InputAction.CallbackContext context)
+    {
+        OnHotbar(context, 4);
+    }
+
+    public void OnLeftMouse(InputAction.CallbackContext context)
+    {
+        if (IsClicked(context)) onMouseDown?.Invoke();
+        else if (context.canceled) onMouseUp?.Invoke();
     }
 }

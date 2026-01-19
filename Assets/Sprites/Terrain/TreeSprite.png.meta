@@ -1,19 +1,10 @@
 fileFormatVersion: 2
-guid: cca9a52b14b855f47b21cd24f76b7447
+guid: c11ed17d95b607a4a989adf549154d18
 TextureImporter:
   internalIDToNameTable:
   - first:
-      213: 218657635391805041
-    second: EquipmentIcons_0
-  - first:
-      213: -508515256125228720
-    second: EquipmentIcons_1
-  - first:
-      213: 971072248089452544
-    second: EquipmentIcons_2
-  - first:
-      213: -2209729577135604883
-    second: EquipmentIcons_3
+      213: -5985158595695688419
+    second: TreeSprite_0
   externalObjects: {}
   serializedVersion: 13
   mipmaps:
@@ -60,7 +51,7 @@ TextureImporter:
   spriteMeshType: 1
   alignment: 0
   spritePivot: {x: 0.5, y: 0.5}
-  spritePixelsToUnits: 100
+  spritePixelsToUnits: 8
   spriteBorder: {x: 0, y: 0, z: 0, w: 0}
   spriteGenerateFallbackPhysicsShape: 1
   alphaUsage: 1
@@ -109,89 +100,23 @@ TextureImporter:
     serializedVersion: 2
     sprites:
     - serializedVersion: 2
-      name: EquipmentIcons_0
+      name: TreeSprite_0
       rect:
         serializedVersion: 2
-        x: 49
-        y: 249
-        width: 102
-        height: 102
+        x: 9
+        y: 0
+        width: 14
+        height: 32
       alignment: 0
-      pivot: {x: 0, y: 0}
+      pivot: {x: 0.5, y: 0.5}
       border: {x: 0, y: 0, z: 0, w: 0}
       customData: 
       outline: []
       physicsShape: []
       tessellationDetail: -1
       bones: []
-      spriteID: 17694fcf5f3d80300800000000000000
-      internalID: 218657635391805041
-      vertices: []
-      indices: 
-      edges: []
-      weights: []
-    - serializedVersion: 2
-      name: EquipmentIcons_1
-      rect:
-        serializedVersion: 2
-        x: 224
-        y: 224
-        width: 152
-        height: 152
-      alignment: 0
-      pivot: {x: 0, y: 0}
-      border: {x: 0, y: 0, z: 0, w: 0}
-      customData: 
-      outline: []
-      physicsShape: []
-      tessellationDetail: -1
-      bones: []
-      spriteID: 059f9cb911461f8f0800000000000000
-      internalID: -508515256125228720
-      vertices: []
-      indices: 
-      edges: []
-      weights: []
-    - serializedVersion: 2
-      name: EquipmentIcons_2
-      rect:
-        serializedVersion: 2
-        x: 24
-        y: 24
-        width: 152
-        height: 152
-      alignment: 0
-      pivot: {x: 0, y: 0}
-      border: {x: 0, y: 0, z: 0, w: 0}
-      customData: 
-      outline: []
-      physicsShape: []
-      tessellationDetail: -1
-      bones: []
-      spriteID: 000ac9e8011f97d00800000000000000
-      internalID: 971072248089452544
-      vertices: []
-      indices: 
-      edges: []
-      weights: []
-    - serializedVersion: 2
-      name: EquipmentIcons_3
-      rect:
-        serializedVersion: 2
-        x: 224
-        y: 24
-        width: 152
-        height: 152
-      alignment: 0
-      pivot: {x: 0, y: 0}
-      border: {x: 0, y: 0, z: 0, w: 0}
-      customData: 
-      outline: []
-      physicsShape: []
-      tessellationDetail: -1
-      bones: []
-      spriteID: d6b782148a67551e0800000000000000
-      internalID: -2209729577135604883
+      spriteID: d15ce2bc7f170fca0800000000000000
+      internalID: -5985158595695688419
       vertices: []
       indices: 
       edges: []
@@ -200,7 +125,7 @@ TextureImporter:
     customData: 
     physicsShape: []
     bones: []
-    spriteID: 
+    spriteID: 5220e4ea4d602154b8cedd0464464335
     internalID: 0
     vertices: []
     indices: 
@@ -208,12 +133,11 @@ TextureImporter:
     weights: []
     secondaryTextures: []
     spriteCustomMetadata:
-      entries: []
+      entries:
+      - key: SpriteEditor.SliceSettings
+        value: '{"sliceOnImport":false,"gridCellCount":{"x":1.0,"y":1.0},"gridSpriteSize":{"x":64.0,"y":64.0},"gridSpriteOffset":{"x":0.0,"y":0.0},"gridSpritePadding":{"x":0.0,"y":0.0},"pivot":{"x":0.5,"y":0.5},"pivotPixels":{"x":0.0,"y":0.0},"autoSlicingMethod":0,"spriteAlignment":0,"pivotUnitMode":0,"slicingType":0,"keepEmptyRects":false,"isAlternate":false}'
     nameFileIdTable:
-      EquipmentIcons_0: 218657635391805041
-      EquipmentIcons_1: -508515256125228720
-      EquipmentIcons_2: 971072248089452544
-      EquipmentIcons_3: -2209729577135604883
+      TreeSprite_0: -5985158595695688419
   mipmapLimitGroupName: 
   pSDRemoveMatte: 0
   userData: 

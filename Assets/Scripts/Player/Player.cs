@@ -134,9 +134,7 @@ public class Player : MonoBehaviour
     {
         colliders.ToList().ForEach(collider =>
         {
-            Enemy enemy = collider.GetComponent<Enemy>();
-
-            if (!enemy) return;
+            if (collider.gameObject.Equals(gameObject)) return;
             Health health = collider.GetComponent<Health>();
 
             if (!health) return;
@@ -196,8 +194,11 @@ public class Player : MonoBehaviour
     public void UpdateEquipmentStats()
     {
         ResetStats();
-        inventory.Equiped.ToList().ForEach(equipment =>
+        Inventory inventory = Inventory.Instance;
+        for (int i = 0; i < inventory.GetEquipmentCount(); i++)
         {
+            Equipment equipment = inventory.GetEquipment(i);
+
             if (!equipment) return;
             if (equipment as Weapon)
             {
@@ -215,7 +216,7 @@ public class Player : MonoBehaviour
                 if (armor.Substats.Length == 0) return;
                 percentageStats[armor.SecondaryStat.Stat] += armor.SecondaryStat.Amount;
             }
-        });
+        }
     }
 
     public void UpdateStats()

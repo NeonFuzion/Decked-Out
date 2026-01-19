@@ -31,7 +31,7 @@ public class DungeonGenerator : MonoBehaviour
     void Start()
     {
         dungeonCreator.SetActive(false);
-        DungeonRoom oldRoom = new(new Vector2(0, 0), new(), specialLayouts[0], this);
+        DungeonRoom oldRoom = new (new (), new(), specialLayouts[0], this);
         roomList = new() { oldRoom };
 
         GeneratePath(oldRoom, Vector2.zero, 0, roomLength);

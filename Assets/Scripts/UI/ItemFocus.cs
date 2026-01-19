@@ -5,24 +5,21 @@ using UnityEngine.UI;
 
 public class ItemFocus : MonoBehaviour
 {
-    [SerializeField] Vector2 pixelOffset;
     [SerializeField] RectTransform rectTransform;
     [SerializeField] TextMeshProUGUI focusName, focusType, focusAmount, focusMainStats, focusSubStats, focusDescription, focusAbility;
-
-    Vector2 offset;
 
     // Start is called once before the first execution of Update after the MonoBehaviour is created
     void Start()
     {
-        EventManager.AddOnUnfocusItemListener(() => gameObject.SetActive(false));
+        rectTransform.GetComponent<Image>().raycastTarget = false;
 
-        offset = new Vector2(Camera.main.pixelWidth, Camera.main.pixelHeight) / 2f;
+        EventManager.AddOnUnfocusItemListener(() => gameObject.SetActive(false));
     }
 
     // Update is called once per frame
     void Update()
     {
-        rectTransform.anchoredPosition = MainCamera.MousePixelPosition() - offset + pixelOffset;
+        rectTransform.position = MainCamera.MouseWorldPosition();
     }
 
     void ResizeTooltip()
@@ -94,6 +91,9 @@ public class ItemFocus : MonoBehaviour
 
     public void DisplayItemStats(Item item, int amount = 1)
     {
+        Update();
+        gameObject.SetActive(true);
+        
         focusName.SetText(item.ItemName);
         focusType.SetText("Item");
         focusDescription.SetText(item.Description);
@@ -108,6 +108,7 @@ public class ItemFocus : MonoBehaviour
         ProcessWeapon(item as Weapon);
         ProcessAccessory(item as Accessory);
         ProcessArmor(item as Armor);
+        // NOTE: Add main hand support
 
         ResizeTooltip();
     }

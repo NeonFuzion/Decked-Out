@@ -1,9 +1,6 @@
-using JetBrains.Annotations;
 using System;
 using System.Collections;
 using System.Collections.Generic;
-using TMPro;
-using Unity.Mathematics;
 using UnityEngine;
 using UnityEngine.Events;
 using UnityEngine.UI;
@@ -58,10 +55,12 @@ public class Health : MonoBehaviour
 
         if (prefabDmgObj) SpawnDamageNumber(incomingAttack, element, finalDamage, false);
         if (amount < 0) return;
-        if (incomingAttack != Vector2.zero)
+
+        Enemy enemy = GetComponent<Enemy>();
+        if (incomingAttack != Vector2.zero && enemy)
         {
             StopAllCoroutines();
-            StartCoroutine(ApplyKnockback(incomingAttack, knockback));
+            StartCoroutine(ApplyHitEffects(incomingAttack, knockback, enemy));
         }
 
         if (hp > 0) return;
@@ -89,10 +88,8 @@ public class Health : MonoBehaviour
         dmgObj.GetComponent<DamageObject>().Instantiate((isHeal ? -1 : 1) * amount, isHeal, direction, element);
     }
 
-    IEnumerator ApplyKnockback(Vector2 incomingAttack, float knockback)
+    IEnumerator ApplyHitEffects(Vector2 incomingAttack, float knockback, Enemy enemy)
     {
-        Enemy enemy = GetComponent<Enemy>();
-        if (!enemy) yield return null;
         enemy.enabled = false;
         GetComponent<Rigidbody2D>().AddForce(((Vector2)transform.position - incomingAttack) * knockback * (1 - knockbackResistance), ForceMode2D.Impulse);
         yield return new WaitForSeconds(0.2f);

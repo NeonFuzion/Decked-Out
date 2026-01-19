@@ -2,7 +2,7 @@ using System;
 using UnityEngine;
 using UnityEngine.Events;
 
-public abstract class Weapon : Equipment
+public abstract class Weapon : MainHand
 {
     [SerializeField] int attack;
     [SerializeField] float attackSpeed, knockback;
@@ -27,7 +27,7 @@ public abstract class Weapon : Equipment
 
     public AttackSequenceData GetAttackSequenceDataByIndex(int index)
     {
-        return attackComboData[index >= attackComboData.Length ? attackComboData.Length - 1 : index];
+        return attackComboData[Mathf.Clamp(index, 0, attackComboData.Length - 1)];
     }
 
     public string GetAnimationByIndex(int index)
@@ -40,9 +40,9 @@ public abstract class Weapon : Equipment
         return GetAttackSequenceDataByIndex(index).Multipliers;
     }
 
-    public abstract void AttackActionHandle(int attackIndex, Transform transform, Vector2 mousePosition);
+    public abstract void AttackActionHandle(int attackIndex, Transform transform, Vector2 mousePosition, Shooter shooter);
     
-    public abstract void AttackAnimationHandle(int animationIndex, Transform transform);
+    public abstract void AttackAnimationHandle(int animationIndex, Transform transform, Animator animator);
 }
 
 public enum WeaponHoldStyle { Static, Mouse }

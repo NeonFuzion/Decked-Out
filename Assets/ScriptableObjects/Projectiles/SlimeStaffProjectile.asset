@@ -17,7 +17,7 @@ MonoBehaviour:
   maxDistance: 8
   homingSpeed: 5
   damageRadius: 0.5
-  sprite: {fileID: -5645770559910880998, guid: c520f021a9d5bdc45ba7de1e3145718f, type: 3}
+  sprite: {fileID: -1634759435, guid: c520f021a9d5bdc45ba7de1e3145718f, type: 3}
   trajectoryCurve:
     serializedVersion: 2
     m_Curve:
