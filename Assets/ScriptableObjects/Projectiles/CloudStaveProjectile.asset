@@ -42,4 +42,4 @@ MonoBehaviour:
     m_PreInfinity: 2
     m_PostInfinity: 2
     m_RotationOrder: 4
-  projectileEffect: {fileID: 0}
+  projectileEffect: {fileID: 11400000, guid: 7a8317eec20210f46854884cfe5b27ba, type: 2}

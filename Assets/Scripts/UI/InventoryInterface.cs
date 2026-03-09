@@ -94,7 +94,6 @@ public class InventoryInterface : MonoBehaviour
 
     void DropItem(int index, bool isEquiped)
     {
-        //Debug.Log($"{lastHeldItemIndex} + {isLastHeldItemEquiped} -> {index} + {isEquiped}");
         isHoldingItem = false;
 
         if (index == lastHeldItemIndex && isEquiped == isLastHeldItemEquiped) return;
@@ -102,8 +101,8 @@ public class InventoryInterface : MonoBehaviour
         ItemStack oldItem = isLastHeldItemEquiped ? new (inventory.GetEquipment(lastHeldItemIndex)) : inventory.GetItem(lastHeldItemIndex);
         ItemStack newItem = isEquiped ? new (inventory.GetEquipment(index)) : inventory.GetItem(index);
         
+        // NOTE: if isEquip is true then newItem will NOT be null regardless of whether or not the equipment slot has an item
         if (newItem != null && !newItem.Item) newItem = null;
-        //Debug.Log($"{oldItem != null} -> {newItem != null}");
 
         // A bunch of filters to prevent equiping materials
         if (isEquiped && !(oldItem.Item as Equipment)) return;

@@ -1,5 +1,5 @@
+using System.Linq;
 using UnityEngine;
-using UnityEngine.AI;
 using UnityEngine.Events;
 
 public class Projectile : MonoBehaviour
@@ -8,12 +8,15 @@ public class Projectile : MonoBehaviour
 
     float totalDistance, groundDirection;
 
-    Element element;
-    StatBoost[] multipliers;
     ProjectileData projectileData;
+    ProjectileEffect projectileEffect;
     Vector2 targetPosition, startPosition;
     SpriteRenderer visualSpriteRenderer, shadowSpriteRenderer;
+    UnityEvent<Collider2D[], Projectile> onHit;
     
+    public UnityEvent<Collider2D[], Projectile> OnHit { get => onHit; set => onHit = value; }
+    public ProjectileData ProjectileData { get => projectileData; }
+    public ProjectileEffect ProjectileEffect { get => projectileEffect; }
 
     // Start is called once before the first execution of Update after the MonoBehaviour is created
     void Start()
@@ -41,38 +44,38 @@ public class Projectile : MonoBehaviour
         projectileVisual.transform.eulerAngles = Vector3.forward * (groundDirection + trajectoryAngle);
         projectileShadow.transform.eulerAngles = Vector3.forward * groundDirection;
 
-        if (distanceProgress > 0.95f) DestroyProjectile();
-        Collider2D collider = Physics2D.OverlapCircle(transform.position, projectileData.DamageRadius);
+        if (distanceProgress <= 0.95f && projectileData.MaxHeight > 0) return;
+        Collider2D[] colliders = Physics2D.OverlapCircleAll(transform.position, projectileData.DamageRadius).Where(collider => collider.gameObject != gameObject).ToArray();
 
-        if (!collider) return;
-        if (collider.GetComponent<Player>()) return;
-        if (!collider.GetComponent<Health>()) return;
-        if (collider.gameObject == gameObject) return;
-        DestroyProjectile();
+        if (projectileData.MaxHeight > 0)
+        {
+            if (colliders.Length > 0) onHit?.Invoke(colliders, this);
+            Destroy(gameObject);
+        }
+        else
+        {
+            if (colliders.Length == 0) return;
+            if (distanceProgress < 0.95f) return;
+            onHit?.Invoke(colliders, this);
+            Destroy(gameObject);
+        }
     }
 
-    void DestroyProjectile()
-    {
-        if (projectileData.ProjectileEffect) projectileData.ProjectileEffect.ActivateEffect(targetPosition);
-        EventManager.InvokeOnEnemyDataAcquired(Physics2D.OverlapCircleAll(transform.position, projectileData.DamageRadius), new (element, transform.position, multipliers));
-        Destroy(gameObject);
-    }
-
-    public void Initialize(ProjectileData projectileData, Vector2 targetPosition, Element element, StatBoost[] multipliers)
+    public void Initialize(ProjectileData projectileData, Vector2 targetPosition)
     {
         this.projectileData = projectileData;
-        this.element = element;
-        this.multipliers = multipliers;
 
         Vector3 correctedTargetPosition = ((Vector3)targetPosition - transform.position).normalized * projectileData.MaxDistance + transform.position;
         this.targetPosition = projectileData.MaxHeight == 0 ? correctedTargetPosition : targetPosition;
         
+        onHit = new ();
         startPosition = transform.position;
         visualSpriteRenderer = projectileVisual.GetComponent<SpriteRenderer>();
         shadowSpriteRenderer = projectileShadow.GetComponent<SpriteRenderer>();
         visualSpriteRenderer.sprite = projectileData.Sprite;
         shadowSpriteRenderer.sprite = projectileData.Sprite;
+
+        if (!projectileData.ProjectileEffect) return;
+        projectileEffect = Instantiate(projectileData.ProjectileEffect);
     }
 }
-
-public enum ProjectileTargetType { Friendly, Enemy, Universal }

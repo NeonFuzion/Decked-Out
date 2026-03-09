@@ -1,7 +1,6 @@
 using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
-using Unity.VisualScripting;
 using UnityEngine;
 
 public class Inventory : MonoBehaviour
@@ -90,9 +89,6 @@ public class Inventory : MonoBehaviour
             if (setCount >= 2) curPieceSet.TwoPieceBonus();
             if (setCount >= 4) curPieceSet.FourPieceBonus();
         });
-
-        //Debug.Log("Actual equips: " + string.Join(", ", equiped.ToList().Select(x => x ? x.ItemName : "?")));
-        //Debug.Log("Actual items: " + string.Join(", ", items.ToList().Select(x => x != null ? x.Item.ItemName : "?")));
     }
 
     public ItemStack GetItem(int index)
@@ -134,8 +130,6 @@ public class Inventory : MonoBehaviour
         if (armor && index != armorIndex + (int)armor.ArmorPiece) return false;
         if (accessory && index >= accessoryIndex + 4 && index < accessoryIndex) return false;
         if (mainHand && index >= mainHandIndex + 4 && index < mainHandIndex) return false;
-        
-        //Debug.Log(item.ItemName + " | " + index);
 
         // Moving equipment from items into equipment array
         equiped[index] = equipment;

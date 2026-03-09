@@ -10,45 +10,36 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: ccefeaff58ce65b4b9393a54b3790126, type: 3}
-  m_Name: MalaProjectile
+  m_Name: RockySlimeNatureProjectile
   m_EditorClassIdentifier: Assembly-CSharp::ProjectileData
   speed: 5
-  maxHeight: 4
-  maxDistance: 8
+  maxHeight: 0
+  maxDistance: 5
   homingSpeed: 5
   damageRadius: 0.5
-  sprite: {fileID: -7455544600758985983, guid: bd667445272672a4a9c0e6fad50645b5, type: 3}
+  sprite: {fileID: 5314847592055179947, guid: 28c8dc620ac7cf244bbf3681ff33d787, type: 3}
   trajectoryCurve:
     serializedVersion: 2
     m_Curve:
     - serializedVersion: 3
       time: 0
-      value: 0
-      inSlope: 2
-      outSlope: 2
-      tangentMode: 34
-      weightedMode: 0
-      inWeight: 0
-      outWeight: 0.33333334
-    - serializedVersion: 3
-      time: 0.5
       value: 1
       inSlope: 0
       outSlope: 0
       tangentMode: 34
       weightedMode: 0
-      inWeight: 0.33333334
-      outWeight: 0.33333334
+      inWeight: 0
+      outWeight: 0
     - serializedVersion: 3
       time: 1
-      value: 0
-      inSlope: -2
-      outSlope: -2
+      value: 1
+      inSlope: 0
+      outSlope: 0
       tangentMode: 34
       weightedMode: 0
-      inWeight: 0.33333334
+      inWeight: 0
       outWeight: 0
     m_PreInfinity: 2
     m_PostInfinity: 2
     m_RotationOrder: 4
-  projectileEffect: {fileID: 11400000, guid: 7a8317eec20210f46854884cfe5b27ba, type: 2}
+  projectileEffect: {fileID: 0}

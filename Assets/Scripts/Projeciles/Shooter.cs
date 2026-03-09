@@ -5,7 +5,8 @@ using UnityEngine.Events;
 
 public class Shooter : MonoBehaviour
 {
-    [SerializeField] private GameObject projectilePrefab;
+    [SerializeField] BeingType senderType;
+    [SerializeField] GameObject projectilePrefab;
     [SerializeField] Transform firePoint;
 
     public Transform FirePoint { get => firePoint; }
@@ -15,9 +16,9 @@ public class Shooter : MonoBehaviour
 
     }
 
-    public void FireProjectile(ProjectileData projectileData, ProjectileTargetType projectileType, Vector3 targetPosition, Element element, StatBoost[] multipliers)
+    public void FireProjectile(ProjectileData projectileData, Vector3 targetPosition, out Projectile projectile)
     {
-        Projectile projectile = Instantiate(projectilePrefab, firePoint.position, Quaternion.identity).GetComponent<Projectile>();
-        projectile.Initialize(projectileData, targetPosition, element, multipliers);
+        projectile = Instantiate(projectilePrefab, firePoint.position, Quaternion.identity).GetComponent<Projectile>();
+        projectile.Initialize(projectileData, targetPosition);
     }
 }

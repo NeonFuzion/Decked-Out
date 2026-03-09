@@ -14,10 +14,9 @@ public class CubeMachine : Enemy
     Vector2 direction;
 
     // Start is called before the first frame update
-    void Start()
+    new void Start()
     {
-        rb = GetComponent<Rigidbody2D>();
-        GetComponent<Health>().Initialize(hp, def);
+        base.Start();
     }
 
     // Update is called once per frame

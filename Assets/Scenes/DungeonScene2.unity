@@ -585,6 +585,10 @@ PrefabInstance:
       propertyPath: m_LocalPosition.y
       value: 1
       objectReference: {fileID: 0}
+    - target: {fileID: 1250114075399015345, guid: b2ee695fbaf22ec429a8373efbdd8d2e, type: 3}
+      propertyPath: isFriendly
+      value: 1
+      objectReference: {fileID: 0}
     - target: {fileID: 4467104342022257215, guid: b2ee695fbaf22ec429a8373efbdd8d2e, type: 3}
       propertyPath: dashCount
       value: 
@@ -24567,6 +24571,63 @@ CanvasRenderer:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1158353268}
   m_CullTransparentMesh: 1
+--- !u!1001 &1172376816
+PrefabInstance:
+  m_ObjectHideFlags: 0
+  serializedVersion: 2
+  m_Modification:
+    serializedVersion: 3
+    m_TransformParent: {fileID: 0}
+    m_Modifications:
+    - target: {fileID: 6627289697435893469, guid: e667bd9e90f687d43b79810bab9b9bb7, type: 3}
+      propertyPath: m_LocalPosition.x
+      value: 3.08278
+      objectReference: {fileID: 0}
+    - target: {fileID: 6627289697435893469, guid: e667bd9e90f687d43b79810bab9b9bb7, type: 3}
+      propertyPath: m_LocalPosition.y
+      value: 1.98977
+      objectReference: {fileID: 0}
+    - target: {fileID: 6627289697435893469, guid: e667bd9e90f687d43b79810bab9b9bb7, type: 3}
+      propertyPath: m_LocalPosition.z
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 6627289697435893469, guid: e667bd9e90f687d43b79810bab9b9bb7, type: 3}
+      propertyPath: m_LocalRotation.w
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 6627289697435893469, guid: e667bd9e90f687d43b79810bab9b9bb7, type: 3}
+      propertyPath: m_LocalRotation.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 6627289697435893469, guid: e667bd9e90f687d43b79810bab9b9bb7, type: 3}
+      propertyPath: m_LocalRotation.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 6627289697435893469, guid: e667bd9e90f687d43b79810bab9b9bb7, type: 3}
+      propertyPath: m_LocalRotation.z
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 6627289697435893469, guid: e667bd9e90f687d43b79810bab9b9bb7, type: 3}
+      propertyPath: m_LocalEulerAnglesHint.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 6627289697435893469, guid: e667bd9e90f687d43b79810bab9b9bb7, type: 3}
+      propertyPath: m_LocalEulerAnglesHint.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 6627289697435893469, guid: e667bd9e90f687d43b79810bab9b9bb7, type: 3}
+      propertyPath: m_LocalEulerAnglesHint.z
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 8725815417773111655, guid: e667bd9e90f687d43b79810bab9b9bb7, type: 3}
+      propertyPath: m_Name
+      value: RockySlime
+      objectReference: {fileID: 0}
+    m_RemovedComponents: []
+    m_RemovedGameObjects: []
+    m_AddedGameObjects: []
+    m_AddedComponents: []
+  m_SourcePrefab: {fileID: 100100000, guid: e667bd9e90f687d43b79810bab9b9bb7, type: 3}
 --- !u!1 &1179271328
 GameObject:
   m_ObjectHideFlags: 0
@@ -39152,3 +39213,4 @@ SceneRoots:
   - {fileID: 1378234541}
   - {fileID: 1519576055}
   - {fileID: 2080945828}
+  - {fileID: 1172376816}

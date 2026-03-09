@@ -10,14 +10,14 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: ccefeaff58ce65b4b9393a54b3790126, type: 3}
-  m_Name: MalaProjectile
+  m_Name: RockySlimeEarthProjectile
   m_EditorClassIdentifier: Assembly-CSharp::ProjectileData
   speed: 5
   maxHeight: 4
-  maxDistance: 8
+  maxDistance: 5
   homingSpeed: 5
   damageRadius: 0.5
-  sprite: {fileID: -7455544600758985983, guid: bd667445272672a4a9c0e6fad50645b5, type: 3}
+  sprite: {fileID: 5996949973255884798, guid: 28c8dc620ac7cf244bbf3681ff33d787, type: 3}
   trajectoryCurve:
     serializedVersion: 2
     m_Curve:
@@ -51,4 +51,4 @@ MonoBehaviour:
     m_PreInfinity: 2
     m_PostInfinity: 2
     m_RotationOrder: 4
-  projectileEffect: {fileID: 11400000, guid: 7a8317eec20210f46854884cfe5b27ba, type: 2}
+  projectileEffect: {fileID: 0}

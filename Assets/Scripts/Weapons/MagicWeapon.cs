@@ -25,8 +25,18 @@ public class MagicWeapon : Weapon
                 offset = new Vector2((Random.value * 2) - 1, (Random.value * 2) - 1) * range;
             if (projectileData.MaxHeight == 0)
                 offset = (mousePosition - (Vector2)transform.position).normalized * 100 + offset * 50;
-            shooter.FireProjectile(projectileData, ProjectileTargetType.Friendly, mousePosition + offset, Element, GetMultipliersByIndex(attackIndex));
+
+            Projectile projectile;
+            shooter.FireProjectile(projectileData, mousePosition + offset, out projectile);
+            (projectile.ProjectileEffect as WeaponProjectile).Initialize(GetMultipliersByIndex(attackIndex));
+            projectile.OnHit.AddListener(OnHit);
         }
+    }
+
+    void OnHit(Collider2D[] colliders, Projectile projectile)
+    {
+        StatBoost[] multipliers = (projectile.ProjectileData.ProjectileEffect as WeaponProjectile).Multipliers;
+        EventManager.InvokeOnEnemyDataAcquired(colliders, new (Element, projectile.transform.position, multipliers));
     }
 
     public override void AttackAnimationHandle(int animationIndex, Transform transform, Animator animator)

@@ -8,18 +8,20 @@ public class Bird : Enemy
     [SerializeField] int chargeSpeed, minChargeDistance, chargeCooldown;
     [SerializeField] float chargeDuration, telegraphDuration;
 
+    bool isResting;
+
     BirdState birdState;
     BoxCollider2D boxCollider;
 
     // Start is called before the first frame update
-    void Start()
+    new void Start()
     {
+        base.Start();
+
         birdState = BirdState.Idle;
+        isResting = false;
 
-        rb = GetComponent<Rigidbody2D>();
         boxCollider = GetComponent<BoxCollider2D>();
-
-        GetComponent<Health>().Initialize(hp, def);
     }
 
     // Update is called once per frame
@@ -27,50 +29,46 @@ public class Bird : Enemy
     {
         SearchTarget(transform.position, detectDistance);
         if (!target) return;
-        if (birdState == BirdState.Charging || birdState == BirdState.Telegraphing) return;
-        if (Vector2.Distance(transform.position, target.position) < minChargeDistance)
+
+        switch (birdState)
         {
-            if (birdState != BirdState.Resting)
-            {
+            case BirdState.Idle:
+                animator.CrossFade("Flapping", 0, 0);
+                transform.localScale = new Vector3(transform.position.x > target.position.x ? 1 : -1, 1);
+                Movement();
+
+                if (isResting) break;
+                if (Vector2.Distance(transform.position, target.position) >= minChargeDistance) break;
                 animator.CrossFade("Charging", 0, 0);
                 StartCoroutine(ChargeCoroutine());
-            }
+                break;
+            case BirdState.Charging:
+                Collider2D collision = Physics2D.OverlapCircle(transform.position, 1);
+                
+                if (collision.transform != target) break;
+                collision.GetComponent<Health>().TakeDamage(atk, Element.Wind);
+                break;
         }
-        else
-        {
-            animator.CrossFade("Flapping", 0, 0);
-            transform.localScale = new Vector3(transform.position.x > target.position.x ? 1 : -1, 1);
-            Movement();
-        }
-    }
-
-    private void OnTriggerEnter2D(Collider2D collision)
-    {
-        if (birdState != BirdState.Charging) return;
-        if (collision.transform == target) collision.GetComponent<Health>().TakeDamage(atk, Element.Wind);
-
-        Rigidbody2D rigidbody = collision.GetComponent<Rigidbody2D>();
-        if (!rigidbody) return;
-        if (rigidbody.bodyType != RigidbodyType2D.Static) return;
-        rb.linearVelocity = Vector2.zero;
     }
 
     IEnumerator ChargeCoroutine()
     {
         birdState = BirdState.Telegraphing;
         rb.linearVelocity = Vector2.zero;
+        Vector2 fallBackTarget = target.position;
         yield return new WaitForSeconds(telegraphDuration);
-        rb.linearVelocity = (target.position - transform.position).normalized * chargeSpeed;
+        rb.linearVelocity = ((target ? target.position : fallBackTarget) - transform.position).normalized * chargeSpeed;
 
         birdState = BirdState.Charging;
-        boxCollider.isTrigger = true;
+        boxCollider.excludeLayers = wallLayer;
         yield return new WaitForSeconds(chargeDuration);
-        boxCollider.isTrigger = false;
-        birdState = BirdState.Resting;
-
-        yield return new WaitForSeconds(chargeCooldown);
         birdState = BirdState.Idle;
+        boxCollider.excludeLayers = new ();
+
+        isResting = true;
+        yield return new WaitForSeconds(chargeCooldown);
+        isResting = false;
     }
 }
 
-enum BirdState { Idle, Charging, Resting, Telegraphing };
+enum BirdState { None, Idle, Charging, Telegraphing };

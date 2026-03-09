@@ -13,18 +13,11 @@ public class Skeleton : Enemy
     Vector2 direction;
 
     // Start is called before the first frame update
-    void Start()
+    new void Start()
     {
-        atk = 20;
-        def = 10;
-        hp = 70;
-        spd = 225;
-        detectDistance = 8;
+        base.Start();
 
         animr = GetComponent<Animator>();
-        rb = GetComponent<Rigidbody2D>();
-
-        GetComponent<Health>().Initialize(hp, def);
     }
 
     // Update is called once per frame

@@ -5,7 +5,7 @@ using TMPro;
 using UnityEngine;
 using UnityEngine.Events;
 
-public class Player : MonoBehaviour
+public class Player : Being
 {
     [SerializeField] Transform sprite, dashCount;
     [SerializeField] UnityEvent<int, bool> onDamageInflicted;
@@ -28,6 +28,7 @@ public class Player : MonoBehaviour
     // Start is called before the first frame update
     void Start()
     {
+        BeingType = BeingType.Friendly;
         health?.Initialize((int)resetStats[PlayerStat.Health], (int)resetStats[PlayerStat.Defense]);
     }
 
