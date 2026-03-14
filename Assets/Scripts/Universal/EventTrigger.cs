@@ -28,6 +28,6 @@ public class EventTrigger : MonoBehaviour
     }
     public void TriggerEvent3()
     {
-        onTrigger2?.Invoke();
+        onTrigger3?.Invoke();
     }
 }

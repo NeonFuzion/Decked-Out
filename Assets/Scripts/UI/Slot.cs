@@ -3,7 +3,7 @@ using UnityEngine;
 using UnityEngine.EventSystems;
 using UnityEngine.UI;
 
-public abstract class Slot : MonoBehaviour, IPointerEnterHandler, IPointerExitHandler
+public abstract class Slot : MonoBehaviour
 {
     [SerializeField] protected TextMeshProUGUI amountText;
     [SerializeField] protected Image backgroundImage, image;
@@ -13,14 +13,9 @@ public abstract class Slot : MonoBehaviour, IPointerEnterHandler, IPointerExitHa
     protected int index;
     protected bool isEquiped, isEmpty;
 
-    public void Highlight()
+    protected virtual void SetAmount(int amount)
     {
-        //backgroundImage.color = highlightedColor;
-    }
-
-    public void Unhighlight()
-    {
-        //backgroundImage.color = unhighlightedColor;
+        amountText.SetText(amount <= 1 ? "" : amount.ToString());
     }
 
     public virtual void UpdateItem(Sprite sprite, int amount)
@@ -32,8 +27,9 @@ public abstract class Slot : MonoBehaviour, IPointerEnterHandler, IPointerExitHa
         image.gameObject.SetActive(true);
         emptyImage.SetActive(false);
 
-        if (amount <= 1) return;
-        amountText.SetText(amount.ToString());
+        if (!amountText) return;
+        amountText.gameObject.SetActive(true);
+        SetAmount(amount);
     }
 
     public virtual void ResetItem()
@@ -41,13 +37,15 @@ public abstract class Slot : MonoBehaviour, IPointerEnterHandler, IPointerExitHa
         isEmpty = true;
         image.gameObject.SetActive(false);
         emptyImage.SetActive(true);
+        
+        if (!amountText) return;
+        amountText.gameObject.SetActive(false);
     }
 
     public virtual void Initialize(int index, bool isEquiped)
     {
         this.index = index;
         this.isEquiped = isEquiped;
-        //Debug.Log($"{gameObject.name}: {index} - {isEquiped}");
     }
 
     public void OnPointerEnter(PointerEventData eventData)

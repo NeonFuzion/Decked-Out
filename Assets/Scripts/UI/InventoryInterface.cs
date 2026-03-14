@@ -1,13 +1,5 @@
-using System.Collections;
-using System.Collections.Generic;
-using System.Linq;
-using NUnit.Framework;
 using TMPro;
-using Unity.VisualScripting;
 using UnityEngine;
-using UnityEngine.EventSystems;
-using UnityEngine.InputSystem;
-using UnityEngine.UI;
 
 public class InventoryInterface : MonoBehaviour
 {
@@ -17,11 +9,10 @@ public class InventoryInterface : MonoBehaviour
     [SerializeField] TextMeshProUGUI statsDisplay;
     [SerializeField] Color32[] inventoryColors;
 
-    Transform lastSelected;
     Player player;
     Inventory inventory;
 
-    bool isHoldingItem, isLastHeldItemEquiped;
+    bool isLastHeldItemEquiped;
     int lastHeldItemIndex;
 
     void Awake()
@@ -89,13 +80,10 @@ public class InventoryInterface : MonoBehaviour
     {
         lastHeldItemIndex = index;
         isLastHeldItemEquiped = isEquiped;
-        isHoldingItem = true;
     }
 
     void DropItem(int index, bool isEquiped)
     {
-        isHoldingItem = false;
-
         if (index == lastHeldItemIndex && isEquiped == isLastHeldItemEquiped) return;
 
         ItemStack oldItem = isLastHeldItemEquiped ? new (inventory.GetEquipment(lastHeldItemIndex)) : inventory.GetItem(lastHeldItemIndex);
@@ -160,10 +148,6 @@ public class InventoryInterface : MonoBehaviour
             item = slot.Item;
             itemAmount = slot.Amount;
         }
-
-        if (lastSelected && lastSelected != itemSlot) lastSelected.GetComponent<Slot>().Unhighlight();
-        lastSelected = itemSlot;
-        lastSelected.GetComponent<Slot>().Highlight();
 
         itemFocus.DisplayItemStats(item, itemAmount);
     }

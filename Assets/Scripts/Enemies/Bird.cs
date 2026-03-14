@@ -8,7 +8,7 @@ public class Bird : Enemy
     [SerializeField] int chargeSpeed, minChargeDistance, chargeCooldown;
     [SerializeField] float chargeDuration, telegraphDuration;
 
-    bool isResting;
+    bool isResting, damageDealt;
 
     BirdState birdState;
     BoxCollider2D boxCollider;
@@ -20,6 +20,7 @@ public class Bird : Enemy
 
         birdState = BirdState.Idle;
         isResting = false;
+        damageDealt = true;
 
         boxCollider = GetComponent<BoxCollider2D>();
     }
@@ -43,9 +44,11 @@ public class Bird : Enemy
                 StartCoroutine(ChargeCoroutine());
                 break;
             case BirdState.Charging:
+                if (damageDealt) return;
                 Collider2D collision = Physics2D.OverlapCircle(transform.position, 1);
                 
                 if (collision.transform != target) break;
+                damageDealt = true;
                 collision.GetComponent<Health>().TakeDamage(atk, Element.Wind);
                 break;
         }
@@ -60,6 +63,7 @@ public class Bird : Enemy
         rb.linearVelocity = ((target ? target.position : fallBackTarget) - transform.position).normalized * chargeSpeed;
 
         birdState = BirdState.Charging;
+        damageDealt = false;
         boxCollider.excludeLayers = wallLayer;
         yield return new WaitForSeconds(chargeDuration);
         birdState = BirdState.Idle;

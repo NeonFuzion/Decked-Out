@@ -76,7 +76,12 @@ public class Health : MonoBehaviour
         if (prefabDmgObj) SpawnDamageNumber(Vector2.down, Element.Physical, amount, true);
     }
 
-    public void SetInvincibility()
+    public void SetInvincibility(bool invincible)
+    {
+        this.invincible = invincible;
+    }
+
+    public void ToggleInvincibility()
     {
         invincible = !invincible;
     }

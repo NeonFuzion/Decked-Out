@@ -41,12 +41,15 @@ public class Slime : Enemy
         if (curJumpCD > 0)
         {
             curJumpCD -= Time.deltaTime;
+            rb.linearVelocity = Vector3.zero;
         }
         else if (jumping)
         {
             curJumpTime -= Time.deltaTime;
-            if (curJumpTime < 0 || !target || Vector3.Distance(target.position, transform.position) < 1.75f)
+            if (curJumpTime < 0 || !target || Vector3.Distance(targetPos, transform.position) < 1.75f)
+            {
                 animator.CrossFade("SlimeLanding", 0, 0);
+            }
         }
         else if (target)
         {
@@ -58,12 +61,6 @@ public class Slime : Enemy
             curJumpTime = jumpTime;
             jumping = true;
         }
-    }
-
-    private void FixedUpdate()
-    {
-        if (jumping) return;
-        rb.linearVelocity = Vector3.zero;
     }
 
     public void OnLanding()

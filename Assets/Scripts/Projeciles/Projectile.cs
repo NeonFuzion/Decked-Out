@@ -13,8 +13,10 @@ public class Projectile : MonoBehaviour
     Vector2 targetPosition, startPosition;
     SpriteRenderer visualSpriteRenderer, shadowSpriteRenderer;
     UnityEvent<Collider2D[], Projectile> onHit;
+    UnityEvent<Projectile> onExpire;
     
-    public UnityEvent<Collider2D[], Projectile> OnHit { get => onHit; set => onHit = value; }
+    public UnityEvent<Collider2D[], Projectile> OnHit { get => onHit; }
+    public UnityEvent<Projectile> OnExpire { get => onExpire; }
     public ProjectileData ProjectileData { get => projectileData; }
     public ProjectileEffect ProjectileEffect { get => projectileEffect; }
 
@@ -40,11 +42,11 @@ public class Projectile : MonoBehaviour
         float radians = Mathf.Atan2(differenceVector.y, differenceVector.x);
         groundDirection = (radians > 0 ? radians : radians + 2 * Mathf.PI) * 180 / Mathf.PI % 360;
 
-        float trajectoryAngle = (1 - trajectoryCurveValue) * (distanceProgress > 0.5f && projectileData.MaxHeight != 0 ? -1 : 1) * projectileData.MaxHeight * 20;
+        float trajectoryAngle = (1 - trajectoryCurveValue) * (distanceProgress > 0.5f && projectileData.MaxHeight != 0 ? -1 : 1) * projectileData.MaxHeight * 20 + projectileData.RotationOffset;
         projectileVisual.transform.eulerAngles = Vector3.forward * (groundDirection + trajectoryAngle);
         projectileShadow.transform.eulerAngles = Vector3.forward * groundDirection;
 
-        if (distanceProgress <= 0.95f && projectileData.MaxHeight > 0) return;
+        if (distanceProgress <= 1 && projectileData.MaxHeight > 0) return;
         Collider2D[] colliders = Physics2D.OverlapCircleAll(transform.position, projectileData.DamageRadius).Where(collider => collider.gameObject != gameObject).ToArray();
 
         if (projectileData.MaxHeight > 0)
@@ -54,10 +56,16 @@ public class Projectile : MonoBehaviour
         }
         else
         {
-            if (colliders.Length == 0) return;
-            if (distanceProgress < 0.95f) return;
-            onHit?.Invoke(colliders, this);
-            Destroy(gameObject);
+            if (distanceProgress < 1)
+            {
+                if (colliders.Length == 0) return;
+                onHit?.Invoke(colliders, this);
+            }
+            else
+            {
+                onExpire?.Invoke(this);
+                Destroy(gameObject);
+            }
         }
     }
 

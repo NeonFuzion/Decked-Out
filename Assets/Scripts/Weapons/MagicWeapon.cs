@@ -1,5 +1,6 @@
 using System.Collections;
 using System.Collections.Generic;
+using System.Linq;
 using UnityEngine;
 
 [CreateAssetMenu(menuName = "Item/Weapon/MagicWeapon")]
@@ -28,15 +29,22 @@ public class MagicWeapon : Weapon
 
             Projectile projectile;
             shooter.FireProjectile(projectileData, mousePosition + offset, out projectile);
-            (projectile.ProjectileEffect as WeaponProjectile).Initialize(GetMultipliersByIndex(attackIndex));
+            WeaponProjectile weaponProjectile = projectile.ProjectileEffect as WeaponProjectile;
+            weaponProjectile.Initialize(GetMultipliersByIndex(attackIndex));
             projectile.OnHit.AddListener(OnHit);
         }
     }
 
     void OnHit(Collider2D[] colliders, Projectile projectile)
     {
-        StatBoost[] multipliers = (projectile.ProjectileData.ProjectileEffect as WeaponProjectile).Multipliers;
-        EventManager.InvokeOnEnemyDataAcquired(colliders, new (Element, projectile.transform.position, multipliers));
+        colliders = colliders.Where(collider => collider.GetComponent<Enemy>() || collider.GetComponent<BreakableRoomObject>()).ToArray();
+
+        if (colliders.Length == 0) return;
+        WeaponProjectile weaponProjectile = projectile.ProjectileEffect as WeaponProjectile;
+        EventManager.InvokeOnEnemyDataAcquired(colliders, new (Element, projectile.transform.position, weaponProjectile.Multipliers));
+
+        if (!projectile.gameObject) return;
+        Destroy(projectile.gameObject);
     }
 
     public override void AttackAnimationHandle(int animationIndex, Transform transform, Animator animator)

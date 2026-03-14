@@ -108,7 +108,7 @@ public class Player : Being
 
     void DashHandle()
     {
-        health?.SetInvincibility();
+        health?.ToggleInvincibility();
         dashing = !dashing;
         curSpeed = baseSpeed * (dashing ? dashSpdMulti : 1);
     }

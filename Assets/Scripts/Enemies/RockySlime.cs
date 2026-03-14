@@ -3,7 +3,8 @@ using UnityEngine;
 
 public class RockySlime : Enemy
 {
-    [SerializeField] float jumpTime, attackCooldown, jumpThreshold, minProjectileDistance, maxProjectileDistance;
+    [SerializeField] int projectileCount;
+    [SerializeField] float jumpTime, attackCooldown, jumpThreshold, minProjectileDistance, maxProjectileDistance, projectileAngleRange;
     [SerializeField] ProjectileData natureProjectile, earthProjectile;
 
     float curJumpTime, currentAttackCooldown;
@@ -13,6 +14,7 @@ public class RockySlime : Enemy
     Shooter shooter;
     RockySlimeState rockyState;
     Vector2 targetPos;
+    Health health;
 
 
     // Start is called once before the first execution of Update after the MonoBehaviour is created
@@ -28,6 +30,7 @@ public class RockySlime : Enemy
         bc = GetComponent<BoxCollider2D>();
         sr = GetComponent<SpriteRenderer>();
         shooter = GetComponent<Shooter>();
+        health = GetComponent<Health>();
 
         sr.enabled = false;
     }
@@ -43,7 +46,7 @@ public class RockySlime : Enemy
                 curJumpTime -= Time.deltaTime;
                 Movement(targetPos);
 
-                if (curJumpTime < 0 || !target || Vector3.Distance(target.position, transform.position) < 1.75f)
+                if (curJumpTime < 0 || !target || Vector3.Distance(targetPos, transform.position) < 1.75f)
                     animator.CrossFade("SlimeLanding", 0, 0);
                 break;
             case RockySlimeState.Idle:
@@ -66,6 +69,7 @@ public class RockySlime : Enemy
         sr.enabled = true;
         curJumpTime = jumpTime;
         rockyState = RockySlimeState.Jumping;
+        health.SetInvincibility(true);
     }
 
     void Attack()
@@ -76,6 +80,8 @@ public class RockySlime : Enemy
 
     void ResetToIdle()
     {
+        health.SetInvincibility(false);
+        sr.enabled = false;
         rockyState = RockySlimeState.Idle;
         currentAttackCooldown = attackCooldown;
         animator.CrossFade("SlimeIdle", 0, 0);
@@ -87,6 +93,9 @@ public class RockySlime : Enemy
         int damage = Mathf.RoundToInt(atk * 0.8f);
         Element element = projectile.ProjectileData.ProjectileEffect == natureProjectile ? Element.Nature : Element.Earth;
         target.GetComponent<Health>()?.TakeDamage(damage, element, projectile.transform.position);
+
+        if (!projectile.gameObject) return;
+        Destroy(projectile.gameObject);
     }
 
     public void OnLanding()
@@ -103,12 +112,18 @@ public class RockySlime : Enemy
     public void FireProjectiles()
     {
         bool projectileRandom = Random.value > 0.5f;
+        float targetAngle = Mathf.Atan2(target.position.y - transform.position.y, target.position.x - transform.position.x);
         ProjectileData projectileData = projectileRandom ? earthProjectile : natureProjectile;
 
-        for (int i = 0; i < 3; i++)
+        for (float i = 0; i < projectileCount; i++)
         {
             float magnitude = Random.Range(minProjectileDistance, maxProjectileDistance);
-            Vector2 targetPosition = Random.onUnitSphere * magnitude + transform.position;
+            float baseAngle = i / projectileCount * 2 * Mathf.PI;
+            float range = projectileAngleRange * Mathf.PI / 180;
+            float angleOffset = Random.Range(-range, range);
+            float angle = targetAngle + angleOffset + baseAngle;
+            Vector3 direction = new (Mathf.Cos(angle), Mathf.Sin(angle));
+            Vector2 targetPosition = direction * magnitude + transform.position;
 
             Projectile projectile;
             shooter.FireProjectile(projectileData, targetPosition, out projectile);

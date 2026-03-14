@@ -190,7 +190,19 @@ MonoBehaviour:
         m_CallState: 2
   onTrigger3:
     m_PersistentCalls:
-      m_Calls: []
+      m_Calls:
+      - m_Target: {fileID: 1393866274245383861}
+        m_TargetAssemblyTypeName: RockySlime, Assembly-CSharp
+        m_MethodName: OnLanding
+        m_Mode: 1
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 2
 --- !u!1 &4234002200681039880
 GameObject:
   m_ObjectHideFlags: 0
@@ -393,11 +405,13 @@ MonoBehaviour:
   wallLayer:
     serializedVersion: 2
     m_Bits: 119
+  projectileCount: 5
   jumpTime: 1.5
   attackCooldown: 2
   jumpThreshold: 5
   minProjectileDistance: 3
   maxProjectileDistance: 4
+  projectileAngleRange: 10
   natureProjectile: {fileID: 11400000, guid: 84e4127d4d4d21e408e30c1e3169c3b5, type: 2}
   earthProjectile: {fileID: 11400000, guid: 341e86aeb728f4f4588f9853526f308d, type: 2}
 --- !u!114 &4252210414773073220
@@ -415,7 +429,8 @@ MonoBehaviour:
   prefabItemObject: {fileID: 4856921329552883572, guid: 28161b10ce899b643a1af33f0f5db802, type: 3}
   commonDrops:
   - {fileID: 11400000, guid: cf70870c58229aa4fb12cbe201809414, type: 2}
-  rareDrops: []
+  rareDrops:
+  - {fileID: 11400000, guid: 356be8cf74e3d9042963a4d44acc2b76, type: 2}
   singleDrops: []
 --- !u!114 &2587637367656140370
 MonoBehaviour:
