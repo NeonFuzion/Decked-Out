@@ -20,7 +20,10 @@ public class InventoryInterface : MonoBehaviour
         EventManager.AddOnFocusItemListener(FocusOnItem);
         EventManager.AddOnInventoryUpdatedListener(UpdateInventory);
         EventManager.AddOnPickupItemListener(PickupItem);
-        EventManager.AddOnDropItemListener(DropItem);
+        EventManager.AddOnDropItemListener((int inte, bool boole) => {
+            DropItem(inte, boole); 
+            EventManager.InvokeOnInventoryUpdated();
+            });
     }
 
     // Start is called before the first frame update
@@ -82,46 +85,55 @@ public class InventoryInterface : MonoBehaviour
         isLastHeldItemEquiped = isEquiped;
     }
 
+    void RemoveOldItem(int index, bool isEquiped)
+    {
+        if (isEquiped) inventory.RemoveEquipmentAtIndex(index);
+        else inventory.RemoveItemAtIndex(index);
+    }
+
     void DropItem(int index, bool isEquiped)
     {
         if (index == lastHeldItemIndex && isEquiped == isLastHeldItemEquiped) return;
 
         ItemStack oldItem = isLastHeldItemEquiped ? new (inventory.GetEquipment(lastHeldItemIndex)) : inventory.GetItem(lastHeldItemIndex);
-        ItemStack newItem = isEquiped ? new (inventory.GetEquipment(index)) : inventory.GetItem(index);
-        
-        // NOTE: if isEquip is true then newItem will NOT be null regardless of whether or not the equipment slot has an item
-        if (newItem != null && !newItem.Item) newItem = null;
+        ItemStack newItem = null;
 
-        // A bunch of filters to prevent equiping materials
-        if (isEquiped && !(oldItem.Item as Equipment)) return;
-        if (newItem != null && isLastHeldItemEquiped && !(newItem.Item as Equipment)) return;
+        if (!oldItem.Item) return;
+        // Checking to see if both oldItem and newItem are both equipment
+        ItemStack temp = isEquiped ? new (inventory.GetEquipment(index)) : inventory.GetItem(index);
 
-        if (isLastHeldItemEquiped)
-        {
-            inventory.RemoveEquipmentAtIndex(lastHeldItemIndex);
-        }
-        else
-        {
-            inventory.RemoveItemAtIndex(lastHeldItemIndex);
-        }
-        
+        if (temp != null && temp.Item && (isEquiped || isLastHeldItemEquiped) && (oldItem.Item as Equipment == null) != (temp.Item as Equipment == null)) return;
+
+        // Moving old item into new slot
         if (isEquiped)
         {
-            inventory.RemoveEquipmentAtIndex(index);
-            inventory.AddEquipmentAtIndex(oldItem.Item as Equipment, index);
+            Equipment oldEquipment = oldItem.Item as Equipment;
+
+            if (!oldEquipment) return;
+            Equipment newEquipment = inventory.AddEquipmentAtIndex(oldEquipment, index);
+
+            if (!newEquipment)
+            {
+                RemoveOldItem(lastHeldItemIndex, isLastHeldItemEquiped);
+                return;
+            }
+            if (newEquipment == oldEquipment) return;
+            newItem = new (newEquipment);
         }
         else
         {
-            inventory.RemoveItemAtIndex(index);
-            inventory.AddItemAtIndex(oldItem.Item, index, oldItem.Amount);
+            ItemStack output = inventory.AddItemAtIndex(oldItem.Item, index, oldItem.Amount);
+
+            if (output == null)
+            {
+                RemoveOldItem(lastHeldItemIndex, isLastHeldItemEquiped);
+                return;
+            }
+            if (output == oldItem) return;
+            newItem = output;
         }
 
-        if (newItem == null)
-        {
-            EventManager.InvokeOnInventoryUpdated();
-            return;
-        }
-        
+        // Moving new item into old slot
         if (isLastHeldItemEquiped)
         {
             inventory.AddEquipmentAtIndex(newItem.Item as Equipment, lastHeldItemIndex);
@@ -130,7 +142,6 @@ public class InventoryInterface : MonoBehaviour
         {
             inventory.AddItemAtIndex(newItem.Item, lastHeldItemIndex, newItem.Amount);
         }
-        EventManager.InvokeOnInventoryUpdated();
     }
 
     void FocusOnItem(int index, bool isEquiped, Transform itemSlot)

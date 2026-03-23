@@ -113,9 +113,9 @@ public class Inventory : MonoBehaviour
         this.items = items;
     }
 
-    public bool AddEquipmentAtIndex(Equipment equipment, int index)
+    public Equipment AddEquipmentAtIndex(Equipment equipment, int index)
     {
-        if (!equipment) return false;
+        if (!equipment) return null;
 
         // Creating specific equipment types for later
         MainHand mainHand = equipment as MainHand;
@@ -127,13 +127,15 @@ public class Inventory : MonoBehaviour
         int mainHandIndex = Equipment.GetEquipmentIndex(mainHand);
 
         // Filtering for incorrect equipment index
-        if (armor && index != armorIndex + (int)armor.ArmorPiece) return false;
-        if (accessory && index >= accessoryIndex + 4 && index < accessoryIndex) return false;
-        if (mainHand && index >= mainHandIndex + 4 && index < mainHandIndex) return false;
+        if (armor && index != armorIndex + (int)armor.ArmorPiece) return equipment;
+        if (accessory && (index >= accessoryIndex + 4 || index < accessoryIndex)) return equipment;
+        if (mainHand && (index >= mainHandIndex + 4 || index < mainHandIndex)) return equipment;
+        if (!armor && !accessory && !mainHand) return equipment;
 
         // Moving equipment from items into equipment array
+        Equipment oldItem = equiped[index];
         equiped[index] = equipment;
-        return true;
+        return oldItem;
     }
 
     public bool AddEquipment(Equipment equipment)
@@ -164,22 +166,27 @@ public class Inventory : MonoBehaviour
         return true;
     }
 
-    public bool AddItemAtIndex(Item item, int index, int amount = 1)
+    public ItemStack AddItemAtIndex(Item item, int index, int amount = 1)
     {
-        if (!item) return false;
+        if (!item) return null;
         ItemStack slot = items[index];
+
         if (slot == null)
         {
             items[index] = new (item, amount);
-            return true;
+            return null;
         }
         else if (slot.Item == item)
         {
-            if (item as Equipment) return false;
+            if (item as Equipment) return new (item);
             slot.AddItems(amount);
-            return true;
+            return null;
         }
-        return false;
+        else
+        {
+            items[index] = new (item, amount);
+            return slot;
+        }
     }
 
     public bool AddItem(Item item, int amount = 1)
@@ -211,53 +218,53 @@ public class Inventory : MonoBehaviour
         return true;
     }
 
-    public bool RemoveItem(Item item, int amount = -1)
+    public ItemStack RemoveItem(Item item, int amount = -1)
     {
         for (int i = 0; i < max; i++)
         {
             ItemStack slot = items[i];
             if (slot.Item != item) continue;
-            bool result = RemoveItemAtIndex(i, amount);
-            if (result) return true;
+            ItemStack result = RemoveItemAtIndex(i, amount);
+            if (result != null) return result;
         }
-        return false;
+        return null;
     }
 
-    public bool RemoveItemAtIndex(int index, int amount = -1)
+    public ItemStack RemoveItemAtIndex(int index, int amount = -1)
     {
         ItemStack stack = items[index];
 
-        if (stack == null) return false;
-        if (stack.Amount < amount) return false;
+        if (stack == null) return null;
+        if (stack.Amount < amount) return null;
         else if (stack.Amount == amount || amount == -1)
         {
             items[index] = null;
-            return true;
+            return stack;
         }
         else if (stack.Amount > amount)
         {
             stack.RemoveItems(amount);
-            return true;
+            return stack;
         }
-        return false;
+        return null;
     }
 
-    public bool RemoveEquipment(Equipment target)
+    public Equipment RemoveEquipment(Equipment target)
     {
         for (int i = 0; i < equiped.Length; i++)
         {
             Equipment equipment = equiped[i];
 
             if (equipment != target) continue;
-            bool result = RemoveEquipmentAtIndex(i);
-            if (result) return true;
+            Equipment result = RemoveEquipmentAtIndex(i);
+            if (result) return equipment;
         }
-        return false;
+        return null;
     }
 
-    public bool RemoveEquipmentAtIndex(int index)
+    public Equipment RemoveEquipmentAtIndex(int index)
     {
-        bool result = equiped[index] != null;
+        Equipment result = equiped[index];
         equiped[index] = null;
         return result;
     }
