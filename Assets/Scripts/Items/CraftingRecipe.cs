@@ -4,8 +4,8 @@ using UnityEngine;
 public class CraftingRecipe : ScriptableObject
 {
     [SerializeField] Item output;
-    [SerializeField] Item[] ingredients;
+    [SerializeField] ItemStack[] ingredients;
 
     public Item Output { get => output; }
-    public Item[] Ingredients { get => ingredients; }
+    public ItemStack[] Ingredients { get => ingredients; }
 }

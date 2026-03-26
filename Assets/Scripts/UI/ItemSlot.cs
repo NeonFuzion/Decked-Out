@@ -3,7 +3,7 @@ using UnityEngine;
 using UnityEngine.Events;
 using UnityEngine.EventSystems;
 
-public class ItemSlot : Slot, IDropHandler, IPointerEnterHandler, IPointerExitHandler
+public class ItemSlot : Slot, IDropHandler
 {
     [SerializeField] UnityEvent<int, bool> onSetData;
 

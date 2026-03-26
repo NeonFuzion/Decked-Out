@@ -52,10 +52,8 @@ public class Player : Being
             { PlayerStat.Defense, 1 },
             { PlayerStat.Health, 100 },
             { PlayerStat.ReactionAffinity, 10 },
-            { PlayerStat.Mana, 50 },
             { PlayerStat.StaggerMultiplier, 100 },
             { PlayerStat.DefensePenetration, 0 },
-            { PlayerStat.ManaRegeneration, 100 },
             { PlayerStat.PhysicalDamageBonus, 0 },
             { PlayerStat.FireDamageBonus, 0 },
             { PlayerStat.WaterDamageBonus, 0 },
@@ -139,12 +137,8 @@ public class Player : Being
             Health health = collider.GetComponent<Health>();
 
             if (!health) return;
-            float damage = attackData.Multipliers.ToList().Sum(multiplier =>
-            {
-                try { return CalculateStat(multiplier.Stat) * multiplier.Amount; }
-                catch (Exception) { return 0; }
-            });
-            health.TakeDamage(Mathf.RoundToInt(damage), attackData.Element, attackData.Origin);
+            int damage = Mathf.RoundToInt(attackData.Damage * (1 + Mathf.Log(CalculateStat(PlayerStat.Attack)) / 20));
+            health.TakeDamage(damage, attackData.Element, attackData.Origin);
 
             if (health.HP > 0) return;
             EventManager.InvokeOnKill();
@@ -164,7 +158,7 @@ public class Player : Being
     public string GetStats()
     {
         string output = "Stats: ";
-        for (int i = 0; i < Enum.GetNames(typeof(PlayerStat)).Length; i++)
+        for (int i = 1; i < Enum.GetNames(typeof(PlayerStat)).Length; i++)
         {
             PlayerStat stat = (PlayerStat)i;
             string statStr = "";
@@ -173,7 +167,7 @@ public class Player : Being
                 if (str.ToString().ToUpper().Equals(str)) statStr += " ";
                 statStr += str;
             }
-            output += $"/n{statStr}: {CalculateStat(stat)}";
+            output += $"<br>{statStr}: {CalculateStat(stat)}";
         }
         return output;
     }
@@ -200,21 +194,13 @@ public class Player : Being
         {
             Equipment equipment = inventory.GetEquipment(i);
 
-            if (!equipment) return;
-            if (equipment as Weapon)
-            {
-                Weapon weapon = equipment as Weapon;
-                baseStats[PlayerStat.Attack] = weapon.Attack;
-
-                if (weapon.Substat.Stat == PlayerStat.None) return;
-                percentageStats[weapon.Substat.Stat] = weapon.Substat.Amount;
-            }
-            else if (equipment as Armor)
+            if (!equipment) continue;
+            if (equipment as Armor)
             {
                 Armor armor = equipment as Armor;
                 baseStats[PlayerStat.Defense] += armor.Defense;
 
-                if (armor.Substats.Length == 0) return;
+                if (armor.Substats.Length == 0) continue;
                 percentageStats[armor.SecondaryStat.Stat] += armor.SecondaryStat.Amount;
             }
         }
@@ -251,18 +237,18 @@ public class AttackData
 {
     Element element;
     Vector2 origin;
-    StatBoost[] multipliers;
+    int damage;
 
-    public AttackData(Element element, Vector2 origin, StatBoost[] multipliers)
+    public AttackData(Element element, Vector2 origin, int damage)
     {
         this.element = element;
         this.origin = origin;
-        this.multipliers = multipliers;
+        this.damage = damage;
     }
 
     public Element Element { get => element; }
     public Vector2 Origin { get => origin; }
-    public StatBoost[] Multipliers { get => multipliers; }
+    public int Damage { get => damage; }
 }
 
 public abstract class AttackAugment

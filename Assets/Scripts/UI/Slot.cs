@@ -3,12 +3,11 @@ using UnityEngine;
 using UnityEngine.EventSystems;
 using UnityEngine.UI;
 
-public abstract class Slot : MonoBehaviour
+public abstract class Slot : MonoBehaviour, IPointerEnterHandler, IPointerExitHandler
 {
     [SerializeField] protected TextMeshProUGUI amountText;
     [SerializeField] protected Image backgroundImage, image;
     [SerializeField] protected GameObject emptyImage;
-    [SerializeField] Color highlightedColor, unhighlightedColor;
 
     protected int index;
     protected bool isEquiped, isEmpty;

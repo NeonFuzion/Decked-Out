@@ -14,8 +14,7 @@ public enum PlayerStat
 {
     None,
     Attack, Magic, Defense, Health,
-    ReactionAffinity, Mana,
-    StaggerMultiplier, DefensePenetration, ManaRegeneration,
+    ReactionAffinity, StaggerMultiplier, DefensePenetration,
     PhysicalDamageBonus, FireDamageBonus, WaterDamageBonus,
     WindDamageBonus, EarthDamageBonus, LightningDamageBonus,
     NatureDamageBonus, IceDamageBonus

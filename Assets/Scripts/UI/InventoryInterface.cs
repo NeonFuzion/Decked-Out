@@ -49,6 +49,13 @@ public class InventoryInterface : MonoBehaviour
             ItemSlot slot = itemSlots.GetChild(i).GetComponent<ItemSlot>();
             slot.Initialize(i, false);
         }
+
+        UpdateStatScreen();
+    }
+
+    void UpdateStatScreen()
+    {
+        statsDisplay.SetText(player.GetStats());
     }
 
     void UpdateInventory()
@@ -76,7 +83,7 @@ public class InventoryInterface : MonoBehaviour
             else slot.UpdateItem(stack.Item.Sprite, stack.Amount);
         }
 
-        statsDisplay.SetText(player.GetStats());
+        UpdateStatScreen();
     }
 
     void PickupItem(int index, bool isEquiped)

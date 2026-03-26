@@ -15,7 +15,6 @@ MonoBehaviour:
   itemName: Cloud Katana
   description: An eastern-style blade forged with Cloud Essence.
   sprite: {fileID: 21300000, guid: 295622cae00bfc149bd97b4b782f6227, type: 3}
-  craftingRecipe: []
   attack: 12
   attackSpeed: 1.2
   knockback: 3
@@ -26,13 +25,9 @@ MonoBehaviour:
   element: 3
   attackComboData:
   - animation: SwordSwing0
-    multipliers:
-    - stat: 1
-      amount: 0.7
+    damage: 12
   - animation: SwordSwing1
-    multipliers:
-    - stat: 1
-      amount: 0.7
+    damage: 12
   attackRange: 1.1
   slashAnimations:
   - SlashEffect0

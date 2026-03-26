@@ -65,7 +65,7 @@ public class WeaponParent : MonoBehaviour
 
     public void OnAttackHit()
     {
-        weapon.AttackActionHandle(curAnimIndex, slash, mousePosition, shooter);
+        weapon.AttackActionHandle(curAnimIndex, damageOrigin, mousePosition, shooter);
     }
 
     public void OnAttackFinish()

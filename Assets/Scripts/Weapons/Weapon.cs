@@ -4,20 +4,16 @@ using UnityEngine.Events;
 
 public abstract class Weapon : MainHand
 {
-    [SerializeField] int attack;
     [SerializeField] float attackSpeed, knockback;
-    [SerializeField] StatBoost substat;
-    [SerializeField] WeaponHoldStyle weaponHoldStyle;
     [SerializeField] Element element;
+    [SerializeField] WeaponHoldStyle weaponHoldStyle;
     [SerializeField] AttackSequenceData[] attackComboData;
 
     public float AttackSpeed { get => attackSpeed; }
     public float Knockback { get => knockback; }
     
-    public int Attack { get => attack; }
-    public StatBoost Substat { get => substat; }
-    public WeaponHoldStyle WeaponHoldStyle { get => weaponHoldStyle; }
     public Element Element { get => element; }
+    public WeaponHoldStyle WeaponHoldStyle { get => weaponHoldStyle; }
     public AttackSequenceData[] Animations { get => attackComboData; }
 
     public int GetNextAnimationIndex(int index)
@@ -35,9 +31,9 @@ public abstract class Weapon : MainHand
         return GetAttackSequenceDataByIndex(index).Animation;
     }
 
-    public StatBoost[] GetMultipliersByIndex(int index)
+    public int GetDamageByIndex(int index)
     {
-        return GetAttackSequenceDataByIndex(index).Multipliers;
+        return GetAttackSequenceDataByIndex(index).Damage;
     }
 
     public abstract void AttackActionHandle(int attackIndex, Transform transform, Vector2 mousePosition, Shooter shooter);
@@ -52,8 +48,8 @@ public enum Element { Physical, Fire, Water, Wind, Earth, Electric, Nature, Ice 
 public class AttackSequenceData
 {
     [SerializeField] string animation;
-    [SerializeField] StatBoost[] multipliers;
+    [SerializeField] int damage;
 
     public string Animation { get => animation; }
-    public StatBoost[] Multipliers { get => multipliers; }
+    public int Damage { get => damage; }
 }

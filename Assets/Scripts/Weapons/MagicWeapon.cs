@@ -30,7 +30,7 @@ public class MagicWeapon : Weapon
             Projectile projectile;
             shooter.FireProjectile(projectileData, mousePosition + offset, out projectile);
             WeaponProjectile weaponProjectile = projectile.ProjectileEffect as WeaponProjectile;
-            weaponProjectile.Initialize(GetMultipliersByIndex(attackIndex));
+            weaponProjectile.Initialize(GetDamageByIndex(attackIndex));
             projectile.OnHit.AddListener(OnHit);
         }
     }
@@ -41,7 +41,7 @@ public class MagicWeapon : Weapon
 
         if (colliders.Length == 0) return;
         WeaponProjectile weaponProjectile = projectile.ProjectileEffect as WeaponProjectile;
-        EventManager.InvokeOnEnemyDataAcquired(colliders, new (Element, projectile.transform.position, weaponProjectile.Multipliers));
+        EventManager.InvokeOnEnemyDataAcquired(colliders, new (Element, projectile.transform.position, weaponProjectile.Damage));
 
         if (!projectile.gameObject) return;
         Destroy(projectile.gameObject);

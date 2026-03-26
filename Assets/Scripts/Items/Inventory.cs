@@ -108,6 +108,11 @@ public class Inventory : MonoBehaviour
     public int GetItemCount() => items.Length;
     public int GetEquipmentCount() => equiped.Length;
 
+    public ItemStack FindItem(Item item)
+    {
+        return items.ToList().Find(stack => stack.Item == item);
+    }
+
     public void UpdateItems(ItemStack[] items)
     {
         this.items = items;
@@ -192,7 +197,9 @@ public class Inventory : MonoBehaviour
     public bool AddItem(Item item, int amount = 1)
     {
         if (!item) return false;
-        if (item as Equipment && itemCount == max) return false;
+        Equipment equipment = item as Equipment;
+
+        if (equipment && itemCount == max) return false;
         int index = -1;
         bool isSlotNull = true;
         for (int i = 0; i < max; i++)
@@ -202,9 +209,9 @@ public class Inventory : MonoBehaviour
             {
                 index = i;
                 isSlotNull = true;
-                if (item as Equipment) break;
+                break;
             }
-            else if (slot.Item == item)
+            else if (slot.Item == item && !equipment)
             {
                 index = i;
                 isSlotNull = false;

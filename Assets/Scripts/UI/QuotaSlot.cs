@@ -13,10 +13,11 @@ public class QuotaSlot : Slot
         amountText.color = amount >= quota ? Color.black : insufficientColor;
     }
 
-    public void Initialize(int index, bool isEquiped, int quota)
+    public void Initialize(ItemStack itemStack, int amount)
     {
-        this.quota = quota;
-
-        base.Initialize(index, isEquiped);
+        quota = itemStack.Amount;
+        
+        SetAmount(amount);
+        UpdateItem(itemStack.Item.Sprite, amount);
     }
 }

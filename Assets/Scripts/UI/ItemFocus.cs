@@ -1,3 +1,4 @@
+using System.Collections.Generic;
 using System.Linq;
 using TMPro;
 using UnityEngine;
@@ -51,13 +52,13 @@ public class ItemFocus : MonoBehaviour
     void ProcessWeapon(Weapon weapon)
     {
         if (!weapon) return;
+        int maxDamage = weapon.Animations.Max(animation => animation.Damage);
+        int minDamage = weapon.Animations.Min(animation => animation.Damage);
+        string text = maxDamage == minDamage ? maxDamage + "" : $"{minDamage} ~ {maxDamage}";
+
         focusType.SetText("Weapon");
         focusMainStats.gameObject.SetActive(true);
-        focusMainStats.SetText($"Attack - {weapon.Attack}");
-
-        if (weapon.Substat.Stat == PlayerStat.None) return;
-        focusSubStats.gameObject.SetActive(true);
-        focusSubStats.SetText(weapon.Substat.ToString());
+        focusMainStats.SetText($"Damage: {text}");
 
         focusAbility.SetText("");
     }
@@ -75,7 +76,7 @@ public class ItemFocus : MonoBehaviour
         if (!armor) return;
         focusType.SetText("Armor");
         focusMainStats.gameObject.SetActive(true);
-        focusMainStats.SetText($"Defense - {armor.Defense}");
+        focusMainStats.SetText($"Defense: {armor.Defense}");
 
         if (armor.SecondaryStat.Stat != PlayerStat.None)
         {

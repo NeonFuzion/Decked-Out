@@ -15,7 +15,6 @@ MonoBehaviour:
   itemName: Ion Stave
   description: A magic staff that can fire cloud projectiles.
   sprite: {fileID: -3690721624951990323, guid: f420a45982adcf345ae892b699337aac, type: 3}
-  craftingRecipe: []
   attack: 2
   attackSpeed: 0.8
   knockback: 0
@@ -26,9 +25,7 @@ MonoBehaviour:
   element: 5
   attackComboData:
   - animation: MagicCast0
-    multipliers:
-    - stat: 1
-      amount: 0.9
+    damage: 2
   projectileCount: 3
   projectileSpread: 1
   prefabProjectile: {fileID: 1391803176948481848, guid: 2966367f374e53645920ef66d1f507ed, type: 3}

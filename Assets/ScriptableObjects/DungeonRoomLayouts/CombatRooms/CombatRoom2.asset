@@ -4078,3 +4078,11 @@ MonoBehaviour:
     position: {x: 0, y: -14}
   - prefab: {fileID: 3456724229446359741, guid: 0ce2a61468e43b04fa8c5862cec60ce7, type: 3}
     position: {x: 4, y: -13}
+  - prefab: {fileID: 3789489369730254920, guid: 08d57c32797eeed47897d08a736d4ea0, type: 3}
+    position: {x: -6, y: -5.5}
+  - prefab: {fileID: 3789489369730254920, guid: 08d57c32797eeed47897d08a736d4ea0, type: 3}
+    position: {x: 7, y: -10.75}
+  - prefab: {fileID: 3789489369730254920, guid: 08d57c32797eeed47897d08a736d4ea0, type: 3}
+    position: {x: 7, y: 12.25}
+  - prefab: {fileID: 3789489369730254920, guid: 08d57c32797eeed47897d08a736d4ea0, type: 3}
+    position: {x: -6, y: 14}

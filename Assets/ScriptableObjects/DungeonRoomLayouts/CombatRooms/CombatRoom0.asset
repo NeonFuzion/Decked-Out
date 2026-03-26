@@ -7758,3 +7758,19 @@ MonoBehaviour:
     position: {x: -4, y: 1.5}
   - prefab: {fileID: 3456724229446359741, guid: 0ce2a61468e43b04fa8c5862cec60ce7, type: 3}
     position: {x: 0, y: -2.5}
+  - prefab: {fileID: 3789489369730254920, guid: 08d57c32797eeed47897d08a736d4ea0, type: 3}
+    position: {x: -5.5, y: 11.75}
+  - prefab: {fileID: 3789489369730254920, guid: 08d57c32797eeed47897d08a736d4ea0, type: 3}
+    position: {x: -8.5, y: 7.25}
+  - prefab: {fileID: 3789489369730254920, guid: 08d57c32797eeed47897d08a736d4ea0, type: 3}
+    position: {x: 5.75, y: 11.25}
+  - prefab: {fileID: 3789489369730254920, guid: 08d57c32797eeed47897d08a736d4ea0, type: 3}
+    position: {x: 9.25, y: 7}
+  - prefab: {fileID: 3789489369730254920, guid: 08d57c32797eeed47897d08a736d4ea0, type: 3}
+    position: {x: -9, y: -4.5}
+  - prefab: {fileID: 3789489369730254920, guid: 08d57c32797eeed47897d08a736d4ea0, type: 3}
+    position: {x: -5.75, y: -8.25}
+  - prefab: {fileID: 3789489369730254920, guid: 08d57c32797eeed47897d08a736d4ea0, type: 3}
+    position: {x: 4.75, y: -7.75}
+  - prefab: {fileID: 3789489369730254920, guid: 08d57c32797eeed47897d08a736d4ea0, type: 3}
+    position: {x: 7.5, y: -4}

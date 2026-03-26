@@ -15,7 +15,6 @@ MonoBehaviour:
   itemName: Adventurer's Pocketknife
   description: An adventurer's concealable weapon of choice.
   sprite: {fileID: 21300000, guid: 960fd4def8f3cb540b889a73883889a3, type: 3}
-  craftingRecipe: []
   attack: 10
   attackSpeed: 1
   knockback: 2
@@ -26,17 +25,11 @@ MonoBehaviour:
   element: 0
   attackComboData:
   - animation: SwordSwing0
-    multipliers:
-    - stat: 1
-      amount: 0.7
+    damage: 9
   - animation: SwordSwing1
-    multipliers:
-    - stat: 1
-      amount: 0.7
+    damage: 9
   - animation: SwordSwing2
-    multipliers:
-    - stat: 1
-      amount: 0.9
+    damage: 12
   attackRange: 1
   slashAnimations:
   - SlashEffect0
