@@ -15,6 +15,5 @@ MonoBehaviour:
   itemName: First-Aid Kit
   description: A portable box containing medical supplies for minor injuries.
   sprite: {fileID: 6579135910917660434, guid: 0d31d071e10729949971a7a0606aeb13, type: 3}
-  craftingRecipe: []
   setBonus: {fileID: 0}
-  passiveEffectSO: {fileID: 11400000, guid: 92c91d688743f624daff6f5141da915f, type: 2}
+  passiveEffectSO: {fileID: 11400000, guid: 8ebf0b050eab9b14e885bc362f63868d, type: 2}

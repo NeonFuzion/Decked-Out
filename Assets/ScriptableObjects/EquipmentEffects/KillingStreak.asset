@@ -1,0 +1,19 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 3cfc83b78f01d3448bd777792911be01, type: 3}
+  m_Name: KillingStreak
+  m_EditorClassIdentifier: Assembly-CSharp::KillingStreakSO
+  abilityName: Killing Streak
+  description: After slaying a foe, increase the attack of the next hit by 50%.
+  attackBoost: 0.5
+  duration: 5
+  cooldown: 0

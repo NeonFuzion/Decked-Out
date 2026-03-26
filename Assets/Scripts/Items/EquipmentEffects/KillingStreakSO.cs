@@ -1,33 +1,33 @@
 using UnityEngine;
 
-[CreateAssetMenu(fileName = "Berserker", menuName = "EquipmentEffect/Berserker")]
-public class BerserkerSO : PassiveEffectSO
+[CreateAssetMenu(fileName = "KillingStreak", menuName = "EquipmentEffect/KillingStreak")]
+public class KillingStreakSO : PassiveEffectSO
 {
-    [SerializeField] float attackBoost, duration;
+    [SerializeField] float attackBoost;
 
     public float AttackBoost { get => attackBoost; }
-    public float Duration { get => duration; }
 
     public override PassiveEffect Initialize(GameObject player, EquipmentEffectsManager equipmentEffectsManager)
     {
-        Berserker berserker = new (this, player, equipmentEffectsManager);
-        return berserker;
+        KillingStreak killingStreak = new (this, player, equipmentEffectsManager);
+        return killingStreak;
     }
 }
 
-public class Berserker : PassiveEffect
+public class KillingStreak : PassiveEffect
 {
-    BerserkerSO data;
+    KillingStreakSO data;
     Player playerScript;
     EffectState effectState;
 
-    public Berserker(BerserkerSO berserkerSO, GameObject player, EquipmentEffectsManager equipmentEffectsManager) : base (player, equipmentEffectsManager)
+    public KillingStreak(KillingStreakSO killingStreakSO, GameObject player, EquipmentEffectsManager equipmentEffectsManager) : base (player, equipmentEffectsManager)
     {
-        data = berserkerSO;
+        data = killingStreakSO;
 
         effectState = EffectState.Idle;
         playerScript = player.GetComponent<Player>();
         equipmentEffectsManager.OnKill.AddListener(ActivateEffect);
+        equipmentEffectsManager.OnDamageDealt.AddListener(DeactivateEffect);
     }
 
     void ActivateEffect()
@@ -35,7 +35,6 @@ public class Berserker : PassiveEffect
         if (effectState != EffectState.Idle) return;
         effectState = EffectState.Active;
         playerScript.IncrementStat(PlayerStat.Attack, data.AttackBoost, BoostType.Percentage);
-        equipmentEffectsManager.AddTimerPair(DeactivateEffect, data.Duration, this);
     }
 
     void DeactivateEffect()
@@ -45,5 +44,5 @@ public class Berserker : PassiveEffect
         playerScript.IncrementStat(PlayerStat.Attack, -data.AttackBoost, BoostType.Percentage);
     }
 
-    enum EffectState { Idle, Active }
+    enum EffectState { Idle, Active, Cooldown }
 }

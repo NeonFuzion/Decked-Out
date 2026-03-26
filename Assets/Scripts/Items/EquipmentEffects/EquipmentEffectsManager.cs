@@ -21,6 +21,8 @@ public class EquipmentEffectsManager : MonoBehaviour
     {
         timePairs = new List<TimerPair>();
         passiveEffects = new List<PassiveEffect>();
+
+        EventManager.AddOnKillListener(InvokeOnKill);
     }
 
     // Start is called before the first frame update
