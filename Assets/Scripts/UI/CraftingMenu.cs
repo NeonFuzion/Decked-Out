@@ -5,12 +5,13 @@ using UnityEngine;
 public class CraftingMenu : MonoBehaviour
 {
     [SerializeField] CraftingRecipes craftingRecipes;
-    [SerializeField] ItemFocus itemFocus;
     [SerializeField] Transform materialsParent, recipeParent;
     [SerializeField] GameObject prefabQuotaSlot, prefabCraftingSlot;
 
     Inventory inventory;
-    CraftingRecipe currentRecipe;
+    CraftingData currentCraftingData;
+    List<CraftingData> visibleRecipes;
+    List<CraftingRecipe> allRecipes;
 
     void Awake()
     {
@@ -31,11 +32,13 @@ public class CraftingMenu : MonoBehaviour
 
     void SelectCraftingRecipe(CraftingData craftingData)
     {
-        currentRecipe = craftingData.CraftingRecipe;
+        currentCraftingData = craftingData;
+        CraftingRecipe currentRecipe = craftingData.CraftingRecipe;
 
         for (int i = 0; i < currentRecipe.Ingredients.Length; i++)
         {
-            GameObject materialChild = i >= materialsParent.childCount ? Instantiate(prefabQuotaSlot) : recipeParent.GetChild(i).gameObject;
+            GameObject materialChild = i >= materialsParent.childCount ? Instantiate(prefabQuotaSlot, materialsParent) : materialsParent.GetChild(i).gameObject;
+            materialChild.SetActive(true);
             QuotaSlot quotaSlot = materialChild.GetComponent<QuotaSlot>();
             quotaSlot.Initialize(currentRecipe.Ingredients[i], craftingData.AvailableIngredients[i].Amount);
         }
@@ -55,8 +58,7 @@ public class CraftingMenu : MonoBehaviour
         foreach (Transform recipe in recipeParent) recipe.gameObject.SetActive(false);
 
         // Find all recipes that contain materials that exist in inventory even if they can't be fully crafted
-        List<CraftingData> visibleRecipes = new ();
-        List<CraftingRecipe> allRecipes = craftingRecipes.Recipes.ToList();
+        visibleRecipes.Clear();
         allRecipes.ForEach(recipe =>
         {
             bool isCraftable = true;
@@ -92,16 +94,24 @@ public class CraftingMenu : MonoBehaviour
     {
         if (!inventory) inventory = Inventory.Instance;
 
+        visibleRecipes = new ();
+        allRecipes = craftingRecipes.Recipes.ToList();
+
         UpdateCraftingMenu();
     }
 
     public void CraftItem()
     {
+        if (!currentCraftingData.IsCraftable) return;
+        CraftingRecipe currentRecipe = currentCraftingData.CraftingRecipe;
         currentRecipe.Ingredients.ToList().ForEach(stack =>
         {
             inventory.RemoveItem(stack.Item, stack.Amount);
         });
         inventory.AddItem(currentRecipe.Output);
+
+        UpdateCraftingMenu();
+        SelectCraftingRecipe(visibleRecipes.Find(data => data.CraftingRecipe == currentRecipe));
     }
 }
 

@@ -5,8 +5,9 @@ using UnityEngine.EventSystems;
 public class CraftingSlot : Slot, IPointerClickHandler
 {
     [SerializeField] Color uncraftableColor, baseColor;
+    [SerializeField] UnityEvent<CraftingData> onClick;
+
     CraftingData craftingData;
-    UnityEvent<CraftingData> onClick;
 
     // Start is called once before the first execution of Update after the MonoBehaviour is created
     void Start()
@@ -22,6 +23,7 @@ public class CraftingSlot : Slot, IPointerClickHandler
 
     protected override void FocusOnItem()
     {
+        if (craftingData == null) return;
         EventManager.InvokeOnFocusItem(new (craftingData.CraftingRecipe.Output, 0));
     }
 

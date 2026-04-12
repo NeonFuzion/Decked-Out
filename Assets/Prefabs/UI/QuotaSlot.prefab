@@ -8,9 +8,37 @@ PrefabInstance:
     serializedVersion: 3
     m_TransformParent: {fileID: 0}
     m_Modifications:
+    - target: {fileID: 551918936120916175, guid: 08d660413ffecb94fa10005277789919, type: 3}
+      propertyPath: m_text
+      value: 
+      objectReference: {fileID: 0}
+    - target: {fileID: 551918936120916175, guid: 08d660413ffecb94fa10005277789919, type: 3}
+      propertyPath: m_fontSize
+      value: 36
+      objectReference: {fileID: 0}
+    - target: {fileID: 551918936120916175, guid: 08d660413ffecb94fa10005277789919, type: 3}
+      propertyPath: m_fontSizeBase
+      value: 36
+      objectReference: {fileID: 0}
+    - target: {fileID: 551918936120916175, guid: 08d660413ffecb94fa10005277789919, type: 3}
+      propertyPath: m_HorizontalAlignment
+      value: 2
+      objectReference: {fileID: 0}
     - target: {fileID: 3474119693045124251, guid: 08d660413ffecb94fa10005277789919, type: 3}
       propertyPath: m_Name
       value: QuotaSlot
+      objectReference: {fileID: 0}
+    - target: {fileID: 7699650346612156435, guid: 08d660413ffecb94fa10005277789919, type: 3}
+      propertyPath: m_SizeDelta.x
+      value: 140
+      objectReference: {fileID: 0}
+    - target: {fileID: 7699650346612156435, guid: 08d660413ffecb94fa10005277789919, type: 3}
+      propertyPath: m_AnchoredPosition.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 7699650346612156435, guid: 08d660413ffecb94fa10005277789919, type: 3}
+      propertyPath: m_AnchoredPosition.y
+      value: -55
       objectReference: {fileID: 0}
     - target: {fileID: 8857569904983569468, guid: 08d660413ffecb94fa10005277789919, type: 3}
       propertyPath: m_Pivot.x

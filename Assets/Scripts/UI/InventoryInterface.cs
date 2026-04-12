@@ -5,7 +5,6 @@ public class InventoryInterface : MonoBehaviour
 {
     [SerializeField] GameObject playerGameObject;
     [SerializeField] Transform equipmentSlots, itemSlots;
-    [SerializeField] ItemFocus itemFocus;
     [SerializeField] TextMeshProUGUI statsDisplay;
     [SerializeField] Color32[] inventoryColors;
 

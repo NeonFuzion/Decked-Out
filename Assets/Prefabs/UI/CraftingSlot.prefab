@@ -214,6 +214,7 @@ MonoBehaviour:
   image: {fileID: 8988661542948989911}
   emptyImage: {fileID: 5925014934159773570}
   uncraftableColor: {r: 1, g: 0.6560503, b: 0.17295581, a: 1}
+  baseColor: {r: 1, g: 0.78823537, b: 0.29411766, a: 1}
 --- !u!1 &3669178904465706099
 GameObject:
   m_ObjectHideFlags: 0
