@@ -9,10 +9,8 @@ MonoBehaviour:
   m_GameObject: {fileID: 0}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 063266b61378ac543a2fc434312a4d2b, type: 3}
-  m_Name: Berserker
-  m_EditorClassIdentifier: 
-  abilityName: Berserker
-  description: Increases Attack by 15% for 10 seconds after killing an enemy.
-  attackBoost: 0.15
-  duration: 10
+  m_Script: {fileID: 11500000, guid: 3bd00e680c63daf45b86d27be0d03029, type: 3}
+  m_Name: Recipes
+  m_EditorClassIdentifier: Assembly-CSharp::CraftingRecipes
+  recipes:
+  - {fileID: 11400000, guid: aa85473ede2fe75478c8bc04ed566336, type: 2}

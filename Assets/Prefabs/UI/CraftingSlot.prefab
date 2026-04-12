@@ -210,9 +210,9 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::CraftingSlot
   amountText: {fileID: 551918936120916175}
-  backgroundImage: {fileID: 0}
-  image: {fileID: 0}
-  emptyImage: {fileID: 0}
+  backgroundImage: {fileID: 539908277252066555}
+  image: {fileID: 8988661542948989911}
+  emptyImage: {fileID: 5925014934159773570}
   uncraftableColor: {r: 1, g: 0.6560503, b: 0.17295581, a: 1}
 --- !u!1 &3669178904465706099
 GameObject:

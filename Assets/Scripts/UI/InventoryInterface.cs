@@ -17,7 +17,6 @@ public class InventoryInterface : MonoBehaviour
 
     void Awake()
     {
-        EventManager.AddOnFocusItemListener(FocusOnItem);
         EventManager.AddOnInventoryUpdatedListener(UpdateInventory);
         EventManager.AddOnPickupItemListener(PickupItem);
         EventManager.AddOnDropItemListener((int inte, bool boole) => {
@@ -102,14 +101,14 @@ public class InventoryInterface : MonoBehaviour
     {
         if (index == lastHeldItemIndex && isEquiped == isLastHeldItemEquiped) return;
 
-        ItemStack oldItem = isLastHeldItemEquiped ? new (inventory.GetEquipment(lastHeldItemIndex)) : inventory.GetItem(lastHeldItemIndex);
+        ItemStack oldItem = isLastHeldItemEquiped ? inventory.GetEquipAsStack(inventory.GetEquipment(lastHeldItemIndex)) : inventory.GetItem(lastHeldItemIndex);
         ItemStack newItem = null;
 
         if (!oldItem.Item) return;
         // Checking to see if both oldItem and newItem are both equipment
-        ItemStack temp = isEquiped ? new (inventory.GetEquipment(index)) : inventory.GetItem(index);
+        ItemStack temp = isEquiped ? inventory.GetEquipAsStack(inventory.GetEquipment(index)) : inventory.GetItem(index);
 
-        if (temp != null && temp.Item && (isEquiped || isLastHeldItemEquiped) && (oldItem.Item as Equipment == null) != (temp.Item as Equipment == null)) return;
+        if (temp != null && (isEquiped || isLastHeldItemEquiped) && oldItem.Item as Equipment == null != (temp.Item as Equipment == null)) return;
 
         // Moving old item into new slot
         if (isEquiped)
@@ -149,24 +148,5 @@ public class InventoryInterface : MonoBehaviour
         {
             inventory.AddItemAtIndex(newItem.Item, lastHeldItemIndex, newItem.Amount);
         }
-    }
-
-    void FocusOnItem(int index, bool isEquiped, Transform itemSlot)
-    {
-        int itemAmount = 1;
-        Item item;
-        if (isEquiped)
-        {
-            item = inventory.GetEquipment(index);
-        }
-        else
-        {
-            if (inventory.GetItem(index) == null) return;
-            ItemStack slot = inventory.GetItem(index);
-            item = slot.Item;
-            itemAmount = slot.Amount;
-        }
-
-        itemFocus.DisplayItemStats(item, itemAmount);
     }
 }

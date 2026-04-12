@@ -17,6 +17,15 @@ public abstract class Slot : MonoBehaviour, IPointerEnterHandler, IPointerExitHa
         amountText.SetText(amount <= 1 ? "" : amount.ToString());
     }
 
+    protected virtual void FocusOnItem()
+    {
+        Inventory inventory = Inventory.Instance;
+        ItemStack output = isEquiped ? inventory.GetEquipAsStack(inventory.GetEquipment(index)) : inventory.GetItem(index);
+        
+        if (output == null) return;
+        EventManager.InvokeOnFocusItem(output);
+    }
+
     public virtual void UpdateItem(Sprite sprite, int amount)
     {
         isEmpty = false;
@@ -50,7 +59,7 @@ public abstract class Slot : MonoBehaviour, IPointerEnterHandler, IPointerExitHa
     public void OnPointerEnter(PointerEventData eventData)
     {
         if (isEmpty) return;
-        EventManager.InvokeOnFocusItem(index, isEquiped, transform);
+        FocusOnItem();
     }
 
     public void OnPointerExit(PointerEventData eventData)

@@ -14,6 +14,7 @@ public enum PlayerStat
 {
     None,
     Attack, Magic, Defense, Health,
+    Mana, ManaRegen,
     ReactionAffinity, StaggerMultiplier, DefensePenetration,
     PhysicalDamageBonus, FireDamageBonus, WaterDamageBonus,
     WindDamageBonus, EarthDamageBonus, LightningDamageBonus,
@@ -37,9 +38,13 @@ public class StatBoost
     
     public PlayerStat Stat { get => stat; }
     public float Amount { get => amount; }
+    public static string GetValueAsString(PlayerStat stat, float amount)
+    {
+        return Stats.IsPercentage(stat) ? amount * 100 + "%" : amount + "";
+    }
     public override string ToString()
     {
-        string amountStr = Stats.IsPercentage(stat) ? amount * 100 + "%" : amount + "";
+        string amountStr = GetValueAsString(stat, amount);
         return $"{stat} +{amountStr}";
     }
 }

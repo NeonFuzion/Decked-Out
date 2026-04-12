@@ -5080,3 +5080,5 @@ MonoBehaviour:
     position: {x: 11, y: 7}
   - prefab: {fileID: 3789489369730254920, guid: 08d57c32797eeed47897d08a736d4ea0, type: 3}
     position: {x: 12, y: 3}
+  - prefab: {fileID: 8731708309190630192, guid: ee7fcefab0f9cd94dad36dc09d3ca78f, type: 3}
+    position: {x: -6.25, y: 3.25}

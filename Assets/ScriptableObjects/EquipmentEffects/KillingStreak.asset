@@ -13,7 +13,5 @@ MonoBehaviour:
   m_Name: KillingStreak
   m_EditorClassIdentifier: Assembly-CSharp::KillingStreakSO
   abilityName: Killing Streak
-  description: After slaying a foe, increase the attack of the next hit by 50%.
+  description: After slaying a foe, increase the Attack of the next hit by 50%.
   attackBoost: 0.5
-  duration: 5
-  cooldown: 0

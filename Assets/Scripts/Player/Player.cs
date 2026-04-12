@@ -51,8 +51,10 @@ public class Player : Being
             { PlayerStat.Magic, 10 },
             { PlayerStat.Defense, 1 },
             { PlayerStat.Health, 100 },
+            { PlayerStat.Mana, 100 },
+            { PlayerStat.ManaRegen, 5 },
             { PlayerStat.ReactionAffinity, 10 },
-            { PlayerStat.StaggerMultiplier, 100 },
+            { PlayerStat.StaggerMultiplier, 1 },
             { PlayerStat.DefensePenetration, 0 },
             { PlayerStat.PhysicalDamageBonus, 0 },
             { PlayerStat.FireDamageBonus, 0 },
@@ -167,7 +169,7 @@ public class Player : Being
                 if (str.ToString().ToUpper().Equals(str)) statStr += " ";
                 statStr += str;
             }
-            output += $"<br>{statStr}: {CalculateStat(stat)}";
+            output += $"<br>{statStr}: {StatBoost.GetValueAsString(stat, CalculateStat(stat))}";
         }
         return output;
     }

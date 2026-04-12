@@ -14,9 +14,10 @@ public static class EventManager
     static UnityEvent onMenuOpened = new UnityEvent();
     static UnityEvent onInventoryUpdated = new UnityEvent();
     static UnityEvent onUnfocusItem = new ();
+    static UnityEvent onOpenCraftingMenu = new ();
     static UnityEvent<int, bool> onPickupItem = new ();
     static UnityEvent<int, bool> onDropItem = new ();
-    static UnityEvent<int, bool, Transform> onFocusItem = new UnityEvent<int, bool, Transform>();
+    static UnityEvent<ItemStack> onFocusItem = new ();
     static UnityEvent<DialogueData[]> onDialogueStarted = new UnityEvent<DialogueData[]>();
     static UnityEvent<Collider2D[], AttackData> onEnemyDataAcquired = new ();
 
@@ -100,6 +101,16 @@ public static class EventManager
         onUnfocusItem?.Invoke();
     }
 
+    public static void AddOnOpenCraftingMenu(UnityAction unityAction)
+    {
+        onOpenCraftingMenu?.AddListener(unityAction);
+    }
+
+    public static void InvokeOnOpenCraftingMenu()
+    {
+        onOpenCraftingMenu?.Invoke();
+    }
+
     public static void AddOnPickupItemListener(UnityAction<int, bool> unityAction)
     {
         onPickupItem?.AddListener(unityAction);
@@ -120,14 +131,14 @@ public static class EventManager
         onDropItem?.Invoke(index, isEquiped);
     }
     
-    public static void AddOnFocusItemListener(UnityAction<int, bool, Transform> focusAction)
+    public static void AddOnFocusItemListener(UnityAction<ItemStack> focusAction)
     {
         onFocusItem?.AddListener(focusAction);
     }
 
-    public static void InvokeOnFocusItem(int index, bool isEquipment, Transform item)
+    public static void InvokeOnFocusItem(ItemStack itemStack)
     {
-        onFocusItem?.Invoke(index, isEquipment, item);
+        onFocusItem?.Invoke(itemStack);
     }
 
     public static void AddOnDialogueStartedListener(UnityAction<DialogueData[]> listener)

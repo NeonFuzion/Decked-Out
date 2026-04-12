@@ -14,7 +14,8 @@ public class ItemFocus : MonoBehaviour
     {
         rectTransform.GetComponent<Image>().raycastTarget = false;
 
-        EventManager.AddOnUnfocusItemListener(() => gameObject.SetActive(false));
+        EventManager.AddOnFocusItemListener(DisplayItemStats);
+        EventManager.AddOnUnfocusItemListener(() => rectTransform.gameObject.SetActive(false));
     }
 
     // Update is called once per frame
@@ -90,16 +91,18 @@ public class ItemFocus : MonoBehaviour
         }
     }
 
-    public void DisplayItemStats(Item item, int amount = 1)
+    public void DisplayItemStats(ItemStack itemStack)
     {
+        int amount = itemStack.Amount;
+        Item item = itemStack.Item;
         Update();
-        gameObject.SetActive(true);
+        rectTransform.gameObject.SetActive(true);
         
         focusName.SetText(item.ItemName);
         focusType.SetText("Item");
         focusDescription.SetText(item.Description);
 
-        if (amount > 1) focusAmount.SetText($"Owned: {amount}");
+        if (amount > 0) focusAmount.SetText($"Owned: {amount}");
         else focusAmount.gameObject.SetActive(false);
 
         focusMainStats.gameObject.SetActive(false);

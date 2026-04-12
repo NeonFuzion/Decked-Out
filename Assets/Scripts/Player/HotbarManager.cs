@@ -5,7 +5,6 @@ using UnityEngine.Events;
 public class HotbarManager : MonoBehaviour
 {
     [SerializeField] UnityEvent<Weapon> onSetWeaponAsMainHand;
-    [SerializeField] UnityEvent<Skill> onSetCatalystAsMainHand;
 
     MainHand mainHand;
     MainHand[] hotbar;

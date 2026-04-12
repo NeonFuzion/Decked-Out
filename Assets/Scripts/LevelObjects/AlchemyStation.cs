@@ -1,13 +1,13 @@
 using UnityEngine;
 
-public class AlchemyStation : MonoBehaviour
+public class AlchemyStation : RoomObject
 {
-    [SerializeField] GameObject prefabCraftingMenu;
+    CraftingMenu craftingMenu;
 
     // Start is called once before the first execution of Update after the MonoBehaviour is created
     void Start()
     {
-
+        
     }
 
     // Update is called once per frame
@@ -18,6 +18,17 @@ public class AlchemyStation : MonoBehaviour
 
     public void LoadCraftingMenu()
     {
-        
+        UIManager.Instance.OpenMenu(craftingMenu.gameObject);
+        craftingMenu.Initialize();
+    }
+
+    public override RoomObjectData Initialize(DungeonGenerator dungeonGenerator)
+    {
+        return new(true);
+    }
+
+    public override void LoadData(RoomObjectData roomObjectData, DungeonGenerator dungeonGenerator)
+    {
+        craftingMenu = FindAnyObjectByType<CraftingMenu>(FindObjectsInactive.Include);
     }
 }

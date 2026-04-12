@@ -93,16 +93,15 @@ public class Inventory : MonoBehaviour
 
     public ItemStack GetItem(int index)
     {
-        ItemStack stack = items[index];
-
-        if (stack == null) return null;
-        if (!stack.Item) return null;
-        return stack;
+        return items[index];
     }
 
     public Equipment GetEquipment(int index)
     {
-        return equiped[index];
+        Equipment equipment = equiped[index];
+
+        if (equipment) return equipment;
+        return null;
     }
 
     public int GetItemCount() => items.Length;
@@ -143,7 +142,7 @@ public class Inventory : MonoBehaviour
         return oldItem;
     }
 
-    public bool AddEquipment(Equipment equipment)
+    public Equipment AddEquipment(Equipment equipment)
     {
         // Setting useful variables
         int index = -1;
@@ -166,9 +165,10 @@ public class Inventory : MonoBehaviour
         }
 
         // Adding equipment if index is found
-        if (index == -1) return false;
+        if (index == -1) return equipment;
+        Equipment oldEquipment = equiped[index];
         equiped[index] = equipment;
-        return true;
+        return oldEquipment;
     }
 
     public ItemStack AddItemAtIndex(Item item, int index, int amount = 1)
@@ -274,6 +274,12 @@ public class Inventory : MonoBehaviour
         Equipment result = equiped[index];
         equiped[index] = null;
         return result;
+    }
+
+    public ItemStack GetEquipAsStack(Equipment equipment)
+    {
+        if (!equipment) return null;
+        return new (equipment);
     }
 }
 

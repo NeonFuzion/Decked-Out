@@ -14,38 +14,19 @@ public class CraftingMenu : MonoBehaviour
 
     void Awake()
     {
-        EventManager.AddOnFocusItemListener(FocusOnItem);
+        
     }
 
     // Start is called once before the first execution of Update after the MonoBehaviour is created
     void Start()
     {
-        inventory = Inventory.Instance;
+        
     }
 
     // Update is called once per frame
     void Update()
     {
         
-    }
-
-    void FocusOnItem(int index, bool isEquiped, Transform itemSlot)
-    {
-        int itemAmount = 1;
-        Item item;
-        if (isEquiped)
-        {
-            item = inventory.GetEquipment(index);
-        }
-        else
-        {
-            if (inventory.GetItem(index) == null) return;
-            ItemStack slot = inventory.GetItem(index);
-            item = slot.Item;
-            itemAmount = slot.Amount;
-        }
-
-        itemFocus.DisplayItemStats(item, itemAmount);
     }
 
     void SelectCraftingRecipe(CraftingData craftingData)
@@ -71,16 +52,7 @@ public class CraftingMenu : MonoBehaviour
 
         // Hide old recipes & ingredients
         foreach (Transform material in materialsParent) material.gameObject.SetActive(false);
-        foreach (Transform recipe in recipeParent) recipeParent.gameObject.SetActive(false);
-        
-        // Find all materials in inventory
-        List<ItemStack> materials = new ();
-        for (int i = 0; i < inventory.GetItemCount(); i++)
-        {
-            ItemStack inventoryItem = inventory.GetItem(i);
-            if (materials.Contains(inventoryItem)) continue;
-            materials.Add(inventoryItem);
-        }
+        foreach (Transform recipe in recipeParent) recipe.gameObject.SetActive(false);
 
         // Find all recipes that contain materials that exist in inventory even if they can't be fully crafted
         List<CraftingData> visibleRecipes = new ();
@@ -92,21 +64,14 @@ public class CraftingMenu : MonoBehaviour
             List<ItemStack> availableIngredients = new ();
             recipe.Ingredients.ToList().ForEach(ingredient =>
             {
-                ItemStack inventoryStack = materials.Find(stack => stack.Item == ingredient.Item);
-                if (inventoryStack != null)
-                {
-                    isMaterialFound = true;
-                    availableIngredients.Add(inventoryStack);
-                }
-                else
-                {
-                    availableIngredients.Add(new (ingredient.Item, 0));
-                }
+                ItemStack inventoryStack = inventory.FindItem(ingredient.Item); //materials.Find(stack => stack != null || stack.Item || stack.Item == ingredient.Item);
 
-                if (inventoryStack.Amount < ingredient.Amount)
-                {
-                    isCraftable = false;
-                }
+                if (inventoryStack == null) return;
+                isMaterialFound = true;
+                availableIngredients.Add(inventoryStack);
+
+                if (inventoryStack.Amount >= ingredient.Amount) return;
+                isCraftable = false;
             });
 
             if (!isMaterialFound) return;
@@ -116,7 +81,8 @@ public class CraftingMenu : MonoBehaviour
         // Populate recipes
         for (int i = 0; i < visibleRecipes.Count; i++)
         {
-            GameObject recipeChild = i >= recipeParent.childCount ? Instantiate(prefabCraftingSlot) : recipeParent.GetChild(i).gameObject;
+            GameObject recipeChild = i >= recipeParent.childCount ? Instantiate(prefabCraftingSlot, recipeParent) : recipeParent.GetChild(i).gameObject;
+            if (!recipeChild.activeInHierarchy) recipeChild.SetActive(true);
             CraftingSlot craftingSlot = recipeChild.GetComponent<CraftingSlot>();
             craftingSlot.Initialize(visibleRecipes[i], SelectCraftingRecipe);
         }
@@ -124,12 +90,18 @@ public class CraftingMenu : MonoBehaviour
 
     public void Initialize()
     {
+        if (!inventory) inventory = Inventory.Instance;
+
         UpdateCraftingMenu();
     }
 
     public void CraftItem()
     {
-        
+        currentRecipe.Ingredients.ToList().ForEach(stack =>
+        {
+            inventory.RemoveItem(stack.Item, stack.Amount);
+        });
+        inventory.AddItem(currentRecipe.Output);
     }
 }
 
