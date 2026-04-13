@@ -1,0 +1,20 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: b50c26e1a4b691644b6c6e1766af6db9, type: 3}
+  m_Name: RoyalLeggingsRecipe
+  m_EditorClassIdentifier: Assembly-CSharp::CraftingRecipe
+  output: {fileID: 11400000, guid: c5678bee6c17993489013c3e7261fb5f, type: 2}
+  ingredients:
+  - item: {fileID: 11400000, guid: 621998c626019dc49b577c5cf80ca132, type: 2}
+    amount: 8
+  - item: {fileID: 11400000, guid: 28bb038692fa1204687d9119574d3181, type: 2}
+    amount: 3

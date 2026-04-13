@@ -69,25 +69,11 @@ public class Inventory : MonoBehaviour
         equiped.ToList().ForEach(equip =>
         {
             if (!equip) return;
-            Accessory accessory = equip as Accessory;
+            Armor armor = equip as Armor;
 
-            if (!accessory) return;
-            PassiveEffect passiveEffect = accessory.PassiveEffectSO.Initialize(gameObject, equipmentEffectsManager);
+            if (!armor) return;
+            PassiveEffect passiveEffect = armor.PassiveEffectSO.Initialize(gameObject, equipmentEffectsManager);
             equipmentEffectsManager.AddPassiveEffect(passiveEffect);
-
-            // Set bonuses for accessories
-            if (!accessory.SetBonus) return;
-            int setCount = 1;
-            SetBonus curPieceSet = accessory.SetBonus;
-            foreach (Equipment otherEquip in equiped)
-            {
-                if (otherEquip is not Accessory) continue;
-                SetBonus setBonus = (otherEquip as Accessory).SetBonus;
-                if (setBonus == curPieceSet) setCount++;
-            }
-
-            if (setCount >= 2) curPieceSet.TwoPieceBonus();
-            if (setCount >= 4) curPieceSet.FourPieceBonus();
         });
     }
 
@@ -109,7 +95,7 @@ public class Inventory : MonoBehaviour
 
     public ItemStack FindItem(Item item)
     {
-        return items.ToList().Find(stack => stack.Item == item);
+        return items.ToList().Find(stack => stack != null && stack.Item == item);
     }
 
     public void UpdateItems(ItemStack[] items)
@@ -124,17 +110,17 @@ public class Inventory : MonoBehaviour
         // Creating specific equipment types for later
         MainHand mainHand = equipment as MainHand;
         Armor armor = equipment as Armor;
-        Accessory accessory = equipment as Accessory;
+        SkillTomeSO skillTome = equipment as SkillTomeSO;
 
         int armorIndex = Equipment.GetEquipmentIndex(armor);
-        int accessoryIndex = Equipment.GetEquipmentIndex(accessory);
+        int skillTomeIndex = Equipment.GetEquipmentIndex(skillTome);
         int mainHandIndex = Equipment.GetEquipmentIndex(mainHand);
 
         // Filtering for incorrect equipment index
         if (armor && index != armorIndex + (int)armor.ArmorPiece) return equipment;
-        if (accessory && (index >= accessoryIndex + 4 || index < accessoryIndex)) return equipment;
+        if (skillTome && (index >= skillTomeIndex + 4 || index < skillTomeIndex)) return equipment;
         if (mainHand && (index >= mainHandIndex + 4 || index < mainHandIndex)) return equipment;
-        if (!armor && !accessory && !mainHand) return equipment;
+        if (!armor && !skillTome && !mainHand) return equipment;
 
         // Moving equipment from items into equipment array
         Equipment oldItem = equiped[index];

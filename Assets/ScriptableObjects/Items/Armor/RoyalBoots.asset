@@ -10,12 +10,12 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 837deb2943aa0a74f9f32b89824e0e02, type: 3}
-  m_Name: RoyalCrestplate
+  m_Name: RoyalBoots
   m_EditorClassIdentifier: Assembly-CSharp::Armor
-  itemName: Royal Chestplate
-  description: A larger piece of armor used to protect a person's body.
-  sprite: {fileID: -1416208706, guid: 1529019942676c14784c63a0b641aa78, type: 3}
-  defense: 7
-  armorPiece: 1
-  passiveEffectSO: {fileID: 11400000, guid: 92c91d688743f624daff6f5141da915f, type: 2}
+  itemName: Royal Boots
+  description: Decorated foot coverings that were cleaned often.
+  sprite: {fileID: -888290317, guid: 1529019942676c14784c63a0b641aa78, type: 3}
+  defense: 3
+  armorPiece: 3
+  passiveEffectSO: {fileID: 11400000, guid: 40532c6ac1e579f478c62adb16ec905b, type: 2}
   substats: []

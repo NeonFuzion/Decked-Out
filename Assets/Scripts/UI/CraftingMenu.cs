@@ -6,6 +6,7 @@ public class CraftingMenu : MonoBehaviour
 {
     [SerializeField] CraftingRecipes craftingRecipes;
     [SerializeField] Transform materialsParent, recipeParent;
+    [SerializeField] CraftingSlot selectedCraftableSlot;
     [SerializeField] GameObject prefabQuotaSlot, prefabCraftingSlot;
 
     Inventory inventory;
@@ -34,6 +35,7 @@ public class CraftingMenu : MonoBehaviour
     {
         currentCraftingData = craftingData;
         CraftingRecipe currentRecipe = craftingData.CraftingRecipe;
+        selectedCraftableSlot.UpdateItem(currentRecipe.Output.Sprite, 0);
 
         for (int i = 0; i < currentRecipe.Ingredients.Length; i++)
         {
@@ -51,11 +53,10 @@ public class CraftingMenu : MonoBehaviour
 
     void UpdateCraftingMenu()
     {
-        if (!gameObject.activeInHierarchy) return;
-
         // Hide old recipes & ingredients
         foreach (Transform material in materialsParent) material.gameObject.SetActive(false);
         foreach (Transform recipe in recipeParent) recipe.gameObject.SetActive(false);
+        selectedCraftableSlot.ResetItem();
 
         // Find all recipes that contain materials that exist in inventory even if they can't be fully crafted
         visibleRecipes.Clear();
@@ -68,12 +69,11 @@ public class CraftingMenu : MonoBehaviour
             {
                 ItemStack inventoryStack = inventory.FindItem(ingredient.Item); //materials.Find(stack => stack != null || stack.Item || stack.Item == ingredient.Item);
 
-                if (inventoryStack == null) return;
-                isMaterialFound = true;
-                availableIngredients.Add(inventoryStack);
+                int amount = inventoryStack != null ? inventoryStack.Amount : 0;
+                if (amount < ingredient.Amount) isCraftable = false;
+                if (amount > 0) isMaterialFound = true;
 
-                if (inventoryStack.Amount >= ingredient.Amount) return;
-                isCraftable = false;
+                availableIngredients.Add(new (ingredient.Item, amount));
             });
 
             if (!isMaterialFound) return;
@@ -92,16 +92,22 @@ public class CraftingMenu : MonoBehaviour
 
     public void Initialize()
     {
-        if (!inventory) inventory = Inventory.Instance;
-
-        visibleRecipes = new ();
-        allRecipes = craftingRecipes.Recipes.ToList();
+        if (!inventory)
+        {
+            inventory = Inventory.Instance;
+            allRecipes = craftingRecipes.Recipes.ToList();
+        }
+        if (visibleRecipes == null)
+        {
+            visibleRecipes = new ();
+        }
 
         UpdateCraftingMenu();
     }
 
     public void CraftItem()
     {
+        if (currentCraftingData == null) return;
         if (!currentCraftingData.IsCraftable) return;
         CraftingRecipe currentRecipe = currentCraftingData.CraftingRecipe;
         currentRecipe.Ingredients.ToList().ForEach(stack =>
@@ -109,9 +115,11 @@ public class CraftingMenu : MonoBehaviour
             inventory.RemoveItem(stack.Item, stack.Amount);
         });
         inventory.AddItem(currentRecipe.Output);
-
         UpdateCraftingMenu();
-        SelectCraftingRecipe(visibleRecipes.Find(data => data.CraftingRecipe == currentRecipe));
+        CraftingData data = visibleRecipes.Find(data => data.CraftingRecipe == currentRecipe);
+
+        if (data == null) return;
+        SelectCraftingRecipe(data);
     }
 }
 

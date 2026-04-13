@@ -4,8 +4,6 @@ using UnityEngine.UI;
 
 public class UIManager : MonoBehaviour
 {
-    public static UIManager Instance { get; private set; }
-
     [SerializeField] Button quitButton;
     [SerializeField] GameObject defaultMenu;
     [SerializeField] UnityEvent onMenuOpened, onMenuClosed;
@@ -14,7 +12,7 @@ public class UIManager : MonoBehaviour
 
     void Awake()
     {
-        Instance = this;
+        EventManager.AddOnMenuOpenedListener(OpenMenu);
     }
 
     // Start is called once before the first execution of Update after the MonoBehaviour is created
@@ -42,6 +40,7 @@ public class UIManager : MonoBehaviour
     public void CloseMenu()
     {
         if (quitButton) quitButton.onClick.RemoveAllListeners();
+        EventManager.InvokeOnUnfocusItem();
         menu.SetActive(false);
 
         onMenuClosed?.Invoke();

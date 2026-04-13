@@ -202,8 +202,13 @@ public class Player : Being
                 Armor armor = equipment as Armor;
                 baseStats[PlayerStat.Defense] += armor.Defense;
 
-                if (armor.Substats.Length == 0) continue;
-                percentageStats[armor.SecondaryStat.Stat] += armor.SecondaryStat.Amount;
+                armor.Substats.ToList().ForEach(substat =>
+                {
+                    float amount = substat.Amount;
+                    PlayerStat stat = substat.Stat;
+                    BoostType boostType = Stats.IsPercentage(stat) ? BoostType.Percentage : BoostType.Flat;
+                    IncrementStat(stat, amount, boostType);
+                });
             }
         }
     }

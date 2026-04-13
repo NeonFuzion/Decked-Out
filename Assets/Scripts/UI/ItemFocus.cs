@@ -64,14 +64,6 @@ public class ItemFocus : MonoBehaviour
         focusAbility.SetText("");
     }
 
-    void ProcessAccessory(Accessory accessory)
-    {
-        if (!accessory) return;
-        focusType.SetText("Accessory");
-        focusAbility.gameObject.SetActive(true);
-        focusAbility.SetText($"<i>{accessory.PassiveEffectSO.Name}</i>\n{accessory.PassiveEffectSO.Description}");
-    }
-
     void ProcessArmor(Armor armor)
     {
         if (!armor) return;
@@ -79,9 +71,10 @@ public class ItemFocus : MonoBehaviour
         focusMainStats.gameObject.SetActive(true);
         focusMainStats.SetText($"Defense: {armor.Defense}");
 
-        if (armor.SecondaryStat.Stat != PlayerStat.None)
+        if (armor.PassiveEffectSO)
         {
-            focusMainStats.text += "\n" + armor.SecondaryStat;
+            focusAbility.gameObject.SetActive(true);
+            focusAbility.SetText($"<i>{armor.PassiveEffectSO.Name}</i>\n{armor.PassiveEffectSO.Description}");
         }
 
         if (armor.Substats.Length > 0)
@@ -110,7 +103,6 @@ public class ItemFocus : MonoBehaviour
         focusAbility.gameObject.SetActive(false);
 
         ProcessWeapon(item as Weapon);
-        ProcessAccessory(item as Accessory);
         ProcessArmor(item as Armor);
         // NOTE: Add main hand support
 

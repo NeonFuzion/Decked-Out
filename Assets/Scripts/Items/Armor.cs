@@ -4,14 +4,13 @@ using UnityEngine;
 public class Armor : Equipment
 {
     [SerializeField] float defense;
-    [SerializeField] StatBoost secondaryStat;
     [SerializeField] ArmorPiece armorPiece;
-
-    StatBoost[] substats;
+    [SerializeField] PassiveEffectSO passiveEffectSO;
+    [SerializeField] StatBoost[] substats;
 
     public float Defense { get => defense; }
-    public StatBoost SecondaryStat { get => secondaryStat; }
     public ArmorPiece ArmorPiece { get => armorPiece; }
+    public PassiveEffectSO PassiveEffectSO { get => passiveEffectSO; }
     public StatBoost[] Substats { get => substats; }
 }
 

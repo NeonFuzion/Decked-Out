@@ -15,10 +15,7 @@ MonoBehaviour:
   itemName: Royal Crown
   description: A headpiece meant to signify status.
   sprite: {fileID: 1729119030, guid: 1529019942676c14784c63a0b641aa78, type: 3}
-  craftingRecipe: []
   defense: 3
-  secondaryStat:
-    stat: 0
-    amount: 0
   armorPiece: 0
-  setBonus: {fileID: 0}
+  passiveEffectSO: {fileID: 11400000, guid: 38a40ac64d90d5e4db7513076fbaa290, type: 2}
+  substats: []

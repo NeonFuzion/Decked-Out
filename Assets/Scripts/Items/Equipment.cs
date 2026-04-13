@@ -6,7 +6,7 @@ public class Equipment : Item
     {
         if (item as MainHand) return 0;
         if (item as Armor) return 4;
-        if (item as Accessory) return 8;
+        if (item as SkillTomeSO) return 8;
         return -1;
     }
 }

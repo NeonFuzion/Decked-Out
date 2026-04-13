@@ -14,11 +14,8 @@ MonoBehaviour:
   m_EditorClassIdentifier: Assembly-CSharp::Armor
   itemName: Royal Leggings
   description: Protective armor meant for shielding the users legs.
-  sprite: {fileID: -1416208706, guid: 1529019942676c14784c63a0b641aa78, type: 3}
-  craftingRecipe: []
+  sprite: {fileID: -1057934272, guid: 1529019942676c14784c63a0b641aa78, type: 3}
   defense: 5
-  secondaryStat:
-    stat: 0
-    amount: 0
   armorPiece: 2
-  setBonus: {fileID: 0}
+  passiveEffectSO: {fileID: 11400000, guid: 8ebf0b050eab9b14e885bc362f63868d, type: 2}
+  substats: []
