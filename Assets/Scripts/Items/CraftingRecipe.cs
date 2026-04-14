@@ -1,6 +1,6 @@
 using UnityEngine;
 
-[CreateAssetMenu]
+[CreateAssetMenu(menuName = "Recipe/CraftingRecipe")]
 public class CraftingRecipe : ScriptableObject
 {
     [SerializeField] Item output;

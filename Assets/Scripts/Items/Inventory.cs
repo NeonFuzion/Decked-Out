@@ -110,7 +110,7 @@ public class Inventory : MonoBehaviour
         // Creating specific equipment types for later
         MainHand mainHand = equipment as MainHand;
         Armor armor = equipment as Armor;
-        SkillTomeSO skillTome = equipment as SkillTomeSO;
+        SkillTome skillTome = equipment as SkillTome;
 
         int armorIndex = Equipment.GetEquipmentIndex(armor);
         int skillTomeIndex = Equipment.GetEquipmentIndex(skillTome);

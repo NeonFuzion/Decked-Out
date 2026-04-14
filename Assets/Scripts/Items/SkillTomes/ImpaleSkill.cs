@@ -1,6 +1,7 @@
 using UnityEngine;
 
-public class ImpaleSO : SkillTomeSO
+[CreateAssetMenu(menuName = "SkillTome/Impale")]
+public class ImpaleSkill : SkillTome
 {
     [SerializeField] ProjectileData icicleProjectile;
 

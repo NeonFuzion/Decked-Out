@@ -21912,12 +21912,9 @@ MonoBehaviour:
   - {fileID: 11400000, guid: 8a2aa7d254434064185493ff77be73ad, type: 2}
   - {fileID: 11400000, guid: e7c5e078198eea54e89ac34f4618188c, type: 2}
   - {fileID: 11400000, guid: ac32ef838b0813649bba75d9d40ae4ad, type: 2}
-  - {fileID: 11400000, guid: c7cb9ef21156b85499a02df96eb32612, type: 2}
   - {fileID: 11400000, guid: 48fa4c98e9ffbfb40838be989f1a6c52, type: 2}
   - {fileID: 11400000, guid: 588bbdb6e6de2d147bb553373ee0b758, type: 2}
   - {fileID: 11400000, guid: c5678bee6c17993489013c3e7261fb5f, type: 2}
-  - {fileID: 11400000, guid: 38e8d5906f0a0984287c89c3e06eea13, type: 2}
-  - {fileID: 11400000, guid: 6757d09c42eb69b438ca1b2b010a363a, type: 2}
   onRoomCleared:
     m_PersistentCalls:
       m_Calls:

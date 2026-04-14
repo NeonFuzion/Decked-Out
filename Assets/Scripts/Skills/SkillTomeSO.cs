@@ -1,7 +1,7 @@
 using System;
 using UnityEngine;
 
-public abstract class SkillTomeSO : Equipment
+public abstract class SkillTome : Equipment
 {
     [SerializeField] Sprite uiSprite;
     [SerializeField] CombatResource combatResource;
