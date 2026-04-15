@@ -10,14 +10,14 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 4a6f36eb5340df446aeb7d5c5304bf33, type: 3}
-  m_Name: Impale
+  m_Name: ImpaleTome
   m_EditorClassIdentifier: Assembly-CSharp::ImpaleSkill
   itemName: Impale
   description: Impale a nearby target with a large ice crystal, inflicting Slowness
     and high stagger damage.
-  sprite: {fileID: 0}
-  uiSprite: {fileID: 0}
+  sprite: {fileID: 4508763084341604983, guid: b668de8228cb96c499d868fcd4804bd2, type: 3}
   combatResource: 1
   resourceCost: 10
   cooldown: 5
-  icicleProjectile: {fileID: 0}
+  damageValues: 10000000
+  icicleProjectile: {fileID: 11400000, guid: d470b368aebd76947999c6d207c6f07f, type: 2}

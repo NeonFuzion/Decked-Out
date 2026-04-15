@@ -84,6 +84,21 @@ public class ItemFocus : MonoBehaviour
         }
     }
 
+    void ProcessSkillTome(SkillTome skillTome)
+    {
+        if (!skillTome) return;
+        int maxDamage = skillTome.DamageValues.Max();
+        int minDamage = skillTome.DamageValues.Min();
+        string text = maxDamage == minDamage ? maxDamage + "" : $"{minDamage} ~ {maxDamage}";
+
+        focusMainStats.gameObject.SetActive(true);
+        focusSubStats.gameObject.SetActive(true);
+
+        focusType.SetText("Skill Tome");
+        focusMainStats.SetText($"Damage: {text}");
+        focusSubStats.SetText($"Cost: {skillTome.ResourceCost} {skillTome.CombatResource}<br>Cooldown: {skillTome.Cooldown} sec.");
+    }
+
     public void DisplayItemStats(ItemStack itemStack)
     {
         int amount = itemStack.Amount;
@@ -104,6 +119,7 @@ public class ItemFocus : MonoBehaviour
 
         ProcessWeapon(item as Weapon);
         ProcessArmor(item as Armor);
+        ProcessSkillTome(item as SkillTome);
         // NOTE: Add main hand support
 
         ResizeTooltip();

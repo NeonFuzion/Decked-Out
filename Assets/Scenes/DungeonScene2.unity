@@ -21908,13 +21908,8 @@ MonoBehaviour:
   - {fileID: 8725815417773111655, guid: e667bd9e90f687d43b79810bab9b9bb7, type: 3}
   lootPool:
   - {fileID: 11400000, guid: 85b7f61a53a167d4495115b993cf1e34, type: 2}
-  - {fileID: 11400000, guid: e063420b637182a43987679886f939a4, type: 2}
   - {fileID: 11400000, guid: 8a2aa7d254434064185493ff77be73ad, type: 2}
-  - {fileID: 11400000, guid: e7c5e078198eea54e89ac34f4618188c, type: 2}
-  - {fileID: 11400000, guid: ac32ef838b0813649bba75d9d40ae4ad, type: 2}
-  - {fileID: 11400000, guid: 48fa4c98e9ffbfb40838be989f1a6c52, type: 2}
-  - {fileID: 11400000, guid: 588bbdb6e6de2d147bb553373ee0b758, type: 2}
-  - {fileID: 11400000, guid: c5678bee6c17993489013c3e7261fb5f, type: 2}
+  - {fileID: 11400000, guid: 9d8c77600ebef794da8cafae8f1a19d3, type: 2}
   onRoomCleared:
     m_PersistentCalls:
       m_Calls:

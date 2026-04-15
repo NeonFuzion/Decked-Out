@@ -12,13 +12,13 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: ccefeaff58ce65b4b9393a54b3790126, type: 3}
   m_Name: ImpaleProjectile
   m_EditorClassIdentifier: Assembly-CSharp::ProjectileData
-  speed: 0
+  speed: 10
   maxHeight: 0
-  maxDistance: 0
+  maxDistance: 20
   homingSpeed: 0
-  damageRadius: 0
+  damageRadius: 0.5
   rotationOffset: 0
-  sprite: {fileID: -1206457260079896047, guid: 731d475d53b493746ac0416ddd30f694, type: 3}
+  sprite: {fileID: 3780857010512416547, guid: 45dabadda83c68e4093411e8e9bb6036, type: 3}
   trajectoryCurve:
     serializedVersion: 2
     m_Curve:
@@ -43,4 +43,4 @@ MonoBehaviour:
     m_PreInfinity: 2
     m_PostInfinity: 2
     m_RotationOrder: 4
-  projectileEffect: {fileID: 0}
+  projectileEffect: {fileID: 11400000, guid: 7a8317eec20210f46854884cfe5b27ba, type: 2}
