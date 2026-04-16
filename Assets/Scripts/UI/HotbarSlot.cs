@@ -6,7 +6,7 @@ public class HotbarSlot : MonoBehaviour
 {
     [SerializeField] Sprite emptySprite;
     [SerializeField] TextMeshProUGUI inputText;
-    [SerializeField] GameObject cooldownHolder, resourceHolder;
+    [SerializeField] GameObject cooldownHolder;
     [SerializeField] Image mainHandImage;
 
     bool isEmpty;
