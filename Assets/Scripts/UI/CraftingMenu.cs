@@ -12,7 +12,7 @@ public class CraftingMenu : MonoBehaviour
     Inventory inventory;
     CraftingData currentCraftingData;
     List<CraftingData> visibleRecipes;
-    List<CraftingRecipe> allRecipes;
+    List<CraftingRecipeSO> allRecipes;
 
     void Awake()
     {
@@ -34,7 +34,7 @@ public class CraftingMenu : MonoBehaviour
     void SelectCraftingRecipe(CraftingData craftingData)
     {
         currentCraftingData = craftingData;
-        CraftingRecipe currentRecipe = craftingData.CraftingRecipe;
+        CraftingRecipeSO currentRecipe = craftingData.CraftingRecipe;
         selectedCraftableSlot.UpdateItem(currentRecipe.Output.Sprite, 0);
 
         for (int i = 0; i < currentRecipe.Ingredients.Length; i++)
@@ -109,7 +109,7 @@ public class CraftingMenu : MonoBehaviour
     {
         if (currentCraftingData == null) return;
         if (!currentCraftingData.IsCraftable) return;
-        CraftingRecipe currentRecipe = currentCraftingData.CraftingRecipe;
+        CraftingRecipeSO currentRecipe = currentCraftingData.CraftingRecipe;
         currentRecipe.Ingredients.ToList().ForEach(stack =>
         {
             inventory.RemoveItem(stack.Item, stack.Amount);
@@ -126,10 +126,10 @@ public class CraftingMenu : MonoBehaviour
 public class CraftingData
 {
     bool isCraftable;
-    CraftingRecipe craftingRecipe;
+    CraftingRecipeSO craftingRecipe;
     ItemStack[] availableIngredients;
 
-    public CraftingData(bool isCraftable, CraftingRecipe craftingRecipe, ItemStack[] availableIngredients)
+    public CraftingData(bool isCraftable, CraftingRecipeSO craftingRecipe, ItemStack[] availableIngredients)
     {
         this.isCraftable = isCraftable;
         this.craftingRecipe = craftingRecipe;
@@ -137,6 +137,6 @@ public class CraftingData
     }
 
     public bool IsCraftable { get => isCraftable; }
-    public CraftingRecipe CraftingRecipe { get => craftingRecipe; }
+    public CraftingRecipeSO CraftingRecipe { get => craftingRecipe; }
     public ItemStack[] AvailableIngredients { get => availableIngredients; }
 }

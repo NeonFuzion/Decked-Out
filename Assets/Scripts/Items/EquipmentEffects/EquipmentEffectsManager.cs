@@ -10,7 +10,6 @@ public class EquipmentEffectsManager : MonoBehaviour
 
     List<TimerPair> timePairs;
     List<PassiveEffect> passiveEffects;
-    List<SetBonus> setBonuses;
 
     public UnityEvent OnDamageDealt { get => onDamageDealt; }
     public UnityEvent OnDamageTaken { get => onDamageTaken; }
@@ -70,16 +69,6 @@ public class EquipmentEffectsManager : MonoBehaviour
     public void RemovePassiveEffect(PassiveEffect equipmentEffect)
     {
         passiveEffects.Remove(equipmentEffect);
-    }
-
-    public void AddSetBonusEffect(SetBonus setBonus)
-    {
-        setBonuses.Add(setBonus);
-    }
-
-    public void RemoveSetBonusEffect(SetBonus setBonus)
-    {
-        setBonuses.Remove(setBonus);
     }
 
     public void InvokeOnDamageDealt() => onDamageDealt?.Invoke();

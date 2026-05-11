@@ -9,12 +9,12 @@ public class WeaponParent : MonoBehaviour
     [SerializeField] SpriteRenderer weaponSpriteRenderer;
     [SerializeField] Transform slash, damageOrigin;
     [SerializeField] Animator slashAnimator;
+    [SerializeField] WeaponSO weapon;
     [SerializeField] UnityEvent onAttack, onEnemyHit, onKill;
 
     bool attacking;
     int curAnimIndex;
 
-    Weapon weapon;
     Shooter shooter;
     Inventory inventory;
     Animator animator;
@@ -85,7 +85,7 @@ public class WeaponParent : MonoBehaviour
         animator.CrossFade("WeaponIdle", 0, 0);
     }
 
-    public void UpdateWeapon(Weapon weapon)
+    public void UpdateWeapon(WeaponSO weapon)
     {
         this.weapon = weapon;
 
@@ -94,9 +94,9 @@ public class WeaponParent : MonoBehaviour
         curAnimIndex = 0;
         weaponSpriteRenderer.sprite = weapon.Sprite;
 
-        if (weapon as Sword)
+        if (weapon as SwordSO)
         {
-            Sword sword = weapon as Sword;
+            SwordSO sword = weapon as SwordSO;
             damageOrigin.localPosition = Vector3.right * sword.AttackRange;
             slash.parent.localPosition = Vector3.right * sword.AttackRange;
             slash.localScale = Vector3.one * sword.AttackRange;

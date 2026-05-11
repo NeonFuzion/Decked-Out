@@ -1,7 +1,7 @@
 using UnityEngine;
 
 [CreateAssetMenu(menuName = "Item/Equipment/Armor")]
-public class Armor : Equipment
+public class ArmorSO : EquipmentSO
 {
     [SerializeField] float defense;
     [SerializeField] ArmorPiece armorPiece;

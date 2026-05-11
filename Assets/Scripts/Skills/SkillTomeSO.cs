@@ -1,7 +1,7 @@
 using System;
 using UnityEngine;
 
-public abstract class SkillTome : Equipment
+public abstract class SkillTomeSO : EquipmentSO
 {
     [SerializeField] CombatResource combatResource;
     [SerializeField] int resourceCost;

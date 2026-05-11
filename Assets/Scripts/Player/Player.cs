@@ -194,12 +194,12 @@ public class Player : Being
         Inventory inventory = Inventory.Instance;
         for (int i = 0; i < inventory.GetEquipmentCount(); i++)
         {
-            Equipment equipment = inventory.GetEquipment(i);
+            EquipmentSO equipment = inventory.GetEquipment(i);
 
             if (!equipment) continue;
-            if (equipment as Armor)
+            if (equipment as ArmorSO)
             {
-                Armor armor = equipment as Armor;
+                ArmorSO armor = equipment as ArmorSO;
                 baseStats[PlayerStat.Defense] += armor.Defense;
 
                 armor.Substats.ToList().ForEach(substat =>

@@ -4,14 +4,14 @@ using UnityEngine;
 
 public class ItemObject : MonoBehaviour
 {
-    [SerializeField] Item item;
+    [SerializeField] ItemSO item;
 
     Transform player;
     LayerMask playerLayer;
 
     bool chase;
 
-    public Item Item { get => item; }
+    public ItemSO Item { get => item; }
 
     // Start is called before the first frame update
     void Start()
@@ -36,7 +36,7 @@ public class ItemObject : MonoBehaviour
         chase = false;
     }
 
-    public void Instantiate(Item item)
+    public void Instantiate(ItemSO item)
     {
         this.item = item;
 

@@ -2,7 +2,7 @@ using System;
 using UnityEngine;
 using UnityEngine.Events;
 
-public abstract class Weapon : MainHand
+public abstract class WeaponSO : EquipmentSO
 {
     [SerializeField] float attackSpeed, knockback;
     [SerializeField] Element element;

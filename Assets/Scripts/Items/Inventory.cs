@@ -13,13 +13,13 @@ public class Inventory : MonoBehaviour
     [SerializeField] Canvas itemCanvas;
     [SerializeField] Transform itemParent;
     [SerializeField] EquipmentEffectsManager equipmentEffectsManager;
-    [SerializeField] Equipment[] startingEquipment;
+    [SerializeField] EquipmentSO[] startingEquipment;
     [SerializeField] ItemStack[] startingItems;
 
     int itemCount;
 
     ItemStack[] items;
-    Equipment[] equiped;
+    EquipmentSO[] equiped;
 
     private void Awake()
     {
@@ -44,10 +44,10 @@ public class Inventory : MonoBehaviour
 
     void Initialize()
     {
-        equiped = new Equipment[12];
-        foreach (Equipment equipment in startingEquipment)
+        equiped = new EquipmentSO[12];
+        foreach (EquipmentSO equipment in startingEquipment)
         {
-            int start = Equipment.GetEquipmentIndex(equipment);
+            int start = EquipmentSO.GetEquipmentIndex(equipment);
             for (int i = start; i < start + 4; i++)
             {
                 if (equiped[i]) continue;
@@ -69,7 +69,7 @@ public class Inventory : MonoBehaviour
         equiped.ToList().ForEach(equip =>
         {
             if (!equip) return;
-            Armor armor = equip as Armor;
+            ArmorSO armor = equip as ArmorSO;
 
             if (!armor) return;
             PassiveEffect passiveEffect = armor.PassiveEffectSO.Initialize(gameObject, equipmentEffectsManager);
@@ -82,9 +82,9 @@ public class Inventory : MonoBehaviour
         return items[index];
     }
 
-    public Equipment GetEquipment(int index)
+    public EquipmentSO GetEquipment(int index)
     {
-        Equipment equipment = equiped[index];
+        EquipmentSO equipment = equiped[index];
 
         if (equipment) return equipment;
         return null;
@@ -93,7 +93,7 @@ public class Inventory : MonoBehaviour
     public int GetItemCount() => items.Length;
     public int GetEquipmentCount() => equiped.Length;
 
-    public ItemStack FindItem(Item item)
+    public ItemStack FindItem(ItemSO item)
     {
         return items.ToList().Find(stack => stack != null && stack.Item == item);
     }
@@ -103,18 +103,18 @@ public class Inventory : MonoBehaviour
         this.items = items;
     }
 
-    public Equipment AddEquipmentAtIndex(Equipment equipment, int index)
+    public EquipmentSO AddEquipmentAtIndex(EquipmentSO equipment, int index)
     {
         if (!equipment) return null;
 
         // Creating specific equipment types for later
-        MainHand mainHand = equipment as MainHand;
-        Armor armor = equipment as Armor;
-        SkillTome skillTome = equipment as SkillTome;
+        ConsumablesSO mainHand = equipment as ConsumablesSO;
+        ArmorSO armor = equipment as ArmorSO;
+        SkillTomeSO skillTome = equipment as SkillTomeSO;
 
-        int armorIndex = Equipment.GetEquipmentIndex(armor);
-        int skillTomeIndex = Equipment.GetEquipmentIndex(skillTome);
-        int mainHandIndex = Equipment.GetEquipmentIndex(mainHand);
+        int armorIndex = EquipmentSO.GetEquipmentIndex(armor);
+        int skillTomeIndex = EquipmentSO.GetEquipmentIndex(skillTome);
+        int mainHandIndex = EquipmentSO.GetEquipmentIndex(mainHand);
 
         // Filtering for incorrect equipment index
         if (armor && index != armorIndex + (int)armor.ArmorPiece) return equipment;
@@ -123,17 +123,17 @@ public class Inventory : MonoBehaviour
         if (!armor && !skillTome && !mainHand) return equipment;
 
         // Moving equipment from items into equipment array
-        Equipment oldItem = equiped[index];
+        EquipmentSO oldItem = equiped[index];
         equiped[index] = equipment;
         return oldItem;
     }
 
-    public Equipment AddEquipment(Equipment equipment)
+    public EquipmentSO AddEquipment(EquipmentSO equipment)
     {
         // Setting useful variables
         int index = -1;
-        int startIndex = Equipment.GetEquipmentIndex(equipment);
-        Armor armor = equipment as Armor;
+        int startIndex = EquipmentSO.GetEquipmentIndex(equipment);
+        ArmorSO armor = equipment as ArmorSO;
 
         // Finding correct index
         if (armor)
@@ -152,12 +152,12 @@ public class Inventory : MonoBehaviour
 
         // Adding equipment if index is found
         if (index == -1) return equipment;
-        Equipment oldEquipment = equiped[index];
+        EquipmentSO oldEquipment = equiped[index];
         equiped[index] = equipment;
         return oldEquipment;
     }
 
-    public ItemStack AddItemAtIndex(Item item, int index, int amount = 1)
+    public ItemStack AddItemAtIndex(ItemSO item, int index, int amount = 1)
     {
         if (!item) return null;
         ItemStack slot = items[index];
@@ -169,7 +169,7 @@ public class Inventory : MonoBehaviour
         }
         else if (slot.Item == item)
         {
-            if (item as Equipment) return new (item);
+            if (item as EquipmentSO) return new (item);
             slot.AddItems(amount);
             return null;
         }
@@ -180,10 +180,10 @@ public class Inventory : MonoBehaviour
         }
     }
 
-    public bool AddItem(Item item, int amount = 1)
+    public bool AddItem(ItemSO item, int amount = 1)
     {
         if (!item) return false;
-        Equipment equipment = item as Equipment;
+        EquipmentSO equipment = item as EquipmentSO;
 
         if (equipment && itemCount == max) return false;
         int index = -1;
@@ -211,7 +211,7 @@ public class Inventory : MonoBehaviour
         return true;
     }
 
-    public ItemStack RemoveItem(Item item, int amount = -1)
+    public ItemStack RemoveItem(ItemSO item, int amount = -1)
     {
         for (int i = 0; i < max; i++)
         {
@@ -242,27 +242,27 @@ public class Inventory : MonoBehaviour
         return null;
     }
 
-    public Equipment RemoveEquipment(Equipment target)
+    public EquipmentSO RemoveEquipment(EquipmentSO target)
     {
         for (int i = 0; i < equiped.Length; i++)
         {
-            Equipment equipment = equiped[i];
+            EquipmentSO equipment = equiped[i];
 
             if (equipment != target) continue;
-            Equipment result = RemoveEquipmentAtIndex(i);
+            EquipmentSO result = RemoveEquipmentAtIndex(i);
             if (result) return equipment;
         }
         return null;
     }
 
-    public Equipment RemoveEquipmentAtIndex(int index)
+    public EquipmentSO RemoveEquipmentAtIndex(int index)
     {
-        Equipment result = equiped[index];
+        EquipmentSO result = equiped[index];
         equiped[index] = null;
         return result;
     }
 
-    public ItemStack GetEquipAsStack(Equipment equipment)
+    public ItemStack GetEquipAsStack(EquipmentSO equipment)
     {
         if (!equipment) return null;
         return new (equipment);
@@ -272,13 +272,13 @@ public class Inventory : MonoBehaviour
 [System.Serializable]
 public class ItemStack
 {
-    [SerializeField] Item item;
+    [SerializeField] ItemSO item;
     [SerializeField] int amount;
 
-    public Item Item { get => item; }
+    public ItemSO Item { get => item; }
     public int Amount { get => amount; }
 
-    public ItemStack(Item item, int amount = 1)
+    public ItemStack(ItemSO item, int amount = 1)
     {
         this.item = item;
         this.amount = amount;

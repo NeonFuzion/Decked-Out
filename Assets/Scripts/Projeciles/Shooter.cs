@@ -16,7 +16,7 @@ public class Shooter : MonoBehaviour
 
     }
 
-    public void FireProjectile(ProjectileData projectileData, Vector3 targetPosition, out Projectile projectile)
+    public void FireProjectile(ProjectileSO projectileData, Vector3 targetPosition, out Projectile projectile)
     {
         projectile = Instantiate(projectilePrefab, firePoint.position, Quaternion.identity).GetComponent<Projectile>();
         projectile.Initialize(projectileData, targetPosition);

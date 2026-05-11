@@ -1,11 +1,11 @@
 using UnityEngine;
 
 [CreateAssetMenu(menuName = "Recipe/CraftingRecipe")]
-public class CraftingRecipe : ScriptableObject
+public class CraftingRecipeSO : ScriptableObject
 {
-    [SerializeField] Item output;
+    [SerializeField] ItemSO output;
     [SerializeField] ItemStack[] ingredients;
 
-    public Item Output { get => output; }
+    public ItemSO Output { get => output; }
     public ItemStack[] Ingredients { get => ingredients; }
 }

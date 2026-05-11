@@ -5,7 +5,7 @@ public class RockySlime : Enemy
 {
     [SerializeField] int projectileCount;
     [SerializeField] float jumpTime, attackCooldown, jumpThreshold, minProjectileDistance, maxProjectileDistance, projectileAngleRange;
-    [SerializeField] ProjectileData natureProjectile, earthProjectile;
+    [SerializeField] ProjectileSO natureProjectile, earthProjectile;
 
     float curJumpTime, currentAttackCooldown;
 
@@ -113,7 +113,7 @@ public class RockySlime : Enemy
     {
         bool projectileRandom = Random.value > 0.5f;
         float targetAngle = Mathf.Atan2(target.position.y - transform.position.y, target.position.x - transform.position.x);
-        ProjectileData projectileData = projectileRandom ? earthProjectile : natureProjectile;
+        ProjectileSO projectileData = projectileRandom ? earthProjectile : natureProjectile;
 
         for (float i = 0; i < projectileCount; i++)
         {

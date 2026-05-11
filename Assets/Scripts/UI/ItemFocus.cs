@@ -50,7 +50,7 @@ public class ItemFocus : MonoBehaviour
         rectTransform.sizeDelta = new (rectTransform.rect.width, height);
     }
 
-    void ProcessWeapon(Weapon weapon)
+    void ProcessWeapon(WeaponSO weapon)
     {
         if (!weapon) return;
         int maxDamage = weapon.Animations.Max(animation => animation.Damage);
@@ -64,7 +64,7 @@ public class ItemFocus : MonoBehaviour
         focusAbility.SetText("");
     }
 
-    void ProcessArmor(Armor armor)
+    void ProcessArmor(ArmorSO armor)
     {
         if (!armor) return;
         focusType.SetText("Armor");
@@ -84,7 +84,7 @@ public class ItemFocus : MonoBehaviour
         }
     }
 
-    void ProcessSkillTome(SkillTome skillTome)
+    void ProcessSkillTome(SkillTomeSO skillTome)
     {
         if (!skillTome) return;
         int maxDamage = skillTome.DamageValues.Max();
@@ -102,7 +102,7 @@ public class ItemFocus : MonoBehaviour
     public void DisplayItemStats(ItemStack itemStack)
     {
         int amount = itemStack.Amount;
-        Item item = itemStack.Item;
+        ItemSO item = itemStack.Item;
         Update();
         rectTransform.gameObject.SetActive(true);
         
@@ -117,9 +117,9 @@ public class ItemFocus : MonoBehaviour
         focusSubStats.gameObject.SetActive(false);
         focusAbility.gameObject.SetActive(false);
 
-        ProcessWeapon(item as Weapon);
-        ProcessArmor(item as Armor);
-        ProcessSkillTome(item as SkillTome);
+        ProcessWeapon(item as WeaponSO);
+        ProcessArmor(item as ArmorSO);
+        ProcessSkillTome(item as SkillTomeSO);
         // NOTE: Add main hand support
 
         ResizeTooltip();

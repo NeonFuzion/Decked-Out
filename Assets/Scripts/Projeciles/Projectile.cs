@@ -8,7 +8,7 @@ public class Projectile : MonoBehaviour
 
     float totalDistance, groundDirection;
 
-    ProjectileData projectileData;
+    ProjectileSO projectileData;
     ProjectileEffect projectileEffect;
     Vector2 targetPosition, startPosition;
     SpriteRenderer visualSpriteRenderer, shadowSpriteRenderer;
@@ -17,7 +17,7 @@ public class Projectile : MonoBehaviour
     
     public UnityEvent<Collider2D[], Projectile> OnHit { get => onHit; }
     public UnityEvent<Projectile> OnExpire { get => onExpire; }
-    public ProjectileData ProjectileData { get => projectileData; }
+    public ProjectileSO ProjectileData { get => projectileData; }
     public ProjectileEffect ProjectileEffect { get => projectileEffect; }
 
     // Start is called once before the first execution of Update after the MonoBehaviour is created
@@ -69,7 +69,7 @@ public class Projectile : MonoBehaviour
         }
     }
 
-    public void Initialize(ProjectileData projectileData, Vector2 targetPosition)
+    public void Initialize(ProjectileSO projectileData, Vector2 targetPosition)
     {
         this.projectileData = projectileData;
 

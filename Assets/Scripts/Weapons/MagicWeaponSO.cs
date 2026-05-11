@@ -4,16 +4,16 @@ using System.Linq;
 using UnityEngine;
 
 [CreateAssetMenu(menuName = "Item/Weapon/MagicWeapon")]
-public class MagicWeapon : Weapon
+public class MagicWeaponSO : WeaponSO
 {
     [SerializeField] int projectileCount, projectileSpread;
     [SerializeField] GameObject prefabProjectile;
-    [SerializeField] ProjectileData projectileData;
+    [SerializeField] ProjectileSO projectileData;
 
     public int ProjectileCount { get => projectileCount; }
     public int ProjectileSpread { get => projectileSpread; }
     public GameObject PrefabProjectile { get => prefabProjectile; }
-    public ProjectileData ProjectileData { get => projectileData; }
+    public ProjectileSO ProjectileData { get => projectileData; }
 
     public override void AttackActionHandle(int attackIndex, Transform transform, Vector2 mousePosition, Shooter shooter)
     {

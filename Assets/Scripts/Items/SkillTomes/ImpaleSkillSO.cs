@@ -1,9 +1,9 @@
 using UnityEngine;
 
 [CreateAssetMenu(menuName = "SkillTome/ImpaleTome")]
-public class ImpaleSkill : SkillTome
+public class ImpaleSkillSO : SkillTomeSO
 {
-    [SerializeField] ProjectileData icicleProjectile;
+    [SerializeField] ProjectileSO icicleProjectile;
 
     public override void ActivateEffects(Player player, int index)
     {

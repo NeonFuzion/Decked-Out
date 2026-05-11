@@ -5,11 +5,11 @@ using UnityEngine.UI;
 public class HotbarSlot : MonoBehaviour
 {
     [SerializeField] Sprite emptySprite;
-    [SerializeField] TextMeshProUGUI inputText;
-    [SerializeField] GameObject cooldownHolder;
-    [SerializeField] Image mainHandImage;
+    [SerializeField] TextMeshProUGUI inputText, cooldownText;
+    [SerializeField] Image image, cooldownImage;
 
     bool isEmpty;
+    float cooldown, currentCooldown;
 
     public bool IsEmpty { get => isEmpty; }
 
@@ -22,16 +22,36 @@ public class HotbarSlot : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        
+        if (currentCooldown <= 0) return;
+        currentCooldown -= Mathf.Min(Time.deltaTime, currentCooldown);
+        cooldownImage.fillAmount = currentCooldown / cooldown;
+        cooldownText.SetText(GetRoundedCooldown(cooldown));
+
+        if (currentCooldown > 0) return;
+        cooldownImage.fillAmount = 0;
+        cooldownText.SetText("");
     }
 
-    public void UpdateSprite(MainHand mainHand)
+    string GetRoundedCooldown(float currentCooldown)
     {
-        mainHandImage.sprite = emptySprite;
-        isEmpty = !mainHand;
+        return System.Math.Round(currentCooldown, 1) + "";
+    }
+
+    public void Initialize(Sprite sprite, float cooldown)
+    {
+        image.sprite = emptySprite;
+        isEmpty = !sprite;
 
         if (isEmpty) return;
-        mainHandImage.sprite = mainHand.Sprite;
-        mainHandImage.SetNativeSize();
+        this.cooldown = cooldown;
+        image.sprite = sprite;
+        image.SetNativeSize();
+    }
+
+    public void StartCooldown()
+    {
+        currentCooldown = cooldown;
+        cooldownImage.fillAmount = 1;
+        cooldownText.SetText(GetRoundedCooldown(cooldown));
     }
 }

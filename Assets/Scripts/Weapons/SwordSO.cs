@@ -4,7 +4,7 @@ using UnityEngine;
 using UnityEngine.Events;
 
 [CreateAssetMenu(menuName = "Item/Weapon/Sword")]
-public class Sword : Weapon
+public class SwordSO : WeaponSO
 {
     [SerializeField] float attackRange;
     [SerializeField] List<string> slashAnimations;

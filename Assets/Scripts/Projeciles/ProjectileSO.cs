@@ -1,7 +1,7 @@
 using UnityEngine;
 
 [CreateAssetMenu(menuName = "Item/Projectile/ProjectileData")]
-public class ProjectileData : ScriptableObject
+public class ProjectileSO : ScriptableObject
 {
     [SerializeField] float speed, maxHeight, maxDistance, homingSpeed, damageRadius, rotationOffset;
     [SerializeField] Sprite sprite;

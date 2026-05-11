@@ -77,9 +77,9 @@ public class TreasureChest : RoomObject
 public class TreasureChestData : RoomObjectData
 {
     public TreasureChestState CurrentTreasureChestState;
-    public List<Item> CommonDrops, RareDrops, SingleDrops;
+    public List<ItemSO> CommonDrops, RareDrops, SingleDrops;
 
-    public TreasureChestData(bool isActive, List<Item> commonDrops, List<Item> rareDrops, List<Item> singleDrops) : base(isActive)
+    public TreasureChestData(bool isActive, List<ItemSO> commonDrops, List<ItemSO> rareDrops, List<ItemSO> singleDrops) : base(isActive)
     {
         CurrentTreasureChestState = TreasureChestState.Unspawned;
 

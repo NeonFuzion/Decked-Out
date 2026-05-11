@@ -4,17 +4,17 @@ using UnityEngine.Events;
 
 public class HotbarManager : MonoBehaviour
 {
-    [SerializeField] UnityEvent<Weapon> onSetWeaponAsMainHand;
-
-    MainHand mainHand;
-    MainHand[] hotbar;
+    ConsumablesSO currentConsumable;
+    ConsumablesSO[] hotbar;
+    SkillTomeSO[] skillBar;
+    HotbarSlot[] hotbarUI, skillBarUI;
 
     int hotbarIndex;
 
     void Awake()
     {
         hotbarIndex = 0;
-        hotbar = new MainHand[4];
+        hotbar = new ConsumablesSO[4];
         EventManager.AddOnInventoryUpdatedListener(UpdateHotbar);
     }
 
@@ -35,9 +35,18 @@ public class HotbarManager : MonoBehaviour
         Inventory inventory = Inventory.Instance;
         for (int i = 0; i < 4; i++)
         {
-            hotbar[i] = inventory.GetEquipment(i) as MainHand;
+            ConsumablesSO consumable = inventory.GetEquipment(i) as ConsumablesSO;
+            hotbar[i] = consumable;
+            hotbarUI[i].Initialize(consumable.Sprite, consumable.Cooldown);
         }
         UpdateHotbarIndex(hotbarIndex);
+
+        for (int i = 4; i < 8; i++)
+        {
+            SkillTomeSO skillTome = inventory.GetEquipment(i) as SkillTomeSO;
+            skillBar[i - 4] = skillTome;
+            skillBarUI[i - 4].Initialize(skillTome.Sprite, skillTome.Cooldown);
+        }
     }
 
     public void UpdateHotbarIndex(int index)
@@ -45,13 +54,6 @@ public class HotbarManager : MonoBehaviour
         int tempIndex = Mathf.Max(index - 1, 0);
         if (!hotbar[tempIndex]) return;
         hotbarIndex = tempIndex;
-        mainHand = hotbar[hotbarIndex];
-
-        Weapon weapon = mainHand as Weapon;
-
-        if (weapon)
-        {
-            onSetWeaponAsMainHand?.Invoke(weapon);
-        }
+        currentConsumable = hotbar[hotbarIndex];
     }
 }

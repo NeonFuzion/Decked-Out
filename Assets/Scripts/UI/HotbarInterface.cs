@@ -5,6 +5,7 @@ public class HotbarInterface : MonoBehaviour
 {
     [SerializeField] RectTransform highlight;
     [SerializeField] HotbarSlot[] hotbarSlots;
+    //[SerializeField] 
 
     void Awake()
     {
@@ -37,7 +38,8 @@ public class HotbarInterface : MonoBehaviour
         Inventory inventory = Inventory.Instance;
         for (int i = 0; i < hotbarSlots.Length; i++)
         {
-            hotbarSlots[i].UpdateSprite(inventory.GetEquipment(i) as MainHand);
+            ConsumablesSO consumable = inventory.GetEquipment(i) as ConsumablesSO;
+            hotbarSlots[i].Initialize(consumable.Sprite, consumable.Cooldown);
         }
     }
 }

@@ -4,7 +4,7 @@ using UnityEngine;
 [CreateAssetMenu(menuName = "Recipe/CraftingRecipes")]
 public class CraftingRecipes : ScriptableObject
 {
-    [SerializeField] CraftingRecipe[] recipes;
+    [SerializeField] CraftingRecipeSO[] recipes;
 
-    public CraftingRecipe[] Recipes { get => recipes; }
+    public CraftingRecipeSO[] Recipes { get => recipes; }
 }

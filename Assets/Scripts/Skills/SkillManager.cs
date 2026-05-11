@@ -2,7 +2,7 @@ using UnityEngine;
 
 public class SkillManager : MonoBehaviour
 {
-    SkillTome skill;
+    SkillTomeSO skill;
 
     int skillComboIndex;
 
@@ -18,7 +18,7 @@ public class SkillManager : MonoBehaviour
         
     }
 
-    public void UpdateSkill(SkillTome skill)
+    public void UpdateSkill(SkillTomeSO skill)
     {
         this.skill = skill;
 

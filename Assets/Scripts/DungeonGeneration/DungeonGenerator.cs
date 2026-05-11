@@ -12,7 +12,7 @@ public class DungeonGenerator : MonoBehaviour
     [SerializeField] Tilemap wallTilemap, floorTilemap;
     [SerializeField] GameObject player, map, roomObjectParent, dungeonCreator;
     [SerializeField] GameObject[] enemies;
-    [SerializeField] Item[] lootPool;
+    [SerializeField] ItemSO[] lootPool;
     [SerializeField] UnityEvent onRoomCleared;
     [SerializeField] GameObject[] roomTransitions;
     [SerializeField] DungeonRoomLayout[] layouts, specialLayouts;
@@ -24,7 +24,7 @@ public class DungeonGenerator : MonoBehaviour
 
     public bool IsRoomCleared { get => currentRoom.IsSafe; set => currentRoom.IsSafe = value; }
 
-    public Item[] LootPool { get => lootPool; }
+    public ItemSO[] LootPool { get => lootPool; }
     public GameObject[] EnemyPool { get => enemies; }
 
     // Start is called once before the first execution of Update after the MonoBehaviour is created
