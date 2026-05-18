@@ -52,7 +52,7 @@ public static class EventManager
     public static void InvokeOnDropItem(int index, bool isEquiped) => onDropItem?.Invoke(index, isEquiped);
     
     public static void AddOnFocusItemListener(UnityAction<ItemStack> focusAction) => onFocusItem?.AddListener(focusAction);
-    public static void InvokeOnFocusItem(ItemStack itemStack) => onFocusItem?.Invoke(itemStack);
+    public static void InvokeOnFocusItem(ItemStack itemInstance) => onFocusItem?.Invoke(itemInstance);
 
     public static void AddOnDialogueStartedListener(UnityAction<DialogueData[]> listener) => onDialogueStarted?.AddListener(listener);
     public static void InvokeOnDialogueStarted(DialogueData[] data) => onDialogueStarted?.Invoke(data);

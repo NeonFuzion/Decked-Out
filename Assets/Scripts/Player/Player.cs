@@ -7,13 +7,15 @@ using UnityEngine.Events;
 
 public class Player : Being
 {
+    [SerializeField] float baseResourceRegen;
     [SerializeField] Transform sprite, dashCount;
+    [SerializeField] UnityEvent<float> onManaChanged;
     [SerializeField] UnityEvent<int, bool> onDamageInflicted;
 
-    Dictionary<PlayerStat, float> resetStats, baseStats, percentageStats, flatStats, stats;
+    Dictionary<PlayerStat, float> resetStats, baseStats, percentageStats, flatStats;
 
     int baseSpeed, curSpeed, dashSpdMulti, dashCharges;
-    float curDashTime, dashChargeTime, curDashChargeTime;
+    float curDashTime, dashChargeTime, curDashChargeTime, currentMana;
     bool dashing;
 
     Vector2 direction;
@@ -44,7 +46,6 @@ public class Player : Being
         dashing = false;
         inventory = Inventory.Instance;
 
-        ResetStats();
         resetStats = new ()
         {
             { PlayerStat.Attack, 10 },
@@ -66,6 +67,9 @@ public class Player : Being
             { PlayerStat.IceDamageBonus, 0 }
         };
 
+        ResetStats();
+        SetMana(CalculateStat(PlayerStat.Mana));
+
         spriteRenderer = sprite.GetComponent<SpriteRenderer>();
         animator = GetComponent<Animator>();
         rb = GetComponent<Rigidbody2D>();
@@ -81,23 +85,10 @@ public class Player : Being
     void Update()
     {
         if (Time.timeScale == 0) return;
-        curDashTime -= Time.deltaTime;
         spriteRenderer.flipX = direction.x > 0;
 
-        if (dashing) return;
-        animator.CrossFade("Player" + (direction.magnitude == 0 ? "Idle" : "Walk"), 0, 0);
-
-        if (dashCharges >= 3) return;
-        if (curDashChargeTime > 0)
-        {
-            curDashChargeTime -= Time.deltaTime;
-        }
-        else
-        {
-            dashCount.GetChild(dashCharges).gameObject.SetActive(true);
-            dashCharges++;
-            curDashChargeTime = dashChargeTime;
-        }
+        HandleDash();
+        HandleMana();
     }
 
     void FixedUpdate()
@@ -106,7 +97,7 @@ public class Player : Being
         rb.linearVelocity = Movement.normalized * Time.deltaTime * curSpeed;
     }
 
-    void DashHandle()
+    void ToggleDash()
     {
         health?.ToggleInvincibility();
         dashing = !dashing;
@@ -137,14 +128,56 @@ public class Player : Being
         {
             if (collider.gameObject.Equals(gameObject)) return;
             Health health = collider.GetComponent<Health>();
+            Stagger stagger = collider.GetComponent<Stagger>();
 
             if (!health) return;
             int damage = Mathf.RoundToInt(attackData.Damage * (1 + Mathf.Log(CalculateStat(PlayerStat.Attack)) / 20));
+            int staggerDamage = Mathf.RoundToInt(attackData.Stagger * CalculateStat(PlayerStat.StaggerMultiplier));
             health.TakeDamage(damage, attackData.Element, attackData.Origin);
+            stagger?.TakeStagger(staggerDamage);
 
             if (health.HP > 0) return;
             EventManager.InvokeOnKill();
         });
+    }
+
+    void IncrementMana(float amount)
+    {
+        SetMana(currentMana + amount);
+    }
+
+    void SetMana(float amount)
+    {
+        float maxMana = CalculateStat(PlayerStat.Mana);
+        currentMana = Mathf.Clamp(amount, 0, maxMana);
+        onManaChanged?.Invoke(currentMana / maxMana);
+    }
+
+    void HandleDash()
+    {
+        curDashTime -= Time.deltaTime;
+
+        if (dashing) return;
+        animator.CrossFade("Player" + (direction.magnitude == 0 ? "Idle" : "Walk"), 0, 0);
+
+        if (dashCharges >= 3) return;
+        if (curDashChargeTime > 0)
+        {
+            curDashChargeTime -= Time.deltaTime;
+        }
+        else
+        {
+            dashCount.GetChild(dashCharges).gameObject.SetActive(true);
+            dashCharges++;
+            curDashChargeTime = dashChargeTime;
+        }
+    }
+
+    void HandleMana()
+    {
+        if (currentMana >= CalculateStat(PlayerStat.Mana)) return;
+        float manaRegenRate = 1 + CalculateStat(PlayerStat.ManaRegen) / 100;
+        ReplenishMana(baseResourceRegen * manaRegenRate * Time.deltaTime);
     }
 
     Dictionary<PlayerStat, float> GetEmptyStats()
@@ -194,34 +227,22 @@ public class Player : Being
         Inventory inventory = Inventory.Instance;
         for (int i = 0; i < inventory.GetEquipmentCount(); i++)
         {
-            EquipmentSO equipment = inventory.GetEquipment(i);
+            EquipmentInstance equipInst = inventory.GetEquipment(i);
 
-            if (!equipment) continue;
-            if (equipment as ArmorSO)
+            if (equipInst == null) continue;
+            ArmorSO armor = equipInst.EquipmentData as ArmorSO;
+
+            if (armor == null) continue;
+            baseStats[PlayerStat.Defense] += armor.Defense;
+
+            armor.Substats.ToList().ForEach(substat =>
             {
-                ArmorSO armor = equipment as ArmorSO;
-                baseStats[PlayerStat.Defense] += armor.Defense;
-
-                armor.Substats.ToList().ForEach(substat =>
-                {
-                    float amount = substat.Amount;
-                    PlayerStat stat = substat.Stat;
-                    BoostType boostType = Stats.IsPercentage(stat) ? BoostType.Percentage : BoostType.Flat;
-                    IncrementStat(stat, amount, boostType);
-                });
-            }
+                float amount = substat.Amount;
+                PlayerStat stat = substat.Stat;
+                BoostType boostType = Stats.IsPercentage(stat) ? BoostType.Percentage : BoostType.Flat;
+                IncrementStat(stat, amount, boostType);
+            });
         }
-    }
-
-    public void UpdateStats()
-    {
-        resetStats.Keys.ToList().ForEach(stat =>
-        {
-            if (Stats.IsPercentage(stat))
-                stats[stat] = resetStats[stat] + percentageStats[stat];
-            else
-                stats[stat] = (resetStats[stat] + baseStats[stat]) * (1 + percentageStats[stat]) + flatStats[stat];
-        });
     }
 
     public void IncrementStat(PlayerStat stat, float amount, BoostType boostType)
@@ -236,6 +257,18 @@ public class Player : Being
                 break;
         }
     }
+
+    public bool ConsumeMana(float amount)
+    {
+        if (amount > currentMana) return false;
+        IncrementMana(-amount);
+        return true;
+    }
+
+    public void ReplenishMana(float amount)
+    {
+        IncrementMana(amount);
+    }
 }
 
 public enum BoostType { Percentage, Flat }
@@ -244,18 +277,20 @@ public class AttackData
 {
     Element element;
     Vector2 origin;
-    int damage;
+    int damage, stagger;
 
-    public AttackData(Element element, Vector2 origin, int damage)
+    public AttackData(Element element, Vector2 origin, int damage, int stagger)
     {
         this.element = element;
         this.origin = origin;
         this.damage = damage;
+        this.stagger = stagger;
     }
 
     public Element Element { get => element; }
     public Vector2 Origin { get => origin; }
     public int Damage { get => damage; }
+    public int Stagger { get => stagger; }
 }
 
 public abstract class AttackAugment

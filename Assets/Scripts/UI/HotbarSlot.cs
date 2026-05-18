@@ -4,9 +4,9 @@ using UnityEngine.UI;
 
 public class HotbarSlot : MonoBehaviour
 {
-    [SerializeField] Sprite emptySprite;
     [SerializeField] TextMeshProUGUI inputText, cooldownText;
     [SerializeField] Image image, cooldownImage;
+    [SerializeField] GameObject emptyImage;
 
     bool isEmpty;
     float cooldown, currentCooldown;
@@ -25,7 +25,7 @@ public class HotbarSlot : MonoBehaviour
         if (currentCooldown <= 0) return;
         currentCooldown -= Mathf.Min(Time.deltaTime, currentCooldown);
         cooldownImage.fillAmount = currentCooldown / cooldown;
-        cooldownText.SetText(GetRoundedCooldown(cooldown));
+        cooldownText.SetText(GetRoundedCooldown(currentCooldown));
 
         if (currentCooldown > 0) return;
         cooldownImage.fillAmount = 0;
@@ -39,13 +39,21 @@ public class HotbarSlot : MonoBehaviour
 
     public void Initialize(Sprite sprite, float cooldown)
     {
-        image.sprite = emptySprite;
         isEmpty = !sprite;
 
-        if (isEmpty) return;
-        this.cooldown = cooldown;
-        image.sprite = sprite;
-        image.SetNativeSize();
+        if (isEmpty)
+        {
+            image.gameObject.SetActive(false);
+            emptyImage.SetActive(true);
+        }
+        else
+        {
+            this.cooldown = cooldown;
+            image.sprite = sprite;
+            image.SetNativeSize();
+            image.gameObject.SetActive(true);
+            emptyImage.SetActive(false);
+        }
     }
 
     public void StartCooldown()

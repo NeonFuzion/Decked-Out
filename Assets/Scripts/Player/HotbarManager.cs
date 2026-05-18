@@ -1,13 +1,15 @@
-using System.Linq;
 using UnityEngine;
 using UnityEngine.Events;
 
 public class HotbarManager : MonoBehaviour
 {
+    [SerializeField] Player player;
+    [SerializeField] UnityEvent<int> onActivateSkill;
+
     ConsumablesSO currentConsumable;
     ConsumablesSO[] hotbar;
     SkillTomeSO[] skillBar;
-    HotbarSlot[] hotbarUI, skillBarUI;
+    float[] skillCooldowns;
 
     int hotbarIndex;
 
@@ -15,19 +17,15 @@ public class HotbarManager : MonoBehaviour
     {
         hotbarIndex = 0;
         hotbar = new ConsumablesSO[4];
+        skillBar = new SkillTomeSO[4];
+        skillCooldowns = new float[4];
         EventManager.AddOnInventoryUpdatedListener(UpdateHotbar);
     }
 
-    // Start is called once before the first execution of Update after the MonoBehaviour is created
-    void Start()
-    {
-        
-    }
-
-    // Update is called once per frame
     void Update()
     {
-        
+        for (int i = 0; i < skillCooldowns.Length; i++)
+            if (skillCooldowns[i] > 0) skillCooldowns[i] -= Time.deltaTime;
     }
 
     void UpdateHotbar()
@@ -35,25 +33,35 @@ public class HotbarManager : MonoBehaviour
         Inventory inventory = Inventory.Instance;
         for (int i = 0; i < 4; i++)
         {
-            ConsumablesSO consumable = inventory.GetEquipment(i) as ConsumablesSO;
-            hotbar[i] = consumable;
-            hotbarUI[i].Initialize(consumable.Sprite, consumable.Cooldown);
+            EquipmentInstance equipInst = inventory.GetEquipment(8 + i);
+            skillBar[i] = equipInst?.EquipmentData as SkillTomeSO;
+        }
+        for (int i = 0; i < 4; i++)
+        {
+            EquipmentInstance equipInst = inventory.GetEquipment(i);
+            hotbar[i] = equipInst?.EquipmentData as ConsumablesSO;
         }
         UpdateHotbarIndex(hotbarIndex);
-
-        for (int i = 4; i < 8; i++)
-        {
-            SkillTomeSO skillTome = inventory.GetEquipment(i) as SkillTomeSO;
-            skillBar[i - 4] = skillTome;
-            skillBarUI[i - 4].Initialize(skillTome.Sprite, skillTome.Cooldown);
-        }
     }
 
     public void UpdateHotbarIndex(int index)
     {
-        int tempIndex = Mathf.Max(index - 1, 0);
+        int tempIndex = Mathf.Clamp(index, 0, 3);
         if (!hotbar[tempIndex]) return;
         hotbarIndex = tempIndex;
         currentConsumable = hotbar[hotbarIndex];
+    }
+
+    public void ActivateSkill(int index)
+    {
+        if (index < 0 || index >= skillBar.Length) return;
+
+        SkillTomeSO skillTomeSO = skillBar[index];
+        if (skillTomeSO == null) return;
+        if (skillCooldowns[index] > 0) return;
+        if (!player.ConsumeMana(skillTomeSO.ResourceCost)) return;
+        skillCooldowns[index] = skillTomeSO.Cooldown;
+        skillTomeSO.ActivateEffects(player, 0);
+        onActivateSkill?.Invoke(index);
     }
 }

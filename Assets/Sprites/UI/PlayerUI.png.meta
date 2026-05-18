@@ -119,13 +119,13 @@ TextureImporter:
     serializedVersion: 2
     sprites:
     - serializedVersion: 2
-      name: PlayerUI_0
+      name: HealthBar
       rect:
         serializedVersion: 2
-        x: 9
-        y: 17
-        width: 39
-        height: 13
+        x: 1
+        y: 20
+        width: 37
+        height: 11
       alignment: 0
       pivot: {x: 0.5, y: 0.5}
       border: {x: 0, y: 0, z: 0, w: 0}
@@ -141,11 +141,11 @@ TextureImporter:
       edges: []
       weights: []
     - serializedVersion: 2
-      name: PlayerUI_1
+      name: ManaBarFill
       rect:
         serializedVersion: 2
-        x: 11
-        y: 4
+        x: 1
+        y: 10
         width: 9
         height: 9
       alignment: 0
@@ -163,11 +163,11 @@ TextureImporter:
       edges: []
       weights: []
     - serializedVersion: 2
-      name: PlayerUI_2
+      name: HealthBarFill
       rect:
         serializedVersion: 2
-        x: 20
-        y: 8
+        x: 10
+        y: 15
         width: 26
         height: 4
       alignment: 0
@@ -185,15 +185,15 @@ TextureImporter:
       edges: []
       weights: []
     - serializedVersion: 2
-      name: PlayerUI_3
+      name: DashBarFill
       rect:
         serializedVersion: 2
-        x: 20
-        y: 5
+        x: 10
+        y: 11
         width: 4
         height: 2
       alignment: 0
-      pivot: {x: 0, y: 0}
+      pivot: {x: 0.5, y: 0.5}
       border: {x: 0, y: 0, z: 0, w: 0}
       customData: 
       outline: []
@@ -202,6 +202,270 @@ TextureImporter:
       bones: []
       spriteID: 4b7dc6af2008d78418aad23db8ec23b4
       internalID: 1956863144
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: DashBar
+      rect:
+        serializedVersion: 2
+        x: 15
+        y: 11
+        width: 6
+        height: 3
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: bf61fa47977310e4ea78017dd172bc32
+      internalID: -1425826883
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: DashBarEdge
+      rect:
+        serializedVersion: 2
+        x: 21
+        y: 11
+        width: 7
+        height: 3
+      alignment: 9
+      pivot: {x: 0.425, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 7af90e82b670bf54f9b3bb40f94614b0
+      internalID: 1338470300
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: SkillBar
+      rect:
+        serializedVersion: 2
+        x: 37
+        y: 11
+        width: 39
+        height: 10
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: d91279223fad4f74685aad2f70cdae78
+      internalID: 770787763
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: SkillBarFill
+      rect:
+        serializedVersion: 2
+        x: 39
+        y: 23
+        width: 35
+        height: 8
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 95bcdf656eac62348a6c6f8fe7a0cb97
+      internalID: 236643869
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: ItemSlot
+      rect:
+        serializedVersion: 2
+        x: 77
+        y: 19
+        width: 12
+        height: 12
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 3c6e1ff7668ea724189863d4ca5be8f6
+      internalID: 749009712
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: NatureIcon
+      rect:
+        serializedVersion: 2
+        x: 71
+        y: 4
+        width: 6
+        height: 6
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 0425ec381621ce743b5763f127bf38a6
+      internalID: 1077704564
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: WaterIcon
+      rect:
+        serializedVersion: 2
+        x: 64
+        y: 4
+        width: 6
+        height: 6
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: af04af6ab991d8d4e923fd742c756e42
+      internalID: 382324685
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: IceIcon
+      rect:
+        serializedVersion: 2
+        x: 57
+        y: 4
+        width: 6
+        height: 6
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 89b3eef1eafaecd4dbaf4542528a743b
+      internalID: 1906813410
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: FireIcon
+      rect:
+        serializedVersion: 2
+        x: 50
+        y: 4
+        width: 6
+        height: 6
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 5bacbec4571fd3d4a9230d1902ae4e1e
+      internalID: -1064645450
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: ElectricIcon
+      rect:
+        serializedVersion: 2
+        x: 43
+        y: 4
+        width: 6
+        height: 6
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 5c6fbaca5b5543a489a59f4ef73832b8
+      internalID: -337947021
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: WindIcon
+      rect:
+        serializedVersion: 2
+        x: 36
+        y: 4
+        width: 6
+        height: 6
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 5b5932a42d356da49bc66de5beaab714
+      internalID: 769454541
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: EarthIcon
+      rect:
+        serializedVersion: 2
+        x: 29
+        y: 4
+        width: 6
+        height: 6
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 565322cb4815196459bb313c198fb16d
+      internalID: 18184437
       vertices: []
       indices: 
       edges: []
@@ -220,10 +484,22 @@ TextureImporter:
     spriteCustomMetadata:
       entries: []
     nameFileIdTable:
-      PlayerUI_0: -1199959443329451114
-      PlayerUI_1: -7072743717001298553
-      PlayerUI_2: 2484019787223908330
-      PlayerUI_3: 1956863144
+      DashBar: -1425826883
+      DashBarEdge: 1338470300
+      DashBarFill: 1956863144
+      EarthIcon: 18184437
+      ElectricIcon: -337947021
+      FireIcon: -1064645450
+      HealthBar: -1199959443329451114
+      HealthBarFill: 2484019787223908330
+      IceIcon: 1906813410
+      ItemSlot: 749009712
+      ManaBarFill: -7072743717001298553
+      NatureIcon: 1077704564
+      SkillBar: 770787763
+      SkillBarFill: 236643869
+      WaterIcon: 382324685
+      WindIcon: 769454541
   mipmapLimitGroupName: 
   pSDRemoveMatte: 0
   userData: 

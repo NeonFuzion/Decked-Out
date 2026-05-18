@@ -27,7 +27,7 @@ RectTransform:
   m_GameObject: {fileID: 2380571614757840618}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
   m_LocalPosition: {x: 0, y: 0, z: 0}
-  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_LocalScale: {x: 0.5, y: 0.5, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
   m_Father: {fileID: 7696933732198906900}
@@ -576,11 +576,17 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: a5d846c0ed75e9b42b93747f98807cb1, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::HotbarSlot
-  emptySprite: {fileID: -1132992148885968286, guid: 6d911a1466d52ca4d8614f4560138de3, type: 3}
   inputText: {fileID: 228970180877655791}
   cooldownText: {fileID: 2922887951472617858}
+  nameText: {fileID: 0}
   image: {fileID: 2137177453526350544}
   cooldownImage: {fileID: 1029937724137544998}
+  emptyImage: {fileID: 3673901180727789250}
+--- !u!1 &3673901180727789250 stripped
+GameObject:
+  m_CorrespondingSourceObject: {fileID: 4806529171523812403, guid: 5bc933ba9e624554fa542cfc118bb6b0, type: 3}
+  m_PrefabInstance: {fileID: 8090832695192566513}
+  m_PrefabAsset: {fileID: 0}
 --- !u!224 &7696933732198906900 stripped
 RectTransform:
   m_CorrespondingSourceObject: {fileID: 1916678612816119525, guid: 5bc933ba9e624554fa542cfc118bb6b0, type: 3}

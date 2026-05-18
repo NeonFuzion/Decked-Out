@@ -5,7 +5,7 @@ using UnityEngine.InputSystem;
 public class PlayerInputManager : MonoBehaviour, PlayerInputConfig.ICombatActions, PlayerInputConfig.IMenuActions, PlayerInputConfig.IDialogueActions, PlayerInputConfig.IPlayerActions
 {
     [SerializeField] UnityEvent onAttack, onDash, onInventory, onMenu, onQuit, onMap, onDialogue, onContinue, onMouseDown, onMouseUp;
-    [SerializeField] UnityEvent<int> onHotbar;
+    [SerializeField] UnityEvent<int> onHotbar, onSkill;
     [SerializeField] UnityEvent<Vector2> onMovement, onMouse;
 
     PlayerInputConfig config;
@@ -42,6 +42,12 @@ public class PlayerInputManager : MonoBehaviour, PlayerInputConfig.ICombatAction
     {
         if (!IsClicked(context)) return;
         onHotbar?.Invoke(index);
+    }
+
+    void OnSkill(InputAction.CallbackContext context, int index)
+    {
+        if (!IsClicked(context)) return;
+        onSkill?.Invoke(index);
     }
 
     public void OnAttack(InputAction.CallbackContext context)
@@ -129,22 +135,42 @@ public class PlayerInputManager : MonoBehaviour, PlayerInputConfig.ICombatAction
 
     public void OnHotbar1(InputAction.CallbackContext context)
     {
-        OnHotbar(context, 1);
+        OnHotbar(context, 0);
     }
 
     public void OnHotbar2(InputAction.CallbackContext context)
     {
-        OnHotbar(context, 2);
+        OnHotbar(context, 1);
     }
 
     public void OnHotbar3(InputAction.CallbackContext context)
     {
-        OnHotbar(context, 3);
+        OnHotbar(context, 2);
     }
 
     public void OnHotbar4(InputAction.CallbackContext context)
     {
-        OnHotbar(context, 4);
+        OnHotbar(context, 3);
+    }
+
+    public void OnSkill1(InputAction.CallbackContext context)
+    {
+        OnSkill(context, 0);
+    }
+
+    public void OnSkill2(InputAction.CallbackContext context)
+    {
+        OnSkill(context, 1);
+    }
+
+    public void OnSkill3(InputAction.CallbackContext context)
+    {
+        OnSkill(context, 2);
+    }
+
+    public void OnSkill4(InputAction.CallbackContext context)
+    {
+        OnSkill(context, 3);
     }
 
     public void OnLeftMouse(InputAction.CallbackContext context)

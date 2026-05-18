@@ -10,14 +10,16 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 4a6f36eb5340df446aeb7d5c5304bf33, type: 3}
-  m_Name: ImpaleTome
+  m_Name: Catapult
   m_EditorClassIdentifier: Assembly-CSharp::ImpaleSkill
-  itemName: Impale
-  description: Impale a nearby target with a large ice crystal, inflicting Slowness
-    and high stagger damage.
-  sprite: {fileID: 4508763084341604983, guid: b668de8228cb96c499d868fcd4804bd2, type: 3}
+  itemName: Catapult
+  description: Summon a large boulder and throw it in front of you.
+  sprite: {fileID: -472735285, guid: ef34d59f4ae4b7247ac9f028d62c1c2b, type: 3}
   combatResource: 1
-  resourceCost: 10
+  element: 4
+  resourceCost: 15
   cooldown: 5
-  damageValues: 10000000
-  icicleProjectile: {fileID: 11400000, guid: d470b368aebd76947999c6d207c6f07f, type: 2}
+  damageStaggerPairs:
+  - damage: 18
+    stagger: 10
+  projectileSO: {fileID: 11400000, guid: 88eb622944cf7d446abd9cec750698f8, type: 2}

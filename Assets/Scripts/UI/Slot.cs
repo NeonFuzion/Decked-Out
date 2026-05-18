@@ -20,8 +20,8 @@ public abstract class Slot : MonoBehaviour, IPointerEnterHandler, IPointerExitHa
     protected virtual void FocusOnItem()
     {
         Inventory inventory = Inventory.Instance;
-        ItemStack output = isEquiped ? inventory.GetEquipAsStack(inventory.GetEquipment(index)) : inventory.GetItem(index);
-        
+        ItemStack output = isEquiped ? inventory.GetEquipAsItemStack(inventory.GetEquipment(index)) : inventory.GetItem(index);
+
         if (output == null) return;
         EventManager.InvokeOnFocusItem(output);
     }

@@ -15,8 +15,9 @@ MonoBehaviour:
   speed: 5
   maxHeight: 4
   maxDistance: 8
-  homingSpeed: 5
+  homingSpeed: 0
   damageRadius: 0.5
+  rotationOffset: 0
   sprite: {fileID: -7455544600758985983, guid: bd667445272672a4a9c0e6fad50645b5, type: 3}
   trajectoryCurve:
     serializedVersion: 2

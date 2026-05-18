@@ -67,7 +67,7 @@ public class CraftingMenu : MonoBehaviour
             List<ItemStack> availableIngredients = new ();
             recipe.Ingredients.ToList().ForEach(ingredient =>
             {
-                ItemStack inventoryStack = inventory.FindItem(ingredient.Item); //materials.Find(stack => stack != null || stack.Item || stack.Item == ingredient.Item);
+                ItemStack inventoryStack = inventory.FindItem(ingredient.Item);
 
                 int amount = inventoryStack != null ? inventoryStack.Amount : 0;
                 if (amount < ingredient.Amount) isCraftable = false;

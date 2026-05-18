@@ -1,77 +1,94 @@
-using System.Collections;
-using System.Collections.Generic;
-using UnityEditor;
 using UnityEngine;
 
 public class Slime : Enemy
 {
     [SerializeField] float jumpTime, jumpCD;
 
-    float curJumpTime, curJumpCD;
-    bool jumping;
+    readonly int landingAnim = Animator.StringToHash("SlimeLanding"),
+                 bounceAnim = Animator.StringToHash("SlimeBounce");
 
-    Vector2 knockback;
-    BoxCollider2D bc;
+    float curJumpTime, curJumpCD;
+    SlimeState slimeState;
+
     SpriteRenderer sr;
     Vector2 targetPos;
 
-    // Start is called before the first frame update
+    protected override int IdleAnim => Animator.StringToHash("SlimeIdle");
+
+
     new void Start()
     {
         base.Start();
 
         curJumpCD = 0;
         curJumpTime = 0;
-        jumping = false;
+        slimeState = SlimeState.Idle;
 
-        knockback = Vector2.zero;
         targetPos = Vector2.zero;
-        
-        bc = GetComponent<BoxCollider2D>();
+
         sr = GetComponent<SpriteRenderer>();
 
         sr.enabled = false;
     }
 
-    // Update is called once per frame
     void Update()
     {
+        if (slimeState == SlimeState.Staggered) return;
+
         SearchTarget(transform.position, detectDistance);
 
-        if (curJumpCD > 0)
+        switch (slimeState)
         {
-            curJumpCD -= Time.deltaTime;
-            rb.linearVelocity = Vector3.zero;
+            case SlimeState.Idle:
+                if (curJumpCD > 0) { curJumpCD -= Time.deltaTime; rb.linearVelocity = Vector2.zero; break; }
+                if (!target) break;
+                Jump();
+                break;
+            case SlimeState.Jumping:
+                curJumpTime -= Time.deltaTime;
+                if (curJumpTime < 0 || !target || Vector3.Distance(targetPos, transform.position) < 1.75f)
+                    animator.CrossFade(landingAnim, 0, 0);
+                break;
         }
-        else if (jumping)
-        {
-            curJumpTime -= Time.deltaTime;
-            if (curJumpTime < 0 || !target || Vector3.Distance(targetPos, transform.position) < 1.75f)
-            {
-                animator.CrossFade("SlimeLanding", 0, 0);
-            }
-        }
-        else if (target)
-        {
-            animator.CrossFade("SlimeBounce", 0, 0);
-            targetPos = target.position;
-            Movement(targetPos);
-            bc.excludeLayers = wallLayer;
-            sr.enabled = true;
-            curJumpTime = jumpTime;
-            jumping = true;
-        }
+    }
+
+    void Jump()
+    {
+        animator.CrossFade(bounceAnim, 0, 0);
+        targetPos = target.position;
+        Movement(targetPos);
+        sr.enabled = true;
+        curJumpTime = jumpTime;
+        slimeState = SlimeState.Jumping;
     }
 
     public void OnLanding()
     {
+        if (IsStaggered) return;
         sr.enabled = false;
-        bc.excludeLayers = new ();
-        jumping = false;
+        slimeState = SlimeState.Idle;
+        animator.CrossFade(IdleAnim, 0, 0);
         curJumpCD = jumpCD;
 
         if (!target) return;
         if (Vector2.Distance(target.position, transform.position) > 1) return;
-        target.GetComponent<Health>()?.TakeDamage(atk, Element.Water);
+        Health health = target.GetComponent<Health>();
+        if (health) health.TakeDamage(atk, Element.Water);
+    }
+
+    public override void OnStagger()
+    {
+        base.OnStagger();
+        slimeState = SlimeState.Staggered;
+        sr.enabled = false;
+    }
+
+    public override void OnStaggerEnd()
+    {
+        base.OnStaggerEnd();
+        slimeState = SlimeState.Idle;
+        curJumpCD = 0;
     }
 }
+
+enum SlimeState { Idle, Jumping, Staggered }

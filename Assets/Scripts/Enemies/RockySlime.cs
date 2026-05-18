@@ -8,16 +8,19 @@ public class RockySlime : Enemy
     [SerializeField] ProjectileSO natureProjectile, earthProjectile;
 
     float curJumpTime, currentAttackCooldown;
+    int landingAnim = Animator.StringToHash("SlimeLanding"),
+        launchingAnim = Animator.StringToHash("RockyBurst"),
+        bounceAnim = Animator.StringToHash("SlimeBounce");
 
-    BoxCollider2D bc;
     SpriteRenderer sr;
     Shooter shooter;
     RockySlimeState rockyState;
     Vector2 targetPos;
     Health health;
 
+    protected override int IdleAnim => Animator.StringToHash("SlimeIdle");
 
-    // Start is called once before the first execution of Update after the MonoBehaviour is created
+
     new void Start()
     {
         base.Start();
@@ -27,7 +30,6 @@ public class RockySlime : Enemy
         rockyState = RockySlimeState.Idle;
         targetPos = Vector2.zero;
 
-        bc = GetComponent<BoxCollider2D>();
         sr = GetComponent<SpriteRenderer>();
         shooter = GetComponent<Shooter>();
         health = GetComponent<Health>();
@@ -35,11 +37,12 @@ public class RockySlime : Enemy
         sr.enabled = false;
     }
 
-    // Update is called once per frame
     void Update()
     {
+        if (rockyState == RockySlimeState.Staggered) return;
+
         if (!target) SearchTarget(transform.position, detectDistance);
-        
+
         switch (rockyState)
         {
             case RockySlimeState.Jumping:
@@ -47,7 +50,7 @@ public class RockySlime : Enemy
                 Movement(targetPos);
 
                 if (curJumpTime < 0 || !target || Vector3.Distance(targetPos, transform.position) < 1.75f)
-                    animator.CrossFade("SlimeLanding", 0, 0);
+                    animator.CrossFade(landingAnim, 0, 0);
                 break;
             case RockySlimeState.Idle:
                 rb.linearVelocity = Vector2.zero;
@@ -63,9 +66,8 @@ public class RockySlime : Enemy
 
     void Jump()
     {
-        animator.CrossFade("SlimeBounce", 0, 0);
+        animator.CrossFade(bounceAnim, 0, 0);
         targetPos = target.position;
-        bc.excludeLayers = wallLayer;
         sr.enabled = true;
         curJumpTime = jumpTime;
         rockyState = RockySlimeState.Jumping;
@@ -74,7 +76,7 @@ public class RockySlime : Enemy
 
     void Attack()
     {
-        animator.CrossFade("RockyBurst", 0, 0);
+        animator.CrossFade(launchingAnim, 0, 0);
         rockyState = RockySlimeState.Attacking;
     }
 
@@ -84,7 +86,7 @@ public class RockySlime : Enemy
         sr.enabled = false;
         rockyState = RockySlimeState.Idle;
         currentAttackCooldown = attackCooldown;
-        animator.CrossFade("SlimeIdle", 0, 0);
+        animator.CrossFade(IdleAnim, 0, 0);
     }
 
     void DealProjectileDamage(Collider2D[] colliders, Projectile projectile)
@@ -92,7 +94,8 @@ public class RockySlime : Enemy
         if (colliders.Count(collider => collider.transform == target) == 0) return;
         int damage = Mathf.RoundToInt(atk * 0.8f);
         Element element = projectile.ProjectileData.ProjectileEffect == natureProjectile ? Element.Nature : Element.Earth;
-        target.GetComponent<Health>()?.TakeDamage(damage, element, projectile.transform.position);
+        Health targetHealth = target.GetComponent<Health>();
+        if (targetHealth) targetHealth.TakeDamage(damage, element, projectile.transform.position);
 
         if (!projectile.gameObject) return;
         Destroy(projectile.gameObject);
@@ -100,17 +103,19 @@ public class RockySlime : Enemy
 
     public void OnLanding()
     {
+        if (IsStaggered) return;
         sr.enabled = false;
-        bc.excludeLayers = new ();
         ResetToIdle();
 
         if (!target) return;
         if (Vector2.Distance(target.position, transform.position) > 1.5f) return;
-        target.GetComponent<Health>()?.TakeDamage(atk, Element.Nature);
+        Health targetHealth = target.GetComponent<Health>();
+        if (targetHealth) targetHealth.TakeDamage(atk, Element.Nature);
     }
 
     public void FireProjectiles()
     {
+        if (IsStaggered) return;
         bool projectileRandom = Random.value > 0.5f;
         float targetAngle = Mathf.Atan2(target.position.y - transform.position.y, target.position.x - transform.position.x);
         ProjectileSO projectileData = projectileRandom ? earthProjectile : natureProjectile;
@@ -122,19 +127,35 @@ public class RockySlime : Enemy
             float range = projectileAngleRange * Mathf.PI / 180;
             float angleOffset = Random.Range(-range, range);
             float angle = targetAngle + angleOffset + baseAngle;
-            Vector3 direction = new (Mathf.Cos(angle), Mathf.Sin(angle));
+            Vector3 direction = new(Mathf.Cos(angle), Mathf.Sin(angle));
             Vector2 targetPosition = direction * magnitude + transform.position;
 
-            Projectile projectile;
-            shooter.FireProjectile(projectileData, targetPosition, out projectile);
+            shooter.FireProjectile(projectileData, targetPosition, out Projectile projectile, FiringMode.FirePoint);
             projectile.OnHit.AddListener(DealProjectileDamage);
         }
     }
 
     public void FinishAttack()
     {
+        if (IsStaggered) return;
         ResetToIdle();
     }
 
-    public enum RockySlimeState { None, Idle, Jumping, Attacking }
+    public override void OnStagger()
+    {
+        base.OnStagger();
+        rockyState = RockySlimeState.Staggered;
+        sr.enabled = false;
+        health.SetInvincibility(false);
+    }
+
+    public override void OnStaggerEnd()
+    {
+        base.OnStaggerEnd();
+        rockyState = RockySlimeState.Idle;
+        currentAttackCooldown = 0;
+    }
+
+
+    public enum RockySlimeState { None, Idle, Jumping, Attacking, Staggered }
 }

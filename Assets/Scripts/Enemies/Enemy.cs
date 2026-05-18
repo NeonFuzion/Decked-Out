@@ -2,11 +2,10 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class Enemy : Being
+public abstract class Enemy : Being
 {
     [SerializeField] protected int atk, spd, detectDistance;
     [SerializeField] protected Animator animator;
-    [SerializeField] protected LayerMask wallLayer;
 
     protected Rigidbody2D rb;
     protected Transform target;
@@ -23,6 +22,8 @@ public class Enemy : Being
     {
 
     }
+
+    protected abstract int IdleAnim { get; }
 
     protected Transform FindPlayer(Vector2 detectPoint, int radius)
     {
@@ -50,14 +51,23 @@ public class Enemy : Being
 
     protected void Movement(Vector3 targetPosition)
     {
-        if (!target) return;
         Vector2 direction = (targetPosition - transform.position).normalized;
         rb.linearVelocity = direction * spd;
     }
 
-    protected void Telegraph()
-    {
+    public bool IsStaggered { get; private set; }
 
+    public virtual void OnStagger()
+    {
+        IsStaggered = true;
+        StopAllCoroutines();
+        animator.CrossFade(IdleAnim, 0, 0);
+        rb.linearVelocity = Vector2.zero;
+    }
+
+    public virtual void OnStaggerEnd()
+    {
+        IsStaggered = false;
     }
 
     public void OnDeath()

@@ -1,9 +1,6 @@
-using System;
 using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.Events;
-using UnityEngine.UI;
 
 public class Health : MonoBehaviour
 {
@@ -12,7 +9,8 @@ public class Health : MonoBehaviour
     [SerializeField] bool invincible;
     [SerializeField] UnityEvent onDeath, onHit;
     [SerializeField] GameObject prefabDmgObj, prefabHitEffect, prefabHealth;
-    [SerializeField] GameObject healthBarTarget, existingHealthBar;
+    [SerializeField] Transform healthBarTarget;
+    [SerializeField] HealthBar existingHealthBar;
 
     public int HP { get => hp; }
     public int MaxHP { get => maxHp; }
@@ -20,29 +18,11 @@ public class Health : MonoBehaviour
     public bool Invincible { get => invincible; }
     public UnityEvent OnDeath { get => onDeath; }
 
-    Slider slider;
-    GameObject healthBarCanvas, healthBar;
+    HealthBar healthBar;
+    StaggerBar staggerBar;
+    Transform healthBarCanvas;
 
-    // Start is called before the first frame update
-    void Start()
-    {
-
-    }
-
-    // Update is called once per frame
-    void Update()
-    {
-        if (!slider) return;
-        if (healthBarCanvas) healthBarCanvas.transform.position = healthBarTarget.transform.position;
-
-        if (slider.value == hp) return;
-        slider.value += (hp - slider.value) / 10;
-
-        Image image = slider.GetComponentInChildren<Image>();
-        if (hp < maxHp) image.color = Color.green;
-        if (hp < maxHp * 0.6f) image.color = Color.yellow;
-        if (hp < maxHp * 0.2f) image.color = Color.red;
-    }
+    void Start() { CreateHealthBar(); }
 
     public void TakeDamage(int amount, Element element, Vector2 incomingAttack = new Vector2(), float knockback = 1)
     {
@@ -63,9 +43,14 @@ public class Health : MonoBehaviour
             StartCoroutine(ApplyHitEffects(incomingAttack, knockback, enemy));
         }
 
-        if (hp > 0) return;
+        if (hp > 0)
+        {
+            if (healthBar) healthBar.SetFill((float)hp / maxHp);
+            return;
+        }
+
         onDeath?.Invoke();
-        Destroy(healthBarCanvas);
+        if (healthBarCanvas) Destroy(healthBarCanvas.gameObject);
     }
 
     public void Heal(int amount)
@@ -73,6 +58,7 @@ public class Health : MonoBehaviour
         hp += amount;
         if (hp > maxHp) hp = maxHp;
 
+        if (healthBar) healthBar.SetFill((float)hp / maxHp);
         if (prefabDmgObj) SpawnDamageNumber(Vector2.down, Element.Physical, amount, true);
     }
 
@@ -86,6 +72,31 @@ public class Health : MonoBehaviour
         invincible = !invincible;
     }
 
+    public void Initialize(int maxHp, int def)
+    {
+        this.def = def;
+        this.maxHp = maxHp;
+        hp = maxHp;
+
+        CreateHealthBar();
+    }
+
+    public void CreateHealthBar()
+    {
+        if (existingHealthBar)
+        {
+            healthBar = existingHealthBar;
+        }
+        else if (prefabHealth)
+        {
+            healthBarCanvas = Instantiate(prefabHealth, healthBarTarget.position, Quaternion.identity).transform;
+            healthBar = healthBarCanvas.GetComponentInChildren<HealthBar>();
+            healthBar.Initialize((float)hp / maxHp);
+            staggerBar = healthBarCanvas.GetComponentInChildren<StaggerBar>();
+            staggerBar?.Initialize(1f);
+        }
+    }
+
     void SpawnDamageNumber(Vector2 incomingAttack, Element element, int amount, bool isHeal)
     {
         Vector2 direction = incomingAttack == new Vector2() ? (Vector2)transform.position : (incomingAttack - (Vector2)transform.position);
@@ -95,30 +106,13 @@ public class Health : MonoBehaviour
 
     IEnumerator ApplyHitEffects(Vector2 incomingAttack, float knockback, Enemy enemy)
     {
+        bool wasEnabled = enemy.enabled;
         enemy.enabled = false;
-        GetComponent<Rigidbody2D>().AddForce(((Vector2)transform.position - incomingAttack) * knockback * (1 - knockbackResistance), ForceMode2D.Impulse);
+        Rigidbody2D rigidbody = GetComponent<Rigidbody2D>();
+        Vector2 oldVelocity = rigidbody.linearVelocity;
+        rigidbody.AddForce(((Vector2)transform.position - incomingAttack) * knockback * (1 - knockbackResistance), ForceMode2D.Impulse);
         yield return new WaitForSeconds(0.2f);
-        enemy.enabled = true;
-    }
-
-    public void Initialize(int maxHp, int def)
-    {
-        this.def = def;
-        this.maxHp = maxHp;
-        hp = maxHp;
-
-        if (existingHealthBar)
-        {
-            healthBar = existingHealthBar;
-        }
-        else
-        {
-            healthBarCanvas = Instantiate(prefabHealth, healthBarTarget.transform.position, Quaternion.identity);
-            healthBar = healthBarCanvas.transform.GetChild(0).gameObject;
-        }
-        slider = healthBar.GetComponent<Slider>();
-        slider.GetComponentInChildren<Image>().color = Color.green;
-        slider.maxValue = maxHp;
-        slider.value = hp;
+        enemy.enabled = wasEnabled;
+        rigidbody.linearVelocity = oldVelocity;
     }
 }

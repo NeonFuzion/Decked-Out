@@ -36,6 +36,11 @@ public abstract class WeaponSO : EquipmentSO
         return GetAttackSequenceDataByIndex(index).Damage;
     }
 
+    public int GetStaggerByIndex(int index)
+    {
+        return GetAttackSequenceDataByIndex(index).Stagger;
+    }
+
     public abstract void AttackActionHandle(int attackIndex, Transform transform, Vector2 mousePosition, Shooter shooter);
     
     public abstract void AttackAnimationHandle(int animationIndex, Transform transform, Animator animator);
@@ -48,8 +53,9 @@ public enum Element { Physical, Fire, Water, Wind, Earth, Electric, Nature, Ice 
 public class AttackSequenceData
 {
     [SerializeField] string animation;
-    [SerializeField] int damage;
+    [SerializeField] int damage, stagger;
 
     public string Animation { get => animation; }
     public int Damage { get => damage; }
+    public int Stagger { get => stagger; }
 }

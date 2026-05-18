@@ -5,6 +5,7 @@ using UnityEngine.Events;
 
 public class Shooter : MonoBehaviour
 {
+    [SerializeField] float radialFireRadius;
     [SerializeField] BeingType senderType;
     [SerializeField] GameObject projectilePrefab;
     [SerializeField] Transform firePoint;
@@ -16,9 +17,13 @@ public class Shooter : MonoBehaviour
 
     }
 
-    public void FireProjectile(ProjectileSO projectileData, Vector3 targetPosition, out Projectile projectile)
+    public void FireProjectile(ProjectileSO projectileData, Vector3 targetPosition, out Projectile projectile, FiringMode firingMode)
     {
-        projectile = Instantiate(projectilePrefab, firePoint.position, Quaternion.identity).GetComponent<Projectile>();
+        Vector2 radialFirePosition = (targetPosition - transform.position).normalized * radialFireRadius + transform.position;
+        Vector2 startPosition = firingMode == FiringMode.FirePoint ? firePoint.position : radialFirePosition;
+        projectile = Instantiate(projectilePrefab, startPosition, Quaternion.identity).GetComponent<Projectile>();
         projectile.Initialize(projectileData, targetPosition);
     }
 }
+
+public enum FiringMode { None, FirePoint, Radial }

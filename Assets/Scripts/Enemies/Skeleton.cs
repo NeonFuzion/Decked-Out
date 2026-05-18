@@ -4,36 +4,39 @@ using UnityEngine;
 
 public class Skeleton : Enemy
 {
-    int idleAnim = Animator.StringToHash("SkeletonIdle"),
-        activeAnim = Animator.StringToHash("SkeletonActive"),
+    int activeAnim = Animator.StringToHash("SkeletonActive"),
         throwingAnim = Animator.StringToHash("SkeletonBoneToss");
-    bool inAtkingRange;
 
+    SkeletonState state;
     Animator animr;
     Vector2 direction;
 
-    // Start is called before the first frame update
+    protected override int IdleAnim => Animator.StringToHash("SkeletonIdle");
+
+
     new void Start()
     {
         base.Start();
-
+        state = SkeletonState.Idle;
         animr = GetComponent<Animator>();
     }
 
-    // Update is called once per frame
     void Update()
     {
+        if (state == SkeletonState.Staggered) return;
+
         SearchTarget(transform.position, detectDistance);
 
-        if (!target) return;
-        inAtkingRange = Vector2.Distance(target.position, transform.position) < 6;
+        if (!target) state = SkeletonState.Idle;
+        else if (Vector2.Distance(target.position, transform.position) < 6) state = SkeletonState.Throwing;
+        else state = SkeletonState.Active;
 
         animr.CrossFade(AnimationHelper(), 0, 0);
     }
 
     void FixedUpdate()
     {
-        if (inAtkingRange)
+        if (state != SkeletonState.Active)
         {
             rb.linearVelocity = Vector2.zero;
             return;
@@ -43,18 +46,37 @@ public class Skeleton : Enemy
 
     void LockTargetPos()
     {
+        if (IsStaggered) return;
         direction = (target.position - transform.position).normalized;
     }
 
     void ThrowBone()
     {
-
+        if (IsStaggered) return;
     }
 
     int AnimationHelper()
     {
-        if (inAtkingRange) return throwingAnim;
-        if (target) return activeAnim;
-        return idleAnim;
+        return state switch
+        {
+            SkeletonState.Throwing => throwingAnim,
+            SkeletonState.Active => activeAnim,
+            _ => IdleAnim,
+        };
     }
+
+    public override void OnStagger()
+    {
+        base.OnStagger();
+        state = SkeletonState.Staggered;
+    }
+
+    public override void OnStaggerEnd()
+    {
+        base.OnStaggerEnd();
+        state = SkeletonState.Idle;
+    }
+
 }
+
+enum SkeletonState { Idle, Active, Throwing, Staggered }

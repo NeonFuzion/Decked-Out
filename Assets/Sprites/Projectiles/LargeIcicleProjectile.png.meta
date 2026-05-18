@@ -1,5 +1,5 @@
 fileFormatVersion: 2
-guid: 45dabadda83c68e4093411e8e9bb6036
+guid: 60469461b0615884fb5583d0424c3991
 TextureImporter:
   internalIDToNameTable:
   - first:
@@ -116,10 +116,10 @@ TextureImporter:
       name: LargeIcicleProjectile_0
       rect:
         serializedVersion: 2
-        x: 0
-        y: 0
-        width: 16
-        height: 16
+        x: 1
+        y: 1
+        width: 30
+        height: 30
       alignment: 0
       pivot: {x: 0, y: 0}
       border: {x: 0, y: 0, z: 0, w: 0}

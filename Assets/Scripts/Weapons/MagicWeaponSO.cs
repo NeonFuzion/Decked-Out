@@ -28,9 +28,9 @@ public class MagicWeaponSO : WeaponSO
                 offset = (mousePosition - (Vector2)transform.position).normalized * 100 + offset * 50;
 
             Projectile projectile;
-            shooter.FireProjectile(projectileData, mousePosition + offset, out projectile);
+            shooter.FireProjectile(projectileData, mousePosition + offset, out projectile, FiringMode.FirePoint);
             WeaponProjectile weaponProjectile = projectile.ProjectileEffect as WeaponProjectile;
-            weaponProjectile.Initialize(GetDamageByIndex(attackIndex));
+            weaponProjectile.Initialize(GetDamageByIndex(attackIndex), GetStaggerByIndex(attackIndex));
             projectile.OnHit.AddListener(OnHit);
         }
     }
@@ -41,7 +41,7 @@ public class MagicWeaponSO : WeaponSO
 
         if (colliders.Length == 0) return;
         WeaponProjectile weaponProjectile = projectile.ProjectileEffect as WeaponProjectile;
-        EventManager.InvokeOnEnemyDataAcquired(colliders, new (Element, projectile.transform.position, weaponProjectile.Damage));
+        EventManager.InvokeOnEnemyDataAcquired(colliders, new (Element, projectile.transform.position, weaponProjectile.Damage, weaponProjectile.Stagger));
 
         if (!projectile.gameObject) return;
         Destroy(projectile.gameObject);

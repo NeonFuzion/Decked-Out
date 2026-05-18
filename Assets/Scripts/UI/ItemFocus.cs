@@ -87,8 +87,8 @@ public class ItemFocus : MonoBehaviour
     void ProcessSkillTome(SkillTomeSO skillTome)
     {
         if (!skillTome) return;
-        int maxDamage = skillTome.DamageValues.Max();
-        int minDamage = skillTome.DamageValues.Min();
+        int maxDamage = skillTome.DamageStaggerPairs.Max(pair => pair.Damage);
+        int minDamage = skillTome.DamageStaggerPairs.Min(pair => pair.Damage);
         string text = maxDamage == minDamage ? maxDamage + "" : $"{minDamage} ~ {maxDamage}";
 
         focusMainStats.gameObject.SetActive(true);
@@ -99,10 +99,10 @@ public class ItemFocus : MonoBehaviour
         focusSubStats.SetText($"Cost: {skillTome.ResourceCost} {skillTome.CombatResource}<br>Cooldown: {skillTome.Cooldown} sec.");
     }
 
-    public void DisplayItemStats(ItemStack itemStack)
+    public void DisplayItemStats(ItemStack itemInstance)
     {
-        int amount = itemStack.Amount;
-        ItemSO item = itemStack.Item;
+        int amount = itemInstance.Amount;
+        ItemSO item = itemInstance.Item;
         Update();
         rectTransform.gameObject.SetActive(true);
         

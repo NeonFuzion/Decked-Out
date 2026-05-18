@@ -117,11 +117,24 @@ TextureImporter:
     ignorePlatformSupport: 0
     androidETC2FallbackOverride: 0
     forceMaximumCompressionQuality_BC6H_BC7: 0
+  - serializedVersion: 4
+    buildTarget: WebGL
+    maxTextureSize: 2048
+    resizeAlgorithm: 0
+    textureFormat: -1
+    textureCompression: 0
+    compressionQuality: 50
+    crunchedCompression: 0
+    allowsAlphaSplitting: 0
+    overridden: 0
+    ignorePlatformSupport: 0
+    androidETC2FallbackOverride: 0
+    forceMaximumCompressionQuality_BC6H_BC7: 0
   spriteSheet:
     serializedVersion: 2
     sprites:
     - serializedVersion: 2
-      name: ItemSlotSprites_0
+      name: MaterialIcon
       rect:
         serializedVersion: 2
         x: 0
@@ -143,7 +156,7 @@ TextureImporter:
       edges: []
       weights: []
     - serializedVersion: 2
-      name: ItemSlotSprites_1
+      name: WeaponIcon
       rect:
         serializedVersion: 2
         x: 8
@@ -165,7 +178,7 @@ TextureImporter:
       edges: []
       weights: []
     - serializedVersion: 2
-      name: ItemSlotSprites_2
+      name: HelmetIcon
       rect:
         serializedVersion: 2
         x: 16
@@ -187,7 +200,7 @@ TextureImporter:
       edges: []
       weights: []
     - serializedVersion: 2
-      name: ItemSlotSprites_3
+      name: LeggingsIcon
       rect:
         serializedVersion: 2
         x: 24
@@ -209,7 +222,7 @@ TextureImporter:
       edges: []
       weights: []
     - serializedVersion: 2
-      name: ItemSlotSprites_4
+      name: ConsumableIcon
       rect:
         serializedVersion: 2
         x: 0
@@ -231,7 +244,7 @@ TextureImporter:
       edges: []
       weights: []
     - serializedVersion: 2
-      name: ItemSlotSprites_5
+      name: SkillIcon
       rect:
         serializedVersion: 2
         x: 8
@@ -253,7 +266,7 @@ TextureImporter:
       edges: []
       weights: []
     - serializedVersion: 2
-      name: ItemSlotSprites_6
+      name: ChestplateIcon
       rect:
         serializedVersion: 2
         x: 16
@@ -275,7 +288,7 @@ TextureImporter:
       edges: []
       weights: []
     - serializedVersion: 2
-      name: ItemSlotSprites_7
+      name: BootsIcon
       rect:
         serializedVersion: 2
         x: 24
@@ -312,14 +325,14 @@ TextureImporter:
       - key: SpriteEditor.SliceSettings
         value: '{"sliceOnImport":false,"gridCellCount":{"x":4.0,"y":2.0},"gridSpriteSize":{"x":8.0,"y":8.0},"gridSpriteOffset":{"x":0.0,"y":0.0},"gridSpritePadding":{"x":0.0,"y":0.0},"pivot":{"x":0.5,"y":0.5},"pivotPixels":{"x":0.0,"y":0.0},"autoSlicingMethod":0,"spriteAlignment":0,"pivotUnitMode":0,"slicingType":2,"keepEmptyRects":false,"isAlternate":false}'
     nameFileIdTable:
-      ItemSlotSprites_0: -1132992148885968286
-      ItemSlotSprites_1: -3238372882265034149
-      ItemSlotSprites_2: 1522430123606251771
-      ItemSlotSprites_3: -4930955580115004763
-      ItemSlotSprites_4: 2245285777335983317
-      ItemSlotSprites_5: 2427697593569896714
-      ItemSlotSprites_6: 8459856358068473679
-      ItemSlotSprites_7: -6568851375111525242
+      BootsIcon: -6568851375111525242
+      ChestplateIcon: 8459856358068473679
+      ConsumableIcon: 2245285777335983317
+      HelmetIcon: 1522430123606251771
+      LeggingsIcon: -4930955580115004763
+      MaterialIcon: -1132992148885968286
+      SkillIcon: 2427697593569896714
+      WeaponIcon: -3238372882265034149
   mipmapLimitGroupName: 
   pSDRemoveMatte: 0
   userData: 

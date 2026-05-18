@@ -4,35 +4,39 @@ using UnityEngine;
 
 public class CubeMachine : Enemy
 {
+    [SerializeField] float firingDistance = 6;
     [SerializeField] LineRenderer laser;
 
-    int idleAnim = Animator.StringToHash("CubeMachineIdle"),
-        activeAnim = Animator.StringToHash("CubeMachineActive"),
+    int activeAnim = Animator.StringToHash("CubeMachineActive"),
         firingAnim = Animator.StringToHash("CubeMachineFiring");
-    bool inAtkingRange;
 
+    CubeMachineState state;
     Vector2 direction;
 
-    // Start is called before the first frame update
+    protected override int IdleAnim  => Animator.StringToHash("CubeMachineIdle");
+
     new void Start()
     {
         base.Start();
+        state = CubeMachineState.Idle;
     }
 
-    // Update is called once per frame
     void Update()
     {
+        if (state == CubeMachineState.Staggered) return;
+
         SearchTarget(transform.position, detectDistance);
 
-        if (!target) return;
-        inAtkingRange = Vector2.Distance(target.position, transform.position) < 6;
+        if (!target) state = CubeMachineState.Idle;
+        else if (Vector2.Distance(target.position, transform.position) < firingDistance) state = CubeMachineState.Firing;
+        else state = CubeMachineState.Active;
 
         animator.CrossFade(AnimationHelper(), 0, 0);
     }
 
     private void FixedUpdate()
     {
-        if (inAtkingRange)
+        if (state != CubeMachineState.Active)
         {
             rb.linearVelocity = Vector2.zero;
             return;
@@ -42,12 +46,13 @@ public class CubeMachine : Enemy
 
     void LockTargetPos()
     {
-        if (!target) return;
+        if (IsStaggered || !target) return;
         direction = (target.position - transform.position).normalized;
     }
 
     void FireLaser()
     {
+        if (IsStaggered) return;
         StartCoroutine(RenderLaser());
     }
 
@@ -73,8 +78,25 @@ public class CubeMachine : Enemy
 
     int AnimationHelper()
     {
-        if (inAtkingRange) return firingAnim;
-        if (target) return activeAnim;
-        return idleAnim;
+        return state switch
+        {
+            CubeMachineState.Firing => firingAnim,
+            CubeMachineState.Active => activeAnim,
+            _ => IdleAnim,
+        };
+    }
+
+    public override void OnStagger()
+    {
+        base.OnStagger();
+        state = CubeMachineState.Staggered;
+    }
+
+    public override void OnStaggerEnd()
+    {
+        base.OnStaggerEnd();
+        state = CubeMachineState.Idle;
     }
 }
+
+enum CubeMachineState { Idle, Active, Firing, Staggered }
