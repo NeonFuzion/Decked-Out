@@ -4,18 +4,24 @@ using UnityEngine;
 public class FlowerSpirit : Enemy
 {
     [SerializeField] float rootDistance = 8f;
+    [SerializeField] float retreatDistance = 5f;
     [SerializeField] float rootingSpeed = 3f;
     [SerializeField] float repositionThreshold = 0.5f;
+    [SerializeField] float sinkDuration = 0.5f;
+    [SerializeField] float emergeDuration = 0.5f;
     [SerializeField] float attackCooldown = 4f;
     [SerializeField] float chargeDuration = 2f;
     [SerializeField] float beamDuration = 1.5f;
     [SerializeField] float beamDamageTickRate = 0.3f;
+    [SerializeField] TrailRenderer undergroundTrail;
     [SerializeField] LineRenderer beamRenderer;
 
-    readonly int chargeAnim = Animator.StringToHash("ForestSpiritCharge");
-    readonly int firingAnim = Animator.StringToHash("ForestSpiritFiring");
+    readonly int sinkAnim = Animator.StringToHash("FlowerSinking");
+    readonly int emergeAnim = Animator.StringToHash("FlowerEmerging");
+    readonly int chargeAnim = Animator.StringToHash("FlowerCharging");
+    readonly int firingAnim = Animator.StringToHash("FlowerFiring");
 
-    protected override int IdleAnim => Animator.StringToHash("ForestSpiritIdle");
+    protected override int IdleAnim => Animator.StringToHash("FlowerIdle");
 
     ForestSpiritState state;
     Vector2 rootPosition;
@@ -41,15 +47,18 @@ public class FlowerSpirit : Enemy
         {
             case ForestSpiritState.Idle:
                 CalculateRootPosition();
-                state = ForestSpiritState.Rooting;
-                break;
-
-            case ForestSpiritState.Rooting:
-                if (Vector2.Distance(transform.position, rootPosition) <= repositionThreshold)
-                    EnterRooted();
+                state = ForestSpiritState.Sinking;
+                animator.CrossFade(sinkAnim, 0, 0);
                 break;
 
             case ForestSpiritState.Rooted:
+                if (Vector2.Distance(transform.position, target.position) < retreatDistance)
+                {
+                    CalculateRootPosition();
+                    state = ForestSpiritState.Sinking;
+                    animator.CrossFade(sinkAnim, 0, 0);
+                    break;
+                }
                 currentCooldown -= Time.deltaTime;
                 if (currentCooldown <= 0)
                     StartBeamAttack();
@@ -74,10 +83,31 @@ public class FlowerSpirit : Enemy
         rootPosition = (Vector2)target.position + awayFromPlayer * rootDistance;
     }
 
-    void EnterRooted()
+    void FinishSinking()
+    {
+        if (IsStaggered) return;
+        StartCoroutine(RootSequence());
+    }
+
+    void FinishEmerging()
     {
         state = ForestSpiritState.Rooted;
         animator.CrossFade(IdleAnim, 0, 0);
+    }
+
+    IEnumerator RootSequence()
+    {
+        state = ForestSpiritState.Rooting;
+        if (undergroundTrail) undergroundTrail.enabled = true;
+        while (Vector2.Distance(transform.position, rootPosition) > repositionThreshold)
+        {
+            if (IsStaggered) yield break;
+            yield return null;
+        }
+        if (undergroundTrail) undergroundTrail.enabled = false;
+
+        state = ForestSpiritState.Emerging;
+        animator.CrossFade(emergeAnim, 0, 0);
     }
 
     void StartBeamAttack()
@@ -85,14 +115,16 @@ public class FlowerSpirit : Enemy
         state = ForestSpiritState.Charging;
         beamDirection = target ? ((Vector2)target.position - (Vector2)transform.position).normalized : Vector2.right;
         animator.CrossFade(chargeAnim, 0, 0);
+    }
+
+    void FinishCharging()
+    {
+        if (IsStaggered) return;
         StartCoroutine(BeamAttack());
     }
 
     IEnumerator BeamAttack()
     {
-        yield return new WaitForSeconds(chargeDuration);
-        if (IsStaggered) yield break;
-
         state = ForestSpiritState.Firing;
         animator.CrossFade(firingAnim, 0, 0);
         yield return StartCoroutine(FireBeam());
@@ -148,6 +180,7 @@ public class FlowerSpirit : Enemy
         base.OnStagger();
         state = ForestSpiritState.Staggered;
         if (beamRenderer) beamRenderer.enabled = false;
+        if (undergroundTrail) undergroundTrail.enabled = false;
     }
 
     public override void OnStaggerEnd()
@@ -158,4 +191,4 @@ public class FlowerSpirit : Enemy
     }
 }
 
-enum ForestSpiritState { Idle, Rooting, Rooted, Charging, Firing, Staggered }
+enum ForestSpiritState { Idle, Sinking, Rooting, Emerging, Rooted, Charging, Firing, Staggered }

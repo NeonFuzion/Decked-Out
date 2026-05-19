@@ -22643,6 +22643,7 @@ MonoBehaviour:
   - {fileID: 659871511894809678, guid: 449522271f14b1f46a58bcd22f5bd140, type: 3}
   - {fileID: 3393938777718689110, guid: f28271878fc372e41b9ff4a814bd373c, type: 3}
   - {fileID: 8725815417773111655, guid: e667bd9e90f687d43b79810bab9b9bb7, type: 3}
+  - {fileID: 6232617699584047601, guid: 0d0047c6736820946b1c9fb314fc888f, type: 3}
   lootPool:
   - {fileID: 11400000, guid: 9d8c77600ebef794da8cafae8f1a19d3, type: 2}
   - {fileID: 11400000, guid: 1f1d36eeb3d8bd743bef11f8b7326da6, type: 2}
