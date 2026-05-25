@@ -10,41 +10,32 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: ccefeaff58ce65b4b9393a54b3790126, type: 3}
-  m_Name: CatapultProjectile
+  m_Name: AeroslashProjectile
   m_EditorClassIdentifier: Assembly-CSharp::ProjectileData
-  speed: 8
-  maxHeight: 4
-  maxDistance: 5
+  speed: 20
+  maxHeight: 0
+  maxDistance: 3
   homingSpeed: 0
   damageRadius: 1
   rotationOffset: 0
-  sprite: {fileID: 5996949973255884798, guid: 28c8dc620ac7cf244bbf3681ff33d787, type: 3}
+  sprite: {fileID: -6691633101269850969, guid: 34a1598d443c4254399976aeec811cdd, type: 3}
   trajectoryCurve:
     serializedVersion: 2
     m_Curve:
     - serializedVersion: 3
       time: 0
       value: 0
-      inSlope: 2
-      outSlope: 2
+      inSlope: 0
+      outSlope: 0
       tangentMode: 34
       weightedMode: 0
       inWeight: 0
       outWeight: 0.33333334
     - serializedVersion: 3
-      time: 0.5
-      value: 1
-      inSlope: 0
-      outSlope: 0
-      tangentMode: 34
-      weightedMode: 0
-      inWeight: 0.33333334
-      outWeight: 0.33333334
-    - serializedVersion: 3
       time: 1
       value: 0
-      inSlope: -2
-      outSlope: -2
+      inSlope: 0
+      outSlope: 0
       tangentMode: 34
       weightedMode: 0
       inWeight: 0.33333334

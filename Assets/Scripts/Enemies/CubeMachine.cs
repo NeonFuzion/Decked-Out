@@ -23,8 +23,7 @@ public class CubeMachine : Enemy
 
     void Update()
     {
-        if (state == CubeMachineState.Staggered) return;
-
+        if (IsStaggered) return;
         SearchTarget(transform.position, detectDistance);
 
         if (!target) state = CubeMachineState.Idle;
@@ -38,7 +37,7 @@ public class CubeMachine : Enemy
     {
         if (state != CubeMachineState.Active)
         {
-            rb.linearVelocity = Vector2.zero;
+            rigidbody.linearVelocity = Vector2.zero;
             return;
         }
         Movement();
@@ -67,7 +66,7 @@ public class CubeMachine : Enemy
             if (!hit.collider.GetComponent<Player>()) continue;
             Vector3 laserEndPoint = hit.transform.position - transform.position;
             laser.SetPosition(1, laserEndPoint + Vector3.back);
-            hit.collider.GetComponent<Health>().TakeDamage(atk, Element.Fire);
+            hit.collider.GetComponent<Health>().TakeDamage(attack, Element.Fire);
             break;
         }
 
@@ -89,7 +88,6 @@ public class CubeMachine : Enemy
     public override void OnStagger()
     {
         base.OnStagger();
-        state = CubeMachineState.Staggered;
     }
 
     public override void OnStaggerEnd()
@@ -99,4 +97,4 @@ public class CubeMachine : Enemy
     }
 }
 
-enum CubeMachineState { Idle, Active, Firing, Staggered }
+enum CubeMachineState { Idle, Active, Firing }

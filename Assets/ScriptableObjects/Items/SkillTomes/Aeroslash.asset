@@ -10,16 +10,17 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 4a6f36eb5340df446aeb7d5c5304bf33, type: 3}
-  m_Name: Catapult
+  m_Name: Aeroslash
   m_EditorClassIdentifier: Assembly-CSharp::ImpaleSkill
-  itemName: Catapult
-  description: Summon a large boulder and throw it in front of you.
-  sprite: {fileID: -472735285, guid: ef34d59f4ae4b7247ac9f028d62c1c2b, type: 3}
+  itemName: Impale
+  description: Impale a nearby target with a large ice crystal, inflicting Slowness
+    and high stagger damage.
+  sprite: {fileID: -1925902765, guid: ef34d59f4ae4b7247ac9f028d62c1c2b, type: 3}
   combatResource: 1
-  element: 4
-  resourceCost: 15
-  cooldown: 4
+  element: 7
+  resourceCost: 25
+  cooldown: 3
   damageStaggerPairs:
-  - damage: 18
-    stagger: 10
-  projectileSO: {fileID: 11400000, guid: 88eb622944cf7d446abd9cec750698f8, type: 2}
+  - damage: 11
+    stagger: 15
+  projectileSO: {fileID: 11400000, guid: a23ca65918908934890838be74ad47f6, type: 2}

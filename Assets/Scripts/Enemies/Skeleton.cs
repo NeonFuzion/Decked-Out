@@ -38,7 +38,7 @@ public class Skeleton : Enemy
     {
         if (state != SkeletonState.Active)
         {
-            rb.linearVelocity = Vector2.zero;
+            rigidbody.linearVelocity = Vector2.zero;
             return;
         }
         Movement();

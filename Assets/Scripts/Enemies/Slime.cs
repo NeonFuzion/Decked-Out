@@ -10,7 +10,7 @@ public class Slime : Enemy
     float curJumpTime, curJumpCD;
     SlimeState slimeState;
 
-    SpriteRenderer sr;
+    SpriteRenderer spriteRenderer;
     Vector2 targetPos;
 
     protected override int IdleAnim => Animator.StringToHash("SlimeIdle");
@@ -26,27 +26,26 @@ public class Slime : Enemy
 
         targetPos = Vector2.zero;
 
-        sr = GetComponent<SpriteRenderer>();
+        spriteRenderer = GetComponent<SpriteRenderer>();
 
-        sr.enabled = false;
+        spriteRenderer.enabled = false;
     }
 
     void Update()
     {
-        if (slimeState == SlimeState.Staggered) return;
-
+        if (IsStaggered) return;
         SearchTarget(transform.position, detectDistance);
 
         switch (slimeState)
         {
             case SlimeState.Idle:
-                if (curJumpCD > 0) { curJumpCD -= Time.deltaTime; rb.linearVelocity = Vector2.zero; break; }
+                if (curJumpCD > 0) { curJumpCD -= Time.deltaTime; rigidbody.linearVelocity = Vector2.zero; break; }
                 if (!target) break;
                 Jump();
                 break;
             case SlimeState.Jumping:
                 curJumpTime -= Time.deltaTime;
-                if (curJumpTime < 0 || !target || Vector3.Distance(targetPos, transform.position) < 1.75f)
+                if (curJumpTime < 0 || !target || Vector3.Distance(targetPos, transform.position) < 1.75f || IsStaggered)
                     animator.CrossFade(landingAnim, 0, 0);
                 break;
         }
@@ -57,7 +56,7 @@ public class Slime : Enemy
         animator.CrossFade(bounceAnim, 0, 0);
         targetPos = target.position;
         Movement(targetPos);
-        sr.enabled = true;
+        spriteRenderer.enabled = true;
         curJumpTime = jumpTime;
         slimeState = SlimeState.Jumping;
     }
@@ -65,7 +64,8 @@ public class Slime : Enemy
     public void OnLanding()
     {
         if (IsStaggered) return;
-        sr.enabled = false;
+        spriteRenderer.enabled = false;
+        rigidbody.linearVelocity = Vector2.zero;
         slimeState = SlimeState.Idle;
         animator.CrossFade(IdleAnim, 0, 0);
         curJumpCD = jumpCD;
@@ -73,14 +73,13 @@ public class Slime : Enemy
         if (!target) return;
         if (Vector2.Distance(target.position, transform.position) > 1) return;
         Health health = target.GetComponent<Health>();
-        if (health) health.TakeDamage(atk, Element.Water);
+        if (health) health.TakeDamage(attack, Element.Water);
     }
 
     public override void OnStagger()
     {
         base.OnStagger();
-        slimeState = SlimeState.Staggered;
-        sr.enabled = false;
+        spriteRenderer.enabled = false;
     }
 
     public override void OnStaggerEnd()
@@ -91,4 +90,4 @@ public class Slime : Enemy
     }
 }
 
-enum SlimeState { Idle, Jumping, Staggered }
+enum SlimeState { Idle, Jumping }

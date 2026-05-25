@@ -5,6 +5,7 @@ public class FlowerSpirit : Enemy
 {
     [SerializeField] float rootDistance = 8f;
     [SerializeField] float retreatDistance = 5f;
+    [SerializeField] float retreatDistanceFloor = 2f;
     [SerializeField] float rootingSpeed = 3f;
     [SerializeField] float repositionThreshold = 0.5f;
     [SerializeField] float sinkDuration = 0.5f;
@@ -13,7 +14,7 @@ public class FlowerSpirit : Enemy
     [SerializeField] float chargeDuration = 2f;
     [SerializeField] float beamDuration = 1.5f;
     [SerializeField] float beamDamageTickRate = 0.3f;
-    [SerializeField] TrailRenderer undergroundTrail;
+    [SerializeField] ParticleSystem undergroundTrail;
     [SerializeField] LineRenderer beamRenderer;
 
     readonly int sinkAnim = Animator.StringToHash("FlowerSinking");
@@ -24,8 +25,8 @@ public class FlowerSpirit : Enemy
     protected override int IdleAnim => Animator.StringToHash("FlowerIdle");
 
     ForestSpiritState state;
-    Vector2 rootPosition;
-    Vector2 beamDirection;
+    Vector2 rootPosition, beamDirection;
+    Health health;
     float currentCooldown;
 
     new void Start()
@@ -33,25 +34,17 @@ public class FlowerSpirit : Enemy
         base.Start();
         state = ForestSpiritState.Idle;
         currentCooldown = attackCooldown;
+        health = GetComponent<Health>();
     }
 
     void Update()
     {
-        if (state == ForestSpiritState.Staggered) return;
-
         SearchTarget(transform.position, detectDistance);
-
         if (!target) return;
 
         switch (state)
         {
             case ForestSpiritState.Idle:
-                CalculateRootPosition();
-                state = ForestSpiritState.Sinking;
-                animator.CrossFade(sinkAnim, 0, 0);
-                break;
-
-            case ForestSpiritState.Rooted:
                 if (Vector2.Distance(transform.position, target.position) < retreatDistance)
                 {
                     CalculateRootPosition();
@@ -60,8 +53,9 @@ public class FlowerSpirit : Enemy
                     break;
                 }
                 currentCooldown -= Time.deltaTime;
-                if (currentCooldown <= 0)
-                    StartBeamAttack();
+
+                if (currentCooldown > 0) break;
+                StartBeamAttack();
                 break;
         }
     }
@@ -71,16 +65,20 @@ public class FlowerSpirit : Enemy
         if (state == ForestSpiritState.Rooting)
         {
             Vector2 dir = (rootPosition - (Vector2)transform.position).normalized;
-            rb.linearVelocity = dir * rootingSpeed;
+            rigidbody.linearVelocity = dir * rootingSpeed;
             return;
         }
-        rb.linearVelocity = Vector2.zero;
+        rigidbody.linearVelocity = Vector2.zero;
     }
 
     void CalculateRootPosition()
     {
         Vector2 awayFromPlayer = ((Vector2)transform.position - (Vector2)target.position).normalized;
-        rootPosition = (Vector2)target.position + awayFromPlayer * rootDistance;
+        RaycastHit2D raycastHit2D = Physics2D.Raycast(transform.position, awayFromPlayer, rootDistance, LayerMask.GetMask("Wall"));
+        float magnitude = raycastHit2D ? (raycastHit2D.point - (Vector2)transform.position).magnitude : rootDistance;
+
+        if (magnitude < retreatDistanceFloor) return;
+        rootPosition = (Vector2)target.position + awayFromPlayer * magnitude;
     }
 
     void FinishSinking()
@@ -91,22 +89,27 @@ public class FlowerSpirit : Enemy
 
     void FinishEmerging()
     {
-        state = ForestSpiritState.Rooted;
+        if (IsStaggered) return;
+        state = ForestSpiritState.Idle;
         animator.CrossFade(IdleAnim, 0, 0);
     }
 
     IEnumerator RootSequence()
     {
         state = ForestSpiritState.Rooting;
-        if (undergroundTrail) undergroundTrail.enabled = true;
+        health.SetInvincibility(true);
+        undergroundTrail.Play();
+
         while (Vector2.Distance(transform.position, rootPosition) > repositionThreshold)
         {
-            if (IsStaggered) yield break;
+            if (IsStaggered) break;
             yield return null;
         }
-        if (undergroundTrail) undergroundTrail.enabled = false;
 
         state = ForestSpiritState.Emerging;
+        health.SetInvincibility(false);
+        undergroundTrail.Stop();
+        rigidbody.linearVelocity = Vector2.zero;
         animator.CrossFade(emergeAnim, 0, 0);
     }
 
@@ -130,7 +133,7 @@ public class FlowerSpirit : Enemy
         yield return StartCoroutine(FireBeam());
 
         if (IsStaggered) yield break;
-        state = ForestSpiritState.Rooted;
+        state = ForestSpiritState.Idle;
         animator.CrossFade(IdleAnim, 0, 0);
         currentCooldown = attackCooldown;
     }
@@ -169,7 +172,7 @@ public class FlowerSpirit : Enemy
         foreach (RaycastHit2D hit in hits)
         {
             if (!hit.collider.GetComponent<Player>()) continue;
-            hit.collider.GetComponent<Health>().TakeDamage(atk, Element.Nature, transform.position);
+            hit.collider.GetComponent<Health>().TakeDamage(attack, Element.Nature, transform.position);
             beamRenderer.SetPosition(1, hit.transform.position - transform.position + Vector3.back);
             break;
         }
@@ -178,17 +181,16 @@ public class FlowerSpirit : Enemy
     public override void OnStagger()
     {
         base.OnStagger();
-        state = ForestSpiritState.Staggered;
         if (beamRenderer) beamRenderer.enabled = false;
-        if (undergroundTrail) undergroundTrail.enabled = false;
+        if (undergroundTrail) undergroundTrail.Stop();
     }
 
     public override void OnStaggerEnd()
     {
         base.OnStaggerEnd();
-        state = ForestSpiritState.Rooted;
+        state = ForestSpiritState.Idle;
         currentCooldown = attackCooldown;
     }
 }
 
-enum ForestSpiritState { Idle, Sinking, Rooting, Emerging, Rooted, Charging, Firing, Staggered }
+enum ForestSpiritState { Idle, Sinking, Rooting, Emerging, Charging, Firing }

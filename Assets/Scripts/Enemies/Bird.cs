@@ -24,15 +24,13 @@ public class Bird : Enemy
 
     void Update()
     {
-        if (birdState == BirdState.Staggered) return;
-
         SearchTarget(transform.position, detectDistance);
         if (!target) return;
 
         switch (birdState)
         {
             case BirdState.Idle:
-                animator.CrossFade(IdleAnim, 0, 0);
+                if (IsStaggered) break;
                 transform.localScale = new Vector3(transform.position.x > target.position.x ? 1 : -1, 1);
                 Movement();
 
@@ -47,7 +45,7 @@ public class Bird : Enemy
 
                 if (collision.transform != target) break;
                 damageDealt = true;
-                collision.GetComponent<Health>().TakeDamage(atk, Element.Wind);
+                collision.GetComponent<Health>().TakeDamage(attack, Element.Wind);
                 break;
         }
     }
@@ -55,15 +53,17 @@ public class Bird : Enemy
     IEnumerator ChargeCoroutine()
     {
         birdState = BirdState.Telegraphing;
-        rb.linearVelocity = Vector2.zero;
+        rigidbody.linearVelocity = Vector2.zero;
         Vector2 fallBackTarget = target.position;
         yield return new WaitForSeconds(telegraphDuration);
-        rb.linearVelocity = ((target ? target.position : fallBackTarget) - transform.position).normalized * chargeSpeed;
+        rigidbody.linearVelocity = ((target ? target.position : fallBackTarget) - transform.position).normalized * chargeSpeed;
 
         birdState = BirdState.Charging;
         damageDealt = false;
         yield return new WaitForSeconds(chargeDuration);
         birdState = BirdState.Idle;
+        rigidbody.linearVelocity = Vector2.zero;
+        animator.CrossFade(IdleAnim, 0, 0);
 
         isResting = true;
         yield return new WaitForSeconds(chargeCooldown);
@@ -73,7 +73,6 @@ public class Bird : Enemy
     public override void OnStagger()
     {
         base.OnStagger();
-        birdState = BirdState.Staggered;
         isResting = false;
     }
 
@@ -84,4 +83,4 @@ public class Bird : Enemy
     }
 }
 
-enum BirdState { None, Idle, Charging, Telegraphing, Staggered }
+enum BirdState { None, Idle, Charging, Telegraphing }

@@ -452,7 +452,7 @@ Rigidbody2D:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 8121270163122483361}
-  m_BodyType: 0
+  m_BodyType: 1
   m_Simulated: 1
   m_UseFullKinematicContacts: 0
   m_UseAutoMass: 0
@@ -568,10 +568,9 @@ MonoBehaviour:
   atk: 23
   spd: 5
   detectDistance: 7
+  attack: 23
+  movementSpeed: 5
   animator: {fileID: 2313024853081663727}
-  wallLayer:
-    serializedVersion: 2
-    m_Bits: 375
   firingDistance: 6
   laser: {fileID: 2123333649283610715}
 --- !u!114 &-2732641929997468365

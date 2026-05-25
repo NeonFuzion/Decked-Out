@@ -7,12 +7,12 @@ public class RockySlime : Enemy
     [SerializeField] float jumpTime, attackCooldown, jumpThreshold, minProjectileDistance, maxProjectileDistance, projectileAngleRange;
     [SerializeField] ProjectileSO natureProjectile, earthProjectile;
 
-    float curJumpTime, currentAttackCooldown;
+    float currentJumpTime, currentAttackCooldown;
     int landingAnim = Animator.StringToHash("SlimeLanding"),
         launchingAnim = Animator.StringToHash("RockyBurst"),
         bounceAnim = Animator.StringToHash("SlimeBounce");
 
-    SpriteRenderer sr;
+    SpriteRenderer spriteRenderer;
     Shooter shooter;
     RockySlimeState rockyState;
     Vector2 targetPos;
@@ -26,34 +26,34 @@ public class RockySlime : Enemy
         base.Start();
 
         currentAttackCooldown = 0;
-        curJumpTime = 0;
+        currentJumpTime = 0;
         rockyState = RockySlimeState.Idle;
         targetPos = Vector2.zero;
 
-        sr = GetComponent<SpriteRenderer>();
+        spriteRenderer = GetComponent<SpriteRenderer>();
         shooter = GetComponent<Shooter>();
         health = GetComponent<Health>();
 
-        sr.enabled = false;
+        spriteRenderer.enabled = false;
     }
 
     void Update()
     {
-        if (rockyState == RockySlimeState.Staggered) return;
+        if (IsStaggered) return;
 
         if (!target) SearchTarget(transform.position, detectDistance);
 
         switch (rockyState)
         {
             case RockySlimeState.Jumping:
-                curJumpTime -= Time.deltaTime;
+                currentJumpTime -= Time.deltaTime;
                 Movement(targetPos);
 
-                if (curJumpTime < 0 || !target || Vector3.Distance(targetPos, transform.position) < 1.75f)
+                if (currentJumpTime < 0 || !target || Vector3.Distance(targetPos, transform.position) < 1.75f || IsStaggered)
                     animator.CrossFade(landingAnim, 0, 0);
                 break;
             case RockySlimeState.Idle:
-                rb.linearVelocity = Vector2.zero;
+                rigidbody.linearVelocity = Vector2.zero;
                 currentAttackCooldown -= Time.deltaTime;
 
                 if (currentAttackCooldown > 0) break;
@@ -68,8 +68,8 @@ public class RockySlime : Enemy
     {
         animator.CrossFade(bounceAnim, 0, 0);
         targetPos = target.position;
-        sr.enabled = true;
-        curJumpTime = jumpTime;
+        spriteRenderer.enabled = true;
+        currentJumpTime = jumpTime;
         rockyState = RockySlimeState.Jumping;
         health.SetInvincibility(true);
     }
@@ -83,7 +83,8 @@ public class RockySlime : Enemy
     void ResetToIdle()
     {
         health.SetInvincibility(false);
-        sr.enabled = false;
+        spriteRenderer.enabled = false;
+        rigidbody.linearVelocity = Vector2.zero;
         rockyState = RockySlimeState.Idle;
         currentAttackCooldown = attackCooldown;
         animator.CrossFade(IdleAnim, 0, 0);
@@ -92,7 +93,7 @@ public class RockySlime : Enemy
     void DealProjectileDamage(Collider2D[] colliders, Projectile projectile)
     {
         if (colliders.Count(collider => collider.transform == target) == 0) return;
-        int damage = Mathf.RoundToInt(atk * 0.8f);
+        int damage = Mathf.RoundToInt(attack * 0.8f);
         Element element = projectile.ProjectileData.ProjectileEffect == natureProjectile ? Element.Nature : Element.Earth;
         Health targetHealth = target.GetComponent<Health>();
         if (targetHealth) targetHealth.TakeDamage(damage, element, projectile.transform.position);
@@ -104,13 +105,13 @@ public class RockySlime : Enemy
     public void OnLanding()
     {
         if (IsStaggered) return;
-        sr.enabled = false;
+        spriteRenderer.enabled = false;
         ResetToIdle();
 
         if (!target) return;
         if (Vector2.Distance(target.position, transform.position) > 1.5f) return;
         Health targetHealth = target.GetComponent<Health>();
-        if (targetHealth) targetHealth.TakeDamage(atk, Element.Nature);
+        if (targetHealth) targetHealth.TakeDamage(attack, Element.Nature);
     }
 
     public void FireProjectiles()
@@ -144,8 +145,7 @@ public class RockySlime : Enemy
     public override void OnStagger()
     {
         base.OnStagger();
-        rockyState = RockySlimeState.Staggered;
-        sr.enabled = false;
+        spriteRenderer.enabled = false;
         health.SetInvincibility(false);
     }
 
@@ -157,5 +157,5 @@ public class RockySlime : Enemy
     }
 
 
-    public enum RockySlimeState { None, Idle, Jumping, Attacking, Staggered }
+    public enum RockySlimeState { None, Idle, Jumping, Attacking }
 }

@@ -4,17 +4,19 @@ using UnityEngine;
 
 public abstract class Enemy : Being
 {
-    [SerializeField] protected int atk, spd, detectDistance;
+    [SerializeField] protected int attack, movementSpeed, detectDistance;
     [SerializeField] protected Animator animator;
 
-    protected Rigidbody2D rb;
+    protected new Rigidbody2D rigidbody;
     protected Transform target;
+
+    protected abstract int IdleAnim { get; }
 
     // Start is called before the first frame update
     protected void Start()
     {
         BeingType = BeingType.Hostile;
-        rb = GetComponent<Rigidbody2D>();
+        rigidbody = GetComponent<Rigidbody2D>();
     }
 
     // Update is called once per frame
@@ -22,8 +24,6 @@ public abstract class Enemy : Being
     {
 
     }
-
-    protected abstract int IdleAnim { get; }
 
     protected Transform FindPlayer(Vector2 detectPoint, int radius)
     {
@@ -45,14 +45,15 @@ public abstract class Enemy : Being
     protected void Movement()
     {
         if (!target) return;
+        if (IsStaggered) return;
         Vector2 direction = (target.position - transform.position).normalized;
-        rb.linearVelocity = direction * spd;
+        rigidbody.linearVelocity = direction * movementSpeed;
     }
 
     protected void Movement(Vector3 targetPosition)
     {
         Vector2 direction = (targetPosition - transform.position).normalized;
-        rb.linearVelocity = direction * spd;
+        rigidbody.linearVelocity = direction * movementSpeed;
     }
 
     public bool IsStaggered { get; private set; }
@@ -62,7 +63,7 @@ public abstract class Enemy : Being
         IsStaggered = true;
         StopAllCoroutines();
         animator.CrossFade(IdleAnim, 0, 0);
-        rb.linearVelocity = Vector2.zero;
+        rigidbody.linearVelocity = Vector2.zero;
     }
 
     public virtual void OnStaggerEnd()

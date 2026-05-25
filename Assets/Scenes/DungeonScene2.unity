@@ -737,7 +737,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 5412322040207766502, guid: b2ee695fbaf22ec429a8373efbdd8d2e, type: 3}
       propertyPath: startingEquipment.Array.size
-      value: 1
+      value: 2
       objectReference: {fileID: 0}
     - target: {fileID: 5412322040207766502, guid: b2ee695fbaf22ec429a8373efbdd8d2e, type: 3}
       propertyPath: 'startingEquipment.Array.data[0]'
@@ -746,7 +746,7 @@ PrefabInstance:
     - target: {fileID: 5412322040207766502, guid: b2ee695fbaf22ec429a8373efbdd8d2e, type: 3}
       propertyPath: 'startingEquipment.Array.data[1]'
       value: 
-      objectReference: {fileID: 11400000, guid: 9d8c77600ebef794da8cafae8f1a19d3, type: 2}
+      objectReference: {fileID: 11400000, guid: 724c32b3960b8194b9cb2893cd27fb09, type: 2}
     - target: {fileID: 5412322040207766502, guid: b2ee695fbaf22ec429a8373efbdd8d2e, type: 3}
       propertyPath: 'startingEquipment.Array.data[2]'
       value: 
@@ -22647,6 +22647,8 @@ MonoBehaviour:
   lootPool:
   - {fileID: 11400000, guid: 9d8c77600ebef794da8cafae8f1a19d3, type: 2}
   - {fileID: 11400000, guid: 1f1d36eeb3d8bd743bef11f8b7326da6, type: 2}
+  - {fileID: 11400000, guid: f39c36ea606206e41bb9ed9594bcae93, type: 2}
+  - {fileID: 11400000, guid: 724c32b3960b8194b9cb2893cd27fb09, type: 2}
   onRoomCleared:
     m_PersistentCalls:
       m_Calls:
