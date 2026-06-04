@@ -13,12 +13,7 @@ MonoBehaviour:
   m_Name: Recipes
   m_EditorClassIdentifier: Assembly-CSharp::CraftingRecipes
   recipes:
-  - {fileID: 11400000, guid: aa85473ede2fe75478c8bc04ed566336, type: 2}
-  - {fileID: 11400000, guid: 690db2740687a9e48b5fc821ba99907f, type: 2}
-  - {fileID: 11400000, guid: b57f2cb03ebdcd84eb6bc51747d596dc, type: 2}
-  - {fileID: 11400000, guid: faa9dee09377a29448bee899df0d4b94, type: 2}
-  - {fileID: 11400000, guid: ae1acf1ad66100e4dbac41adcbc11d11, type: 2}
-  - {fileID: 11400000, guid: cafb64a3a575ab5448eee6225da67954, type: 2}
-  - {fileID: 11400000, guid: 8d52f91f018230d46900fb3a9bb017fa, type: 2}
-  - {fileID: 11400000, guid: 2ead26347e2157d4c92ab09952ca322a, type: 2}
-  - {fileID: 11400000, guid: aa85473ede2fe75478c8bc04ed566336, type: 2}
+  - {fileID: 11400000, guid: 4d35b2c9aa3d78140a8f41ef655f2775, type: 2}
+  - {fileID: 11400000, guid: f35a6edbafcc0c2419522f0d8f1033a1, type: 2}
+  - {fileID: 11400000, guid: 1259b954dd61979428b88ecd8f375d40, type: 2}
+  - {fileID: 11400000, guid: 2e425aa0ecad60740a3a46d24ee5f7c5, type: 2}

@@ -5669,12 +5669,20 @@ PrefabInstance:
       value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 1227486679126910494, guid: 28ae2131f23309b4cb7b419f9cc10d23, type: 3}
+      propertyPath: commonDrops.Array.size
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 1227486679126910494, guid: 28ae2131f23309b4cb7b419f9cc10d23, type: 3}
       propertyPath: 'rareDrops.Array.data[0]'
       value: 
       objectReference: {fileID: 11400000, guid: 356be8cf74e3d9042963a4d44acc2b76, type: 2}
+    - target: {fileID: 1227486679126910494, guid: 28ae2131f23309b4cb7b419f9cc10d23, type: 3}
+      propertyPath: 'commonDrops.Array.data[0]'
+      value: 
+      objectReference: {fileID: 11400000, guid: 796c8882e5051e3458fd3658511292ee, type: 2}
     - target: {fileID: 5109368311923587848, guid: 28ae2131f23309b4cb7b419f9cc10d23, type: 3}
       propertyPath: m_Name
-      value: FlowerSpirit Variant
+      value: FlowerSpirit
       objectReference: {fileID: 0}
     - target: {fileID: 5754510934464056380, guid: 28ae2131f23309b4cb7b419f9cc10d23, type: 3}
       propertyPath: hp

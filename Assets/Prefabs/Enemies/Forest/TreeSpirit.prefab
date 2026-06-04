@@ -10273,6 +10273,14 @@ PrefabInstance:
       propertyPath: m_Controller
       value: 
       objectReference: {fileID: 9100000, guid: f0ca8f15debcc68438373878408475ee, type: 2}
+    - target: {fileID: 1227486679126910494, guid: 28ae2131f23309b4cb7b419f9cc10d23, type: 3}
+      propertyPath: commonDrops.Array.size
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 1227486679126910494, guid: 28ae2131f23309b4cb7b419f9cc10d23, type: 3}
+      propertyPath: 'commonDrops.Array.data[0]'
+      value: 
+      objectReference: {fileID: 11400000, guid: 796c8882e5051e3458fd3658511292ee, type: 2}
     - target: {fileID: 4731809785871379778, guid: 28ae2131f23309b4cb7b419f9cc10d23, type: 3}
       propertyPath: m_Enabled
       value: 1
