@@ -14,10 +14,10 @@ MonoBehaviour:
   m_EditorClassIdentifier: Assembly-CSharp::ProjectileData
   speed: 20
   maxHeight: 0
-  maxDistance: 3
+  maxDistance: 10
   homingSpeed: 0
   damageRadius: 1
-  rotationOffset: 0
+  rotationOffset: -90
   sprite: {fileID: -6691633101269850969, guid: 34a1598d443c4254399976aeec811cdd, type: 3}
   trajectoryCurve:
     serializedVersion: 2

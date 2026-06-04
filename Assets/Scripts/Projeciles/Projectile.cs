@@ -5,11 +5,12 @@ using UnityEngine.Events;
 public class Projectile : MonoBehaviour
 {
     [SerializeField] Transform projectileVisual, projectileShadow;
+    [SerializeField] float speed, maxHeight, maxDistance, homingSpeed, damageRadius;
+    [SerializeField] AnimationCurve trajectoryCurve;
+    [SerializeField] ProjectileEffect projectileEffect;
 
-    float totalDistance, groundDirection;
+    float totalDistance, groundDirection, rotationOffset;
 
-    ProjectileSO projectileData;
-    ProjectileEffect projectileEffect;
     Vector2 targetPosition, startPosition;
     SpriteRenderer visualSpriteRenderer, shadowSpriteRenderer;
     UnityEvent<Collider2D[], Projectile> onHit;
@@ -17,8 +18,8 @@ public class Projectile : MonoBehaviour
     
     public UnityEvent<Collider2D[], Projectile> OnHit { get => onHit; }
     public UnityEvent<Projectile> OnExpire { get => onExpire; }
-    public ProjectileSO ProjectileData { get => projectileData; }
     public ProjectileEffect ProjectileEffect { get => projectileEffect; }
+    public float MaxHeight { get => maxHeight; }
 
     // Start is called once before the first execution of Update after the MonoBehaviour is created
     void Start()
@@ -30,26 +31,26 @@ public class Projectile : MonoBehaviour
     void Update()
     {
         totalDistance = Vector2.Distance(startPosition, targetPosition);
-        transform.position += (Vector3)(targetPosition - startPosition).normalized * projectileData.Speed * Time.deltaTime;
+        transform.position += (Vector3)(targetPosition - startPosition).normalized * speed * Time.deltaTime;
 
         float distanceCovered = Vector2.Distance(transform.position, startPosition);
         float distanceProgress = distanceCovered / totalDistance;
-        float trajectoryCurveValue = projectileData.TrajectoryCurve.Evaluate(distanceProgress);
-        float projectileHeight = trajectoryCurveValue * projectileData.MaxHeight * totalDistance / 8;
+        float trajectoryCurveValue = trajectoryCurve.Evaluate(distanceProgress);
+        float projectileHeight = trajectoryCurveValue * maxHeight * totalDistance / 8;
         projectileVisual.transform.localPosition = Vector2.up * projectileHeight;
 
         Vector2 differenceVector = targetPosition - (Vector2)transform.position;
         float radians = Mathf.Atan2(differenceVector.y, differenceVector.x);
         groundDirection = (radians > 0 ? radians : radians + 2 * Mathf.PI) * 180 / Mathf.PI % 360;
 
-        float trajectoryAngle = (1 - trajectoryCurveValue) * (distanceProgress > 0.5f && projectileData.MaxHeight != 0 ? -1 : 1) * projectileData.MaxHeight * 20 + projectileData.RotationOffset;
+        float trajectoryAngle = (1 - trajectoryCurveValue) * (distanceProgress > 0.5f && maxHeight != 0 ? -1 : 1) * maxHeight * 20 + rotationOffset;
         projectileVisual.transform.eulerAngles = Vector3.forward * (groundDirection + trajectoryAngle);
         projectileShadow.transform.eulerAngles = Vector3.forward * groundDirection;
 
-        if (distanceProgress <= 1 && projectileData.MaxHeight > 0) return;
-        Collider2D[] colliders = Physics2D.OverlapCircleAll(transform.position, projectileData.DamageRadius).Where(collider => collider.gameObject != gameObject).ToArray();
+        if (distanceProgress <= 1 && maxHeight > 0) return;
+        Collider2D[] colliders = Physics2D.OverlapCircleAll(transform.position, damageRadius).Where(collider => collider.gameObject != gameObject).ToArray();
 
-        if (projectileData.MaxHeight > 0)
+        if (maxHeight > 0)
         {
             if (colliders.Length > 0) onHit?.Invoke(colliders, this);
             Destroy(gameObject);
@@ -69,21 +70,16 @@ public class Projectile : MonoBehaviour
         }
     }
 
-    public void Initialize(ProjectileSO projectileData, Vector2 targetPosition)
+    public void Initialize(Vector2 targetPosition)
     {
-        this.projectileData = projectileData;
-
-        Vector3 correctedTargetPosition = ((Vector3)targetPosition - transform.position).normalized * projectileData.MaxDistance + transform.position;
-        this.targetPosition = projectileData.MaxHeight == 0 ? correctedTargetPosition : targetPosition;
+        Vector3 correctedTargetPosition = ((Vector3)targetPosition - transform.position).normalized * maxDistance + transform.position;
+        this.targetPosition = maxHeight == 0 ? correctedTargetPosition : targetPosition;
         
         onHit = new ();
+        rotationOffset = projectileVisual.eulerAngles.z;
         startPosition = transform.position;
         visualSpriteRenderer = projectileVisual.GetComponent<SpriteRenderer>();
         shadowSpriteRenderer = projectileShadow.GetComponent<SpriteRenderer>();
-        visualSpriteRenderer.sprite = projectileData.Sprite;
-        shadowSpriteRenderer.sprite = projectileData.Sprite;
-
-        if (!projectileData.ProjectileEffect) return;
-        projectileEffect = Instantiate(projectileData.ProjectileEffect);
+        shadowSpriteRenderer.sprite = visualSpriteRenderer.sprite;
     }
 }

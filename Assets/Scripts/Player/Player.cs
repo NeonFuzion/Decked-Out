@@ -277,20 +277,22 @@ public class AttackData
 {
     Element element;
     Vector2 origin;
-    int damage, stagger;
+    int damage, stagger, knockback;
 
-    public AttackData(Element element, Vector2 origin, int damage, int stagger)
+    public AttackData(Element element, Vector2 origin, int damage, int stagger, int knockback = 1)
     {
         this.element = element;
         this.origin = origin;
         this.damage = damage;
         this.stagger = stagger;
+        this.knockback = knockback;
     }
 
     public Element Element { get => element; }
     public Vector2 Origin { get => origin; }
     public int Damage { get => damage; }
     public int Stagger { get => stagger; }
+    public int Knockback { get => knockback; }
 }
 
 public abstract class AttackAugment

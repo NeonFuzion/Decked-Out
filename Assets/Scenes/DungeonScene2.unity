@@ -737,20 +737,20 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 5412322040207766502, guid: b2ee695fbaf22ec429a8373efbdd8d2e, type: 3}
       propertyPath: startingEquipment.Array.size
-      value: 2
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 5412322040207766502, guid: b2ee695fbaf22ec429a8373efbdd8d2e, type: 3}
       propertyPath: 'startingEquipment.Array.data[0]'
       value: 
-      objectReference: {fileID: 11400000, guid: 9d8c77600ebef794da8cafae8f1a19d3, type: 2}
+      objectReference: {fileID: 11400000, guid: f39c36ea606206e41bb9ed9594bcae93, type: 2}
     - target: {fileID: 5412322040207766502, guid: b2ee695fbaf22ec429a8373efbdd8d2e, type: 3}
       propertyPath: 'startingEquipment.Array.data[1]'
       value: 
-      objectReference: {fileID: 11400000, guid: 724c32b3960b8194b9cb2893cd27fb09, type: 2}
+      objectReference: {fileID: 11400000, guid: f39c36ea606206e41bb9ed9594bcae93, type: 2}
     - target: {fileID: 5412322040207766502, guid: b2ee695fbaf22ec429a8373efbdd8d2e, type: 3}
       propertyPath: 'startingEquipment.Array.data[2]'
       value: 
-      objectReference: {fileID: 11400000, guid: 38e8d5906f0a0984287c89c3e06eea13, type: 2}
+      objectReference: {fileID: 11400000, guid: 724c32b3960b8194b9cb2893cd27fb09, type: 2}
     - target: {fileID: 5412322040207766502, guid: b2ee695fbaf22ec429a8373efbdd8d2e, type: 3}
       propertyPath: startingItems.Array.data[0].item
       value: 
@@ -16253,7 +16253,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!4 &500012711
 Transform:
   m_ObjectHideFlags: 0
@@ -22640,10 +22640,11 @@ MonoBehaviour:
   roomObjectParent: {fileID: 1690732733}
   dungeonCreator: {fileID: 2047493906}
   enemies:
-  - {fileID: 659871511894809678, guid: 449522271f14b1f46a58bcd22f5bd140, type: 3}
-  - {fileID: 3393938777718689110, guid: f28271878fc372e41b9ff4a814bd373c, type: 3}
-  - {fileID: 8725815417773111655, guid: e667bd9e90f687d43b79810bab9b9bb7, type: 3}
-  - {fileID: 6232617699584047601, guid: 0d0047c6736820946b1c9fb314fc888f, type: 3}
+  - {fileID: 2563996187059559786, guid: f28271878fc372e41b9ff4a814bd373c, type: 3}
+  - {fileID: 6583578241170589365, guid: e667bd9e90f687d43b79810bab9b9bb7, type: 3}
+  - {fileID: 6101275713863541804, guid: 733bc115dc1807c4487684ecf5ad67fa, type: 3}
+  - {fileID: 2157457153016163890, guid: 449522271f14b1f46a58bcd22f5bd140, type: 3}
+  - {fileID: 6274167078380148059, guid: 5be36d8e5423b8844b60dc0aecc86b6f, type: 3}
   lootPool:
   - {fileID: 11400000, guid: 9d8c77600ebef794da8cafae8f1a19d3, type: 2}
   - {fileID: 11400000, guid: 1f1d36eeb3d8bd743bef11f8b7326da6, type: 2}

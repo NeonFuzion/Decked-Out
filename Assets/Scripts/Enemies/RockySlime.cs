@@ -5,7 +5,7 @@ public class RockySlime : Enemy
 {
     [SerializeField] int projectileCount;
     [SerializeField] float jumpTime, attackCooldown, jumpThreshold, minProjectileDistance, maxProjectileDistance, projectileAngleRange;
-    [SerializeField] ProjectileSO natureProjectile, earthProjectile;
+    [SerializeField] GameObject prefabNatureProjectile, prefabEarthProjectile;
 
     float currentJumpTime, currentAttackCooldown;
     int landingAnim = Animator.StringToHash("SlimeLanding"),
@@ -16,10 +16,8 @@ public class RockySlime : Enemy
     Shooter shooter;
     RockySlimeState rockyState;
     Vector2 targetPos;
-    Health health;
 
     protected override int IdleAnim => Animator.StringToHash("SlimeIdle");
-
 
     new void Start()
     {
@@ -32,7 +30,6 @@ public class RockySlime : Enemy
 
         spriteRenderer = GetComponent<SpriteRenderer>();
         shooter = GetComponent<Shooter>();
-        health = GetComponent<Health>();
 
         spriteRenderer.enabled = false;
     }
@@ -71,7 +68,7 @@ public class RockySlime : Enemy
         spriteRenderer.enabled = true;
         currentJumpTime = jumpTime;
         rockyState = RockySlimeState.Jumping;
-        health.SetInvincibility(true);
+        SetInvincibility(true);
     }
 
     void Attack()
@@ -82,7 +79,7 @@ public class RockySlime : Enemy
 
     void ResetToIdle()
     {
-        health.SetInvincibility(false);
+        SetInvincibility(false);
         spriteRenderer.enabled = false;
         rigidbody.linearVelocity = Vector2.zero;
         rockyState = RockySlimeState.Idle;
@@ -90,11 +87,10 @@ public class RockySlime : Enemy
         animator.CrossFade(IdleAnim, 0, 0);
     }
 
-    void DealProjectileDamage(Collider2D[] colliders, Projectile projectile)
+    void DealProjectileDamage(Collider2D[] colliders, Projectile projectile, Element element)
     {
         if (colliders.Count(collider => collider.transform == target) == 0) return;
         int damage = Mathf.RoundToInt(attack * 0.8f);
-        Element element = projectile.ProjectileData.ProjectileEffect == natureProjectile ? Element.Nature : Element.Earth;
         Health targetHealth = target.GetComponent<Health>();
         if (targetHealth) targetHealth.TakeDamage(damage, element, projectile.transform.position);
 
@@ -119,7 +115,8 @@ public class RockySlime : Enemy
         if (IsStaggered) return;
         bool projectileRandom = Random.value > 0.5f;
         float targetAngle = Mathf.Atan2(target.position.y - transform.position.y, target.position.x - transform.position.x);
-        ProjectileSO projectileData = projectileRandom ? earthProjectile : natureProjectile;
+        GameObject prefabProjectile = projectileRandom ? prefabEarthProjectile : prefabNatureProjectile;
+        Element element = projectileRandom ? Element.Earth : Element.Nature;
 
         for (float i = 0; i < projectileCount; i++)
         {
@@ -131,8 +128,8 @@ public class RockySlime : Enemy
             Vector3 direction = new(Mathf.Cos(angle), Mathf.Sin(angle));
             Vector2 targetPosition = direction * magnitude + transform.position;
 
-            shooter.FireProjectile(projectileData, targetPosition, out Projectile projectile, FiringMode.FirePoint);
-            projectile.OnHit.AddListener(DealProjectileDamage);
+            shooter.FireProjectile(prefabProjectile, targetPosition, out Projectile projectile, FiringMode.FirePoint);
+            projectile.OnHit.AddListener((Collider2D[] colliders, Projectile projectile) => DealProjectileDamage(colliders, projectile, element));
         }
     }
 
@@ -146,7 +143,7 @@ public class RockySlime : Enemy
     {
         base.OnStagger();
         spriteRenderer.enabled = false;
-        health.SetInvincibility(false);
+        SetInvincibility(false);
     }
 
     public override void OnStaggerEnd()

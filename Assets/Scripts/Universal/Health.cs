@@ -5,7 +5,7 @@ using UnityEngine.Events;
 public class Health : MonoBehaviour
 {
     [SerializeField] int hp, maxHp, def;
-    [SerializeField] float knockbackResistance = 0;
+    [SerializeField] float knockbackResistance = 0, invincibilityFrames = 0.5f;
     [SerializeField] bool invincible;
     [SerializeField] UnityEvent onDeath, onHit;
     [SerializeField] GameObject prefabDmgObj, prefabHitEffect, prefabHealth;
@@ -28,7 +28,7 @@ public class Health : MonoBehaviour
     {
         onHit.Invoke();
         if (invincible) return;
-        int finalDamage = Mathf.RoundToInt((1 - 0.01f * Mathf.Log(def + 1, 1.2f)) * amount);
+        int finalDamage = Mathf.RoundToInt(amount * 100 / (100 + def));
         hp -= finalDamage;
 
         Instantiate(prefabHitEffect).GetComponent<HitEfect>().Initialize(transform.position);
@@ -41,6 +41,7 @@ public class Health : MonoBehaviour
         {
             StopAllCoroutines();
             StartCoroutine(ApplyHitEffects(incomingAttack, knockback, enemy));
+            StartCoroutine(InvincibilityFrameCoroutine());
         }
 
         if (hp > 0)
@@ -113,6 +114,14 @@ public class Health : MonoBehaviour
         rigidbody.AddForce(((Vector2)transform.position - incomingAttack) * knockback * (1 - knockbackResistance), ForceMode2D.Impulse);
         yield return new WaitForSeconds(0.2f);
         enemy.enabled = wasEnabled;
+        if (enemy.IsStaggered) oldVelocity = Vector2.zero;
         rigidbody.linearVelocity = oldVelocity;
+    }
+
+    IEnumerator InvincibilityFrameCoroutine()
+    {
+        SetInvincibility(true);
+        yield return new WaitForSeconds(invincibilityFrames);
+        SetInvincibility(false);
     }
 }

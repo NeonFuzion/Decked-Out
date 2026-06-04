@@ -12,7 +12,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: ccefeaff58ce65b4b9393a54b3790126, type: 3}
   m_Name: ImpaleProjectile
   m_EditorClassIdentifier: Assembly-CSharp::ProjectileData
-  speed: 20
+  speed: 12
   maxHeight: 0
   maxDistance: 3
   homingSpeed: 0

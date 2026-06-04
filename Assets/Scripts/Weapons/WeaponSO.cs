@@ -14,7 +14,7 @@ public abstract class WeaponSO : EquipmentSO
     
     public Element Element { get => element; }
     public WeaponHoldStyle WeaponHoldStyle { get => weaponHoldStyle; }
-    public AttackSequenceData[] Animations { get => attackComboData; }
+    public AttackSequenceData[] AttackComboData { get => attackComboData; }
 
     public int GetNextAnimationIndex(int index)
     {

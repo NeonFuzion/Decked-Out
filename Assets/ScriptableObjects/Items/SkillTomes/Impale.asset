@@ -18,9 +18,9 @@ MonoBehaviour:
   sprite: {fileID: 672505362, guid: ef34d59f4ae4b7247ac9f028d62c1c2b, type: 3}
   combatResource: 1
   element: 7
-  resourceCost: 40
+  resourceCost: 35
   cooldown: 5
   damageStaggerPairs:
-  - damage: 20
-    stagger: 15
-  projectileSO: {fileID: 11400000, guid: d470b368aebd76947999c6d207c6f07f, type: 2}
+  - damage: 17
+    stagger: 14
+  prefabProjectile: {fileID: 1391803176948481848, guid: 040e45d44ae462944ac2423b3f60f5e2, type: 3}

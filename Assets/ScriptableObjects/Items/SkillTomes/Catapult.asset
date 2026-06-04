@@ -22,4 +22,4 @@ MonoBehaviour:
   damageStaggerPairs:
   - damage: 18
     stagger: 10
-  projectileSO: {fileID: 11400000, guid: 88eb622944cf7d446abd9cec750698f8, type: 2}
+  prefabProjectile: {fileID: 1391803176948481848, guid: 3f207f91610413f4f89a406b6baf3d23, type: 3}

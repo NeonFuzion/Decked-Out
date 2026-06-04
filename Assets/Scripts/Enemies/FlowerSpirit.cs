@@ -24,15 +24,14 @@ public class FlowerSpirit : Enemy
 
     protected override int IdleAnim => Animator.StringToHash("FlowerIdle");
 
-    ForestSpiritState state;
+    FlowerSpiritState state;
     Vector2 rootPosition, beamDirection;
-    Health health;
     float currentCooldown;
 
     new void Start()
     {
         base.Start();
-        state = ForestSpiritState.Idle;
+        state = FlowerSpiritState.Idle;
         currentCooldown = attackCooldown;
         health = GetComponent<Health>();
     }
@@ -44,15 +43,18 @@ public class FlowerSpirit : Enemy
 
         switch (state)
         {
-            case ForestSpiritState.Idle:
+            case FlowerSpiritState.Idle:
+                currentCooldown -= Time.deltaTime;
+
                 if (Vector2.Distance(transform.position, target.position) < retreatDistance)
                 {
-                    CalculateRootPosition();
-                    state = ForestSpiritState.Sinking;
+                    bool hasSpace = CalculateRootPosition();
+
+                    if (!hasSpace) break;
+                    state = FlowerSpiritState.Sinking;
                     animator.CrossFade(sinkAnim, 0, 0);
                     break;
                 }
-                currentCooldown -= Time.deltaTime;
 
                 if (currentCooldown > 0) break;
                 StartBeamAttack();
@@ -62,7 +64,7 @@ public class FlowerSpirit : Enemy
 
     void FixedUpdate()
     {
-        if (state == ForestSpiritState.Rooting)
+        if (state == FlowerSpiritState.Rooting)
         {
             Vector2 dir = (rootPosition - (Vector2)transform.position).normalized;
             rigidbody.linearVelocity = dir * rootingSpeed;
@@ -71,14 +73,15 @@ public class FlowerSpirit : Enemy
         rigidbody.linearVelocity = Vector2.zero;
     }
 
-    void CalculateRootPosition()
+    bool CalculateRootPosition()
     {
         Vector2 awayFromPlayer = ((Vector2)transform.position - (Vector2)target.position).normalized;
         RaycastHit2D raycastHit2D = Physics2D.Raycast(transform.position, awayFromPlayer, rootDistance, LayerMask.GetMask("Wall"));
-        float magnitude = raycastHit2D ? (raycastHit2D.point - (Vector2)transform.position).magnitude : rootDistance;
+        float magnitude = raycastHit2D ? Vector2.Distance(raycastHit2D.point, transform.position) - 0.4f : rootDistance;
 
-        if (magnitude < retreatDistanceFloor) return;
+        if (magnitude < retreatDistanceFloor) return false;
         rootPosition = (Vector2)target.position + awayFromPlayer * magnitude;
+        return true;
     }
 
     void FinishSinking()
@@ -90,14 +93,14 @@ public class FlowerSpirit : Enemy
     void FinishEmerging()
     {
         if (IsStaggered) return;
-        state = ForestSpiritState.Idle;
+        state = FlowerSpiritState.Idle;
         animator.CrossFade(IdleAnim, 0, 0);
     }
 
     IEnumerator RootSequence()
     {
-        state = ForestSpiritState.Rooting;
-        health.SetInvincibility(true);
+        state = FlowerSpiritState.Rooting;
+        SetInvincibility(true);
         undergroundTrail.Play();
 
         while (Vector2.Distance(transform.position, rootPosition) > repositionThreshold)
@@ -106,8 +109,8 @@ public class FlowerSpirit : Enemy
             yield return null;
         }
 
-        state = ForestSpiritState.Emerging;
-        health.SetInvincibility(false);
+        state = FlowerSpiritState.Emerging;
+        SetInvincibility(false);
         undergroundTrail.Stop();
         rigidbody.linearVelocity = Vector2.zero;
         animator.CrossFade(emergeAnim, 0, 0);
@@ -115,7 +118,7 @@ public class FlowerSpirit : Enemy
 
     void StartBeamAttack()
     {
-        state = ForestSpiritState.Charging;
+        state = FlowerSpiritState.Charging;
         beamDirection = target ? ((Vector2)target.position - (Vector2)transform.position).normalized : Vector2.right;
         animator.CrossFade(chargeAnim, 0, 0);
     }
@@ -128,12 +131,12 @@ public class FlowerSpirit : Enemy
 
     IEnumerator BeamAttack()
     {
-        state = ForestSpiritState.Firing;
+        state = FlowerSpiritState.Firing;
         animator.CrossFade(firingAnim, 0, 0);
         yield return StartCoroutine(FireBeam());
 
         if (IsStaggered) yield break;
-        state = ForestSpiritState.Idle;
+        state = FlowerSpiritState.Idle;
         animator.CrossFade(IdleAnim, 0, 0);
         currentCooldown = attackCooldown;
     }
@@ -188,9 +191,9 @@ public class FlowerSpirit : Enemy
     public override void OnStaggerEnd()
     {
         base.OnStaggerEnd();
-        state = ForestSpiritState.Idle;
+        state = FlowerSpiritState.Idle;
         currentCooldown = attackCooldown;
     }
 }
 
-enum ForestSpiritState { Idle, Sinking, Rooting, Emerging, Charging, Firing }
+enum FlowerSpiritState { Idle, Sinking, Rooting, Emerging, Charging, Firing }

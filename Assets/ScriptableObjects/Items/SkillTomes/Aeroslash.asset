@@ -12,15 +12,14 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 4a6f36eb5340df446aeb7d5c5304bf33, type: 3}
   m_Name: Aeroslash
   m_EditorClassIdentifier: Assembly-CSharp::ImpaleSkill
-  itemName: Impale
-  description: Impale a nearby target with a large ice crystal, inflicting Slowness
-    and high stagger damage.
+  itemName: Aeroslash
+  description: Launches a fast wind slash dealing low damage while having a low cooldown.
   sprite: {fileID: -1925902765, guid: ef34d59f4ae4b7247ac9f028d62c1c2b, type: 3}
   combatResource: 1
-  element: 7
-  resourceCost: 25
+  element: 3
+  resourceCost: 20
   cooldown: 3
   damageStaggerPairs:
   - damage: 11
     stagger: 15
-  projectileSO: {fileID: 11400000, guid: a23ca65918908934890838be74ad47f6, type: 2}
+  prefabProjectile: {fileID: 1391803176948481848, guid: 2762f8370abe82c4dad201e0d2745b5a, type: 3}

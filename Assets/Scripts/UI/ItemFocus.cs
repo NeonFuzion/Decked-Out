@@ -53,8 +53,8 @@ public class ItemFocus : MonoBehaviour
     void ProcessWeapon(WeaponSO weapon)
     {
         if (!weapon) return;
-        int maxDamage = weapon.Animations.Max(animation => animation.Damage);
-        int minDamage = weapon.Animations.Min(animation => animation.Damage);
+        int maxDamage = weapon.AttackComboData.Max(animation => animation.Damage);
+        int minDamage = weapon.AttackComboData.Min(animation => animation.Damage);
         string text = maxDamage == minDamage ? maxDamage + "" : $"{minDamage} ~ {maxDamage}";
 
         focusType.SetText("Weapon");

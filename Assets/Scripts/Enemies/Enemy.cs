@@ -9,6 +9,8 @@ public abstract class Enemy : Being
 
     protected new Rigidbody2D rigidbody;
     protected Transform target;
+    protected Health health;
+    protected Stagger stagger;
 
     protected abstract int IdleAnim { get; }
 
@@ -16,7 +18,10 @@ public abstract class Enemy : Being
     protected void Start()
     {
         BeingType = BeingType.Hostile;
+
         rigidbody = GetComponent<Rigidbody2D>();
+        stagger = GetComponent<Stagger>();
+        health = GetComponent<Health>();
     }
 
     // Update is called once per frame
@@ -54,6 +59,12 @@ public abstract class Enemy : Being
     {
         Vector2 direction = (targetPosition - transform.position).normalized;
         rigidbody.linearVelocity = direction * movementSpeed;
+    }
+
+    protected void SetInvincibility(bool isInvincible)
+    {
+        health.SetInvincibility(isInvincible);
+        stagger.SetInvincibility(isInvincible);
     }
 
     public bool IsStaggered { get; private set; }

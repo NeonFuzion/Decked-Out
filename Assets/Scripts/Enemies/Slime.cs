@@ -45,6 +45,7 @@ public class Slime : Enemy
                 break;
             case SlimeState.Jumping:
                 curJumpTime -= Time.deltaTime;
+                Movement(targetPos);
                 if (curJumpTime < 0 || !target || Vector3.Distance(targetPos, transform.position) < 1.75f || IsStaggered)
                     animator.CrossFade(landingAnim, 0, 0);
                 break;

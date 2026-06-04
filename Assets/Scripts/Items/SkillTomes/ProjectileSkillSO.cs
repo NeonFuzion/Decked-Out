@@ -4,13 +4,13 @@ using UnityEngine;
 [CreateAssetMenu(menuName = "SkillTome/ProjectileTome")]
 public class ProjectileSkillSO : SkillTomeSO
 {
-    [SerializeField] ProjectileSO projectileSO;
+    [SerializeField] GameObject prefabProjectile;
 
     public override void ActivateEffects(Player player, int index)
     {
         Shooter shooter = player.GetComponentInChildren<Shooter>();
         Projectile projectile;
-        shooter.FireProjectile(projectileSO, MainCamera.MouseWorldPosition(), out projectile, FiringMode.Radial);
+        shooter.FireProjectile(prefabProjectile, MainCamera.MouseWorldPosition(), out projectile, FiringMode.Radial);
         projectile.OnHit.AddListener((Collider2D[] colliders, Projectile projectile) =>
         {
             DamageStaggerPair damageStaggerPair = DamageStaggerPairs[0];

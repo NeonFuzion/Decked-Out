@@ -11,7 +11,7 @@ public class Stagger : MonoBehaviour
     [SerializeField] StaggerBar staggerBar;
 
     int currentStaggerPoints;
-    bool isStaggered;
+    bool isStaggered, isInvincible;
 
     Health health;
 
@@ -25,6 +25,7 @@ public class Stagger : MonoBehaviour
 
     public void TakeStagger(int amount)
     {
+        if (isInvincible) return;
         if (isStaggered || amount <= 0) return;
 
         currentStaggerPoints -= amount;
@@ -69,5 +70,10 @@ public class Stagger : MonoBehaviour
         enemy.OnStaggerEnd();
 
         animator.CrossFade("HideEffect", 0, 0);
+    }
+
+    public void SetInvincibility(bool isInvincible)
+    {
+        this.isInvincible = isInvincible;
     }
 }
