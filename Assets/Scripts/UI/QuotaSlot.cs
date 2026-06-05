@@ -7,6 +7,8 @@ public class QuotaSlot : Slot
 
     int quota;
 
+    ItemStack itemStack;
+
     protected override void SetAmount(int amount)
     {
         amountText.SetText($"{amount} / {quota}");
@@ -16,8 +18,14 @@ public class QuotaSlot : Slot
     public void Initialize(ItemStack itemStack, int amount)
     {
         quota = itemStack.Amount;
+        this.itemStack = itemStack;
         
         SetAmount(amount);
         UpdateItem(itemStack.Item.Sprite, amount);
+    }
+
+    protected override void FocusOnItem()
+    {
+        EventManager.InvokeOnFocusItem(itemStack);
     }
 }

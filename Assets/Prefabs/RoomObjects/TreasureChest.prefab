@@ -270,6 +270,7 @@ Canvas:
   m_OverridePixelPerfect: 0
   m_SortingBucketNormalizedSize: 0
   m_VertexColorAlwaysGammaSpace: 0
+  m_UseReflectionProbes: 0
   m_AdditionalShaderChannelsFlag: 25
   m_UpdateRectTransformForStandalone: 0
   m_SortingLayerID: 0
@@ -331,7 +332,7 @@ GameObject:
   - component: {fileID: 7650186419472975386}
   - component: {fileID: 3493767135289193874}
   - component: {fileID: 6032278959693598430}
-  m_Layer: 0
+  m_Layer: 7
   m_Name: TreasureChest
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -451,7 +452,7 @@ BoxCollider2D:
   m_SpriteTilingProperty:
     border: {x: 0, y: 0, z: 0, w: 0}
     pivot: {x: 0.5, y: 0.5}
-    oldSize: {x: 1.8666667, y: 1.8666667}
+    oldSize: {x: 1.75, y: 1.75}
     newSize: {x: 1.8666667, y: 1.8666667}
     adaptiveTilingThreshold: 0.5
     drawMode: 0

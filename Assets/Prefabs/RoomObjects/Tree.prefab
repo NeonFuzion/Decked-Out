@@ -15,7 +15,7 @@ GameObject:
   - component: {fileID: 3862366698560748006}
   - component: {fileID: 2464662232058022203}
   - component: {fileID: 2346262360925278481}
-  m_Layer: 0
+  m_Layer: 7
   m_Name: Tree
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -112,6 +112,7 @@ MonoBehaviour:
   maxHp: 50
   def: 0
   knockbackResistance: 0
+  invincibilityFrames: 0.5
   invincible: 0
   onDeath:
     m_PersistentCalls:

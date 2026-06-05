@@ -12,6 +12,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: cd126234fc7fd34418b49d791e539451, type: 3}
   m_Name: CombatRoom0
   m_EditorClassIdentifier: 
+  roomIcon: {fileID: -1806698700789873819, guid: 44a3ec133d1437c4b934436237a77f13, type: 3}
   floorTiles:
   - tile: {fileID: 11400000, guid: 8eb14e8865f592f4da9a415b5982ff2f, type: 2}
     position: {x: -30, y: -2, z: 0}

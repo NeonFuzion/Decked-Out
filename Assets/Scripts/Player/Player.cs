@@ -140,19 +140,6 @@ public class Player : Being
             EventManager.InvokeOnKill();
         });
     }
-
-    void IncrementMana(float amount)
-    {
-        SetMana(currentMana + amount);
-    }
-
-    void SetMana(float amount)
-    {
-        float maxMana = CalculateStat(PlayerStat.Mana);
-        currentMana = Mathf.Clamp(amount, 0, maxMana);
-        onManaChanged?.Invoke(currentMana / maxMana);
-    }
-
     void HandleDash()
     {
         curDashTime -= Time.deltaTime;
@@ -206,6 +193,19 @@ public class Player : Being
         }
         return output;
     }
+
+    public void IncrementMana(float amount)
+    {
+        SetMana(currentMana + amount);
+    }
+
+    public void SetMana(float amount)
+    {
+        float maxMana = CalculateStat(PlayerStat.Mana);
+        currentMana = Mathf.Clamp(amount, 0, maxMana);
+        onManaChanged?.Invoke(currentMana / maxMana);
+    }
+
 
     public void OnDash()
     {

@@ -8,14 +8,16 @@ using UnityEngine.UI;
 public class DungeonGenerator : MonoBehaviour
 {
     [SerializeField] int roomLength;
-    [SerializeField] float chestSpawnChance;
+    [SerializeField] float chestSpawnChance, specialRoomChance;
     [SerializeField] Tilemap wallTilemap, floorTilemap;
-    [SerializeField] GameObject player, map, roomObjectParent, dungeonCreator;
+    [SerializeField] GameObject player, roomObjectParent, dungeonCreator;
     [SerializeField] GameObject[] enemies;
     [SerializeField] ItemSO[] lootPool;
-    [SerializeField] UnityEvent onRoomCleared;
     [SerializeField] GameObject[] roomTransitions;
     [SerializeField] DungeonRoomLayout[] layouts, specialLayouts;
+    [SerializeField] UnityEvent onRoomCleared;
+    [SerializeField] UnityEvent<DungeonRoom[]> onCreateRooms;
+    [SerializeField] UnityEvent<Direction> onRoomChanged;
 
     int enemyQuota, currentEnemyQuota;
 
@@ -41,27 +43,7 @@ public class DungeonGenerator : MonoBehaviour
             DestroyImmediate(roomObjectParent.transform.GetChild(0).gameObject);
         }
 
-        foreach (DungeonRoom room in roomList)
-        {
-            GameObject roomImage = new GameObject();
-            roomImage.transform.SetParent(map.transform);
-
-            Image image = roomImage.AddComponent<Image>();
-            image.rectTransform.localScale = new Vector2(0.3f, 0.3f);
-            image.rectTransform.position = room.Position;
-
-            foreach (Direction exit in room.Exits)
-            {
-                Vector2 linePosition = room.Position + DirectionToVector(exit) / 2;
-
-                GameObject exitImage = new GameObject();
-                exitImage.transform.SetParent(map.transform);
-
-                Image line = exitImage.AddComponent<Image>();
-                line.rectTransform.localScale = (int)exit % 2 == 0 ? new Vector2(0.05f, 0.25f) : new Vector2(0.25f, 0.05f);
-                line.rectTransform.position = linePosition;
-            }
-        }
+        onCreateRooms?.Invoke(roomList.ToArray());
 
         currentRoom = roomList[0];
         LoadRoom(Direction.None);
@@ -84,7 +66,7 @@ public class DungeonGenerator : MonoBehaviour
         return direction;
     }
 
-    Vector2 DirectionToVector(Direction direction)
+    public static Vector2 DirectionToVector(Direction direction)
     {
         Vector2 vector = Vector2.zero;
         switch ((int)direction)
@@ -123,8 +105,8 @@ public class DungeonGenerator : MonoBehaviour
         }
         else
         {
-            float specialRoomChance = Random.Range(0, 100);
-            DungeonRoomLayout layout = specialRoomChance < 15 ? specialLayouts[Random.Range(1, specialLayouts.Length)] : layouts[Random.Range(0, layouts.Length)];
+            float roomRandom = Random.Range(0, 100);
+            DungeonRoomLayout layout = roomRandom < specialRoomChance ? specialLayouts[Random.Range(1, specialLayouts.Length)] : layouts[Random.Range(0, layouts.Length)];
             newRoom = new (newPostion, new() { newExit }, layout, this);
             roomList.Add(newRoom);
         }
@@ -137,19 +119,15 @@ public class DungeonGenerator : MonoBehaviour
 
     public DungeonRoom FindRoomAtPosition(Vector2 position)
     {
-        return roomList.Where(room => room.Position == position).FirstOrDefault();
+        return roomList.FirstOrDefault(room => room.Position == position);
     }
 
     public void LoadRoom(Direction direction)
     {
         currentRoom = FindRoomAtPosition(currentRoom.Position + DirectionToVector(direction));
-        Vector3 directionVector = DirectionToVector(direction);
-        for (int i = 0; i < map.transform.childCount; i++)
-        {
-            map.transform.GetChild(i).transform.position -= directionVector;
-        }
 
         if (currentRoom == null) return;
+        onRoomChanged?.Invoke(direction);
         List<Direction> exits = currentRoom.Exits;
         DungeonRoomLayout roomLayout = currentRoom.DungeonRoomLayout;
 
@@ -229,6 +207,7 @@ public class DungeonGenerator : MonoBehaviour
     }
 }
 
+[System.Serializable]
 public enum Direction { North, East, South, West, None }
 
 public class DungeonRoom

@@ -330,7 +330,7 @@ GameObject:
   - component: {fileID: 7650186419472975386}
   - component: {fileID: 1155475966266257727}
   - component: {fileID: 3493767135289193874}
-  m_Layer: 0
+  m_Layer: 7
   m_Name: AlchemyTable
   m_TagString: Untagged
   m_Icon: {fileID: 0}

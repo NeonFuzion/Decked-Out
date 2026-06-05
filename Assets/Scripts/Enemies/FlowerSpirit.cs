@@ -8,10 +8,7 @@ public class FlowerSpirit : Enemy
     [SerializeField] float retreatDistanceFloor = 2f;
     [SerializeField] float rootingSpeed = 3f;
     [SerializeField] float repositionThreshold = 0.5f;
-    [SerializeField] float sinkDuration = 0.5f;
-    [SerializeField] float emergeDuration = 0.5f;
     [SerializeField] float attackCooldown = 4f;
-    [SerializeField] float chargeDuration = 2f;
     [SerializeField] float beamDuration = 1.5f;
     [SerializeField] float beamDamageTickRate = 0.3f;
     [SerializeField] ParticleSystem undergroundTrail;
@@ -75,9 +72,9 @@ public class FlowerSpirit : Enemy
 
     bool CalculateRootPosition()
     {
-        Vector2 awayFromPlayer = ((Vector2)transform.position - (Vector2)target.position).normalized;
+        Vector2 awayFromPlayer = (Vector2)(transform.position - target.position).normalized;
         RaycastHit2D raycastHit2D = Physics2D.Raycast(transform.position, awayFromPlayer, rootDistance, LayerMask.GetMask("Wall"));
-        float magnitude = raycastHit2D ? Vector2.Distance(raycastHit2D.point, transform.position) - 0.4f : rootDistance;
+        float magnitude = raycastHit2D ? Mathf.Max(Vector2.Distance(raycastHit2D.point, transform.position) - 1, 0) : rootDistance;
 
         if (magnitude < retreatDistanceFloor) return false;
         rootPosition = (Vector2)target.position + awayFromPlayer * magnitude;
