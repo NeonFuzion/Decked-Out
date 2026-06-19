@@ -50,42 +50,31 @@ public class TreeSpirit : Enemy
         SearchTarget(transform.position, detectDistance);
 
         if (state != TreeSpiritState.Idle) return;
-
         bool isMoving = target != null && !IsStaggered;
         if (isMoving != wasMoving)
         {
             animator.CrossFade(isMoving ? walkAnim : IdleAnim, 0, 0);
             wasMoving = isMoving;
         }
-
         if (!target)
         {
             rigidbody.linearVelocity = Vector2.zero;
             return;
         }
-
         Movement();
         currentCooldown -= Time.deltaTime;
 
-        if (currentCooldown <= 0)
-            SelectAbility();
+        if (currentCooldown > 0) return;
+        SelectAbility();
     }
 
     void SelectAbility()
     {
         if (!target) return;
-
         float distToPlayer = Vector2.Distance(transform.position, target.position);
-        List<TreeSpiritAbility> pool = new();
-
-        if (distToPlayer <= meleeRange)
-            pool.Add(TreeSpiritAbility.Physical);
-
-        pool.Add(TreeSpiritAbility.NatureAttack);
-
-        if (HasNearbyAllies())
-            pool.Add(TreeSpiritAbility.NatureHeal);
-
+        List<TreeSpiritAbility> pool = new() { TreeSpiritAbility.NatureAttack };
+        if (distToPlayer <= meleeRange) pool.Add(TreeSpiritAbility.Physical);
+        if (HasNearbyAllies()) pool.Add(TreeSpiritAbility.NatureHeal);
         pendingAbility = pool[Random.Range(0, pool.Count)];
         BeginWindUp();
     }
@@ -101,24 +90,22 @@ public class TreeSpirit : Enemy
     public void ExecuteAbility()
     {
         if (IsStaggered) return;
-
         state = TreeSpiritState.Executing;
-
+        int animation = -1;
         switch (pendingAbility)
         {
-            case TreeSpiritAbility.Physical:     animator.CrossFade(slamAnim, 0, 0);        break;
-            case TreeSpiritAbility.NatureAttack: animator.CrossFade(natureAttackAnim, 0, 0); break;
-            case TreeSpiritAbility.NatureHeal:   animator.CrossFade(healAnim, 0, 0);         break;
+            case TreeSpiritAbility.Physical: animation = slamAnim; break;
+            case TreeSpiritAbility.NatureAttack: animation = natureAttackAnim; break;
+            case TreeSpiritAbility.NatureHeal: animation = healAnim; break;
         }
+        animator.CrossFade(animation, 0, 0);
     }
 
     // Animation event: slam impact frame
     public void SlamHit()
     {
         if (IsStaggered) return;
-
-        if (slamEffect) slamEffect.Play();
-
+        slamEffect.Play();
         foreach (Collider2D col in Physics2D.OverlapCircleAll(transform.position, slamRadius))
         {
             if (!col.GetComponent<Player>()) continue;
@@ -129,17 +116,14 @@ public class TreeSpirit : Enemy
     // Animation event: nature projectile fire frame
     public void FireNatureProjectiles()
     {
-        if (IsStaggered || !target || !prefabNatureProjectile) return;
-
-        float baseAngle = Mathf.Atan2(
-            target.position.y - transform.position.y,
-            target.position.x - transform.position.x
-        );
+        if (IsStaggered || !target) return;
+        Vector2 deltaPosition = target.position - transform.position;
+        float baseAngle = Mathf.Atan2(deltaPosition.y, deltaPosition.x);
         float halfSpread = projectileSpreadAngle * 0.5f * Mathf.Deg2Rad;
 
-        for (int i = 0; i < projectileCount; i++)
+        for (float i = 0; i < projectileCount; i++)
         {
-            float t = projectileCount == 1 ? 0f : (float)i / (projectileCount - 1) - 0.5f;
+            float t = i / (projectileCount - 1) - 0.5f;
             float angle = baseAngle + t * halfSpread * 2f;
             Vector2 dir = new(Mathf.Cos(angle), Mathf.Sin(angle));
             Vector2 targetPos = (Vector2)transform.position + dir * natureAttackRange;
@@ -155,7 +139,7 @@ public class TreeSpirit : Enemy
         {
             if (!col.GetComponent<Player>()) continue;
             col.GetComponent<Health>()?.TakeDamage(attack, Element.Nature, projectile.transform.position);
-            if (projectile) Destroy(projectile.gameObject);
+            Destroy(projectile.gameObject);
             return;
         }
     }
@@ -164,16 +148,14 @@ public class TreeSpirit : Enemy
     public void HealAllies()
     {
         if (IsStaggered) return;
-
-        if (healAuraEffect) healAuraEffect.Play();
-
+        healAuraEffect.Play();
         foreach (Collider2D col in Physics2D.OverlapCircleAll(transform.position, healRange))
         {
             Enemy enemy = col.GetComponent<Enemy>();
+
             if (!enemy || enemy == this) continue;
             col.GetComponent<Health>()?.Heal(healAmount);
         }
-
         health.Heal(healAmount / 2);
     }
 
@@ -209,8 +191,8 @@ public class TreeSpirit : Enemy
     public override void OnStagger()
     {
         base.OnStagger();
-        if (slamEffect) slamEffect.Stop();
-        if (healAuraEffect) healAuraEffect.Stop();
+        slamEffect.Stop();
+        healAuraEffect.Stop();
         wasMoving = false;
     }
 

@@ -7,8 +7,10 @@ public class ItemSO : ScriptableObject
 {
     [SerializeField] string itemName, description;
     [SerializeField] Sprite sprite;
+    [SerializeField] ItemStack[] ingredients;
 
     public string ItemName { get => itemName; }
     public string Description { get => description; }
     public Sprite Sprite { get => sprite; }
+    public ItemStack[] Ingredients { get => ingredients; }
 }

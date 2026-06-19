@@ -119,6 +119,7 @@ public class Inventory : MonoBehaviour
         int skillTomeIndex = EquipmentSO.GetEquipmentIndex(skillTome);
         int mainHandIndex = EquipmentSO.GetEquipmentIndex(mainHand);
 
+        if (equiped.First(equip => equip?.EquipmentData == skillTome) != null) return equipment;
         if (armor && index != armorIndex + (int)armor.ArmorPiece) return equipment;
         if (skillTome && (index >= skillTomeIndex + 4 || index < skillTomeIndex)) return equipment;
         if (mainHand && (index >= mainHandIndex + 4 || index < mainHandIndex)) return equipment;
@@ -132,11 +133,10 @@ public class Inventory : MonoBehaviour
     public EquipmentInstance AddEquipment(EquipmentInstance equipment)
     {
         if (equipment == null || equipment.EquipmentData == null) return null;
-
         int index = -1;
         int startIndex = EquipmentSO.GetEquipmentIndex(equipment.EquipmentData);
         ArmorSO armor = equipment.EquipmentData as ArmorSO;
-
+        
         if (armor)
         {
             index = startIndex + (int)armor.ArmorPiece;

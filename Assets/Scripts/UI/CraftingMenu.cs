@@ -4,7 +4,7 @@ using UnityEngine;
 
 public class CraftingMenu : MonoBehaviour
 {
-    [SerializeField] CraftingRecipes craftingRecipes;
+    [SerializeField] ItemLoader allRecipes;
     [SerializeField] Transform materialsParent, recipeParent;
     [SerializeField] CraftingSlot selectedCraftableSlot;
     [SerializeField] GameObject prefabQuotaSlot, prefabCraftingSlot;
@@ -12,7 +12,6 @@ public class CraftingMenu : MonoBehaviour
     Inventory inventory;
     CraftingData currentCraftingData;
     List<CraftingData> visibleRecipes;
-    List<CraftingRecipeSO> allRecipes;
 
     void Awake()
     {
@@ -34,8 +33,8 @@ public class CraftingMenu : MonoBehaviour
     void SelectCraftingRecipe(CraftingData craftingData)
     {
         currentCraftingData = craftingData;
-        CraftingRecipeSO currentRecipe = craftingData.CraftingRecipe;
-        selectedCraftableSlot.UpdateItem(currentRecipe.Output.Sprite, 0);
+        ItemSO currentRecipe = craftingData.ItemSO;
+        selectedCraftableSlot.UpdateItem(currentRecipe.Sprite, 0);
 
         for (int i = 0; i < currentRecipe.Ingredients.Length; i++)
         {
@@ -60,7 +59,7 @@ public class CraftingMenu : MonoBehaviour
 
         // Find all recipes that contain materials that exist in inventory even if they can't be fully crafted
         visibleRecipes.Clear();
-        allRecipes.ForEach(recipe =>
+        allRecipes.Items.ForEach(recipe =>
         {
             bool isCraftable = true;
             bool isMaterialFound = false;
@@ -95,7 +94,6 @@ public class CraftingMenu : MonoBehaviour
         if (!inventory)
         {
             inventory = Inventory.Instance;
-            allRecipes = craftingRecipes.Recipes.ToList();
         }
         if (visibleRecipes == null)
         {
@@ -109,14 +107,14 @@ public class CraftingMenu : MonoBehaviour
     {
         if (currentCraftingData == null) return;
         if (!currentCraftingData.IsCraftable) return;
-        CraftingRecipeSO currentRecipe = currentCraftingData.CraftingRecipe;
-        currentRecipe.Ingredients.ToList().ForEach(stack =>
+        ItemSO currentItem = currentCraftingData.ItemSO;
+        currentItem.Ingredients.ToList().ForEach(stack =>
         {
             inventory.RemoveItem(stack.Item, stack.Amount);
         });
-        inventory.AddItem(currentRecipe.Output);
+        inventory.AddItem(currentItem);
         UpdateCraftingMenu();
-        CraftingData data = visibleRecipes.Find(data => data.CraftingRecipe == currentRecipe);
+        CraftingData data = visibleRecipes.Find(data => data.ItemSO == currentItem);
 
         if (data == null) return;
         SelectCraftingRecipe(data);
@@ -126,17 +124,17 @@ public class CraftingMenu : MonoBehaviour
 public class CraftingData
 {
     bool isCraftable;
-    CraftingRecipeSO craftingRecipe;
+    ItemSO craftingRecipe;
     ItemStack[] availableIngredients;
 
-    public CraftingData(bool isCraftable, CraftingRecipeSO craftingRecipe, ItemStack[] availableIngredients)
+    public CraftingData(bool isCraftable, ItemSO itemSO, ItemStack[] availableIngredients)
     {
         this.isCraftable = isCraftable;
-        this.craftingRecipe = craftingRecipe;
+        this.craftingRecipe = itemSO;
         this.availableIngredients = availableIngredients;
     }
 
     public bool IsCraftable { get => isCraftable; }
-    public CraftingRecipeSO CraftingRecipe { get => craftingRecipe; }
+    public ItemSO ItemSO { get => craftingRecipe; }
     public ItemStack[] AvailableIngredients { get => availableIngredients; }
 }

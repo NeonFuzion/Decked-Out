@@ -24,7 +24,7 @@ public class CraftingSlot : Slot, IPointerClickHandler
     protected override void FocusOnItem()
     {
         if (craftingData == null) return;
-        EventManager.InvokeOnFocusItem(new (craftingData.CraftingRecipe.Output, 0));
+        EventManager.InvokeOnFocusItem(new (craftingData.ItemSO, 0));
     }
 
     public void Initialize(CraftingData craftingData, UnityAction<CraftingData> unityAction)
@@ -32,7 +32,7 @@ public class CraftingSlot : Slot, IPointerClickHandler
         this.craftingData = craftingData;
 
         backgroundImage.color = craftingData.IsCraftable ? baseColor : uncraftableColor;
-        UpdateItem(craftingData.CraftingRecipe.Output.Sprite, 1);
+        UpdateItem(craftingData.ItemSO.Sprite, 1);
         onClick?.AddListener(unityAction);
     }
 

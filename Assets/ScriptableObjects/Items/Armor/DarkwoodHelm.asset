@@ -15,6 +15,11 @@ MonoBehaviour:
   itemName: Darkwood Helm
   description: A headpiece made using jagged pieces of bark.
   sprite: {fileID: 1729119030, guid: ae3cbe6ed38ff704b9095494006d5138, type: 3}
+  ingredients:
+  - item: {fileID: 11400000, guid: 28bb038692fa1204687d9119574d3181, type: 2}
+    amount: 4
+  - item: {fileID: 11400000, guid: 796c8882e5051e3458fd3658511292ee, type: 2}
+    amount: 1
   defense: 3
   armorPiece: 0
   passiveEffectSO: {fileID: 0}

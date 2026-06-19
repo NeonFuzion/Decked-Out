@@ -1,5 +1,4 @@
 using System.Collections;
-using System.Collections.Generic;
 using System.Linq;
 using UnityEngine;
 
@@ -33,7 +32,7 @@ public class Whirlwind : MonoBehaviour
                 .ToArray();
 
             if (enemyColliders.Length == 0) continue;
-            AttackData attackData = new(element, transform.position, damageStaggerPair.Damage, damageStaggerPair.Stagger, -1);
+            AttackData attackData = new(element, transform.position, damageStaggerPair.Damage, damageStaggerPair.Stagger, -(int)pullStrength);
             EventManager.InvokeOnEnemyDataAcquired(enemyColliders, attackData);
         }
 

@@ -16,6 +16,13 @@ MonoBehaviour:
   description: A larger piece of armor constucted out of wooden plates used to protect
     a person's body.
   sprite: {fileID: -1416208706, guid: ae3cbe6ed38ff704b9095494006d5138, type: 3}
+  ingredients:
+  - item: {fileID: 11400000, guid: 28bb038692fa1204687d9119574d3181, type: 2}
+    amount: 7
+  - item: {fileID: 11400000, guid: 796c8882e5051e3458fd3658511292ee, type: 2}
+    amount: 2
+  - item: {fileID: 11400000, guid: 356be8cf74e3d9042963a4d44acc2b76, type: 2}
+    amount: 1
   defense: 7
   armorPiece: 1
   passiveEffectSO: {fileID: 0}

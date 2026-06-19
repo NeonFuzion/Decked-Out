@@ -15,6 +15,11 @@ MonoBehaviour:
   itemName: Darkwood Boots
   description: Foot protection made of wood and sap.
   sprite: {fileID: 455125575, guid: ae3cbe6ed38ff704b9095494006d5138, type: 3}
+  ingredients:
+  - item: {fileID: 11400000, guid: 28bb038692fa1204687d9119574d3181, type: 2}
+    amount: 3
+  - item: {fileID: 11400000, guid: 796c8882e5051e3458fd3658511292ee, type: 2}
+    amount: 1
   defense: 3
   armorPiece: 3
   passiveEffectSO: {fileID: 0}
