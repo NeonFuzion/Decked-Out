@@ -15,11 +15,12 @@ MonoBehaviour:
   itemName: Catapult
   description: Summon a large boulder and throw it in front of you.
   sprite: {fileID: -472735285, guid: ef34d59f4ae4b7247ac9f028d62c1c2b, type: 3}
+  ingredients: []
   combatResource: 1
   element: 4
   resourceCost: 15
   cooldown: 4
   damageStaggerPairs:
-  - damage: 18
+  - damage: 30
     stagger: 10
   prefabProjectile: {fileID: 1391803176948481848, guid: 3f207f91610413f4f89a406b6baf3d23, type: 3}

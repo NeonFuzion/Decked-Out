@@ -16,11 +16,12 @@ MonoBehaviour:
   description: Impale a nearby target with a large ice crystal, inflicting Slowness
     and high stagger damage.
   sprite: {fileID: 672505362, guid: ef34d59f4ae4b7247ac9f028d62c1c2b, type: 3}
+  ingredients: []
   combatResource: 1
   element: 7
-  resourceCost: 35
+  resourceCost: 25
   cooldown: 5
   damageStaggerPairs:
-  - damage: 17
+  - damage: 23
     stagger: 14
   prefabProjectile: {fileID: 1391803176948481848, guid: 040e45d44ae462944ac2423b3f60f5e2, type: 3}

@@ -5,7 +5,7 @@ using UnityEngine.Events;
 public class Health : MonoBehaviour
 {
     [SerializeField] int hp, maxHp, def;
-    [SerializeField] float knockbackResistance = 0, invincibilityFrames = 0.5f;
+    [SerializeField] float knockbackResistance = 0, invincibilityFrames = 0.3f;
     [SerializeField] bool invincible;
     [SerializeField] UnityEvent onDeath, onHit;
     [SerializeField] GameObject prefabDmgObj, prefabHitEffect, prefabHealth;
@@ -20,11 +20,21 @@ public class Health : MonoBehaviour
 
     HealthBar healthBar;
     StaggerBar staggerBar;
+    new Rigidbody2D rigidbody;
     Transform healthBarCanvas;
+    Vector2 oldVelocity;
 
-    void Start() { CreateHealthBar(); }
+    bool isGettingKnockedBack;
 
-    public void TakeDamage(int amount, Element element, Vector2 incomingAttack = new Vector2(), float knockback = 1)
+    void Start()
+    {
+        isGettingKnockedBack = false;
+        rigidbody = GetComponent<Rigidbody2D>();
+
+        CreateHealthBar();
+    }
+
+    public void TakeDamage(int amount, Element element, Vector2 attackOrigin, float knockback = 1)
     {
         onHit.Invoke();
         if (invincible) return;
@@ -33,25 +43,23 @@ public class Health : MonoBehaviour
 
         Instantiate(prefabHitEffect).GetComponent<HitEfect>().Initialize(transform.position);
 
-        if (prefabDmgObj) SpawnDamageNumber(incomingAttack, element, finalDamage, false);
+        if (prefabDmgObj) SpawnDamageNumber(attackOrigin, element, finalDamage, false);
         if (amount < 0) return;
 
         Enemy enemy = GetComponent<Enemy>();
-        if (incomingAttack != Vector2.zero && enemy)
+        if (enemy)
         {
+            if (!isGettingKnockedBack) oldVelocity = rigidbody.linearVelocity;
             StopAllCoroutines();
-            StartCoroutine(ApplyHitEffects(incomingAttack, knockback, enemy));
-            StartCoroutine(InvincibilityFrameCoroutine());
+            StartCoroutine(ApplyHitEffects(attackOrigin, knockback, enemy));
         }
+        if (healthBar) healthBar.SetFill((float)hp / maxHp);
 
-        if (hp > 0)
-        {
-            if (healthBar) healthBar.SetFill((float)hp / maxHp);
-            return;
-        }
-
+        if (hp > 0) return;
         onDeath?.Invoke();
-        if (healthBarCanvas) Destroy(healthBarCanvas.gameObject);
+
+        if (!healthBarCanvas) return;
+        Destroy(healthBarCanvas.gameObject);
     }
 
     public void Heal(int amount)
@@ -108,12 +116,12 @@ public class Health : MonoBehaviour
     IEnumerator ApplyHitEffects(Vector2 incomingAttack, float knockback, Enemy enemy)
     {
         bool wasEnabled = enemy.enabled;
+        isGettingKnockedBack = true;
         enemy.enabled = false;
-        Rigidbody2D rigidbody = GetComponent<Rigidbody2D>();
-        Vector2 oldVelocity = rigidbody.linearVelocity;
-        rigidbody.AddForce(((Vector2)transform.position - incomingAttack) * knockback * (1 - knockbackResistance), ForceMode2D.Impulse);
+        rigidbody.AddForce(((Vector2)transform.position - incomingAttack).normalized * knockback * (1 - knockbackResistance), ForceMode2D.Impulse);
         yield return new WaitForSeconds(0.2f);
         enemy.enabled = wasEnabled;
+        isGettingKnockedBack = false;
         if (enemy.IsStaggered) oldVelocity = Vector2.zero;
         rigidbody.linearVelocity = oldVelocity;
     }

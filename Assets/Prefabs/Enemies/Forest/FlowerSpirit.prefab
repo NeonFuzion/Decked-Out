@@ -5863,10 +5863,7 @@ MonoBehaviour:
   retreatDistanceFloor: 2
   rootingSpeed: 3
   repositionThreshold: 0.5
-  sinkDuration: 0.5
-  emergeDuration: 0.5
   attackCooldown: 4
-  chargeDuration: 2
   beamDuration: 1.5
   beamDamageTickRate: 0.3
   undergroundTrail: {fileID: 861065165659023475}

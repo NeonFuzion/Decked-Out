@@ -192,7 +192,9 @@ GameObject:
   m_Component:
   - component: {fileID: 6914463608645881522}
   - component: {fileID: 1604240619775246307}
-  - component: {fileID: -2274503540313287159}
+  - component: {fileID: 5695514071641954708}
+  - component: {fileID: 1415834885342970022}
+  - component: {fileID: 500209601325953640}
   m_Layer: 0
   m_Name: WhirlwindProjectile
   m_TagString: Untagged
@@ -239,7 +241,7 @@ Animator:
   m_AllowConstantClipSamplingOptimization: 1
   m_KeepAnimatorStateOnDisable: 0
   m_WriteDefaultValuesOnDisable: 0
---- !u!114 &-2274503540313287159
+--- !u!114 &5695514071641954708
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -248,6 +250,89 @@ MonoBehaviour:
   m_GameObject: {fileID: 5114884153644805686}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 4584b55aa6285a9469d2d112e9e6261c, type: 3}
+  m_Script: {fileID: 11500000, guid: 149b40c25753f4844a4bd428989828cc, type: 3}
   m_Name: 
-  m_EditorClassIdentifier: Assembly-CSharp::Whirlwind
+  m_EditorClassIdentifier: Assembly-CSharp::Timer
+  startActive: 1
+  onTimerCompleted:
+    m_PersistentCalls:
+      m_Calls:
+      - m_Target: {fileID: 1415834885342970022}
+        m_TargetAssemblyTypeName: MultiTrigger, Assembly-CSharp
+        m_MethodName: Trigger
+        m_Mode: 1
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 2
+--- !u!114 &1415834885342970022
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 5114884153644805686}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 6cb01ca47b17ce84bbcba268f58d16f6, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::MultiTrigger
+  triggerCount: 6
+  onTrigger:
+    m_PersistentCalls:
+      m_Calls:
+      - m_Target: {fileID: 500209601325953640}
+        m_TargetAssemblyTypeName: DamageHolder, Assembly-CSharp
+        m_MethodName: DealDamage
+        m_Mode: 4
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 2.5
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 2
+      - m_Target: {fileID: 5695514071641954708}
+        m_TargetAssemblyTypeName: Timer, Assembly-CSharp
+        m_MethodName: SetTimer
+        m_Mode: 4
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0.5
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 2
+  onFinish:
+    m_PersistentCalls:
+      m_Calls:
+      - m_Target: {fileID: 500209601325953640}
+        m_TargetAssemblyTypeName: DamageHolder, Assembly-CSharp
+        m_MethodName: Destroy
+        m_Mode: 1
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 2
+--- !u!114 &500209601325953640
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 5114884153644805686}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: ca4c76aa3a4448f49b94c9894e59b88c, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::DamageHolder

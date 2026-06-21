@@ -74,7 +74,7 @@ public class Slime : Enemy
         if (!target) return;
         if (Vector2.Distance(target.position, transform.position) > 1) return;
         Health health = target.GetComponent<Health>();
-        if (health) health.TakeDamage(attack, Element.Water);
+        if (health) health.TakeDamage(attack, Element.Water, transform.position);
     }
 
     public override void OnStagger()

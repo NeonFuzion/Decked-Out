@@ -55,7 +55,7 @@ MonoBehaviour:
   maxHp: 0
   def: 0
   knockbackResistance: 0
-  invincibilityFrames: 0.5
+  invincibilityFrames: 0.3
   invincible: 0
   onDeath:
     m_PersistentCalls:

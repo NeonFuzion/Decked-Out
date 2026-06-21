@@ -49,7 +49,7 @@ public class WeaponParent : MonoBehaviour
                 transform.right = direction.normalized;
                 break;
             case WeaponHoldStyle.Static:
-                transform.right = Vector2.right * (mousePosition.x > 0 ? 1 : -1);
+                transform.right = Vector2.right * Mathf.Sign(mousePosition.x);
                 break;
         }
     }

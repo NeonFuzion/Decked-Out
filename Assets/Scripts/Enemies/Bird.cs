@@ -45,7 +45,7 @@ public class Bird : Enemy
 
                 if (collision.transform != target) break;
                 damageDealt = true;
-                collision.GetComponent<Health>().TakeDamage(attack, Element.Wind);
+                collision.GetComponent<Health>().TakeDamage(attack, Element.Wind, transform.position);
                 break;
         }
     }

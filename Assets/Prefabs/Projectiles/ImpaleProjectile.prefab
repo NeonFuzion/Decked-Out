@@ -144,6 +144,7 @@ MonoBehaviour:
   maxDistance: 3
   homingSpeed: 0
   damageRadius: 1
+  effectTickCooldown: 0.3
   trajectoryCurve:
     serializedVersion: 2
     m_Curve:
@@ -168,6 +169,12 @@ MonoBehaviour:
     m_PreInfinity: 2
     m_PostInfinity: 2
     m_RotationOrder: 4
+  onHit:
+    m_PersistentCalls:
+      m_Calls: []
+  onExpire:
+    m_PersistentCalls:
+      m_Calls: []
 --- !u!1 &5519684884632065514
 GameObject:
   m_ObjectHideFlags: 0

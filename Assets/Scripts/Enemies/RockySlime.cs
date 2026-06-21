@@ -107,7 +107,7 @@ public class RockySlime : Enemy
         if (!target) return;
         if (Vector2.Distance(target.position, transform.position) > 1.5f) return;
         Health targetHealth = target.GetComponent<Health>();
-        if (targetHealth) targetHealth.TakeDamage(attack, Element.Nature);
+        if (targetHealth) targetHealth.TakeDamage(attack, Element.Nature, transform.position);
     }
 
     public void FireProjectiles()

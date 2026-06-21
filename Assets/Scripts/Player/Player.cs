@@ -7,7 +7,7 @@ using UnityEngine.Events;
 
 public class Player : Being
 {
-    [SerializeField] float baseResourceRegen;
+    [SerializeField] float baseResourceRegen, perfectDodgeResourceGain;
     [SerializeField] Transform sprite, dashCount;
     [SerializeField] UnityEvent<float> onManaChanged;
     [SerializeField] UnityEvent<int, bool> onDamageInflicted;
@@ -99,7 +99,7 @@ public class Player : Being
 
     void ToggleDash()
     {
-        health?.ToggleInvincibility();
+        health.ToggleInvincibility();
         dashing = !dashing;
         curSpeed = baseSpeed * (dashing ? dashSpdMulti : 1);
     }
@@ -133,13 +133,14 @@ public class Player : Being
             if (!health) return;
             int damage = Mathf.RoundToInt(attackData.Damage * (1 + Mathf.Log(CalculateStat(PlayerStat.Attack)) / 20));
             int staggerDamage = Mathf.RoundToInt(attackData.Stagger * CalculateStat(PlayerStat.StaggerMultiplier));
-            health.TakeDamage(damage, attackData.Element, attackData.Origin);
-            stagger?.TakeStagger(staggerDamage);
+            health.TakeDamage(damage, attackData.Element, attackData.Origin, attackData.Knockback);
+            stagger?.TakeStagger(staggerDamage, attackData.Origin);
 
             if (health.HP > 0) return;
             EventManager.InvokeOnKill();
         });
     }
+
     void HandleDash()
     {
         curDashTime -= Time.deltaTime;
@@ -219,6 +220,14 @@ public class Player : Being
     public void OnDeath()
     {
         gameObject.SetActive(false);
+    }
+
+    public void OnPerfectDodge()
+    {
+        if (!dashing) return;
+        if (!health.Invincible) return;
+        float manaRegenRate = 1 + CalculateStat(PlayerStat.ManaRegen) / 100;
+        IncrementMana(perfectDodgeResourceGain * manaRegenRate);
     }
 
     public void UpdateEquipmentStats()

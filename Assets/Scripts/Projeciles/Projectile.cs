@@ -5,16 +5,16 @@ using UnityEngine.Events;
 public class Projectile : MonoBehaviour
 {
     [SerializeField] Transform projectileVisual, projectileShadow;
-    [SerializeField] float speed, maxHeight, maxDistance, homingSpeed, damageRadius;
+    [SerializeField] float speed, maxHeight, maxDistance, homingSpeed, damageRadius, effectTickCooldown = 0.3f;
     [SerializeField] AnimationCurve trajectoryCurve;
     [SerializeField] ProjectileEffect projectileEffect;
+    [SerializeField] UnityEvent<Collider2D[], Projectile> onHit;
+    [SerializeField] UnityEvent<Projectile> onExpire;
 
-    float totalDistance, groundDirection, rotationOffset;
+    float totalDistance, groundDirection, rotationOffset, currentEffectTickCooldown;
 
     Vector2 targetPosition, startPosition;
     SpriteRenderer visualSpriteRenderer, shadowSpriteRenderer;
-    UnityEvent<Collider2D[], Projectile> onHit;
-    UnityEvent<Projectile> onExpire;
     
     public UnityEvent<Collider2D[], Projectile> OnHit { get => onHit; }
     public UnityEvent<Projectile> OnExpire { get => onExpire; }
@@ -45,7 +45,7 @@ public class Projectile : MonoBehaviour
 
         float trajectoryAngle = (1 - trajectoryCurveValue) * (distanceProgress > 0.5f && maxHeight != 0 ? -1 : 1) * maxHeight * 20 + rotationOffset;
         projectileVisual.transform.eulerAngles = Vector3.forward * (groundDirection + trajectoryAngle);
-        projectileShadow.transform.eulerAngles = Vector3.forward * groundDirection;
+        if (projectileShadow) projectileShadow.transform.eulerAngles = Vector3.forward * groundDirection;
 
         if (distanceProgress <= 1 && maxHeight > 0) return;
         Collider2D[] colliders = Physics2D.OverlapCircleAll(transform.position, damageRadius).Where(collider => collider.gameObject != gameObject).ToArray();
@@ -59,8 +59,12 @@ public class Projectile : MonoBehaviour
         {
             if (distanceProgress < 1)
             {
+                currentEffectTickCooldown -= Time.deltaTime;
+                
                 if (colliders.Length == 0) return;
+                if (currentEffectTickCooldown > 0) return;
                 onHit?.Invoke(colliders, this);
+                currentEffectTickCooldown = effectTickCooldown;
             }
             else
             {
@@ -75,10 +79,11 @@ public class Projectile : MonoBehaviour
         Vector3 correctedTargetPosition = ((Vector3)targetPosition - transform.position).normalized * maxDistance + transform.position;
         this.targetPosition = maxHeight == 0 ? correctedTargetPosition : targetPosition;
         
-        onHit = new ();
         rotationOffset = projectileVisual.eulerAngles.z;
         startPosition = transform.position;
         visualSpriteRenderer = projectileVisual.GetComponent<SpriteRenderer>();
+
+        if (!projectileShadow) return;
         shadowSpriteRenderer = projectileShadow.GetComponent<SpriteRenderer>();
         shadowSpriteRenderer.sprite = visualSpriteRenderer.sprite;
     }

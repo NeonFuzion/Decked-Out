@@ -23,7 +23,7 @@ public class Stagger : MonoBehaviour
         health = GetComponent<Health>();
     }
 
-    public void TakeStagger(int amount)
+    public void TakeStagger(int amount, Vector2 attackOrigin)
     {
         if (isInvincible) return;
         if (isStaggered || amount <= 0) return;
@@ -33,20 +33,20 @@ public class Stagger : MonoBehaviour
         if (currentStaggerPoints <= 0)
         {
             currentStaggerPoints = 0;
-            StartCoroutine(ApplyStagger());
+            StartCoroutine(ApplyStagger(attackOrigin));
         }
 
         if (staggerBar) staggerBar.SetFill((float)currentStaggerPoints / maxStaggerPoints);
     }
 
-    IEnumerator ApplyStagger()
+    IEnumerator ApplyStagger(Vector2 attackOrigin)
     {
         isStaggered = true;
 
         Enemy enemy = GetComponent<Enemy>();
         enemy.OnStagger();
 
-        if (health) health.TakeDamage(staggerDamage, Element.Physical);
+        if (health) health.TakeDamage(staggerDamage, Element.Physical, attackOrigin);
 
         if (staggerBar) staggerBar.SetRefilling(true);
 

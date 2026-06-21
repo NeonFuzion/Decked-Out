@@ -30,7 +30,8 @@ public class UIManager : MonoBehaviour
 
     public void OpenMenu(GameObject menu)
     {
-        CloseMenu();
+        if (this.menu) CloseMenu();
+        this.menu = menu;
         menu.SetActive(true);
         onMenuOpened?.Invoke();
     }

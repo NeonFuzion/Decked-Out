@@ -15,11 +15,12 @@ MonoBehaviour:
   itemName: Aeroslash
   description: Launches a fast wind slash dealing low damage while having a low cooldown.
   sprite: {fileID: -1925902765, guid: ef34d59f4ae4b7247ac9f028d62c1c2b, type: 3}
+  ingredients: []
   combatResource: 1
   element: 3
   resourceCost: 20
   cooldown: 3
   damageStaggerPairs:
-  - damage: 11
+  - damage: 16
     stagger: 15
   prefabProjectile: {fileID: 1391803176948481848, guid: 2762f8370abe82c4dad201e0d2745b5a, type: 3}
