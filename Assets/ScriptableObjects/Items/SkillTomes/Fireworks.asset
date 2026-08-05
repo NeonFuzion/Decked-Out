@@ -1,0 +1,32 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: d40e4b30bedbe014984e5a38e30c4cc3, type: 3}
+  m_Name: Fireworks
+  m_EditorClassIdentifier: Assembly-CSharp::AngleBlastSkillSO
+  itemName: Fireworks
+  description: Creates multiple small explosions focused on a medium sized area.
+  sprite: {fileID: 0}
+  ingredients: []
+  combatResource: 1
+  element: 1
+  resourceCost: 30
+  cooldown: 4
+  damageStaggerPairs:
+  - damage: 5
+    stagger: 30
+  range: 3
+  coneAngle: 75
+  knockbackForce: 5
+  particleMaterial: {fileID: 2100000, guid: 14cba492e0d0b4d40878a3ff0e6ea864, type: 2}
+  enemyLayer:
+    serializedVersion: 2
+    m_Bits: 256

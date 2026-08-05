@@ -6,13 +6,15 @@ using UnityEngine;
 public class AngleBlastSkillSO : SkillTomeSO
 {
     [SerializeField] float range = 3f, coneAngle = 90f, knockbackForce = 5f;
-    [SerializeField] Texture2D particleTexture;
+    [SerializeField] Material particleMaterial;
     [SerializeField] LayerMask enemyLayer;
 
     public override void ActivateEffects(Player player, int index)
     {
         Vector2 playerPos = player.transform.position;
         Vector2 direction = (MainCamera.MouseWorldPosition() - playerPos).normalized;
+
+        player.FireParticles(direction, coneAngle, particleMaterial);
 
         Collider2D[] hits = Physics2D.OverlapCircleAll(playerPos, range, enemyLayer);
 
@@ -23,7 +25,7 @@ public class AngleBlastSkillSO : SkillTomeSO
 
         if (inCone.Count == 0) return;
         DamageStaggerPair pair = DamageStaggerPairs[0];
-        AttackData attackData = new(Element, playerPos, pair.Damage, pair.Stagger);
+        AttackData attackData = new(Element, playerPos, pair.Damage, pair.Stagger, (int)knockbackForce);
         EventManager.InvokeOnEnemyDataAcquired(inCone.ToArray(), attackData);
     }
 }

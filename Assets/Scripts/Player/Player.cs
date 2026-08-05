@@ -26,6 +26,7 @@ public class Player : Being
     Health health;
     SpriteRenderer spriteRenderer;
     Inventory inventory;
+    ParticleSystemRenderer particleRenderer;
 
     public Vector2 Movement { get; set; }
     public ParticleSystem ParticleSystem => particleSystem;
@@ -75,6 +76,7 @@ public class Player : Being
         SetMana(CalculateStat(PlayerStat.Mana));
 
         spriteRenderer = sprite.GetComponent<SpriteRenderer>();
+        particleRenderer = particleSystem.GetComponent<ParticleSystemRenderer>();
         animator = GetComponent<Animator>();
         rb = GetComponent<Rigidbody2D>();
         health = GetComponent<Health>();
@@ -136,7 +138,11 @@ public class Player : Being
                 if (health.Invincible) return;
                 int damage = Mathf.RoundToInt(attackData.Damage * damageConstant / (damageConstant + CalculateStat(PlayerStat.Attack)));
                 health.TakeDamage(damage, attackData.Element, attackData.Origin);
-                if (health.HP <= 0) EventManager.InvokeOnKill();
+                if (health.HP <= 0)
+                {
+                    Debug.Log(collider.gameObject.name);
+                    EventManager.InvokeOnKill();
+                }
             }
             if (collider.GetComponent<Stagger>() is Stagger stagger)
             {
@@ -300,6 +306,15 @@ public class Player : Being
     public void ReplenishMana(float amount)
     {
         IncrementMana(amount);
+    }
+
+    public void FireParticles(Vector2 direction, float coneAngle, Material particleMaterial)
+    {
+        ParticleSystem.ShapeModule shape = particleSystem.shape;
+        shape.arc = coneAngle;
+        particleRenderer.material = particleMaterial;
+        particleSystem.transform.eulerAngles = new Vector3(0, 0, Mathf.Atan2(direction.y, direction.x) * 180 / Mathf.PI - coneAngle / 2);
+        particleSystem.Play();
     }
 }
 

@@ -25,7 +25,7 @@ public class LingeringSkillSO : SkillTomeSO
         multiTrigger.OnTrigger.AddListener(() => {
             Collider2D[] colliders = Physics2D.OverlapCircleAll(obj.transform.position, radius).Where(collider => collider.gameObject != obj).ToArray();
             DamageStaggerPair damageStaggerPair = DamageStaggerPairs[0];
-            AttackData attackData = new (Element, obj.transform.position, damageStaggerPair.Damage, damageStaggerPair.Stagger);
+            AttackData attackData = new (Element, obj.transform.position, damageStaggerPair.Damage, damageStaggerPair.Stagger, knockBack);
             EventManager.InvokeOnEnemyDataAcquired(colliders, attackData);
         });
         multiTrigger.OnFinish.AddListener(() => Destroy(obj));

@@ -602,6 +602,10 @@ PrefabInstance:
       value: 
       objectReference: {fileID: 945444441}
     - target: {fileID: 4467104342022257215, guid: b2ee695fbaf22ec429a8373efbdd8d2e, type: 3}
+      propertyPath: particleSystem
+      value: 
+      objectReference: {fileID: 500012713}
+    - target: {fileID: 4467104342022257215, guid: b2ee695fbaf22ec429a8373efbdd8d2e, type: 3}
       propertyPath: baseResourceRegen
       value: 8
       objectReference: {fileID: 0}
@@ -763,7 +767,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 5412322040207766502, guid: b2ee695fbaf22ec429a8373efbdd8d2e, type: 3}
       propertyPath: startingEquipment.Array.size
-      value: 1
+      value: 2
       objectReference: {fileID: 0}
     - target: {fileID: 5412322040207766502, guid: b2ee695fbaf22ec429a8373efbdd8d2e, type: 3}
       propertyPath: 'startingEquipment.Array.data[0]'
@@ -772,7 +776,7 @@ PrefabInstance:
     - target: {fileID: 5412322040207766502, guid: b2ee695fbaf22ec429a8373efbdd8d2e, type: 3}
       propertyPath: 'startingEquipment.Array.data[1]'
       value: 
-      objectReference: {fileID: 11400000, guid: f39c36ea606206e41bb9ed9594bcae93, type: 2}
+      objectReference: {fileID: 11400000, guid: e7d428e6fb51f7c4688110eab57b7f42, type: 2}
     - target: {fileID: 5412322040207766502, guid: b2ee695fbaf22ec429a8373efbdd8d2e, type: 3}
       propertyPath: 'startingEquipment.Array.data[2]'
       value: 
@@ -34768,7 +34772,7 @@ ParticleSystem:
     rateOverTime:
       serializedVersion: 2
       minMaxState: 0
-      scalar: 50
+      scalar: 100
       minScalar: 10
       maxCurve:
         serializedVersion: 2
