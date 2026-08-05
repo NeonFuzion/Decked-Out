@@ -13,8 +13,7 @@ MonoBehaviour:
   m_Name: Impale
   m_EditorClassIdentifier: Assembly-CSharp::ImpaleSkill
   itemName: Impale
-  description: Impale a nearby target with a large ice crystal, inflicting Slowness
-    and high stagger damage.
+  description: Impales a nearby target with a large ice crystal and applies Slowness
   sprite: {fileID: 672505362, guid: ef34d59f4ae4b7247ac9f028d62c1c2b, type: 3}
   ingredients: []
   combatResource: 1
@@ -23,5 +22,5 @@ MonoBehaviour:
   cooldown: 5
   damageStaggerPairs:
   - damage: 23
-    stagger: 14
+    stagger: 20
   prefabProjectile: {fileID: 1391803176948481848, guid: 040e45d44ae462944ac2423b3f60f5e2, type: 3}

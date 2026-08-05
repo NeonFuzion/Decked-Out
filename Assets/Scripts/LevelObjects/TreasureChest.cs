@@ -7,7 +7,7 @@ using UnityEngine.EventSystems;
 
 public class TreasureChest : RoomObject
 {
-    [SerializeField] UnityEvent onOpen;
+    [SerializeField] UnityEvent onOpen, onSpawn;
 
     TreasureChestData treasureChestData;
 
@@ -35,6 +35,7 @@ public class TreasureChest : RoomObject
     {
         treasureChestData.CurrentTreasureChestState = TreasureChestData.TreasureChestState.Spawned;
         gameObject.SetActive(true);
+        onSpawn?.Invoke();
     }
 
     public void OnClick()

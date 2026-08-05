@@ -1,5 +1,3 @@
-using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
 
 public abstract class Enemy : Being
@@ -13,6 +11,9 @@ public abstract class Enemy : Being
     protected Stagger stagger;
 
     protected abstract int IdleAnim { get; }
+
+    public bool IsStaggered { get; private set; }
+    public bool IsImmobile { get; private set; }
 
     // Start is called before the first frame update
     protected void Start()
@@ -44,19 +45,20 @@ public abstract class Enemy : Being
 
     protected void SearchTarget(Vector2 detectPoint, int radius)
     {
+        if (target && Vector2.Distance(target.position, transform.position) <= detectDistance) return;
         target = FindPlayer(detectPoint, radius);
     }
 
     protected void Movement()
     {
         if (!target) return;
-        if (IsStaggered) return;
-        Vector2 direction = (target.position - transform.position).normalized;
-        rigidbody.linearVelocity = direction * movementSpeed;
+        Movement(target.position);
     }
 
     protected void Movement(Vector3 targetPosition)
     {
+        if (IsStaggered) return;
+        if (IsImmobile) return;
         Vector2 direction = (targetPosition - transform.position).normalized;
         rigidbody.linearVelocity = direction * movementSpeed;
     }
@@ -66,8 +68,6 @@ public abstract class Enemy : Being
         health.SetInvincibility(isInvincible);
         stagger.SetInvincibility(isInvincible);
     }
-
-    public bool IsStaggered { get; private set; }
 
     public virtual void OnStagger()
     {
@@ -85,5 +85,17 @@ public abstract class Enemy : Being
     public void OnDeath()
     {
         Destroy(gameObject);
+    }
+
+    public void OnKnockbackStart()
+    {
+        IsImmobile = true;
+        rigidbody.linearVelocity = Vector2.zero;
+    }
+
+    public void OnKnockbackEnd()
+    {
+        IsImmobile = false;
+        rigidbody.linearVelocity = Vector2.zero;
     }
 }

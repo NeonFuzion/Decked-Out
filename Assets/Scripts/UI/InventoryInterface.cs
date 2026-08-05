@@ -65,7 +65,7 @@ public class InventoryInterface : MonoBehaviour
 
         for (int i = 0; i < equipmentSlots.childCount; i++)
         {
-            EquipmentInstance item = inventory.GetEquipment(i);
+            Equipment item = inventory.GetEquipment(i);
             ItemSlot slot = equipmentSlots.GetChild(i).GetComponent<ItemSlot>();
 
             if (item == null) slot.ResetItem();
@@ -117,8 +117,8 @@ public class InventoryInterface : MonoBehaviour
             EquipmentSO oldEquipmentSO = oldItem.Item as EquipmentSO;
             if (!oldEquipmentSO) return;
 
-            EquipmentInstance toPlace = new EquipmentInstance(oldEquipmentSO);
-            EquipmentInstance displaced = inventory.AddEquipmentAtIndex(toPlace, index);
+            Equipment toPlace = new Equipment(oldEquipmentSO);
+            Equipment displaced = inventory.AddEquipmentAtIndex(toPlace, index);
 
             if (displaced == null) { RemoveOldItem(lastHeldItemIndex, isLastHeldItemEquiped); return; }
             if (displaced == toPlace) return;
@@ -136,7 +136,7 @@ public class InventoryInterface : MonoBehaviour
         if (isLastHeldItemEquiped)
         {
             EquipmentSO newEquipmentSO = newItem.Item as EquipmentSO;
-            if (newEquipmentSO) inventory.AddEquipmentAtIndex(new EquipmentInstance(newEquipmentSO), lastHeldItemIndex);
+            if (newEquipmentSO) inventory.AddEquipmentAtIndex(new Equipment(newEquipmentSO), lastHeldItemIndex);
         }
         else
         {

@@ -36,7 +36,7 @@ Transform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!212 &6734428179752445552
 SpriteRenderer:
-  serializedVersion: 2
+  serializedVersion: 3
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
@@ -93,6 +93,7 @@ SpriteRenderer:
   m_SpriteTileMode: 0
   m_WasSpriteAssigned: 1
   m_SpriteSortPoint: 0
+  m_BlendShapeWeights: []
 --- !u!95 &3957268082418657055
 Animator:
   serializedVersion: 7
@@ -172,6 +173,46 @@ PrefabInstance:
       propertyPath: 'commonDrops.Array.data[0]'
       value: 
       objectReference: {fileID: 11400000, guid: cf70870c58229aa4fb12cbe201809414, type: 2}
+    - target: {fileID: 2038733839661455880, guid: 28ae2131f23309b4cb7b419f9cc10d23, type: 3}
+      propertyPath: onKnockbackEnded.m_PersistentCalls.m_Calls.Array.data[0].m_Mode
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 2038733839661455880, guid: 28ae2131f23309b4cb7b419f9cc10d23, type: 3}
+      propertyPath: onKnockbackEnded.m_PersistentCalls.m_Calls.Array.data[0].m_Target
+      value: 
+      objectReference: {fileID: 8535489045614460257}
+    - target: {fileID: 2038733839661455880, guid: 28ae2131f23309b4cb7b419f9cc10d23, type: 3}
+      propertyPath: onKnockbackStarted.m_PersistentCalls.m_Calls.Array.data[0].m_Mode
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 2038733839661455880, guid: 28ae2131f23309b4cb7b419f9cc10d23, type: 3}
+      propertyPath: onKnockbackStarted.m_PersistentCalls.m_Calls.Array.data[0].m_Target
+      value: 
+      objectReference: {fileID: 8535489045614460257}
+    - target: {fileID: 2038733839661455880, guid: 28ae2131f23309b4cb7b419f9cc10d23, type: 3}
+      propertyPath: onKnockbackEnded.m_PersistentCalls.m_Calls.Array.data[0].m_MethodName
+      value: OnKnockbackEnd
+      objectReference: {fileID: 0}
+    - target: {fileID: 2038733839661455880, guid: 28ae2131f23309b4cb7b419f9cc10d23, type: 3}
+      propertyPath: onKnockbackStarted.m_PersistentCalls.m_Calls.Array.data[0].m_MethodName
+      value: OnKnockbackStart
+      objectReference: {fileID: 0}
+    - target: {fileID: 2038733839661455880, guid: 28ae2131f23309b4cb7b419f9cc10d23, type: 3}
+      propertyPath: onKnockbackEnded.m_PersistentCalls.m_Calls.Array.data[0].m_TargetAssemblyTypeName
+      value: Slime, Assembly-CSharp
+      objectReference: {fileID: 0}
+    - target: {fileID: 2038733839661455880, guid: 28ae2131f23309b4cb7b419f9cc10d23, type: 3}
+      propertyPath: onKnockbackStarted.m_PersistentCalls.m_Calls.Array.data[0].m_TargetAssemblyTypeName
+      value: Slime, Assembly-CSharp
+      objectReference: {fileID: 0}
+    - target: {fileID: 2038733839661455880, guid: 28ae2131f23309b4cb7b419f9cc10d23, type: 3}
+      propertyPath: onKnockbackEnded.m_PersistentCalls.m_Calls.Array.data[0].m_Arguments.m_ObjectArgumentAssemblyTypeName
+      value: UnityEngine.Object, UnityEngine
+      objectReference: {fileID: 0}
+    - target: {fileID: 2038733839661455880, guid: 28ae2131f23309b4cb7b419f9cc10d23, type: 3}
+      propertyPath: onKnockbackStarted.m_PersistentCalls.m_Calls.Array.data[0].m_Arguments.m_ObjectArgumentAssemblyTypeName
+      value: UnityEngine.Object, UnityEngine
+      objectReference: {fileID: 0}
     - target: {fileID: 4731809785871379778, guid: 28ae2131f23309b4cb7b419f9cc10d23, type: 3}
       propertyPath: m_Size.x
       value: 1.8666667
@@ -194,7 +235,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 5754510934464056380, guid: 28ae2131f23309b4cb7b419f9cc10d23, type: 3}
       propertyPath: hp
-      value: 70
+      value: 45
       objectReference: {fileID: 0}
     - target: {fileID: 5754510934464056380, guid: 28ae2131f23309b4cb7b419f9cc10d23, type: 3}
       propertyPath: def
@@ -202,7 +243,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 5754510934464056380, guid: 28ae2131f23309b4cb7b419f9cc10d23, type: 3}
       propertyPath: maxHp
-      value: 70
+      value: 45
       objectReference: {fileID: 0}
     - target: {fileID: 5754510934464056380, guid: 28ae2131f23309b4cb7b419f9cc10d23, type: 3}
       propertyPath: m_EditorClassIdentifier

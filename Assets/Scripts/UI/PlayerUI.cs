@@ -35,14 +35,14 @@ public class PlayerUI : MonoBehaviour
         Inventory inventory = Inventory.Instance;
         for (int i = 0; i < hotbarSlots.Length; i++)
         {
-            EquipmentInstance equipInst = inventory.GetEquipment(i);
+            Equipment equipInst = inventory.GetEquipment(i);
             ConsumablesSO consumable = equipInst?.EquipmentData as ConsumablesSO;
             hotbarSlots[i].Initialize(consumable ? consumable.Sprite : null, consumable ? consumable.Cooldown : 0);
         }
 
         for (int i = 0; i < skillBarSlots.Length; i++)
         {
-            EquipmentInstance equipInst = inventory.GetEquipment(8 + i);
+            Equipment equipInst = inventory.GetEquipment(8 + i);
             SkillTomeSO skillTome = equipInst?.EquipmentData as SkillTomeSO;
             Sprite icon = skillTome != null ? GetElementIcon(skillTome.Element) : null;
             skillBarSlots[i].InitializeSkill(skillTome, icon);

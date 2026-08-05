@@ -17,11 +17,12 @@ public class DamageHolder : MonoBehaviour
         EventManager.InvokeOnEnemyDataAcquired(colliders, attackData);
     }
 
-    public void Initialize(int damage, int stagger, int knockback)
+    public void Initialize(int damage, int stagger, int knockback, Element element)
     {
         this.damage = damage;
         this.stagger = stagger;
         this.knockback = knockback;
+        this.element = element;
     }
 
     public void DealProjectileDamage(Collider2D[] colliders, Projectile projectile)

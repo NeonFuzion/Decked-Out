@@ -18,7 +18,7 @@ public class Inventory : MonoBehaviour
     int itemCount;
 
     ItemStack[] items;
-    EquipmentInstance[] equiped;
+    Equipment[] equiped;
 
     private void Awake()
     {
@@ -43,14 +43,14 @@ public class Inventory : MonoBehaviour
 
     void Initialize()
     {
-        equiped = new EquipmentInstance[12];
+        equiped = new Equipment[12];
         foreach (EquipmentSO equipment in startingEquipment)
         {
             int start = EquipmentSO.GetEquipmentIndex(equipment);
             for (int i = start; i < start + 4; i++)
             {
                 if (equiped[i] != null) continue;
-                equiped[i] = new EquipmentInstance(equipment);
+                equiped[i] = new Equipment(equipment);
                 break;
             }
         }
@@ -82,7 +82,7 @@ public class Inventory : MonoBehaviour
         return items[index];
     }
 
-    public EquipmentInstance GetEquipment(int index)
+    public Equipment GetEquipment(int index)
     {
         return equiped[index];
     }
@@ -100,13 +100,13 @@ public class Inventory : MonoBehaviour
         this.items = items;
     }
 
-    public ItemStack GetEquipAsItemStack(EquipmentInstance equipment)
+    public ItemStack GetEquipAsItemStack(Equipment equipment)
     {
         if (equipment == null) return null;
         return new ItemStack(equipment.EquipmentData, 1);
     }
 
-    public EquipmentInstance AddEquipmentAtIndex(EquipmentInstance equipment, int index)
+    public Equipment AddEquipmentAtIndex(Equipment equipment, int index)
     {
         if (equipment == null || equipment.EquipmentData == null) return null;
 
@@ -125,12 +125,12 @@ public class Inventory : MonoBehaviour
         if (skillTome && (index >= skillTomeIndex + 4 || index < skillTomeIndex)) return equipment;
         if (mainHand && (index >= mainHandIndex + 4 || index < mainHandIndex)) return equipment;
 
-        EquipmentInstance oldItem = equiped[index];
+        Equipment oldItem = equiped[index];
         equiped[index] = equipment;
         return oldItem;
     }
 
-    public EquipmentInstance AddEquipment(EquipmentInstance equipment)
+    public Equipment AddEquipment(Equipment equipment)
     {
         if (equipment == null || equipment.EquipmentData == null) return null;
         int index = -1;
@@ -152,7 +152,7 @@ public class Inventory : MonoBehaviour
         }
 
         if (index == -1) return equipment;
-        EquipmentInstance oldEquipment = equiped[index];
+        Equipment oldEquipment = equiped[index];
         equiped[index] = equipment;
         return oldEquipment;
     }
@@ -242,7 +242,7 @@ public class Inventory : MonoBehaviour
         return null;
     }
 
-    public EquipmentInstance RemoveEquipment(EquipmentSO target)
+    public Equipment RemoveEquipment(EquipmentSO target)
     {
         for (int i = 0; i < equiped.Length; i++)
         {
@@ -252,9 +252,9 @@ public class Inventory : MonoBehaviour
         return null;
     }
 
-    public EquipmentInstance RemoveEquipmentAtIndex(int index)
+    public Equipment RemoveEquipmentAtIndex(int index)
     {
-        EquipmentInstance result = equiped[index];
+        Equipment result = equiped[index];
         equiped[index] = null;
         return result;
     }

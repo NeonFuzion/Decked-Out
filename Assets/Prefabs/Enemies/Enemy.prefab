@@ -10,6 +10,7 @@ GameObject:
   m_Component:
   - component: {fileID: 6845683363559863354}
   - component: {fileID: 5754510934464056380}
+  - component: {fileID: 2038733839661455880}
   - component: {fileID: 1227486679126910494}
   - component: {fileID: 4402656590818373220}
   - component: {fileID: 421466296229121326}
@@ -54,9 +55,12 @@ MonoBehaviour:
   hp: 0
   maxHp: 0
   def: 0
-  knockbackResistance: 0
-  invincibilityFrames: 0.3
   invincible: 0
+  prefabDmgObj: {fileID: 1411201924886030582, guid: 2738ed096446142479ac7a5c9cbf3fe0, type: 3}
+  prefabHitEffect: {fileID: 5432257962816510117, guid: dcfd8fb1acbf42e43b00ff9f2236ca6a, type: 3}
+  prefabHealth: {fileID: 0}
+  healthBarTarget: {fileID: 0}
+  existingHealthBar: {fileID: 0}
   onDeath:
     m_PersistentCalls:
       m_Calls:
@@ -75,11 +79,49 @@ MonoBehaviour:
   onHit:
     m_PersistentCalls:
       m_Calls: []
-  prefabDmgObj: {fileID: 1411201924886030582, guid: 2738ed096446142479ac7a5c9cbf3fe0, type: 3}
-  prefabHitEffect: {fileID: 5432257962816510117, guid: dcfd8fb1acbf42e43b00ff9f2236ca6a, type: 3}
-  prefabHealth: {fileID: 0}
-  healthBarTarget: {fileID: 0}
-  existingHealthBar: {fileID: 0}
+--- !u!114 &2038733839661455880
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 5109368311923587848}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 11458a3e4016679438fcd6442fe5d045, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::KnockbackEffect
+  knockbackResistance: 0
+  onKnockbackStarted:
+    m_PersistentCalls:
+      m_Calls:
+      - m_Target: {fileID: 5109368311923587848}
+        m_TargetAssemblyTypeName: 
+        m_MethodName: 
+        m_Mode: 0
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: 
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 2
+  onKnockbackEnded:
+    m_PersistentCalls:
+      m_Calls:
+      - m_Target: {fileID: 5109368311923587848}
+        m_TargetAssemblyTypeName: 
+        m_MethodName: 
+        m_Mode: 0
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: 
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 2
 --- !u!114 &1227486679126910494
 MonoBehaviour:
   m_ObjectHideFlags: 0

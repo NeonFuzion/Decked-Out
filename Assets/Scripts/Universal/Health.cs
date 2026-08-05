@@ -1,16 +1,19 @@
 using System.Collections;
+using System.Collections.Generic;
+using System.Linq;
 using UnityEngine;
 using UnityEngine.Events;
 
 public class Health : MonoBehaviour
 {
-    [SerializeField] int hp, maxHp, def;
-    [SerializeField] float knockbackResistance = 0, invincibilityFrames = 0.3f;
+    [SerializeField] float damageFlashDuration = 0.1f;
+    [SerializeField] int hp, maxHp, def, defenseConstant = 100;
     [SerializeField] bool invincible;
-    [SerializeField] UnityEvent onDeath, onHit;
+    [SerializeField] Color damageFlashColor = Color.white;
     [SerializeField] GameObject prefabDmgObj, prefabHitEffect, prefabHealth;
     [SerializeField] Transform healthBarTarget;
     [SerializeField] HealthBar existingHealthBar;
+    [SerializeField] UnityEvent onDeath, onHit;
 
     public int HP { get => hp; }
     public int MaxHP { get => maxHp; }
@@ -19,40 +22,38 @@ public class Health : MonoBehaviour
     public UnityEvent OnDeath { get => onDeath; }
 
     HealthBar healthBar;
-    StaggerBar staggerBar;
-    new Rigidbody2D rigidbody;
     Transform healthBarCanvas;
-    Vector2 oldVelocity;
-
-    bool isGettingKnockedBack;
+    List<SpriteRenderer> spriteRenderers;
 
     void Start()
     {
-        isGettingKnockedBack = false;
-        rigidbody = GetComponent<Rigidbody2D>();
+		spriteRenderers = GetComponentsInChildren<SpriteRenderer>().ToList();
 
         CreateHealthBar();
     }
 
-    public void TakeDamage(int amount, Element element, Vector2 attackOrigin, float knockback = 1)
+    void Update () {
+		float emission = Mathf.PingPong (Time.time, damageFlashDuration);
+		Color baseColor = damageFlashColor; //Replace this with whatever you want for your base color at emission level '1'
+
+		Color finalColor = baseColor * Mathf.LinearToGammaSpace (emission);
+
+        spriteRenderers.ForEach(spriteRenderer => {
+		    Material mat = spriteRenderer.material;
+            mat.SetColor ("_EmissionColor", finalColor);
+        });
+	}
+
+    public void TakeDamage(int amount, Element element, Vector2 attackOrigin)
     {
         onHit.Invoke();
         if (invincible) return;
-        int finalDamage = Mathf.RoundToInt(amount * 100 / (100 + def));
+        int finalDamage = Mathf.RoundToInt(amount * defenseConstant / (defenseConstant + def));
         hp -= finalDamage;
-
         Instantiate(prefabHitEffect).GetComponent<HitEfect>().Initialize(transform.position);
-
         if (prefabDmgObj) SpawnDamageNumber(attackOrigin, element, finalDamage, false);
-        if (amount < 0) return;
 
-        Enemy enemy = GetComponent<Enemy>();
-        if (enemy)
-        {
-            if (!isGettingKnockedBack) oldVelocity = rigidbody.linearVelocity;
-            StopAllCoroutines();
-            StartCoroutine(ApplyHitEffects(attackOrigin, knockback, enemy));
-        }
+        if (amount < 0) return;
         if (healthBar) healthBar.SetFill((float)hp / maxHp);
 
         if (hp > 0) return;
@@ -101,8 +102,6 @@ public class Health : MonoBehaviour
             healthBarCanvas = Instantiate(prefabHealth, healthBarTarget.position, Quaternion.identity).transform;
             healthBar = healthBarCanvas.GetComponentInChildren<HealthBar>();
             healthBar.Initialize((float)hp / maxHp);
-            staggerBar = healthBarCanvas.GetComponentInChildren<StaggerBar>();
-            staggerBar?.Initialize(1f);
         }
     }
 
@@ -111,25 +110,5 @@ public class Health : MonoBehaviour
         Vector2 direction = incomingAttack == new Vector2() ? (Vector2)transform.position : (incomingAttack - (Vector2)transform.position);
         GameObject dmgObj = Instantiate(prefabDmgObj, transform.position, Quaternion.identity);
         dmgObj.GetComponent<DamageObject>().Instantiate((isHeal ? -1 : 1) * amount, isHeal, direction, element);
-    }
-
-    IEnumerator ApplyHitEffects(Vector2 incomingAttack, float knockback, Enemy enemy)
-    {
-        bool wasEnabled = enemy.enabled;
-        isGettingKnockedBack = true;
-        enemy.enabled = false;
-        rigidbody.AddForce(((Vector2)transform.position - incomingAttack).normalized * knockback * (1 - knockbackResistance), ForceMode2D.Impulse);
-        yield return new WaitForSeconds(0.2f);
-        enemy.enabled = wasEnabled;
-        isGettingKnockedBack = false;
-        if (enemy.IsStaggered) oldVelocity = Vector2.zero;
-        rigidbody.linearVelocity = oldVelocity;
-    }
-
-    IEnumerator InvincibilityFrameCoroutine()
-    {
-        SetInvincibility(true);
-        yield return new WaitForSeconds(invincibilityFrames);
-        SetInvincibility(false);
     }
 }

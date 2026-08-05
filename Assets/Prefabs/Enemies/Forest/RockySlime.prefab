@@ -36,7 +36,7 @@ Transform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!212 &7576407757726766027
 SpriteRenderer:
-  serializedVersion: 2
+  serializedVersion: 3
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
@@ -93,6 +93,7 @@ SpriteRenderer:
   m_SpriteTileMode: 0
   m_WasSpriteAssigned: 1
   m_SpriteSortPoint: 0
+  m_BlendShapeWeights: []
 --- !u!95 &8356030759821381648
 Animator:
   serializedVersion: 7
@@ -227,13 +228,57 @@ PrefabInstance:
       propertyPath: 'commonDrops.Array.data[0]'
       value: 
       objectReference: {fileID: 11400000, guid: cf70870c58229aa4fb12cbe201809414, type: 2}
+    - target: {fileID: 2038733839661455880, guid: 28ae2131f23309b4cb7b419f9cc10d23, type: 3}
+      propertyPath: knockbackResistance
+      value: 0.3
+      objectReference: {fileID: 0}
+    - target: {fileID: 2038733839661455880, guid: 28ae2131f23309b4cb7b419f9cc10d23, type: 3}
+      propertyPath: onKnockbackEnded.m_PersistentCalls.m_Calls.Array.data[0].m_Mode
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 2038733839661455880, guid: 28ae2131f23309b4cb7b419f9cc10d23, type: 3}
+      propertyPath: onKnockbackEnded.m_PersistentCalls.m_Calls.Array.data[0].m_Target
+      value: 
+      objectReference: {fileID: 1393866274245383861}
+    - target: {fileID: 2038733839661455880, guid: 28ae2131f23309b4cb7b419f9cc10d23, type: 3}
+      propertyPath: onKnockbackStarted.m_PersistentCalls.m_Calls.Array.data[0].m_Mode
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 2038733839661455880, guid: 28ae2131f23309b4cb7b419f9cc10d23, type: 3}
+      propertyPath: onKnockbackStarted.m_PersistentCalls.m_Calls.Array.data[0].m_Target
+      value: 
+      objectReference: {fileID: 1393866274245383861}
+    - target: {fileID: 2038733839661455880, guid: 28ae2131f23309b4cb7b419f9cc10d23, type: 3}
+      propertyPath: onKnockbackEnded.m_PersistentCalls.m_Calls.Array.data[0].m_MethodName
+      value: OnKnockbackEnd
+      objectReference: {fileID: 0}
+    - target: {fileID: 2038733839661455880, guid: 28ae2131f23309b4cb7b419f9cc10d23, type: 3}
+      propertyPath: onKnockbackStarted.m_PersistentCalls.m_Calls.Array.data[0].m_MethodName
+      value: OnKnockbackStart
+      objectReference: {fileID: 0}
+    - target: {fileID: 2038733839661455880, guid: 28ae2131f23309b4cb7b419f9cc10d23, type: 3}
+      propertyPath: onKnockbackEnded.m_PersistentCalls.m_Calls.Array.data[0].m_TargetAssemblyTypeName
+      value: RockySlime, Assembly-CSharp
+      objectReference: {fileID: 0}
+    - target: {fileID: 2038733839661455880, guid: 28ae2131f23309b4cb7b419f9cc10d23, type: 3}
+      propertyPath: onKnockbackStarted.m_PersistentCalls.m_Calls.Array.data[0].m_TargetAssemblyTypeName
+      value: RockySlime, Assembly-CSharp
+      objectReference: {fileID: 0}
+    - target: {fileID: 2038733839661455880, guid: 28ae2131f23309b4cb7b419f9cc10d23, type: 3}
+      propertyPath: onKnockbackEnded.m_PersistentCalls.m_Calls.Array.data[0].m_Arguments.m_ObjectArgumentAssemblyTypeName
+      value: UnityEngine.Object, UnityEngine
+      objectReference: {fileID: 0}
+    - target: {fileID: 2038733839661455880, guid: 28ae2131f23309b4cb7b419f9cc10d23, type: 3}
+      propertyPath: onKnockbackStarted.m_PersistentCalls.m_Calls.Array.data[0].m_Arguments.m_ObjectArgumentAssemblyTypeName
+      value: UnityEngine.Object, UnityEngine
+      objectReference: {fileID: 0}
     - target: {fileID: 5109368311923587848, guid: 28ae2131f23309b4cb7b419f9cc10d23, type: 3}
       propertyPath: m_Name
       value: RockySlime
       objectReference: {fileID: 0}
     - target: {fileID: 5754510934464056380, guid: 28ae2131f23309b4cb7b419f9cc10d23, type: 3}
       propertyPath: hp
-      value: 120
+      value: 75
       objectReference: {fileID: 0}
     - target: {fileID: 5754510934464056380, guid: 28ae2131f23309b4cb7b419f9cc10d23, type: 3}
       propertyPath: def
@@ -241,7 +286,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 5754510934464056380, guid: 28ae2131f23309b4cb7b419f9cc10d23, type: 3}
       propertyPath: maxHp
-      value: 120
+      value: 75
       objectReference: {fileID: 0}
     - target: {fileID: 5754510934464056380, guid: 28ae2131f23309b4cb7b419f9cc10d23, type: 3}
       propertyPath: onDeath.m_PersistentCalls.m_Calls.Array.size
@@ -447,7 +492,7 @@ MonoBehaviour:
   firePoint: {fileID: 6121795034197968400}
 --- !u!212 &3652973860826283459
 SpriteRenderer:
-  serializedVersion: 2
+  serializedVersion: 3
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
@@ -504,3 +549,4 @@ SpriteRenderer:
   m_SpriteTileMode: 0
   m_WasSpriteAssigned: 1
   m_SpriteSortPoint: 0
+  m_BlendShapeWeights: []

@@ -8,6 +8,9 @@ public class MultiTrigger : MonoBehaviour
 
     int currentTriggerCount;
 
+    public UnityEvent OnTrigger => onTrigger;
+    public UnityEvent OnFinish => onFinish; 
+
     public void Trigger()
     {
         if (currentTriggerCount >= triggerCount) return;
@@ -16,5 +19,10 @@ public class MultiTrigger : MonoBehaviour
 
         if (currentTriggerCount != triggerCount) return;
         onFinish?.Invoke();
+    }
+
+    public void SetTriggerCount(int triggerCount)
+    {
+        this.triggerCount = triggerCount;
     }
 }

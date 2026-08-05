@@ -82,10 +82,7 @@ public class DungeonGenerator : MonoBehaviour
 
     void PlaceTiles(List<TileInfo> tiles, Tilemap tilemap)
     {
-        foreach (TileInfo tile in tiles)
-        {
-            tilemap.SetTile(tile.Position, tile.Tile);
-        }
+        tiles.ForEach(tile => tilemap.SetTile(tile.Position, tile.Tile));
     }
 
     void GeneratePath(DungeonRoom oldRoom, Vector2 lastDirection, int currentPathLength, int pathLength)
@@ -132,9 +129,10 @@ public class DungeonGenerator : MonoBehaviour
         DungeonRoomLayout roomLayout = currentRoom.DungeonRoomLayout;
 
         List<Vector2> transitionPositions = roomLayout.RoomTransitionPositions;
+        GameObject transition;
         for (int i = 0; i < transitionPositions.Count; i++)
         {
-            GameObject transition = roomTransitions[i];
+            transition = roomTransitions[i];
             transition.transform.position = transitionPositions[i];
             transition.GetComponent<RoomTransition>().ResetBarrier();
         }
@@ -186,7 +184,7 @@ public class DungeonGenerator : MonoBehaviour
         {
             foreach (GameObject roomTransition in roomTransitions)
             {
-                roomTransition.GetComponent<RoomTransition>().UnlockBarrier();
+                roomTransition.GetComponent<RoomTransition>().ForceUnlock();
             }
         }
     }

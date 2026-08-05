@@ -6,7 +6,7 @@ public class RoomTransition : MonoBehaviour
     [SerializeField] Direction direction;
     [SerializeField] Transform playerSpawn;
     [SerializeField] DungeonGenerator dungeonGenerator;
-    [SerializeField] UnityEvent onEnter;
+    [SerializeField] UnityEvent onEnter, onGateUnlocked;
 
     BoxCollider2D boxCollider;
     SpriteRenderer spriteRenderer;
@@ -57,7 +57,14 @@ public class RoomTransition : MonoBehaviour
 
     public void UnlockBarrier()
     {
-        spriteRenderer.enabled = false;
+        if (!gameObject.activeInHierarchy) return;
         boxCollider.isTrigger = true;
+        onGateUnlocked?.Invoke();
+    }
+
+    public void ForceUnlock()
+    {
+        boxCollider.isTrigger = true;
+        spriteRenderer.enabled = false;
     }
 }

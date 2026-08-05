@@ -13,8 +13,8 @@ MonoBehaviour:
   m_Name: Whirlwind
   m_EditorClassIdentifier: Assembly-CSharp::WhirlwindSkillSO
   itemName: Whirlwind
-  description: Conjure a tornado in front of you, pulling enemies towards the center
-    and dealing damage over time.
+  description: Conjures a tornado in front of you, pulling enemies towards the center
+    and dealing damage over time
   sprite: {fileID: -1925902765, guid: ef34d59f4ae4b7247ac9f028d62c1c2b, type: 3}
   ingredients: []
   combatResource: 1
@@ -24,6 +24,8 @@ MonoBehaviour:
   damageStaggerPairs:
   - damage: 5
     stagger: 7
-  whirlwindPrefab: {fileID: 5114884153644805686, guid: 76a9a6128c5782541a65814b6c50be50, type: 3}
+  lingerPrefab: {fileID: 80839937966615522, guid: 26cea2151b1d03d469b086674e684d12, type: 3}
   spawnDistance: 2
-  pullStrength: 5
+  radius: 2.5
+  tickInterval: 0.5
+  knockBack: -5

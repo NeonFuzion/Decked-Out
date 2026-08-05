@@ -4,6 +4,7 @@ using UnityEngine.Events;
 public class Timer : MonoBehaviour
 {
     [SerializeField] bool startActive;
+    [SerializeField] float duration;
     [SerializeField] UnityEvent onTimerCompleted;
 
     float timerEndTime;
@@ -27,7 +28,18 @@ public class Timer : MonoBehaviour
 
     public void SetTimer(float duration)
     {
-        isActive = true;
+        this.duration = duration;
+        RestartTimer();
+    }
+
+    public void RestartTimer()
+    {
         timerEndTime = Time.time + duration;
+        isActive = true;
+    }
+
+    public void AddTimerEndListener(UnityAction unityAction)
+    {
+        onTimerCompleted?.AddListener(unityAction);
     }
 }

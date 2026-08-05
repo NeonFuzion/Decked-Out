@@ -7,15 +7,17 @@ using UnityEngine.Events;
 
 public class Player : Being
 {
-    [SerializeField] float baseResourceRegen, perfectDodgeResourceGain;
+    [SerializeField] float baseResourceRegen, perfectDodgeResourceGain, perfectDodgeTimeScale, perfectDodgeDuration, damageConstant = 20;
+    [SerializeField] AnimationCurve slowCurve;
     [SerializeField] Transform sprite, dashCount;
+    [SerializeField] ParticleSystem particleSystem;
     [SerializeField] UnityEvent<float> onManaChanged;
     [SerializeField] UnityEvent<int, bool> onDamageInflicted;
 
     Dictionary<PlayerStat, float> resetStats, baseStats, percentageStats, flatStats;
 
     int baseSpeed, curSpeed, dashSpdMulti, dashCharges;
-    float curDashTime, dashChargeTime, curDashChargeTime, currentMana;
+    float curDashTime, dashChargeTime, curDashChargeTime, currentMana, perfectDodgeProgress;
     bool dashing;
 
     Vector2 direction;
@@ -26,6 +28,7 @@ public class Player : Being
     Inventory inventory;
 
     public Vector2 Movement { get; set; }
+    public ParticleSystem ParticleSystem => particleSystem;
 
     // Start is called before the first frame update
     void Start()
@@ -42,6 +45,7 @@ public class Player : Being
         curDashTime = 0;
         dashCharges = 3;
         dashChargeTime = 0.75f;
+        perfectDodgeProgress = -1;
         curDashChargeTime = 0;
         dashing = false;
         inventory = Inventory.Instance;
@@ -102,6 +106,10 @@ public class Player : Being
         health.ToggleInvincibility();
         dashing = !dashing;
         curSpeed = baseSpeed * (dashing ? dashSpdMulti : 1);
+
+        if (dashing) return;
+        perfectDodgeProgress = -1;
+        Time.timeScale = 1;
     }
 
     void ResetStats()
@@ -114,12 +122,8 @@ public class Player : Being
     float CalculateStat(PlayerStat stat)
     {
         if (stat == PlayerStat.None) return 0;
-        float output = 0;
-        if (Stats.IsPercentage(stat))
-            output = resetStats[stat] + percentageStats[stat];
-        else
-            output = (resetStats[stat] + baseStats[stat]) * (1 + percentageStats[stat]) + flatStats[stat];
-        return output;
+        if (Stats.IsPercentage(stat)) return resetStats[stat] + percentageStats[stat];
+        else return (resetStats[stat] + baseStats[stat]) * (1 + percentageStats[stat]) + flatStats[stat];
     }
 
     void DealDamage(Collider2D[] colliders, AttackData attackData)
@@ -127,23 +131,40 @@ public class Player : Being
         colliders.ToList().ForEach(collider =>
         {
             if (collider.gameObject.Equals(gameObject)) return;
-            Health health = collider.GetComponent<Health>();
-            Stagger stagger = collider.GetComponent<Stagger>();
-
-            if (!health) return;
-            int damage = Mathf.RoundToInt(attackData.Damage * (1 + Mathf.Log(CalculateStat(PlayerStat.Attack)) / 20));
-            int staggerDamage = Mathf.RoundToInt(attackData.Stagger * CalculateStat(PlayerStat.StaggerMultiplier));
-            health.TakeDamage(damage, attackData.Element, attackData.Origin, attackData.Knockback);
-            stagger?.TakeStagger(staggerDamage, attackData.Origin);
-
-            if (health.HP > 0) return;
-            EventManager.InvokeOnKill();
+            if (collider.GetComponent<Health>() is Health health)
+            {
+                if (health.Invincible) return;
+                int damage = Mathf.RoundToInt(attackData.Damage * damageConstant / (damageConstant + CalculateStat(PlayerStat.Attack)));
+                health.TakeDamage(damage, attackData.Element, attackData.Origin);
+                if (health.HP <= 0) EventManager.InvokeOnKill();
+            }
+            if (collider.GetComponent<Stagger>() is Stagger stagger)
+            {
+                int staggerDamage = Mathf.RoundToInt(attackData.Stagger * CalculateStat(PlayerStat.StaggerMultiplier));
+                stagger.TakeStagger(staggerDamage, attackData.Origin);
+            }
+            if (collider.GetComponent<KnockbackEffect>() is KnockbackEffect knockbackEffect)
+            {
+                knockbackEffect.ApplyKnockback(attackData.Origin, attackData.Knockback);
+            }
         });
     }
 
     void HandleDash()
     {
         curDashTime -= Time.deltaTime;
+
+        if (perfectDodgeProgress >= 0 && perfectDodgeProgress <= 1)
+        {
+            Time.timeScale = 1 - slowCurve.Evaluate(perfectDodgeProgress) * perfectDodgeTimeScale;
+            perfectDodgeProgress += Time.deltaTime / perfectDodgeDuration;
+            
+            if (perfectDodgeProgress > 1)
+            {
+                Time.timeScale = 1;
+                perfectDodgeProgress = -1;
+            }
+        }
 
         if (dashing) return;
         animator.CrossFade("Player" + (direction.magnitude == 0 ? "Idle" : "Walk"), 0, 0);
@@ -228,6 +249,8 @@ public class Player : Being
         if (!health.Invincible) return;
         float manaRegenRate = 1 + CalculateStat(PlayerStat.ManaRegen) / 100;
         IncrementMana(perfectDodgeResourceGain * manaRegenRate);
+        Time.timeScale = perfectDodgeTimeScale;
+        perfectDodgeProgress = 0;
     }
 
     public void UpdateEquipmentStats()
@@ -236,7 +259,7 @@ public class Player : Being
         Inventory inventory = Inventory.Instance;
         for (int i = 0; i < inventory.GetEquipmentCount(); i++)
         {
-            EquipmentInstance equipInst = inventory.GetEquipment(i);
+            Equipment equipInst = inventory.GetEquipment(i);
 
             if (equipInst == null) continue;
             ArmorSO armor = equipInst.EquipmentData as ArmorSO;

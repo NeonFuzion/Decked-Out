@@ -1,0 +1,33 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: fcbddfe4f83299941bf0138c5a751033, type: 3}
+  m_Name: KnightlyArms
+  m_EditorClassIdentifier: 
+  itemName: Knightly Arms
+  description: The first weapon that a knight receives.
+  sprite: {fileID: -401756408995338569, guid: 08d7a4b9240fe3e448ff3a82229b4ff4, type: 3}
+  ingredients: []
+  attackSpeed: 1.2
+  knockback: 3
+  element: 0
+  weaponHoldStyle: 1
+  attackComboData:
+  - animation: SwordSwing0
+    damage: 11
+    stagger: 20
+  - animation: SwordSwing1
+    damage: 11
+    stagger: 20
+  attackRange: 1.1
+  slashAnimations:
+  - SlashEffect0
+  - SlashEffect1
