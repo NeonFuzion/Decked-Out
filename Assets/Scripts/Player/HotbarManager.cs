@@ -1,3 +1,5 @@
+using System;
+using System.Collections;
 using UnityEngine;
 using UnityEngine.Events;
 
@@ -6,12 +8,15 @@ public class HotbarManager : MonoBehaviour
     [SerializeField] Player player;
     [SerializeField] UnityEvent<int> onActivateSkill;
 
+    int hotbarIndex;
+    float[] skillCooldowns, consumableCooldowns;
+
     ConsumablesSO currentConsumable;
+    Inventory inventory;
     ConsumablesSO[] hotbar;
     SkillTomeSO[] skillBar;
-    float[] skillCooldowns;
 
-    int hotbarIndex;
+    public Player Player => player;
 
     void Awake()
     {
@@ -19,6 +24,7 @@ public class HotbarManager : MonoBehaviour
         hotbar = new ConsumablesSO[4];
         skillBar = new SkillTomeSO[4];
         skillCooldowns = new float[4];
+        inventory = player.GetComponent<Inventory>();
         EventManager.AddOnInventoryUpdatedListener(UpdateHotbar);
     }
 
@@ -33,7 +39,7 @@ public class HotbarManager : MonoBehaviour
         Inventory inventory = Inventory.Instance;
         for (int i = 0; i < 4; i++)
         {
-            Equipment equipInst = inventory.GetEquipment(8 + i);
+            Equipment equipInst = inventory.GetEquipment(4 + i);
             skillBar[i] = equipInst?.EquipmentData as SkillTomeSO;
         }
         for (int i = 0; i < 4; i++)
@@ -63,5 +69,16 @@ public class HotbarManager : MonoBehaviour
         skillCooldowns[index] = skillTomeSO.Cooldown;
         skillTomeSO.ActivateEffects(player, 0);
         onActivateSkill?.Invoke(index);
+    }
+
+    public void UseConsumable()
+    {
+        currentConsumable.ActivateEffect(this);
+        inventory.RemoveEquipment(currentConsumable);
+    }
+
+    public void RunCoroutine(IEnumerator coroutine)
+    {
+        RunCoroutine(coroutine);
     }
 }

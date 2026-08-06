@@ -5,16 +5,16 @@ using UnityEngine.EventSystems;
 
 public class ItemSlot : Slot, IDropHandler
 {
-    [SerializeField] UnityEvent<int, bool> onSetData;
+    [SerializeField] UnityEvent<int, SlotType> onSetData;
 
-    public override void Initialize(int index, bool isEquiped)
+    public override void Initialize(int index, SlotType slotType)
     {
-        base.Initialize(index, isEquiped);
-        onSetData?.Invoke(index, isEquiped);
+        base.Initialize(index, slotType);
+        onSetData?.Invoke(index, slotType);
     }
 
     public void OnDrop(PointerEventData eventData)
     {
-        EventManager.InvokeOnDropItem(index, isEquiped);
+        EventManager.InvokeOnDropItem(index, slotType);
     }
 }

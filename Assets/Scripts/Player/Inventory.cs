@@ -13,11 +13,11 @@ public class Inventory : MonoBehaviour
     [SerializeField] Transform itemParent;
     [SerializeField] EquipmentEffectsManager equipmentEffectsManager;
     [SerializeField] EquipmentSO[] startingEquipment;
-    [SerializeField] ItemStack[] startingItems;
+    [SerializeField] ItemStack[] startingItems, startingHotbar;
 
     int itemCount;
 
-    ItemStack[] items;
+    ItemStack[] items, hotbar;
     Equipment[] equiped;
 
     private void Awake()
@@ -43,7 +43,7 @@ public class Inventory : MonoBehaviour
 
     void Initialize()
     {
-        equiped = new Equipment[12];
+        equiped = new Equipment[8];
         foreach (EquipmentSO equipment in startingEquipment)
         {
             int start = EquipmentSO.GetEquipmentIndex(equipment);
@@ -53,6 +53,12 @@ public class Inventory : MonoBehaviour
                 equiped[i] = new Equipment(equipment);
                 break;
             }
+        }
+
+        hotbar = new ItemStack[4];
+        for (int i = 0; i < startingHotbar.Length; i++)
+        {
+            hotbar[i] = startingHotbar[i];
         }
 
         items = new ItemStack[max];
@@ -85,6 +91,11 @@ public class Inventory : MonoBehaviour
     public Equipment GetEquipment(int index)
     {
         return equiped[index];
+    }
+
+    public ItemStack GetHotbarItem(int index)
+    {
+        return hotbar[index];
     }
 
     public int GetItemCount() => items.Length;

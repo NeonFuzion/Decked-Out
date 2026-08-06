@@ -93,6 +93,7 @@ public class FlowerSpirit : Enemy
     IEnumerator RootSequence()
     {
         state = FlowerSpiritState.Rooting;
+        movementScript.SetMobile();
         SetInvincibility(true);
         undergroundTrail.Play();
 
@@ -104,8 +105,8 @@ public class FlowerSpirit : Enemy
 
         state = FlowerSpiritState.Emerging;
         SetInvincibility(false);
+        movementScript.SetImmobile();
         undergroundTrail.Stop();
-        rigidbody.linearVelocity = Vector2.zero;
         animator.CrossFade(emergeAnim, 0, 0);
     }
 

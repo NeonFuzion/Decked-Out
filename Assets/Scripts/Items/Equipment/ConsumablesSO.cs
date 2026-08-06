@@ -6,5 +6,5 @@ public abstract class ConsumablesSO : EquipmentSO
 
     public float Cooldown { get => cooldown; }
 
-    public abstract void ActivateEffect(Player player);
+    public abstract void ActivateEffect(HotbarManager hotbarManager);
 }

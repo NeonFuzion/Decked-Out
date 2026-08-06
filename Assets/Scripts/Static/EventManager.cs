@@ -11,8 +11,8 @@ public static class EventManager
     static UnityEvent onInventoryUpdated = new ();
     static UnityEvent onUnfocusItem = new ();
     static UnityEvent onOpenCraftingMenu = new ();
-    static UnityEvent<int, bool> onPickupItem = new ();
-    static UnityEvent<int, bool> onDropItem = new ();
+    static UnityEvent<int, SlotType> onPickupItem = new ();
+    static UnityEvent<int, SlotType> onDropItem = new ();
     static UnityEvent<ItemStack> onFocusItem = new ();
     static UnityEvent<GameObject> onMenuOpened = new ();
     static UnityEvent<DialogueData[]> onDialogueStarted = new ();
@@ -45,11 +45,11 @@ public static class EventManager
     public static void AddOnOpenCraftingMenu(UnityAction unityAction) => onOpenCraftingMenu?.AddListener(unityAction);
     public static void InvokeOnOpenCraftingMenu() => onOpenCraftingMenu?.Invoke();
 
-    public static void AddOnPickupItemListener(UnityAction<int, bool> unityAction) => onPickupItem?.AddListener(unityAction);
-    public static void InvokeOnPickupItem(int index, bool isEquiped) => onPickupItem?.Invoke(index, isEquiped);
+    public static void AddOnPickupItemListener(UnityAction<int, SlotType> unityAction) => onPickupItem?.AddListener(unityAction);
+    public static void InvokeOnPickupItem(int index, SlotType slotType) => onPickupItem?.Invoke(index, slotType);
 
-    public static void AddOnDropItemListener(UnityAction<int, bool> unityAction) => onDropItem?.AddListener(unityAction);
-    public static void InvokeOnDropItem(int index, bool isEquiped) => onDropItem?.Invoke(index, isEquiped);
+    public static void AddOnDropItemListener(UnityAction<int, SlotType> unityAction) => onDropItem?.AddListener(unityAction);
+    public static void InvokeOnDropItem(int index, SlotType slotType) => onDropItem?.Invoke(index, slotType);
     
     public static void AddOnFocusItemListener(UnityAction<ItemStack> focusAction) => onFocusItem?.AddListener(focusAction);
     public static void InvokeOnFocusItem(ItemStack itemInstance) => onFocusItem?.Invoke(itemInstance);

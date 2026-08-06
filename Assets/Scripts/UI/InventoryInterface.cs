@@ -1,3 +1,4 @@
+using System.Collections;
 using TMPro;
 using UnityEngine;
 
@@ -11,15 +12,15 @@ public class InventoryInterface : MonoBehaviour
     Player player;
     Inventory inventory;
 
-    bool isLastHeldItemEquiped;
+    SlotType lastHeldItemSlotType;
     int lastHeldItemIndex;
 
     void Awake()
     {
         EventManager.AddOnInventoryUpdatedListener(UpdateInventory);
         EventManager.AddOnPickupItemListener(PickupItem);
-        EventManager.AddOnDropItemListener((int inte, bool boole) => {
-            DropItem(inte, boole);
+        EventManager.AddOnDropItemListener((int inte, SlotType slotType) => {
+            DropItem(inte, slotType);
             EventManager.InvokeOnInventoryUpdated();
             });
     }
@@ -36,15 +37,20 @@ public class InventoryInterface : MonoBehaviour
 
     void Initialize()
     {
-        for (int i = 0; i < equipmentSlots.childCount; i++)
+        for (int i = 0; i < 4; i++)
         {
             ItemSlot slot = equipmentSlots.GetChild(i).GetComponent<ItemSlot>();
-            slot.Initialize(i, true);
+            slot.Initialize(i, SlotType.Consumable);
+        }
+        for (int i = 4; i < equipmentSlots.childCount; i++)
+        {
+            ItemSlot slot = equipmentSlots.GetChild(i).GetComponent<ItemSlot>();
+            slot.Initialize(i, SlotType.Equipment);
         }
         for (int i = 0; i < itemSlots.childCount; i++)
         {
             ItemSlot slot = itemSlots.GetChild(i).GetComponent<ItemSlot>();
-            slot.Initialize(i, false);
+            slot.Initialize(i, SlotType.Item);
         }
 
         UpdateStatScreen();
@@ -63,9 +69,17 @@ public class InventoryInterface : MonoBehaviour
             player = inventory.GetComponent<Player>();
         }
 
-        for (int i = 0; i < equipmentSlots.childCount; i++)
+        for (int i = 0; i < 4; i++)
         {
-            Equipment item = inventory.GetEquipment(i);
+            ItemStack item = inventory.GetHotbarItem(i);
+            ItemSlot slot = equipmentSlots.GetChild(i).GetComponent<ItemSlot>();
+
+            if (item == null) slot.ResetItem();
+            else slot.UpdateItem(item.Item.Sprite, 1);
+        }
+        for (int i = 4; i < equipmentSlots.childCount; i++)
+        {
+            Equipment item = inventory.GetEquipment(i - 4);
             ItemSlot slot = equipmentSlots.GetChild(i).GetComponent<ItemSlot>();
 
             if (item == null) slot.ResetItem();
@@ -83,64 +97,75 @@ public class InventoryInterface : MonoBehaviour
         UpdateStatScreen();
     }
 
-    void PickupItem(int index, bool isEquiped)
+    void PickupItem(int index, SlotType slotType)
     {
         lastHeldItemIndex = index;
-        isLastHeldItemEquiped = isEquiped;
+        lastHeldItemSlotType = slotType;
     }
 
-    void RemoveOldItem(int index, bool isEquiped)
+    void RemoveOldItem(int index, SlotType slotType)
     {
-        if (isEquiped) inventory.RemoveEquipmentAtIndex(index);
-        else inventory.RemoveItemAtIndex(index);
+        switch (slotType)
+        {
+            case SlotType.Equipment: inventory.RemoveEquipmentAtIndex(index); break;
+            case SlotType.Item: inventory.RemoveItemAtIndex(index); break;
+        }
     }
 
-    void DropItem(int index, bool isEquiped)
+    void DropItem(int index, SlotType slotType)
     {
-        if (index == lastHeldItemIndex && isEquiped == isLastHeldItemEquiped) return;
+        if (index == lastHeldItemIndex && slotType == lastHeldItemSlotType) return;
 
-        ItemStack oldItem = isLastHeldItemEquiped
-            ? inventory.GetEquipAsItemStack(inventory.GetEquipment(lastHeldItemIndex))
-            : inventory.GetItem(lastHeldItemIndex);
+        ItemStack oldItem = null;
         ItemStack newItem = null;
+        switch (lastHeldItemSlotType)
+        {
+            case SlotType.Equipment: oldItem = inventory.GetEquipAsItemStack(inventory.GetEquipment(lastHeldItemIndex)); break;
+            case SlotType.Item: oldItem = inventory.GetItem(lastHeldItemIndex); break;
+        }
 
         if (oldItem == null || !oldItem.Item) return;
 
-        ItemStack temp = isEquiped
-            ? inventory.GetEquipAsItemStack(inventory.GetEquipment(index))
-            : inventory.GetItem(index);
-
-        if (temp != null && (isEquiped || isLastHeldItemEquiped) && oldItem.Item as EquipmentSO == null != (temp.Item as EquipmentSO == null)) return;
-
-        if (isEquiped)
+        ItemStack temp = null;
+        switch (slotType)
         {
-            EquipmentSO oldEquipmentSO = oldItem.Item as EquipmentSO;
-            if (!oldEquipmentSO) return;
-
-            Equipment toPlace = new Equipment(oldEquipmentSO);
-            Equipment displaced = inventory.AddEquipmentAtIndex(toPlace, index);
-
-            if (displaced == null) { RemoveOldItem(lastHeldItemIndex, isLastHeldItemEquiped); return; }
-            if (displaced == toPlace) return;
-            newItem = new ItemStack(displaced.EquipmentData, 1);
-        }
-        else
-        {
-            ItemStack output = inventory.AddItemAtIndex(oldItem.Item, index, oldItem.Amount);
-
-            if (output == null) { RemoveOldItem(lastHeldItemIndex, isLastHeldItemEquiped); return; }
-            if (output == oldItem) return;
-            newItem = output;
+            case SlotType.Equipment: temp = inventory.GetEquipAsItemStack(inventory.GetEquipment(index)); break;
+            case SlotType.Item: temp = inventory.GetItem(index); break;
         }
 
-        if (isLastHeldItemEquiped)
+        if (temp != null && (slotType == SlotType.Equipment || lastHeldItemSlotType == SlotType.Equipment) && oldItem.Item as EquipmentSO == null != (temp.Item as EquipmentSO == null)) return;
+
+        switch (slotType)
         {
-            EquipmentSO newEquipmentSO = newItem.Item as EquipmentSO;
-            if (newEquipmentSO) inventory.AddEquipmentAtIndex(new Equipment(newEquipmentSO), lastHeldItemIndex);
+            case SlotType.Equipment:
+                EquipmentSO oldEquipmentSO = oldItem.Item as EquipmentSO;
+                if (!oldEquipmentSO) return;
+
+                Equipment toPlace = new Equipment(oldEquipmentSO);
+                Equipment displaced = inventory.AddEquipmentAtIndex(toPlace, index);
+
+                if (displaced == null) { RemoveOldItem(lastHeldItemIndex, lastHeldItemSlotType); return; }
+                if (displaced == toPlace) return;
+                newItem = new ItemStack(displaced.EquipmentData, 1);
+                break;
+            case SlotType.Item:
+                ItemStack output = inventory.AddItemAtIndex(oldItem.Item, index, oldItem.Amount);
+
+                if (output == null) { RemoveOldItem(lastHeldItemIndex, lastHeldItemSlotType); return; }
+                if (output == oldItem) return;
+                newItem = output;
+                break;
         }
-        else
+
+        switch (lastHeldItemSlotType)
         {
-            inventory.AddItemAtIndex(newItem.Item, lastHeldItemIndex, newItem.Amount);
+            case SlotType.Equipment:
+                EquipmentSO newEquipmentSO = newItem.Item as EquipmentSO;
+                if (newEquipmentSO) inventory.AddEquipmentAtIndex(new Equipment(newEquipmentSO), lastHeldItemIndex);
+                break;
+            case SlotType.Item:
+                inventory.AddItemAtIndex(newItem.Item, lastHeldItemIndex, newItem.Amount);
+                break;
         }
     }
 }

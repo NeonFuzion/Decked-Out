@@ -10,7 +10,8 @@ public abstract class Slot : MonoBehaviour, IPointerEnterHandler, IPointerExitHa
     [SerializeField] protected GameObject emptyImage;
 
     protected int index;
-    protected bool isEquiped, isEmpty;
+    protected bool isEmpty;
+    protected SlotType slotType;
 
     protected virtual void SetAmount(int amount)
     {
@@ -20,7 +21,13 @@ public abstract class Slot : MonoBehaviour, IPointerEnterHandler, IPointerExitHa
     protected virtual void FocusOnItem()
     {
         Inventory inventory = Inventory.Instance;
-        ItemStack output = isEquiped ? inventory.GetEquipAsItemStack(inventory.GetEquipment(index)) : inventory.GetItem(index);
+        ItemStack output = null;
+        switch (slotType)
+        {
+            case SlotType.Equipment: output = inventory.GetEquipAsItemStack(inventory.GetEquipment(index)); break;
+            case SlotType.Item: inventory.GetItem(index); break;
+            case SlotType.Consumable: inventory.GetHotbarItem(index); break;
+        }
 
         if (output == null) return;
         EventManager.InvokeOnFocusItem(output);
@@ -50,10 +57,10 @@ public abstract class Slot : MonoBehaviour, IPointerEnterHandler, IPointerExitHa
         amountText.gameObject.SetActive(false);
     }
 
-    public virtual void Initialize(int index, bool isEquiped)
+    public virtual void Initialize(int index, SlotType slotType)
     {
         this.index = index;
-        this.isEquiped = isEquiped;
+        this.slotType = slotType;
     }
 
     public void OnPointerEnter(PointerEventData eventData)
@@ -68,3 +75,5 @@ public abstract class Slot : MonoBehaviour, IPointerEnterHandler, IPointerExitHa
         EventManager.InvokeOnUnfocusItem();
     }
 }
+
+public enum SlotType { None, Item, Equipment, Consumable }

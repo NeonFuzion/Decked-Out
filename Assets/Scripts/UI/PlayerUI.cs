@@ -42,7 +42,7 @@ public class PlayerUI : MonoBehaviour
 
         for (int i = 0; i < skillBarSlots.Length; i++)
         {
-            Equipment equipInst = inventory.GetEquipment(8 + i);
+            Equipment equipInst = inventory.GetEquipment(4 + i);
             SkillTomeSO skillTome = equipInst?.EquipmentData as SkillTomeSO;
             Sprite icon = skillTome != null ? GetElementIcon(skillTome.Element) : null;
             skillBarSlots[i].InitializeSkill(skillTome, icon);
