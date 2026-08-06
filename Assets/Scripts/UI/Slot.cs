@@ -25,8 +25,8 @@ public abstract class Slot : MonoBehaviour, IPointerEnterHandler, IPointerExitHa
         switch (slotType)
         {
             case SlotType.Equipment: output = inventory.GetEquipAsItemStack(inventory.GetEquipment(index)); break;
-            case SlotType.Item: inventory.GetItem(index); break;
-            case SlotType.Consumable: inventory.GetHotbarItem(index); break;
+            case SlotType.Item: output = inventory.GetItem(index); break;
+            case SlotType.Consumable: output = inventory.GetHotbarItem(index); break;
         }
 
         if (output == null) return;

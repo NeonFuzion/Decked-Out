@@ -99,6 +99,15 @@ public class ItemFocus : MonoBehaviour
         focusSubStats.SetText($"Cost: {skillTome.ResourceCost} {skillTome.CombatResource}<br>Cooldown: {skillTome.Cooldown} sec.");
     }
 
+    void ProcessConsumable(ConsumablesSO consumablesSO)
+    {
+        if (!consumablesSO) return;
+        focusMainStats.gameObject.SetActive(true);
+        
+        focusType.SetText("Consumable");
+        focusMainStats.SetText($"Cooldown: {consumablesSO.Cooldown}");
+    }
+
     public void DisplayItemStats(ItemStack itemInstance)
     {
         int amount = itemInstance.Amount;
@@ -120,7 +129,7 @@ public class ItemFocus : MonoBehaviour
         ProcessWeapon(item as WeaponSO);
         ProcessArmor(item as ArmorSO);
         ProcessSkillTome(item as SkillTomeSO);
-        // NOTE: Add main hand support
+        ProcessConsumable(item as ConsumablesSO);
 
         ResizeTooltip();
     }

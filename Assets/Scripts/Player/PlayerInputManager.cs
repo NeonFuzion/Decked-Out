@@ -4,7 +4,7 @@ using UnityEngine.InputSystem;
 
 public class PlayerInputManager : MonoBehaviour, PlayerInputConfig.ICombatActions, PlayerInputConfig.IMenuActions, PlayerInputConfig.IDialogueActions, PlayerInputConfig.IPlayerActions
 {
-    [SerializeField] UnityEvent onAttack, onDash, onInventory, onMenu, onQuit, onMap, onDialogue, onContinue, onMouseDown, onMouseUp;
+    [SerializeField] UnityEvent onAttack, onDash, onInventory, onMenu, onQuit, onMap, onDialogue, onContinue, onUseConsumable, onMouseDown, onMouseUp;
     [SerializeField] UnityEvent<int> onHotbar, onSkill;
     [SerializeField] UnityEvent<Vector2> onMovement, onMouse;
 
@@ -177,5 +177,11 @@ public class PlayerInputManager : MonoBehaviour, PlayerInputConfig.ICombatAction
     {
         if (IsClicked(context)) onMouseDown?.Invoke();
         else if (context.canceled) onMouseUp?.Invoke();
+    }
+
+    public void OnUseConsumable(InputAction.CallbackContext context)
+    {
+        if (!IsClicked(context)) return;
+        onUseConsumable?.Invoke();
     }
 }

@@ -8,7 +8,7 @@ public class DragAndDrop : MonoBehaviour, IEndDragHandler, IDragHandler, IBeginD
     [SerializeField] UnityEvent onStartDrag, onEndDrag;
 
     int index;
-    bool isEquiped;
+    SlotType slotType;
 
     Image image;
     Transform postDragParent;
@@ -19,7 +19,7 @@ public class DragAndDrop : MonoBehaviour, IEndDragHandler, IDragHandler, IBeginD
         postDragParent = transform.parent;
         transform.SetParent(transform.root);
         //onStartDrag?.Invoke();
-        EventManager.InvokeOnPickupItem(index, isEquiped);
+        EventManager.InvokeOnPickupItem(index, slotType);
     }
 
     public void OnDrag(PointerEventData eventData)
@@ -39,7 +39,7 @@ public class DragAndDrop : MonoBehaviour, IEndDragHandler, IDragHandler, IBeginD
     {
         image = GetComponent<Image>();
 
-        EventManager.AddOnDropItemListener((int index, bool isEquiped) =>
+        EventManager.AddOnDropItemListener((int index, SlotType slotType) =>
         {
             if (image.raycastTarget) return;
             OnEndDrag(null);
@@ -52,9 +52,9 @@ public class DragAndDrop : MonoBehaviour, IEndDragHandler, IDragHandler, IBeginD
         
     }
 
-    public void Initialize(int index, bool isEquiped)
+    public void Initialize(int index, SlotType slotType)
     {
         this.index = index;
-        this.isEquiped = isEquiped;
+        this.slotType = slotType;
     }
 }

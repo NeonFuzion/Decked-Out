@@ -181,6 +181,16 @@ public partial class @PlayerInputConfig: IInputActionCollection2, IDisposable
                     ""interactions"": """",
                     ""initialStateCheck"": false,
                     ""priority"": 0
+                },
+                {
+                    ""name"": ""UseConsumable"",
+                    ""type"": ""Button"",
+                    ""id"": ""1b8fa1c1-881f-4bee-8ea8-a9cd7d84817d"",
+                    ""expectedControlType"": """",
+                    ""processors"": """",
+                    ""interactions"": """",
+                    ""initialStateCheck"": false,
+                    ""priority"": 0
                 }
             ],
             ""bindings"": [
@@ -280,6 +290,17 @@ public partial class @PlayerInputConfig: IInputActionCollection2, IDisposable
                     ""processors"": """",
                     ""groups"": """",
                     ""action"": ""Skill4"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": """",
+                    ""id"": ""44427b8f-7e85-41d7-b5f1-344e211ac790"",
+                    ""path"": ""<Keyboard>/space"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""UseConsumable"",
                     ""isComposite"": false,
                     ""isPartOfComposite"": false
                 }
@@ -535,6 +556,7 @@ public partial class @PlayerInputConfig: IInputActionCollection2, IDisposable
         m_Combat_Skill2 = m_Combat.FindAction("Skill2", throwIfNotFound: true);
         m_Combat_Skill3 = m_Combat.FindAction("Skill3", throwIfNotFound: true);
         m_Combat_Skill4 = m_Combat.FindAction("Skill4", throwIfNotFound: true);
+        m_Combat_UseConsumable = m_Combat.FindAction("UseConsumable", throwIfNotFound: true);
         // Player
         m_Player = asset.FindActionMap("Player", throwIfNotFound: true);
         m_Player_Inventory = m_Player.FindAction("Inventory", throwIfNotFound: true);
@@ -641,6 +663,7 @@ public partial class @PlayerInputConfig: IInputActionCollection2, IDisposable
     private readonly InputAction m_Combat_Skill2;
     private readonly InputAction m_Combat_Skill3;
     private readonly InputAction m_Combat_Skill4;
+    private readonly InputAction m_Combat_UseConsumable;
     /// <summary>
     /// Provides access to input actions defined in input action map "Combat".
     /// </summary>
@@ -688,6 +711,10 @@ public partial class @PlayerInputConfig: IInputActionCollection2, IDisposable
         /// Provides access to the underlying input action "Combat/Skill4".
         /// </summary>
         public InputAction @Skill4 => m_Wrapper.m_Combat_Skill4;
+        /// <summary>
+        /// Provides access to the underlying input action "Combat/UseConsumable".
+        /// </summary>
+        public InputAction @UseConsumable => m_Wrapper.m_Combat_UseConsumable;
         /// <summary>
         /// Provides access to the underlying input action map instance.
         /// </summary>
@@ -741,6 +768,9 @@ public partial class @PlayerInputConfig: IInputActionCollection2, IDisposable
             @Skill4.started += instance.OnSkill4;
             @Skill4.performed += instance.OnSkill4;
             @Skill4.canceled += instance.OnSkill4;
+            @UseConsumable.started += instance.OnUseConsumable;
+            @UseConsumable.performed += instance.OnUseConsumable;
+            @UseConsumable.canceled += instance.OnUseConsumable;
         }
 
         /// <summary>
@@ -779,6 +809,9 @@ public partial class @PlayerInputConfig: IInputActionCollection2, IDisposable
             @Skill4.started -= instance.OnSkill4;
             @Skill4.performed -= instance.OnSkill4;
             @Skill4.canceled -= instance.OnSkill4;
+            @UseConsumable.started -= instance.OnUseConsumable;
+            @UseConsumable.performed -= instance.OnUseConsumable;
+            @UseConsumable.canceled -= instance.OnUseConsumable;
         }
 
         /// <summary>
@@ -1225,6 +1258,13 @@ public partial class @PlayerInputConfig: IInputActionCollection2, IDisposable
         /// <seealso cref="UnityEngine.InputSystem.InputAction.performed" />
         /// <seealso cref="UnityEngine.InputSystem.InputAction.canceled" />
         void OnSkill4(InputAction.CallbackContext context);
+        /// <summary>
+        /// Method invoked when associated input action "UseConsumable" is either <see cref="UnityEngine.InputSystem.InputAction.started" />, <see cref="UnityEngine.InputSystem.InputAction.performed" /> or <see cref="UnityEngine.InputSystem.InputAction.canceled" />.
+        /// </summary>
+        /// <seealso cref="UnityEngine.InputSystem.InputAction.started" />
+        /// <seealso cref="UnityEngine.InputSystem.InputAction.performed" />
+        /// <seealso cref="UnityEngine.InputSystem.InputAction.canceled" />
+        void OnUseConsumable(InputAction.CallbackContext context);
     }
     /// <summary>
     /// Interface to implement callback methods for all input action callbacks associated with input actions defined by "Player" which allows adding and removing callbacks.

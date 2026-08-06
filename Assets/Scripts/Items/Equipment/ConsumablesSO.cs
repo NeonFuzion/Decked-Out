@@ -1,6 +1,6 @@
 using UnityEngine;
 
-public abstract class ConsumablesSO : EquipmentSO
+public abstract class ConsumablesSO : ItemSO
 {
     [SerializeField] float cooldown;
 

@@ -1,5 +1,7 @@
 using System;
 using System.Collections;
+using System.Collections.Generic;
+using System.Linq;
 using UnityEngine;
 using UnityEngine.Events;
 
@@ -9,7 +11,7 @@ public class HotbarManager : MonoBehaviour
     [SerializeField] UnityEvent<int> onActivateSkill;
 
     int hotbarIndex;
-    float[] skillCooldowns, consumableCooldowns;
+    float[] skillCooldowns, hotbarCooldowns;
 
     ConsumablesSO currentConsumable;
     Inventory inventory;
@@ -23,6 +25,7 @@ public class HotbarManager : MonoBehaviour
         hotbarIndex = 0;
         hotbar = new ConsumablesSO[4];
         skillBar = new SkillTomeSO[4];
+        hotbarCooldowns = new float[4];
         skillCooldowns = new float[4];
         inventory = player.GetComponent<Inventory>();
         EventManager.AddOnInventoryUpdatedListener(UpdateHotbar);
@@ -31,7 +34,10 @@ public class HotbarManager : MonoBehaviour
     void Update()
     {
         for (int i = 0; i < skillCooldowns.Length; i++)
+        {
             if (skillCooldowns[i] > 0) skillCooldowns[i] -= Time.deltaTime;
+            if (hotbarCooldowns[i] > 0) hotbarCooldowns[i] -= Time.deltaTime;
+        }
     }
 
     void UpdateHotbar()
@@ -39,13 +45,13 @@ public class HotbarManager : MonoBehaviour
         Inventory inventory = Inventory.Instance;
         for (int i = 0; i < 4; i++)
         {
-            Equipment equipInst = inventory.GetEquipment(4 + i);
+            Equipment equipInst = inventory.GetEquipment(i + 4);
             skillBar[i] = equipInst?.EquipmentData as SkillTomeSO;
         }
         for (int i = 0; i < 4; i++)
         {
-            Equipment equipInst = inventory.GetEquipment(i);
-            hotbar[i] = equipInst?.EquipmentData as ConsumablesSO;
+            ItemStack itemStack = inventory.GetHotbarItem(i);
+            hotbar[i] = itemStack?.Item as ConsumablesSO;
         }
         UpdateHotbarIndex(hotbarIndex);
     }
@@ -61,8 +67,8 @@ public class HotbarManager : MonoBehaviour
     public void ActivateSkill(int index)
     {
         if (index < 0 || index >= skillBar.Length) return;
-
         SkillTomeSO skillTomeSO = skillBar[index];
+
         if (skillTomeSO == null) return;
         if (skillCooldowns[index] > 0) return;
         if (!player.ConsumeMana(skillTomeSO.ResourceCost)) return;
@@ -73,12 +79,14 @@ public class HotbarManager : MonoBehaviour
 
     public void UseConsumable()
     {
+        if (hotbarCooldowns[hotbarIndex] > 0) return;
         currentConsumable.ActivateEffect(this);
-        inventory.RemoveEquipment(currentConsumable);
+        inventory.RemoveHotbarItem(currentConsumable);
+        hotbarCooldowns[hotbarIndex] = currentConsumable.Cooldown;
     }
 
     public void RunCoroutine(IEnumerator coroutine)
     {
-        RunCoroutine(coroutine);
+        StartCoroutine(coroutine);
     }
 }

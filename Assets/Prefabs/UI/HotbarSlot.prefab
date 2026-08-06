@@ -527,7 +527,7 @@ PrefabInstance:
     - target: {fileID: 8031014349764507521, guid: 5bc933ba9e624554fa542cfc118bb6b0, type: 3}
       propertyPath: m_Sprite
       value: 
-      objectReference: {fileID: -1132992148885968286, guid: 6d911a1466d52ca4d8614f4560138de3, type: 3}
+      objectReference: {fileID: 2245285777335983317, guid: 6d911a1466d52ca4d8614f4560138de3, type: 3}
     - target: {fileID: 8440560676102638532, guid: 5bc933ba9e624554fa542cfc118bb6b0, type: 3}
       propertyPath: m_SizeDelta.x
       value: 200
@@ -578,7 +578,6 @@ MonoBehaviour:
   m_EditorClassIdentifier: Assembly-CSharp::HotbarSlot
   inputText: {fileID: 228970180877655791}
   cooldownText: {fileID: 2922887951472617858}
-  nameText: {fileID: 0}
   image: {fileID: 2137177453526350544}
   cooldownImage: {fileID: 1029937724137544998}
   emptyImage: {fileID: 3673901180727789250}

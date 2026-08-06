@@ -12,8 +12,8 @@ public class PlayerUI : MonoBehaviour
 
     void Awake()
     {
-        hotbarSlots = GetComponentsInChildren<HotbarSlot>();
-        skillBarSlots = GetComponentsInChildren<SkillSlot>();
+        hotbarSlots = hotbarParent.GetComponentsInChildren<HotbarSlot>();
+        skillBarSlots = skillBarParent.GetComponentsInChildren<SkillSlot>();
 
         EventManager.AddOnInventoryUpdatedListener(UpdateHotbar);
     }
@@ -35,8 +35,8 @@ public class PlayerUI : MonoBehaviour
         Inventory inventory = Inventory.Instance;
         for (int i = 0; i < hotbarSlots.Length; i++)
         {
-            Equipment equipInst = inventory.GetEquipment(i);
-            ConsumablesSO consumable = equipInst?.EquipmentData as ConsumablesSO;
+            ItemStack itemStack = inventory.GetHotbarItem(i);
+            ConsumablesSO consumable = itemStack?.Item as ConsumablesSO;
             hotbarSlots[i].Initialize(consumable ? consumable.Sprite : null, consumable ? consumable.Cooldown : 0);
         }
 

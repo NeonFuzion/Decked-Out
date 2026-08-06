@@ -122,19 +122,14 @@ public class Inventory : MonoBehaviour
         if (equipment == null || equipment.EquipmentData == null) return null;
 
         EquipmentSO data = equipment.EquipmentData;
-        ConsumablesSO mainHand = data as ConsumablesSO;
         ArmorSO armor = data as ArmorSO;
         SkillTomeSO skillTome = data as SkillTomeSO;
 
         int armorIndex = EquipmentSO.GetEquipmentIndex(armor);
         int skillTomeIndex = EquipmentSO.GetEquipmentIndex(skillTome);
-        int mainHandIndex = EquipmentSO.GetEquipmentIndex(mainHand);
 
-        if (!armor && !skillTome && !mainHand) return equipment;
         if (armor && index != armorIndex + (int)armor.ArmorPiece) return equipment;
-        if (skillTome && equiped.Count(equip => equip?.EquipmentData == skillTome) > 0) return equipment;
-        if (skillTome && (index >= skillTomeIndex + 4 || index < skillTomeIndex)) return equipment;
-        if (mainHand && (index >= mainHandIndex + 4 || index < mainHandIndex)) return equipment;
+        if (skillTome && (equiped.Count(equip => equip?.EquipmentData == skillTome) > 0 || index >= skillTomeIndex + 4 || index < skillTomeIndex)) return equipment;
 
         Equipment oldItem = equiped[index];
         equiped[index] = equipment;
@@ -168,6 +163,43 @@ public class Inventory : MonoBehaviour
         return oldEquipment;
     }
 
+    public ItemStack AddHotbarItemAtIndex(ItemStack itemStack, int index)
+    {
+        if (itemStack == null) return null;
+        ConsumablesSO consumable = itemStack.Item as ConsumablesSO;
+
+        if (!consumable) return null;
+        if (hotbar[index].Item == itemStack.Item)
+        {
+            hotbar[index].AddItems(itemStack.Amount);
+            return null;
+        }
+        else
+        {
+            ItemStack temp = hotbar[index];
+            hotbar[index] = itemStack;
+            return temp;
+        }
+    }
+
+    public ItemStack AddHotbarItem(ItemStack itemStack)
+    {
+        for (int i = 0; i < hotbar.Length; i++)
+        {
+            if (hotbar[i].Item == itemStack.Item)
+            {
+                hotbar[i].AddItems(itemStack.Amount);
+                return null;
+            }
+            if (!hotbar[i].Item)
+            {
+                hotbar[i] = itemStack;
+                return null;
+            }
+        }
+        return itemStack;
+    }
+
     public ItemStack AddItemAtIndex(ItemSO item, int index, int amount = 1)
     {
         if (!item) return null;
@@ -175,12 +207,12 @@ public class Inventory : MonoBehaviour
 
         if (slot == null)
         {
-            items[index] = new ItemStack(item, amount);
+            items[index] = new (item, amount);
             return null;
         }
         else if (slot.Item == item)
         {
-            if (item as EquipmentSO) return new ItemStack(item);
+            if (item as EquipmentSO) return new (item);
             slot.AddItems(amount);
             return null;
         }
@@ -224,14 +256,10 @@ public class Inventory : MonoBehaviour
 
     public ItemStack RemoveItem(ItemSO item, int amount = -1)
     {
-        for (int i = 0; i < max; i++)
-        {
-            ItemStack slot = items[i];
-            if (slot == null || slot.Item != item) continue;
-            ItemStack result = RemoveItemAtIndex(i, amount);
-            if (result != null) return result;
-        }
-        return null;
+        int index = items.ToList().FindIndex(itemStack => itemStack.Item == item);
+
+        if (index == -1) return null;
+        return RemoveItemAtIndex(index, amount);
     }
 
     public ItemStack RemoveItemAtIndex(int index, int amount = -1)
@@ -248,19 +276,17 @@ public class Inventory : MonoBehaviour
         else if (stack.Amount > amount)
         {
             stack.RemoveItems(amount);
-            return stack;
+            return new (stack.Item, amount);
         }
         return null;
     }
 
     public Equipment RemoveEquipment(EquipmentSO target)
     {
-        for (int i = 0; i < equiped.Length; i++)
-        {
-            if (equiped[i] == null || equiped[i].EquipmentData != target) continue;
-            return RemoveEquipmentAtIndex(i);
-        }
-        return null;
+        int index = equiped.ToList().FindIndex(equipment => equipment.EquipmentData == target);
+
+        if (index == -1) return null;
+        return RemoveEquipmentAtIndex(index);
     }
 
     public Equipment RemoveEquipmentAtIndex(int index)
@@ -268,6 +294,31 @@ public class Inventory : MonoBehaviour
         Equipment result = equiped[index];
         equiped[index] = null;
         return result;
+    }
+
+    public ItemStack RemoveHotbarItem(ConsumablesSO target, int amount = -1)
+    {
+        int index = hotbar.ToList().FindIndex(itemStack => itemStack.Item == target);
+        
+        if (index == -1) return null;
+        return RemoveHotbarItemAtIndex(index, amount);
+    }
+
+    public ItemStack RemoveHotbarItemAtIndex(int index, int amount = -1)
+    {
+        ItemStack output = hotbar[index];
+        if (amount > output.Amount) return null;
+        if (amount == output.Amount || amount == -1)
+        {
+            hotbar[index] = null;
+            return output;
+        }
+        if (amount < output.Amount)
+        {
+            hotbar[index].RemoveItems(amount);
+            return new (output.Item, amount);
+        }
+        return null;
     }
 }
 

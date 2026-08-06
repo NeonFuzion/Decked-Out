@@ -82,7 +82,8 @@ public class DungeonGenerator : MonoBehaviour
 
     void PlaceTiles(List<TileInfo> tiles, Tilemap tilemap)
     {
-        tiles.ForEach(tile => tilemap.SetTile(tile.Position, tile.Tile));
+        foreach (TileInfo tile in tiles)
+            tilemap.SetTile(tile.Position, tile.Tile);
     }
 
     void GeneratePath(DungeonRoom oldRoom, Vector2 lastDirection, int currentPathLength, int pathLength)
