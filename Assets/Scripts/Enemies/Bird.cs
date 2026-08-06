@@ -32,7 +32,7 @@ public class Bird : Enemy
             case BirdState.Idle:
                 if (IsStaggered) break;
                 transform.localScale = new Vector3(transform.position.x > target.position.x ? 1 : -1, 1);
-                Movement();
+                MovementToTarget();
 
                 if (isResting) break;
                 if (Vector2.Distance(transform.position, target.position) >= minChargeDistance) break;
@@ -53,16 +53,16 @@ public class Bird : Enemy
     IEnumerator ChargeCoroutine()
     {
         birdState = BirdState.Telegraphing;
-        rigidbody.linearVelocity = Vector2.zero;
+        movementScript.SetMovement(Vector2.zero);
         Vector2 fallBackTarget = target.position;
         yield return new WaitForSeconds(telegraphDuration);
-        rigidbody.linearVelocity = ((target ? target.position : fallBackTarget) - transform.position).normalized * chargeSpeed;
+        movementScript.SetMovement(((target ? target.position : fallBackTarget) - transform.position).normalized * chargeSpeed);
 
         birdState = BirdState.Charging;
         damageDealt = false;
         yield return new WaitForSeconds(chargeDuration);
         birdState = BirdState.Idle;
-        rigidbody.linearVelocity = Vector2.zero;
+        movementScript.SetMovement(Vector2.zero);
         animator.CrossFade(IdleAnim, 0, 0);
 
         isResting = true;

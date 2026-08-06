@@ -13,7 +13,7 @@ MonoBehaviour:
   m_Name: Icicannon
   m_EditorClassIdentifier: Assembly-CSharp::ImpaleSkill
   itemName: Icicannon
-  description: Fires a large icicle in a straight line that pierces through enemies
+  description: Fire a large icicle in a straight line that pierces through enemies
   sprite: {fileID: 672505362, guid: ef34d59f4ae4b7247ac9f028d62c1c2b, type: 3}
   ingredients: []
   combatResource: 1

@@ -2,18 +2,18 @@ using UnityEngine;
 
 public abstract class Enemy : Being
 {
-    [SerializeField] protected int attack, movementSpeed, detectDistance;
+    [SerializeField] protected int attack, detectDistance;
     [SerializeField] protected Animator animator;
 
     protected new Rigidbody2D rigidbody;
     protected Transform target;
     protected Health health;
     protected Stagger stagger;
+    protected Movement movementScript;
 
     protected abstract int IdleAnim { get; }
 
     public bool IsStaggered { get; private set; }
-    public bool IsImmobile { get; private set; }
 
     // Start is called before the first frame update
     protected void Start()
@@ -23,6 +23,7 @@ public abstract class Enemy : Being
         rigidbody = GetComponent<Rigidbody2D>();
         stagger = GetComponent<Stagger>();
         health = GetComponent<Health>();
+        movementScript = GetComponent<Movement>();
     }
 
     // Update is called once per frame
@@ -49,18 +50,21 @@ public abstract class Enemy : Being
         target = FindPlayer(detectPoint, radius);
     }
 
-    protected void Movement()
+    protected void MovementToTarget()
     {
         if (!target) return;
-        Movement(target.position);
+        MovementToPosition(target.position);
     }
 
-    protected void Movement(Vector3 targetPosition)
+    protected void MovementToPosition(Vector3 targetPosition)
+    {
+        movementScript.SetMovementDirection(targetPosition - transform.position);
+    }
+
+    protected void Movement(Vector3 movement)
     {
         if (IsStaggered) return;
-        if (IsImmobile) return;
-        Vector2 direction = (targetPosition - transform.position).normalized;
-        rigidbody.linearVelocity = direction * movementSpeed;
+        movementScript.SetMovement(movement);
     }
 
     protected void SetInvincibility(bool isInvincible)
@@ -74,28 +78,17 @@ public abstract class Enemy : Being
         IsStaggered = true;
         StopAllCoroutines();
         animator.CrossFade(IdleAnim, 0, 0);
-        rigidbody.linearVelocity = Vector2.zero;
+        movementScript.SetImmobile();
     }
 
     public virtual void OnStaggerEnd()
     {
         IsStaggered = false;
+        movementScript.SetImmobile();
     }
 
     public void OnDeath()
     {
         Destroy(gameObject);
-    }
-
-    public void OnKnockbackStart()
-    {
-        IsImmobile = true;
-        rigidbody.linearVelocity = Vector2.zero;
-    }
-
-    public void OnKnockbackEnd()
-    {
-        IsImmobile = false;
-        rigidbody.linearVelocity = Vector2.zero;
     }
 }

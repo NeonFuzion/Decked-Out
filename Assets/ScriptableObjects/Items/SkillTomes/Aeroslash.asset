@@ -13,7 +13,7 @@ MonoBehaviour:
   m_Name: Aeroslash
   m_EditorClassIdentifier: Assembly-CSharp::ImpaleSkill
   itemName: Aeroslash
-  description: Launches a fast wind slash dealing low damage while having a low cooldown
+  description: Launch a fast wind slash dealing low damage while having a low cooldown
   sprite: {fileID: -1925902765, guid: ef34d59f4ae4b7247ac9f028d62c1c2b, type: 3}
   ingredients: []
   combatResource: 1

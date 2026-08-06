@@ -61,13 +61,9 @@ public class FlowerSpirit : Enemy
 
     void FixedUpdate()
     {
-        if (state == FlowerSpiritState.Rooting)
-        {
-            Vector2 dir = (rootPosition - (Vector2)transform.position).normalized;
-            rigidbody.linearVelocity = dir * rootingSpeed;
-            return;
-        }
-        rigidbody.linearVelocity = Vector2.zero;
+        if (state != FlowerSpiritState.Rooting) return;
+        Vector2 dir = (rootPosition - (Vector2)transform.position).normalized;
+        movementScript.SetMovement(dir * rootingSpeed);
     }
 
     bool CalculateRootPosition()

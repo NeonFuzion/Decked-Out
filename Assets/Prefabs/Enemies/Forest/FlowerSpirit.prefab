@@ -5666,6 +5666,14 @@ PrefabInstance:
     serializedVersion: 3
     m_TransformParent: {fileID: 0}
     m_Modifications:
+    - target: {fileID: 368623149862603282, guid: 28ae2131f23309b4cb7b419f9cc10d23, type: 3}
+      propertyPath: movementSpeed
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 368623149862603282, guid: 28ae2131f23309b4cb7b419f9cc10d23, type: 3}
+      propertyPath: knockbackResistance
+      value: 1
+      objectReference: {fileID: 0}
     - target: {fileID: 1065700513455816896, guid: 28ae2131f23309b4cb7b419f9cc10d23, type: 3}
       propertyPath: m_Controller
       value: 

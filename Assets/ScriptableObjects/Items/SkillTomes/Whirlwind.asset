@@ -13,7 +13,7 @@ MonoBehaviour:
   m_Name: Whirlwind
   m_EditorClassIdentifier: Assembly-CSharp::WhirlwindSkillSO
   itemName: Whirlwind
-  description: Conjures a tornado in front of you, pulling enemies towards the center
+  description: Conjure a tornado in front of you, pulling enemies towards the center
     and dealing damage over time
   sprite: {fileID: -1925902765, guid: ef34d59f4ae4b7247ac9f028d62c1c2b, type: 3}
   ingredients: []
@@ -29,3 +29,4 @@ MonoBehaviour:
   radius: 2.5
   tickInterval: 0.5
   knockBack: -5
+  tickCount: 6

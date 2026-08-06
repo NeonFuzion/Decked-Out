@@ -40,7 +40,7 @@ public class CubeMachine : Enemy
             rigidbody.linearVelocity = Vector2.zero;
             return;
         }
-        Movement();
+        MovementToTarget();
     }
 
     void LockTargetPos()

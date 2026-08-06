@@ -140,7 +140,6 @@ public class Player : Being
                 health.TakeDamage(damage, attackData.Element, attackData.Origin);
                 if (health.HP <= 0)
                 {
-                    Debug.Log(collider.gameObject.name);
                     EventManager.InvokeOnKill();
                 }
             }
@@ -149,9 +148,9 @@ public class Player : Being
                 int staggerDamage = Mathf.RoundToInt(attackData.Stagger * CalculateStat(PlayerStat.StaggerMultiplier));
                 stagger.TakeStagger(staggerDamage, attackData.Origin);
             }
-            if (collider.GetComponent<KnockbackEffect>() is KnockbackEffect knockbackEffect)
+            if (collider.GetComponent<Movement>() is Movement movement)
             {
-                knockbackEffect.ApplyKnockback(attackData.Origin, attackData.Knockback);
+                movement.ApplyKnockback(attackData.Origin, attackData.Knockback);
             }
         });
     }

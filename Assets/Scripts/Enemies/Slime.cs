@@ -45,7 +45,7 @@ public class Slime : Enemy
                 break;
             case SlimeState.Jumping:
                 curJumpTime -= Time.deltaTime;
-                Movement(targetPos);
+                MovementToPosition(targetPos);
                 if (curJumpTime < 0 || !target || Vector3.Distance(targetPos, transform.position) < 1.75f || IsStaggered)
                     animator.CrossFade(landingAnim, 0, 0);
                 break;
@@ -56,7 +56,8 @@ public class Slime : Enemy
     {
         animator.CrossFade(bounceAnim, 0, 0);
         targetPos = target.position;
-        Movement(targetPos);
+        movementScript.SetMobile();
+        MovementToPosition(targetPos);
         spriteRenderer.enabled = true;
         curJumpTime = jumpTime;
         slimeState = SlimeState.Jumping;
@@ -66,7 +67,7 @@ public class Slime : Enemy
     {
         if (IsStaggered) return;
         spriteRenderer.enabled = false;
-        rigidbody.linearVelocity = Vector2.zero;
+        movementScript.SetImmobile();
         slimeState = SlimeState.Idle;
         animator.CrossFade(IdleAnim, 0, 0);
         curJumpCD = jumpCD;

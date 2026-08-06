@@ -1,20 +1,23 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.Events;
 
 public class Movement : MonoBehaviour
 {
-    [SerializeField]
-    float maxSpeed = 7.5f, acceleration = 50, deceleration = 100, currentSpeed = 0;
+    [SerializeField] float knockbackResistance = 0, movementSpeed = 5;
+    [SerializeField] UnityEvent onKnockbackStarted, onKnockbackEnded;
+    
+    bool isActive;
 
-    Rigidbody2D rb2d;
-    Vector2 oldMovementInput;
-
-    public Vector2 MovementInput { get; set; }
+    Rigidbody2D rigidbody;
+    Vector2 movementInput;
 
     void Awake()
     {
-        rb2d = GetComponent<Rigidbody2D>();
+        isActive = true;
+
+        rigidbody = GetComponent<Rigidbody2D>();
     }
 
     void Update()
@@ -24,16 +27,46 @@ public class Movement : MonoBehaviour
 
     void FixedUpdate()
     {
-        if (MovementInput.magnitude > 0 && currentSpeed >= 0)
-        {
-            oldMovementInput = MovementInput;
-            currentSpeed += acceleration * maxSpeed * Time.deltaTime;
-        }
-        else
-        {
-            currentSpeed -= deceleration * maxSpeed * Time.deltaTime;
-        }
-        currentSpeed = Mathf.Clamp(currentSpeed, 0, maxSpeed);
-        rb2d.linearVelocity = oldMovementInput * currentSpeed;
+        if (!isActive) return;
+        rigidbody.linearVelocity = movementInput;
+    }
+
+    IEnumerator KnockbackCoroutine(Vector2 incomingAttack, float knockback)
+    {
+        onKnockbackStarted?.Invoke();
+        SetImmobile();
+        rigidbody.AddForce(((Vector2)transform.position - incomingAttack).normalized * knockback * (1 - knockbackResistance), ForceMode2D.Impulse);
+        yield return new WaitForSeconds(0.2f);
+        SetMobile();
+        SetMovement(Vector2.zero);
+        onKnockbackEnded?.Invoke();
+    }
+
+    public void ApplyKnockback(Vector2 origin, float knockback)
+    {
+        if (knockbackResistance >= 1) return;
+        StopAllCoroutines();
+        StartCoroutine(KnockbackCoroutine(origin, knockback));
+    }
+
+    public void SetMobile()
+    {
+        isActive = true;
+    }
+
+    public void SetImmobile()
+    {
+        isActive = false;
+        rigidbody.linearVelocity = Vector2.zero;
+    }
+
+    public void SetMovementDirection(Vector2 direction)
+    {
+        movementInput = direction.normalized * movementSpeed;
+    }
+
+    public void SetMovement(Vector2 movement)
+    {
+        movementInput = movement;
     }
 }

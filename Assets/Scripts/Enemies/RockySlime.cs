@@ -44,7 +44,7 @@ public class RockySlime : Enemy
         {
             case RockySlimeState.Jumping:
                 currentJumpTime -= Time.deltaTime;
-                Movement(targetPos);
+                MovementToPosition(targetPos);
 
                 if (currentJumpTime < 0 || !target || Vector3.Distance(targetPos, transform.position) < 1.75f || IsStaggered)
                     animator.CrossFade(landingAnim, 0, 0);
@@ -69,6 +69,7 @@ public class RockySlime : Enemy
         currentJumpTime = jumpTime;
         rockyState = RockySlimeState.Jumping;
         SetInvincibility(true);
+        movementScript.SetMobile();
     }
 
     void Attack()
@@ -80,6 +81,7 @@ public class RockySlime : Enemy
     void ResetToIdle()
     {
         SetInvincibility(false);
+        movementScript.SetImmobile();
         spriteRenderer.enabled = false;
         rigidbody.linearVelocity = Vector2.zero;
         rockyState = RockySlimeState.Idle;

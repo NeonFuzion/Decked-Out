@@ -58,10 +58,10 @@ public class TreeSpirit : Enemy
         }
         if (!target)
         {
-            rigidbody.linearVelocity = Vector2.zero;
+            movementScript.SetMovement(Vector2.zero);
             return;
         }
-        Movement();
+        MovementToTarget();
         currentCooldown -= Time.deltaTime;
 
         if (currentCooldown > 0) return;
@@ -82,7 +82,7 @@ public class TreeSpirit : Enemy
     void BeginWindUp()
     {
         state = TreeSpiritState.WindingUp;
-        rigidbody.linearVelocity = Vector2.zero;
+            movementScript.SetMovement(Vector2.zero);
         animator.CrossFade(windUpAnim, 0, 0);
     }
 

@@ -10,9 +10,9 @@ GameObject:
   m_Component:
   - component: {fileID: 6845683363559863354}
   - component: {fileID: 5754510934464056380}
-  - component: {fileID: 2038733839661455880}
   - component: {fileID: 1227486679126910494}
   - component: {fileID: 4402656590818373220}
+  - component: {fileID: 368623149862603282}
   - component: {fileID: 421466296229121326}
   - component: {fileID: 8205711150073379654}
   - component: {fileID: 1065700513455816896}
@@ -52,10 +52,13 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 76f79341e74fef744a130bd7dcd60177, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::Health
+  damageFlashDuration: 0.1
   hp: 0
   maxHp: 0
   def: 0
+  defenseConstant: 100
   invincible: 0
+  damageFlashColor: {r: 1, g: 1, b: 1, a: 1}
   prefabDmgObj: {fileID: 1411201924886030582, guid: 2738ed096446142479ac7a5c9cbf3fe0, type: 3}
   prefabHitEffect: {fileID: 5432257962816510117, guid: dcfd8fb1acbf42e43b00ff9f2236ca6a, type: 3}
   prefabHealth: {fileID: 0}
@@ -79,49 +82,6 @@ MonoBehaviour:
   onHit:
     m_PersistentCalls:
       m_Calls: []
---- !u!114 &2038733839661455880
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 5109368311923587848}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 11458a3e4016679438fcd6442fe5d045, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: Assembly-CSharp::KnockbackEffect
-  knockbackResistance: 0
-  onKnockbackStarted:
-    m_PersistentCalls:
-      m_Calls:
-      - m_Target: {fileID: 5109368311923587848}
-        m_TargetAssemblyTypeName: 
-        m_MethodName: 
-        m_Mode: 0
-        m_Arguments:
-          m_ObjectArgument: {fileID: 0}
-          m_ObjectArgumentAssemblyTypeName: 
-          m_IntArgument: 0
-          m_FloatArgument: 0
-          m_StringArgument: 
-          m_BoolArgument: 0
-        m_CallState: 2
-  onKnockbackEnded:
-    m_PersistentCalls:
-      m_Calls:
-      - m_Target: {fileID: 5109368311923587848}
-        m_TargetAssemblyTypeName: 
-        m_MethodName: 
-        m_Mode: 0
-        m_Arguments:
-          m_ObjectArgument: {fileID: 0}
-          m_ObjectArgumentAssemblyTypeName: 
-          m_IntArgument: 0
-          m_FloatArgument: 0
-          m_StringArgument: 
-          m_BoolArgument: 0
-        m_CallState: 2
 --- !u!114 &1227486679126910494
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -155,6 +115,26 @@ MonoBehaviour:
   stunDuration: 2
   animator: {fileID: 7544858775805961749}
   staggerBar: {fileID: 0}
+--- !u!114 &368623149862603282
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 5109368311923587848}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 282e8269e0b1f1a46ab63d2b3d04bce4, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::Movement
+  knockbackResistance: 0
+  movementSpeed: 5
+  onKnockbackStarted:
+    m_PersistentCalls:
+      m_Calls: []
+  onKnockbackEnded:
+    m_PersistentCalls:
+      m_Calls: []
 --- !u!50 &421466296229121326
 Rigidbody2D:
   serializedVersion: 5
@@ -252,7 +232,7 @@ Animator:
   m_WriteDefaultValuesOnDisable: 0
 --- !u!212 &4731809785871379778
 SpriteRenderer:
-  serializedVersion: 2
+  serializedVersion: 3
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
@@ -309,6 +289,7 @@ SpriteRenderer:
   m_SpriteTileMode: 0
   m_WasSpriteAssigned: 0
   m_SpriteSortPoint: 0
+  m_BlendShapeWeights: []
 --- !u!1001 &2816346264931095709
 PrefabInstance:
   m_ObjectHideFlags: 0

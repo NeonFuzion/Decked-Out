@@ -13,7 +13,7 @@ MonoBehaviour:
   m_Name: Catapult
   m_EditorClassIdentifier: Assembly-CSharp::ImpaleSkill
   itemName: Catapult
-  description: Summons a large boulder and throw it in front of you
+  description: Summon a large boulder and throw it in front of you
   sprite: {fileID: -472735285, guid: ef34d59f4ae4b7247ac9f028d62c1c2b, type: 3}
   ingredients: []
   combatResource: 1
