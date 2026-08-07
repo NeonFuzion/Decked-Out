@@ -24,9 +24,9 @@ public abstract class Slot : MonoBehaviour, IPointerEnterHandler, IPointerExitHa
         ItemStack output = null;
         switch (slotType)
         {
-            case SlotType.Equipment: output = inventory.GetEquipAsItemStack(inventory.GetEquipment(index)); break;
-            case SlotType.Item: output = inventory.GetItem(index); break;
-            case SlotType.Consumable: output = inventory.GetHotbarItem(index); break;
+            case SlotType.Equipment: output = ItemStack.ToStack(inventory.GetEquipmentAtIndex(index)); break;
+            case SlotType.Item: output = inventory.GetItemAtIndex(index); break;
+            case SlotType.Consumable: output = inventory.GetHotbarItemAtIndex(index); break;
         }
 
         if (output == null) return;
@@ -76,4 +76,4 @@ public abstract class Slot : MonoBehaviour, IPointerEnterHandler, IPointerExitHa
     }
 }
 
-public enum SlotType { None, Item, Equipment, Consumable }
+public enum SlotType { None, Item, Equipment, Consumable, Armor, SkillTome }

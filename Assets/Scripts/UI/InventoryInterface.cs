@@ -1,4 +1,5 @@
 using System.Collections;
+using System.Linq.Expressions;
 using TMPro;
 using UnityEngine;
 
@@ -19,8 +20,8 @@ public class InventoryInterface : MonoBehaviour
     {
         EventManager.AddOnInventoryUpdatedListener(UpdateInventory);
         EventManager.AddOnPickupItemListener(PickupItem);
-        EventManager.AddOnDropItemListener((int inte, SlotType slotType) => {
-            DropItem(inte, slotType);
+        EventManager.AddOnDropItemListener((int index, SlotType slotType) => {
+            DropItem(index, slotType);
             EventManager.InvokeOnInventoryUpdated();
             });
     }
@@ -71,27 +72,27 @@ public class InventoryInterface : MonoBehaviour
 
         for (int i = 0; i < 4; i++)
         {
-            ItemStack item = inventory.GetHotbarItem(i);
+            ItemStack item = inventory.GetHotbarItemAtIndex(i);
             ItemSlot slot = equipmentSlots.GetChild(i).GetComponent<ItemSlot>();
 
-            if (item == null) slot.ResetItem();
-            else slot.UpdateItem(item.Item.Sprite, item.Amount);
+            if (item == null || item.Item == null) slot.ResetItem();
+            else slot.UpdateItem(item.Item.ItemSO.Sprite, item.Amount);
         }
         for (int i = 4; i < equipmentSlots.childCount; i++)
         {
-            Equipment item = inventory.GetEquipment(i - 4);
+            Equipment item = inventory.GetEquipmentAtIndex(i - 4);
             ItemSlot slot = equipmentSlots.GetChild(i).GetComponent<ItemSlot>();
 
             if (item == null) slot.ResetItem();
-            else slot.UpdateItem(item.EquipmentData.Sprite, 1);
+            else slot.UpdateItem(item.EquipmentSO.Sprite, 1);
         }
         for (int i = 0; i < itemSlots.childCount; i++)
         {
-            ItemStack stack = inventory.GetItem(i);
+            ItemStack stack = inventory.GetItemAtIndex(i);
             ItemSlot slot = itemSlots.GetChild(i).GetComponent<ItemSlot>();
 
-            if (stack == null || stack.Amount <= 0 || !stack.Item) slot.ResetItem();
-            else slot.UpdateItem(stack.Item.Sprite, stack.Amount);
+            if (stack == null || stack.Amount <= 0 || !stack.Item.ItemSO) slot.ResetItem();
+            else slot.UpdateItem(stack.Item.ItemSO.Sprite, stack.Amount);
         }
 
         UpdateStatScreen();
@@ -103,81 +104,66 @@ public class InventoryInterface : MonoBehaviour
         lastHeldItemSlotType = slotType;
     }
 
-    void RemoveOldItem(int index, SlotType slotType)
-    {
-        switch (slotType)
-        {
-            case SlotType.Equipment: inventory.RemoveEquipmentAtIndex(index); break;
-            case SlotType.Item: inventory.RemoveItemAtIndex(index); break;
-        }
-    }
-
     void DropItem(int index, SlotType slotType)
     {
         if (index == lastHeldItemIndex && slotType == lastHeldItemSlotType) return;
-        ItemStack oldItem = null;
-        ItemStack newItem = null;
+        ItemStack oldItem = null, newItem = null;
         switch (lastHeldItemSlotType)
         {
-            case SlotType.Equipment: oldItem = inventory.GetEquipAsItemStack(inventory.GetEquipment(lastHeldItemIndex)); break;
-            case SlotType.Item: oldItem = inventory.GetItem(lastHeldItemIndex); break;
-            case SlotType.Consumable: oldItem = inventory.GetHotbarItem(lastHeldItemIndex); break;
+            case SlotType.Equipment: oldItem = ItemStack.ToStack(inventory.GetEquipmentAtIndex(lastHeldItemIndex)); break;
+            case SlotType.Item: oldItem = inventory.GetItemAtIndex(lastHeldItemIndex); break;
+            case SlotType.Consumable: oldItem = inventory.GetHotbarItemAtIndex(lastHeldItemIndex); break;
         }
-
-        if (oldItem == null || !oldItem.Item) return;
-        ItemStack temp = null;
         switch (slotType)
         {
-            case SlotType.Equipment: temp = inventory.GetEquipAsItemStack(inventory.GetEquipment(index)); break;
-            case SlotType.Item: temp = inventory.GetItem(index); break;
-            case SlotType.Consumable: temp = inventory.GetHotbarItem(index); break;
+            case SlotType.Equipment: newItem = ItemStack.ToStack(inventory.GetEquipmentAtIndex(index)); break;
+            case SlotType.Item: newItem = inventory.GetItemAtIndex(index); break;
+            case SlotType.Consumable: newItem = inventory.GetHotbarItemAtIndex(index); break;
         }
 
-        if (temp != null && (slotType == SlotType.Equipment || lastHeldItemSlotType == SlotType.Equipment) && oldItem.Item as EquipmentSO == null != (temp.Item as EquipmentSO == null)) return;
+        SlotType trueOldItemSlotType = SlotType.None, trueNewItemSlotType = SlotType.None;
+        switch (oldItem.Item.ItemSO)
+        {
+            case ConsumablesSO: trueOldItemSlotType = SlotType.Consumable; break;
+            case SkillTomeSO: trueOldItemSlotType = SlotType.SkillTome; break;
+            case ArmorSO: trueOldItemSlotType = SlotType.Armor; break;
+            case ItemSO: trueOldItemSlotType = SlotType.Item; break;
+        }
+        switch (newItem?.Item.ItemSO)
+        {
+            case ConsumablesSO: trueNewItemSlotType = SlotType.Consumable; break;
+            case SkillTomeSO: trueNewItemSlotType = SlotType.SkillTome; break;
+            case ArmorSO: trueNewItemSlotType = SlotType.Armor; break;
+            case ItemSO: trueNewItemSlotType = SlotType.Item; break;
+        }
 
+        if (trueNewItemSlotType != SlotType.None && trueNewItemSlotType != trueOldItemSlotType && slotType != lastHeldItemSlotType) return;
+        bool isSuccessful = false;
         switch (slotType)
         {
-            case SlotType.Equipment:
-                EquipmentSO oldEquipmentSO = oldItem.Item as EquipmentSO;
-                if (!oldEquipmentSO) return;
-
-                Equipment toPlace = new (oldEquipmentSO);
-                Equipment displaced = inventory.AddEquipmentAtIndex(toPlace, index);
-
-                if (displaced == null) { RemoveOldItem(lastHeldItemIndex, lastHeldItemSlotType); return; }
-                if (displaced == toPlace) return;
-                newItem = new ItemStack(displaced.EquipmentData, 1);
-                break;
-            case SlotType.Item:
-                ItemStack output = inventory.AddItemAtIndex(oldItem.Item, index, oldItem.Amount);
-
-                if (output == null) { RemoveOldItem(lastHeldItemIndex, lastHeldItemSlotType); return; }
-                if (output == oldItem) return;
-                newItem = output;
-                break;
-            case SlotType.Consumable:
-                ItemStack consumable = inventory.AddItemAtIndex(oldItem.Item, index, oldItem.Amount);
-
-                if (consumable == null) { RemoveOldItem(lastHeldItemIndex, lastHeldItemSlotType); return; }
-                if (consumable == oldItem) return;
-                newItem = consumable;
-                break;
+            case SlotType.Equipment: isSuccessful = inventory.AddEquipmentAtIndex(oldItem.Item as Equipment, index, out _, true); break;
+            case SlotType.Consumable: isSuccessful = inventory.AddHotbarItemAtIndex(oldItem, index, out _); break;
+            case SlotType.Item: isSuccessful = inventory.AddItemAtIndex(oldItem, index, out _); break;
         }
 
-        switch (lastHeldItemSlotType)
+        if (!isSuccessful) return;
+        if (newItem != null && newItem.Item != null)
         {
-            case SlotType.Equipment:
-                EquipmentSO newEquipmentSO = newItem.Item as EquipmentSO;
-                if (newEquipmentSO) inventory.AddEquipmentAtIndex(new (newEquipmentSO), lastHeldItemIndex);
-                break;
-            case SlotType.Item:
-                inventory.AddItemAtIndex(newItem.Item, lastHeldItemIndex, newItem.Amount);
-                break;
-            case SlotType.Consumable:
-                ConsumablesSO consumablesSO = newItem.Item as ConsumablesSO;
-                if (consumablesSO) inventory.AddHotbarItemAtIndex(newItem, lastHeldItemIndex);
-                break;
-                
+            switch (lastHeldItemSlotType)
+            {
+                case SlotType.Equipment: inventory.AddEquipmentAtIndex(newItem.Item as Equipment, lastHeldItemIndex, out _, true); break;
+                case SlotType.Consumable: inventory.AddHotbarItemAtIndex(newItem, lastHeldItemIndex, out _); break;
+                case SlotType.Item: inventory.AddItemAtIndex(newItem, lastHeldItemIndex, out _); break;
+            }
+        }
+        else
+        {
+            switch (lastHeldItemSlotType)
+            {
+                case SlotType.Equipment: inventory.RemoveEquipmentAtIndex(lastHeldItemIndex); break;
+                case SlotType.Consumable: inventory.RemoveHotbarItemAtIndex(lastHeldItemIndex); break;
+                case SlotType.Item: inventory.RemoveItemAtIndex(lastHeldItemIndex); break;
+            }
         }
     }
 }

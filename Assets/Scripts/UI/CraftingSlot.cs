@@ -24,7 +24,7 @@ public class CraftingSlot : Slot, IPointerClickHandler
     protected override void FocusOnItem()
     {
         if (craftingData == null) return;
-        EventManager.InvokeOnFocusItem(new (craftingData.ItemSO, 0));
+        EventManager.InvokeOnFocusItem(new (new (craftingData.ItemSO), 0));
     }
 
     public void Initialize(CraftingData craftingData, UnityAction<CraftingData> unityAction)

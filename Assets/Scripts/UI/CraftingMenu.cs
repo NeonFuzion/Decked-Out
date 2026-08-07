@@ -66,7 +66,7 @@ public class CraftingMenu : MonoBehaviour
             List<ItemStack> availableIngredients = new ();
             recipe.Ingredients.ToList().ForEach(ingredient =>
             {
-                ItemStack inventoryStack = inventory.FindItem(ingredient.Item);
+                ItemStack inventoryStack = inventory.FindItem(ingredient.Item.ItemSO);
 
                 int amount = inventoryStack != null ? inventoryStack.Amount : 0;
                 if (amount < ingredient.Amount) isCraftable = false;
@@ -110,9 +110,9 @@ public class CraftingMenu : MonoBehaviour
         ItemSO currentItem = currentCraftingData.ItemSO;
         currentItem.Ingredients.ToList().ForEach(stack =>
         {
-            inventory.RemoveItem(stack.Item, stack.Amount);
+            inventory.RemoveItem(stack.Item.ItemSO, stack.Amount);
         });
-        inventory.AddItem(currentItem);
+        inventory.AddItem(ItemStack.ToStack(currentItem), out _);
         UpdateCraftingMenu();
         CraftingData data = visibleRecipes.Find(data => data.ItemSO == currentItem);
 

@@ -45,13 +45,13 @@ public class HotbarManager : MonoBehaviour
         Inventory inventory = Inventory.Instance;
         for (int i = 0; i < 4; i++)
         {
-            Equipment equipInst = inventory.GetEquipment(i + 4);
-            skillBar[i] = equipInst?.EquipmentData as SkillTomeSO;
+            Equipment equipInst = inventory.GetEquipmentAtIndex(i + 4);
+            skillBar[i] = equipInst?.EquipmentSO as SkillTomeSO;
         }
         for (int i = 0; i < 4; i++)
         {
-            ItemStack itemStack = inventory.GetHotbarItem(i);
-            hotbar[i] = itemStack?.Item as ConsumablesSO;
+            ItemStack itemStack = inventory.GetHotbarItemAtIndex(i);
+            hotbar[i] = itemStack?.Item.ItemSO as ConsumablesSO;
         }
         UpdateHotbarIndex(hotbarIndex);
     }

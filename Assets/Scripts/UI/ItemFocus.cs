@@ -111,7 +111,7 @@ public class ItemFocus : MonoBehaviour
     public void DisplayItemStats(ItemStack itemInstance)
     {
         int amount = itemInstance.Amount;
-        ItemSO item = itemInstance.Item;
+        ItemSO item = itemInstance.Item.ItemSO;
         Update();
         rectTransform.gameObject.SetActive(true);
         

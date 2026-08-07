@@ -264,10 +264,10 @@ public class Player : Being
         Inventory inventory = Inventory.Instance;
         for (int i = 0; i < inventory.GetEquipmentCount(); i++)
         {
-            Equipment equipInst = inventory.GetEquipment(i);
+            Equipment equipInst = inventory.GetEquipmentAtIndex(i);
 
             if (equipInst == null) continue;
-            ArmorSO armor = equipInst.EquipmentData as ArmorSO;
+            ArmorSO armor = equipInst.EquipmentSO as ArmorSO;
 
             if (armor == null) continue;
             baseStats[PlayerStat.Defense] += armor.Defense;

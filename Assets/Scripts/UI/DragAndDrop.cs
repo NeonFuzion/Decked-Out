@@ -18,7 +18,7 @@ public class DragAndDrop : MonoBehaviour, IEndDragHandler, IDragHandler, IBeginD
         image.raycastTarget = false;
         postDragParent = transform.parent;
         transform.SetParent(transform.root);
-        //onStartDrag?.Invoke();
+        onStartDrag?.Invoke();
         EventManager.InvokeOnPickupItem(index, slotType);
     }
 
@@ -31,7 +31,7 @@ public class DragAndDrop : MonoBehaviour, IEndDragHandler, IDragHandler, IBeginD
     {
         image.raycastTarget = true;
         transform.SetParent(postDragParent);
-        //onEndDrag?.Invoke();
+        onEndDrag?.Invoke();
     }
 
     // Start is called once before the first execution of Update after the MonoBehaviour is created

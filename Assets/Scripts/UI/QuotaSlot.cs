@@ -21,7 +21,7 @@ public class QuotaSlot : Slot
         this.itemStack = itemStack;
         
         SetAmount(amount);
-        UpdateItem(itemStack.Item.Sprite, amount);
+        UpdateItem(itemStack.Item.ItemSO.Sprite, amount);
     }
 
     protected override void FocusOnItem()
