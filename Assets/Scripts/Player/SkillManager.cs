@@ -3,12 +3,14 @@ using UnityEngine;
 public class SkillManager : MonoBehaviour
 {
     [SerializeField] Player player;
+    [SerializeField] Shooter shooter;
     [SerializeField] ParticleSystem particleSystem;
 
     ParticleSystemRenderer particleRenderer;
     
     public ParticleSystem ParticleSystem => particleSystem;
     public Player Player => player;
+    public Shooter Shooter => shooter;
 
     // Start is called once before the first execution of Update after the MonoBehaviour is created
     void Start()

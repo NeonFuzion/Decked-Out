@@ -8,9 +8,8 @@ public class ProjectileSkillSO : SkillTomeSO
 
     public override void ActivateEffects(SkillManager skillManager, int index)
     {
-        Shooter shooter = skillManager.GetComponentInChildren<Shooter>();
         Projectile projectile;
-        shooter.FireProjectile(prefabProjectile, MainCamera.MouseWorldPosition(), out projectile, FiringMode.Radial);
+        skillManager.Shooter.FireProjectile(prefabProjectile, MainCamera.MouseWorldPosition(), out projectile, FiringMode.Radial);
         projectile.OnHit.AddListener((Collider2D[] colliders, Projectile projectile) =>
         {
             DamageStaggerPair damageStaggerPair = DamageStaggerPairs[0];

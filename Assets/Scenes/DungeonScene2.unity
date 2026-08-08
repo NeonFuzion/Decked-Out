@@ -767,7 +767,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 5412322040207766502, guid: b2ee695fbaf22ec429a8373efbdd8d2e, type: 3}
       propertyPath: startingHotbar.Array.size
-      value: 1
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 5412322040207766502, guid: b2ee695fbaf22ec429a8373efbdd8d2e, type: 3}
       propertyPath: startingEquipment.Array.size
@@ -1648,7 +1648,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: cf9651374af57bd41b61d7d969129009, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::HotbarManager
-  skillManager: {fileID: 0}
+  skillManager: {fileID: 374448668}
   onActivateSkill:
     m_PersistentCalls:
       m_Calls:
@@ -32687,6 +32687,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::SkillManager
   player: {fileID: 72300887}
+  shooter: {fileID: 744348750}
   particleSystem: {fileID: 500012713}
 --- !u!1 &377973852
 GameObject:
@@ -40384,6 +40385,17 @@ RectTransform:
   m_CorrespondingSourceObject: {fileID: 5780890212747579739, guid: a380ba4b1ca43544c868a9335461ed5d, type: 3}
   m_PrefabInstance: {fileID: 740371902}
   m_PrefabAsset: {fileID: 0}
+--- !u!114 &744348750 stripped
+MonoBehaviour:
+  m_CorrespondingSourceObject: {fileID: 1250114075399015345, guid: b2ee695fbaf22ec429a8373efbdd8d2e, type: 3}
+  m_PrefabInstance: {fileID: 72300885}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 75d635562f063e44a9452fc3ec9fefda, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!1001 &744938988
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -45434,6 +45446,7 @@ MonoBehaviour:
   - {fileID: 11400000, guid: 7c88fcffcd23a7645a3664ec57d92c68, type: 2}
   - {fileID: 11400000, guid: e7d428e6fb51f7c4688110eab57b7f42, type: 2}
   - {fileID: 11400000, guid: 50fa2eeffd9c7904d86f96441f805ea7, type: 2}
+  - {fileID: 11400000, guid: 40a3b3a502eaae14789e8120ea513f39, type: 2}
   roomTransitions:
   - {fileID: 821507328}
   - {fileID: 946309898}

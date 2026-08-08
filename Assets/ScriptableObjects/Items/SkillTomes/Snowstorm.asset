@@ -1,0 +1,32 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: d40e4b30bedbe014984e5a38e30c4cc3, type: 3}
+  m_Name: Snowstorm
+  m_EditorClassIdentifier: Assembly-CSharp::AngleBlastSkillSO
+  itemName: Snowstorm
+  description: Fires a short ranged blast of ice that slows and knocks back enemies.
+  sprite: {fileID: 672505362, guid: ef34d59f4ae4b7247ac9f028d62c1c2b, type: 3}
+  ingredients: []
+  combatResource: 1
+  element: 7
+  resourceCost: 10
+  cooldown: 4
+  damageStaggerPairs:
+  - damage: 5
+    stagger: 14
+  range: 3
+  coneAngle: 60
+  knockbackForce: 10
+  particleMaterial: {fileID: 2100000, guid: ac6fc3cb8f08c7140a9d67e74a899043, type: 2}
+  enemyLayer:
+    serializedVersion: 2
+    m_Bits: 256

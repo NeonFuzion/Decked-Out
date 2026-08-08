@@ -9,6 +9,7 @@ public class RoomTransition : MonoBehaviour
     [SerializeField] UnityEvent onEnter, onGateUnlocked;
 
     BoxCollider2D boxCollider;
+    Animator animator;
     SpriteRenderer spriteRenderer;
 
     // Start is called once before the first execution of Update after the MonoBehaviour is created
@@ -46,25 +47,27 @@ public class RoomTransition : MonoBehaviour
     public void Initialize()
     {
         boxCollider = GetComponent<BoxCollider2D>();
+        animator = GetComponent<Animator>();
         spriteRenderer = GetComponent<SpriteRenderer>();
     }
 
     public void ResetBarrier()
     {
-        spriteRenderer.enabled = true;
-        boxCollider.isTrigger = false;
+        if (gameObject.activeInHierarchy) animator.CrossFade("GateIdle", 0, 0);
+        spriteRenderer.color = new (1, 1, 1, 0);
+        boxCollider.isTrigger = true;
     }
 
     public void UnlockBarrier()
     {
         if (!gameObject.activeInHierarchy) return;
-        boxCollider.isTrigger = true;
+        animator.CrossFade("GateUnlock", 0, 0);
         onGateUnlocked?.Invoke();
     }
 
-    public void ForceUnlock()
+    public void LockBarrier()
     {
-        boxCollider.isTrigger = true;
-        spriteRenderer.enabled = false;
+        if (!gameObject.activeInHierarchy) return;
+        animator.CrossFade("GateLock", 0, 0);
     }
 }

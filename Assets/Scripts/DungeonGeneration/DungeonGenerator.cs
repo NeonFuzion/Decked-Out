@@ -126,6 +126,8 @@ public class DungeonGenerator : MonoBehaviour
 
         if (currentRoom == null) return;
         onRoomChanged?.Invoke(direction);
+        currentEnemyQuota = 0;
+        enemyQuota = 0;
         List<Direction> exits = currentRoom.Exits;
         DungeonRoomLayout roomLayout = currentRoom.DungeonRoomLayout;
 
@@ -177,17 +179,15 @@ public class DungeonGenerator : MonoBehaviour
             script.LoadData(currentRoom.RoomObjects[i], this);
         }
 
-        if (!currentRoom.IsSafe)
+        foreach (GameObject roomTransition in roomTransitions)
         {
-            EventManager.InvokeOnCombatStarted();
+            RoomTransition script = roomTransition.GetComponent<RoomTransition>();
+            if (currentRoom.IsSafe) script.ResetBarrier();
+            else script.LockBarrier();
         }
-        else
-        {
-            foreach (GameObject roomTransition in roomTransitions)
-            {
-                roomTransition.GetComponent<RoomTransition>().ForceUnlock();
-            }
-        }
+
+        if (currentRoom.IsSafe) return;
+        EventManager.InvokeOnCombatStarted();
     }
 
     public void IncrementCurrentEnemyQuota()
