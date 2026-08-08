@@ -15,7 +15,7 @@ public abstract class SkillTomeSO : EquipmentSO
     public float Cooldown { get => cooldown; }
     public DamageStaggerPair[] DamageStaggerPairs { get => damageStaggerPairs; }
 
-    public abstract void ActivateEffects(Player player, int index);
+    public abstract void ActivateEffects(SkillManager skillManager, int index);
 }
 
 public enum CombatResource { None, Mana, Soul, Adrenaline }

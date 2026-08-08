@@ -1167,7 +1167,7 @@ PrefabInstance:
     m_AddedGameObjects:
     - targetCorrespondingSourceObject: {fileID: 5494333157234377941, guid: b2ee695fbaf22ec429a8373efbdd8d2e, type: 3}
       insertIndex: 1
-      addedObject: {fileID: 500012711}
+      addedObject: {fileID: 374448667}
     - targetCorrespondingSourceObject: {fileID: 5100322875429427369, guid: b2ee695fbaf22ec429a8373efbdd8d2e, type: 3}
       insertIndex: -1
       addedObject: {fileID: 38960453}
@@ -1648,7 +1648,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: cf9651374af57bd41b61d7d969129009, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::HotbarManager
-  player: {fileID: 72300887}
+  skillManager: {fileID: 0}
   onActivateSkill:
     m_PersistentCalls:
       m_Calls:
@@ -32641,6 +32641,53 @@ CanvasRenderer:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 373688088}
   m_CullTransparentMesh: 1
+--- !u!1 &374448666
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 374448667}
+  - component: {fileID: 374448668}
+  m_Layer: 6
+  m_Name: SkillManager
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &374448667
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 374448666}
+  serializedVersion: 2
+  m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children:
+  - {fileID: 500012711}
+  m_Father: {fileID: 115057390}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &374448668
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 374448666}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: d87647144974dc248acb695ae1bebe57, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::SkillManager
+  player: {fileID: 72300887}
+  particleSystem: {fileID: 500012713}
 --- !u!1 &377973852
 GameObject:
   m_ObjectHideFlags: 0
@@ -33159,7 +33206,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0.5, y: 0.5}
   m_AnchorMax: {x: 0.5, y: 0.5}
-  m_AnchoredPosition: {x: 0, y: 250}
+  m_AnchoredPosition: {x: 0, y: 304}
   m_SizeDelta: {x: 500, y: 150}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &411560112
@@ -33957,7 +34004,7 @@ GameObject:
   - component: {fileID: 500012713}
   - component: {fileID: 500012712}
   m_Layer: 6
-  m_Name: SkillParent
+  m_Name: ParticleSystem
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -33971,12 +34018,12 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 500012710}
   serializedVersion: 2
-  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
   m_LocalPosition: {x: 0, y: 0, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
-  m_Father: {fileID: 115057390}
+  m_Father: {fileID: 374448667}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!199 &500012712
 ParticleSystemRenderer:
@@ -43335,7 +43382,7 @@ RectTransform:
   m_AnchorMin: {x: 0.5, y: 0.5}
   m_AnchorMax: {x: 0.5, y: 0.5}
   m_AnchoredPosition: {x: 0, y: 0}
-  m_SizeDelta: {x: 1000, y: 800}
+  m_SizeDelta: {x: 1000, y: 900}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &1060089506
 MonoBehaviour:
@@ -43576,7 +43623,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0.5, y: 0.5}
   m_AnchorMax: {x: 0.5, y: 0.5}
-  m_AnchoredPosition: {x: 175, y: -235}
+  m_AnchoredPosition: {x: 175, y: -269.99997}
   m_SizeDelta: {x: 300, y: 100}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &1062505497
@@ -49234,7 +49281,7 @@ RectTransform:
   m_AnchorMin: {x: 0.5, y: 0.5}
   m_AnchorMax: {x: 0.5, y: 0.5}
   m_AnchoredPosition: {x: 0, y: 24.75}
-  m_SizeDelta: {x: 500, y: 349.54}
+  m_SizeDelta: {x: 500, y: 644.9}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &1709506045
 MonoBehaviour:
@@ -49267,7 +49314,9 @@ MonoBehaviour:
     Dodge
     Roll - RMB
 
-    Attack - LMB'
+    Attack - LMB
+
+    Item - SPACE'
   m_isRightToLeft: 0
   m_fontAsset: {fileID: 11400000, guid: eecbd522d82688c4c88002d88c1e86ba, type: 2}
   m_sharedMaterial: {fileID: 2466618213007463994, guid: eecbd522d82688c4c88002d88c1e86ba, type: 2}
@@ -49532,7 +49581,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0.5, y: 0.5}
   m_AnchorMax: {x: 0.5, y: 0.5}
-  m_AnchoredPosition: {x: -175, y: -235}
+  m_AnchoredPosition: {x: -175, y: -270}
   m_SizeDelta: {x: 300, y: 100}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &1750727366

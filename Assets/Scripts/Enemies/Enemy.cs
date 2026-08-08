@@ -84,7 +84,7 @@ public abstract class Enemy : Being
     public virtual void OnStaggerEnd()
     {
         IsStaggered = false;
-        movementScript.SetImmobile();
+        movementScript.SetMobile();
     }
 
     public void OnDeath()

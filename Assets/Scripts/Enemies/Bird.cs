@@ -65,7 +65,9 @@ public class Bird : Enemy
         movementScript.SetMovement(Vector2.zero);
         animator.CrossFade(IdleAnim, 0, 0);
 
-        isResting = true;
+        isResting = Vector2.Distance(transform.position, target.position) > minChargeDistance;
+
+        if (!isResting) yield break;
         yield return new WaitForSeconds(chargeCooldown);
         isResting = false;
     }

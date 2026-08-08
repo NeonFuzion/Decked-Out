@@ -282,7 +282,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 5754510934464056380, guid: 28ae2131f23309b4cb7b419f9cc10d23, type: 3}
       propertyPath: hp
-      value: 75
+      value: 100
       objectReference: {fileID: 0}
     - target: {fileID: 5754510934464056380, guid: 28ae2131f23309b4cb7b419f9cc10d23, type: 3}
       propertyPath: def
@@ -290,7 +290,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 5754510934464056380, guid: 28ae2131f23309b4cb7b419f9cc10d23, type: 3}
       propertyPath: maxHp
-      value: 75
+      value: 100
       objectReference: {fileID: 0}
     - target: {fileID: 5754510934464056380, guid: 28ae2131f23309b4cb7b419f9cc10d23, type: 3}
       propertyPath: onDeath.m_PersistentCalls.m_Calls.Array.size
@@ -467,7 +467,6 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::RockySlime
   attack: 28
-  movementSpeed: 5
   detectDistance: 11
   animator: {fileID: 8356030759821381648}
   projectileCount: 5

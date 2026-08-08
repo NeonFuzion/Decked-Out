@@ -72,7 +72,7 @@ public class FlowerSpirit : Enemy
         RaycastHit2D raycastHit2D = Physics2D.Raycast(transform.position, awayFromPlayer, rootDistance, LayerMask.GetMask("Wall"));
         float magnitude = raycastHit2D ? Mathf.Max(Vector2.Distance(raycastHit2D.point, transform.position) - 1, 0) : rootDistance;
 
-        if (magnitude < retreatDistanceFloor) return false;
+        if (magnitude == 0 || magnitude < retreatDistanceFloor) return false;
         rootPosition = (Vector2)target.position + awayFromPlayer * magnitude;
         return true;
     }

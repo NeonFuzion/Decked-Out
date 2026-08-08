@@ -5744,7 +5744,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 5754510934464056380, guid: 28ae2131f23309b4cb7b419f9cc10d23, type: 3}
       propertyPath: hp
-      value: 65
+      value: 85
       objectReference: {fileID: 0}
     - target: {fileID: 5754510934464056380, guid: 28ae2131f23309b4cb7b419f9cc10d23, type: 3}
       propertyPath: def
@@ -5752,7 +5752,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 5754510934464056380, guid: 28ae2131f23309b4cb7b419f9cc10d23, type: 3}
       propertyPath: maxHp
-      value: 65
+      value: 85
       objectReference: {fileID: 0}
     - target: {fileID: 5754510934464056380, guid: 28ae2131f23309b4cb7b419f9cc10d23, type: 3}
       propertyPath: knockbackResistance
@@ -5913,7 +5913,6 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::ForestSpirit
   attack: 21
-  movementSpeed: 0
   detectDistance: 8
   animator: {fileID: 2057628806149447652}
   rootDistance: 8

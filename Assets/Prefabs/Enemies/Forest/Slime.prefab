@@ -239,7 +239,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 5754510934464056380, guid: 28ae2131f23309b4cb7b419f9cc10d23, type: 3}
       propertyPath: hp
-      value: 45
+      value: 65
       objectReference: {fileID: 0}
     - target: {fileID: 5754510934464056380, guid: 28ae2131f23309b4cb7b419f9cc10d23, type: 3}
       propertyPath: def
@@ -247,7 +247,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 5754510934464056380, guid: 28ae2131f23309b4cb7b419f9cc10d23, type: 3}
       propertyPath: maxHp
-      value: 45
+      value: 65
       objectReference: {fileID: 0}
     - target: {fileID: 5754510934464056380, guid: 28ae2131f23309b4cb7b419f9cc10d23, type: 3}
       propertyPath: m_EditorClassIdentifier
@@ -395,7 +395,6 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::Slime
   attack: 18
-  movementSpeed: 7
   detectDistance: 9
   animator: {fileID: 3957268082418657055}
   jumpTime: 1.5

@@ -6,9 +6,9 @@ public class ProjectileSkillSO : SkillTomeSO
 {
     [SerializeField] GameObject prefabProjectile;
 
-    public override void ActivateEffects(Player player, int index)
+    public override void ActivateEffects(SkillManager skillManager, int index)
     {
-        Shooter shooter = player.GetComponentInChildren<Shooter>();
+        Shooter shooter = skillManager.GetComponentInChildren<Shooter>();
         Projectile projectile;
         shooter.FireProjectile(prefabProjectile, MainCamera.MouseWorldPosition(), out projectile, FiringMode.Radial);
         projectile.OnHit.AddListener((Collider2D[] colliders, Projectile projectile) =>

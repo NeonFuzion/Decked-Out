@@ -10,7 +10,6 @@ public class Player : Being
     [SerializeField] float baseResourceRegen, perfectDodgeResourceGain, perfectDodgeTimeScale, perfectDodgeDuration, damageConstant = 20;
     [SerializeField] AnimationCurve slowCurve;
     [SerializeField] Transform sprite, dashCount;
-    [SerializeField] ParticleSystem particleSystem;
     [SerializeField] UnityEvent<float> onManaChanged;
     [SerializeField] UnityEvent<int, bool> onDamageInflicted;
 
@@ -26,10 +25,8 @@ public class Player : Being
     Health health;
     SpriteRenderer spriteRenderer;
     Inventory inventory;
-    ParticleSystemRenderer particleRenderer;
 
     public Vector2 Movement { get; set; }
-    public ParticleSystem ParticleSystem => particleSystem;
 
     // Start is called before the first frame update
     void Start()
@@ -76,7 +73,6 @@ public class Player : Being
         SetMana(CalculateStat(PlayerStat.Mana));
 
         spriteRenderer = sprite.GetComponent<SpriteRenderer>();
-        particleRenderer = particleSystem.GetComponent<ParticleSystemRenderer>();
         animator = GetComponent<Animator>();
         rb = GetComponent<Rigidbody2D>();
         health = GetComponent<Health>();
@@ -305,15 +301,6 @@ public class Player : Being
     public void ReplenishMana(float amount)
     {
         IncrementMana(amount);
-    }
-
-    public void FireParticles(Vector2 direction, float coneAngle, Material particleMaterial)
-    {
-        ParticleSystem.ShapeModule shape = particleSystem.shape;
-        shape.arc = coneAngle;
-        particleRenderer.material = particleMaterial;
-        particleSystem.transform.eulerAngles = new Vector3(0, 0, Mathf.Atan2(direction.y, direction.x) * 180 / Mathf.PI - coneAngle / 2);
-        particleSystem.Play();
     }
 }
 

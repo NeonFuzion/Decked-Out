@@ -15,7 +15,7 @@ public class PassiveHealing : ConsumablesSO
     {
         this.hotbarManager = hotbarManager;
 
-        healthScript = hotbarManager.Player.GetComponent<Health>();
+        healthScript = hotbarManager.GetComponent<Health>();
         hotbarManager.RunCoroutine(HealCoroutine(tickCount));
     }
 

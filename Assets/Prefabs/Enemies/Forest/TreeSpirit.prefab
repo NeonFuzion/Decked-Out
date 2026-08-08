@@ -10349,7 +10349,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 5754510934464056380, guid: 28ae2131f23309b4cb7b419f9cc10d23, type: 3}
       propertyPath: hp
-      value: 85
+      value: 125
       objectReference: {fileID: 0}
     - target: {fileID: 5754510934464056380, guid: 28ae2131f23309b4cb7b419f9cc10d23, type: 3}
       propertyPath: def
@@ -10357,7 +10357,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 5754510934464056380, guid: 28ae2131f23309b4cb7b419f9cc10d23, type: 3}
       propertyPath: maxHp
-      value: 85
+      value: 125
       objectReference: {fileID: 0}
     - target: {fileID: 5754510934464056380, guid: 28ae2131f23309b4cb7b419f9cc10d23, type: 3}
       propertyPath: onDeath.m_PersistentCalls.m_Calls.Array.size
@@ -10493,7 +10493,6 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::TreeSpirit
   attack: 25
-  movementSpeed: 2
   detectDistance: 10
   animator: {fileID: 2247417330120748691}
   attackCooldown: 5

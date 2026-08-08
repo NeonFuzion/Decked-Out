@@ -8,11 +8,11 @@ public class LingeringSkillSO : SkillTomeSO
     [SerializeField] float spawnDistance = 2f, radius = 2.5f, tickInterval = 0.5f;
     [SerializeField] int knockBack = -5, tickCount = 6;
 
-    public override void ActivateEffects(Player player, int index)
+    public override void ActivateEffects(SkillManager skillManager, int index)
     {
         Vector2 mousePos = MainCamera.MouseWorldPosition();
-        Vector2 direction = (mousePos - (Vector2)player.transform.position).normalized;
-        Vector2 spawnPos = (Vector2)player.transform.position + direction * spawnDistance;
+        Vector2 direction = (mousePos - (Vector2)skillManager.transform.position).normalized;
+        Vector2 spawnPos = (Vector2)skillManager.transform.position + direction * spawnDistance;
 
         GameObject obj = Instantiate(lingerPrefab, spawnPos, Quaternion.identity);
         DamageStaggerPair damagePair = DamageStaggerPairs[0];

@@ -7,7 +7,7 @@ using UnityEngine.Events;
 
 public class HotbarManager : MonoBehaviour
 {
-    [SerializeField] Player player;
+    [SerializeField] SkillManager skillManager;
     [SerializeField] UnityEvent<int> onActivateSkill, onUseConsumable;
 
     int hotbarIndex;
@@ -18,15 +18,13 @@ public class HotbarManager : MonoBehaviour
     ConsumablesSO[] hotbar;
     SkillTomeSO[] skillBar;
 
-    public Player Player => player;
-
     void Awake()
     {
         hotbar = new ConsumablesSO[4];
         skillBar = new SkillTomeSO[4];
         hotbarCooldowns = new float[4];
         skillCooldowns = new float[4];
-        inventory = player.GetComponent<Inventory>();
+        inventory = GetComponent<Inventory>();
         EventManager.AddOnInventoryUpdatedListener(UpdateHotbar);
         UpdateHotbarIndex(0);
     }
@@ -69,9 +67,9 @@ public class HotbarManager : MonoBehaviour
 
         if (skillTomeSO == null) return;
         if (skillCooldowns[index] > 0) return;
-        if (!player.ConsumeMana(skillTomeSO.ResourceCost)) return;
+        if (!skillManager.Player.ConsumeMana(skillTomeSO.ResourceCost)) return;
         skillCooldowns[index] = skillTomeSO.Cooldown;
-        skillTomeSO.ActivateEffects(player, 0);
+        skillTomeSO.ActivateEffects(skillManager, 0);
         onActivateSkill?.Invoke(index);
     }
 
