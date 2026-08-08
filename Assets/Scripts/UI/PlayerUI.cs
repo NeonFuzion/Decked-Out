@@ -37,16 +37,25 @@ public class PlayerUI : MonoBehaviour
         {
             ItemStack itemStack = inventory.GetHotbarItemAtIndex(i);
             ConsumablesSO consumable = itemStack?.Item.ItemSO as ConsumablesSO;
-            hotbarSlots[i].Initialize(consumable ? consumable.Sprite : null, consumable ? consumable.Cooldown : 0);
+            if (consumable) hotbarSlots[i].Initialize(consumable.Sprite, consumable.Cooldown, itemStack.Amount);
+            else hotbarSlots[i].Initialize(null, 0, 0);
         }
 
         for (int i = 0; i < skillBarSlots.Length; i++)
         {
             Equipment equipInst = inventory.GetEquipmentAtIndex(4 + i);
             SkillTomeSO skillTome = equipInst?.EquipmentSO as SkillTomeSO;
-            Sprite icon = skillTome != null ? GetElementIcon(skillTome.Element) : null;
-            skillBarSlots[i].InitializeSkill(skillTome, icon);
+
+            if (skillTome) skillBarSlots[i].InitializeSkill(skillTome, GetElementIcon(skillTome.Element));
+            else skillBarSlots[i].InitializeSkill(null, null);
+            
         }
+    }
+
+    public void UseHotbarItem(int index)
+    {
+        hotbarSlots[index].IncrementAmount();
+        hotbarSlots[index].StartCooldown();
     }
 
     public void UpdateManaBar(float amount)
@@ -56,7 +65,6 @@ public class PlayerUI : MonoBehaviour
 
     public void TriggerSkillCooldown(int index)
     {
-        if (index < 0 || index >= skillBarSlots.Length) return;
         skillBarSlots[index].StartCooldown();
     }
 

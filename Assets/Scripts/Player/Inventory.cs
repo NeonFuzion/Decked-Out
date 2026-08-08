@@ -309,6 +309,7 @@ public class Inventory : MonoBehaviour
     public ItemStack RemoveHotbarItemAtIndex(int index, int amount = -1)
     {
         ItemStack output = hotbar[index];
+        if (output == null) return null;
         if (amount > output.Amount) return null;
         if (amount == output.Amount || amount == -1)
         {

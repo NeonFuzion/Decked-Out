@@ -137,11 +137,12 @@ public class InventoryInterface : MonoBehaviour
             case ItemSO: trueNewItemSlotType = SlotType.Item; break;
         }
 
-        if (trueNewItemSlotType != SlotType.None && trueNewItemSlotType != trueOldItemSlotType && slotType != lastHeldItemSlotType) return;
+        bool areSlotsEqual = slotType == lastHeldItemSlotType;
+        if (trueNewItemSlotType != SlotType.None && trueNewItemSlotType != trueOldItemSlotType && !areSlotsEqual) return;
         bool isSuccessful = false;
         switch (slotType)
         {
-            case SlotType.Equipment: isSuccessful = inventory.AddEquipmentAtIndex(oldItem.Item as Equipment, index, out _, true); break;
+            case SlotType.Equipment: isSuccessful = inventory.AddEquipmentAtIndex(oldItem.Item as Equipment, index, out _, areSlotsEqual); break;
             case SlotType.Consumable: isSuccessful = inventory.AddHotbarItemAtIndex(oldItem, index, out _); break;
             case SlotType.Item: isSuccessful = inventory.AddItemAtIndex(oldItem, index, out _); break;
         }
@@ -151,7 +152,7 @@ public class InventoryInterface : MonoBehaviour
         {
             switch (lastHeldItemSlotType)
             {
-                case SlotType.Equipment: inventory.AddEquipmentAtIndex(newItem.Item as Equipment, lastHeldItemIndex, out _, true); break;
+                case SlotType.Equipment: inventory.AddEquipmentAtIndex(newItem.Item as Equipment, lastHeldItemIndex, out _, areSlotsEqual); break;
                 case SlotType.Consumable: inventory.AddHotbarItemAtIndex(newItem, lastHeldItemIndex, out _); break;
                 case SlotType.Item: inventory.AddItemAtIndex(newItem, lastHeldItemIndex, out _); break;
             }

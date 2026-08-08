@@ -8,7 +8,7 @@ using UnityEngine.Events;
 public class HotbarManager : MonoBehaviour
 {
     [SerializeField] Player player;
-    [SerializeField] UnityEvent<int> onActivateSkill;
+    [SerializeField] UnityEvent<int> onActivateSkill, onUseConsumable;
 
     int hotbarIndex;
     float[] skillCooldowns, hotbarCooldowns;
@@ -22,13 +22,13 @@ public class HotbarManager : MonoBehaviour
 
     void Awake()
     {
-        hotbarIndex = 0;
         hotbar = new ConsumablesSO[4];
         skillBar = new SkillTomeSO[4];
         hotbarCooldowns = new float[4];
         skillCooldowns = new float[4];
         inventory = player.GetComponent<Inventory>();
         EventManager.AddOnInventoryUpdatedListener(UpdateHotbar);
+        UpdateHotbarIndex(0);
     }
 
     void Update()
@@ -58,9 +58,7 @@ public class HotbarManager : MonoBehaviour
 
     public void UpdateHotbarIndex(int index)
     {
-        int tempIndex = Mathf.Clamp(index, 0, 3);
-        if (!hotbar[tempIndex]) return;
-        hotbarIndex = tempIndex;
+        hotbarIndex = Mathf.Clamp(index, 0, 3);
         currentConsumable = hotbar[hotbarIndex];
     }
 
@@ -79,10 +77,16 @@ public class HotbarManager : MonoBehaviour
 
     public void UseConsumable()
     {
+        if (!currentConsumable) return;
         if (hotbarCooldowns[hotbarIndex] > 0) return;
         currentConsumable.ActivateEffect(this);
-        inventory.RemoveHotbarItem(currentConsumable);
+        inventory.RemoveHotbarItemAtIndex(hotbarIndex, 1);
         hotbarCooldowns[hotbarIndex] = currentConsumable.Cooldown;
+        onUseConsumable?.Invoke(hotbarIndex);
+
+        if (inventory.GetHotbarItemAtIndex(hotbarIndex) != null) return;
+        hotbar[hotbarIndex] = null;
+        currentConsumable = null;
     }
 
     public void RunCoroutine(IEnumerator coroutine)

@@ -14,7 +14,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: Assembly-CSharp::AngleBlastSkillSO
   itemName: Fireworks
   description: Create multiple small explosions focused on a medium sized area.
-  sprite: {fileID: 0}
+  sprite: {fileID: -137059578, guid: ef34d59f4ae4b7247ac9f028d62c1c2b, type: 3}
   ingredients: []
   combatResource: 1
   element: 1

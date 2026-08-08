@@ -4,12 +4,13 @@ using UnityEngine.UI;
 
 public class HotbarSlot : MonoBehaviour
 {
-    [SerializeField] TextMeshProUGUI inputText, cooldownText;
+    [SerializeField] TextMeshProUGUI inputText, cooldownText, amountText;
     [SerializeField] Image image, cooldownImage;
     [SerializeField] GameObject emptyImage;
 
     bool isEmpty;
     float cooldown, currentCooldown;
+    int amount;
 
     public bool IsEmpty { get => isEmpty; }
 
@@ -37,22 +38,29 @@ public class HotbarSlot : MonoBehaviour
         return System.Math.Round(currentCooldown, 1) + "";
     }
 
-    public void Initialize(Sprite sprite, float cooldown)
+    public void Initialize(Sprite sprite, float cooldown, int amount)
     {
         isEmpty = !sprite;
 
         if (isEmpty)
         {
-            image.gameObject.SetActive(false);
             emptyImage.SetActive(true);
+            image.gameObject.SetActive(false);
+            amountText?.gameObject.SetActive(false);
         }
         else
         {
             this.cooldown = cooldown;
+            this.amount = amount;
             image.sprite = sprite;
+
             image.SetNativeSize();
             image.gameObject.SetActive(true);
             emptyImage.SetActive(false);
+
+            if (!amountText) return;
+            amountText.SetText(amount + "");
+            amountText.gameObject.SetActive(true);
         }
     }
 
@@ -61,5 +69,11 @@ public class HotbarSlot : MonoBehaviour
         currentCooldown = cooldown;
         cooldownImage.fillAmount = 1;
         cooldownText.SetText(GetRoundedCooldown(cooldown));
+    }
+
+    public void IncrementAmount()
+    {
+        if (--amount > 0) amountText.SetText(amount + "");
+        else Initialize(null, 0, 0);
     }
 }

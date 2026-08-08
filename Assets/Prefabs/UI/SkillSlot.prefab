@@ -52,6 +52,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: Assembly-CSharp::SkillSlot
   inputText: {fileID: 857714559130092562}
   cooldownText: {fileID: 2331297705620714367}
+  amountText: {fileID: 0}
   image: {fileID: 1540941770791493677}
   cooldownImage: {fileID: 468747187812157403}
   emptyImage: {fileID: 4194558085598338111}
@@ -372,7 +373,8 @@ PrefabInstance:
       objectReference: {fileID: 0}
     m_RemovedComponents:
     - {fileID: 3936313495806102547, guid: 93662eebaec445e4e95409802c87ba59, type: 3}
-    m_RemovedGameObjects: []
+    m_RemovedGameObjects:
+    - {fileID: 7746344752980872038, guid: 93662eebaec445e4e95409802c87ba59, type: 3}
     m_AddedGameObjects: []
     m_AddedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 93662eebaec445e4e95409802c87ba59, type: 3}

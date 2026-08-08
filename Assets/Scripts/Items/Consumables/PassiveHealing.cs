@@ -2,7 +2,7 @@ using System.Collections;
 using System.Threading;
 using UnityEngine;
 
-[CreateAssetMenu(menuName = "Item/Consumable")]
+[CreateAssetMenu(menuName = "Item/Consumable/PassiveHealing")]
 public class PassiveHealing : ConsumablesSO
 {
     [SerializeField] float tickCooldown;

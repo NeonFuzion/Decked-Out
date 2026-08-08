@@ -763,7 +763,7 @@ PrefabInstance:
       objectReference: {fileID: 115057398}
     - target: {fileID: 5412322040207766502, guid: b2ee695fbaf22ec429a8373efbdd8d2e, type: 3}
       propertyPath: startingItems.Array.size
-      value: 1
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 5412322040207766502, guid: b2ee695fbaf22ec429a8373efbdd8d2e, type: 3}
       propertyPath: startingHotbar.Array.size
@@ -771,12 +771,12 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 5412322040207766502, guid: b2ee695fbaf22ec429a8373efbdd8d2e, type: 3}
       propertyPath: startingEquipment.Array.size
-      value: 2
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 5412322040207766502, guid: b2ee695fbaf22ec429a8373efbdd8d2e, type: 3}
       propertyPath: 'startingEquipment.Array.data[0]'
       value: 
-      objectReference: {fileID: 11400000, guid: 50fa2eeffd9c7904d86f96441f805ea7, type: 2}
+      objectReference: {fileID: 11400000, guid: d7701ac92f965144e9c54eb7ffa3675c, type: 2}
     - target: {fileID: 5412322040207766502, guid: b2ee695fbaf22ec429a8373efbdd8d2e, type: 3}
       propertyPath: 'startingEquipment.Array.data[1]'
       value: 
@@ -807,7 +807,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 5412322040207766502, guid: b2ee695fbaf22ec429a8373efbdd8d2e, type: 3}
       propertyPath: startingHotbar.Array.data[0].amount
-      value: 5
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 5412322040207766502, guid: b2ee695fbaf22ec429a8373efbdd8d2e, type: 3}
       propertyPath: startingHotbar.Array.data[0].itemSO
@@ -828,7 +828,7 @@ PrefabInstance:
     - target: {fileID: 5412322040207766502, guid: b2ee695fbaf22ec429a8373efbdd8d2e, type: 3}
       propertyPath: startingHotbar.Array.data[0].item.itemSO
       value: 
-      objectReference: {fileID: 11400000, guid: 7a47074f2f9d7fe418f9269f9d12963c, type: 2}
+      objectReference: {fileID: 11400000, guid: 1897a0d0d330d7b409cb2f10a76597e8, type: 2}
     - target: {fileID: 5412322040207766502, guid: b2ee695fbaf22ec429a8373efbdd8d2e, type: 3}
       propertyPath: startingHotbar.Array.data[1].item.itemSO
       value: 
@@ -1655,6 +1655,21 @@ MonoBehaviour:
       - m_Target: {fileID: 168856705}
         m_TargetAssemblyTypeName: HotbarInterface, Assembly-CSharp
         m_MethodName: TriggerSkillCooldown
+        m_Mode: 0
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 2
+  onUseConsumable:
+    m_PersistentCalls:
+      m_Calls:
+      - m_Target: {fileID: 168856705}
+        m_TargetAssemblyTypeName: PlayerUI, Assembly-CSharp
+        m_MethodName: UseHotbarItem
         m_Mode: 0
         m_Arguments:
           m_ObjectArgument: {fileID: 0}
@@ -45370,6 +45385,8 @@ MonoBehaviour:
   - {fileID: 11400000, guid: f39c36ea606206e41bb9ed9594bcae93, type: 2}
   - {fileID: 11400000, guid: 724c32b3960b8194b9cb2893cd27fb09, type: 2}
   - {fileID: 11400000, guid: 7c88fcffcd23a7645a3664ec57d92c68, type: 2}
+  - {fileID: 11400000, guid: e7d428e6fb51f7c4688110eab57b7f42, type: 2}
+  - {fileID: 11400000, guid: 50fa2eeffd9c7904d86f96441f805ea7, type: 2}
   roomTransitions:
   - {fileID: 821507328}
   - {fileID: 946309898}

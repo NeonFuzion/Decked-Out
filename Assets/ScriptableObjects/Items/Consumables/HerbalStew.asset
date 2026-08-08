@@ -16,10 +16,12 @@ MonoBehaviour:
   description: A concoction of slime and sap that heals you over time.
   sprite: {fileID: -2272117092260191054, guid: 938081e2c3499c243b2c0d8f31e2290c, type: 3}
   ingredients:
-  - item: {fileID: 11400000, guid: cf70870c58229aa4fb12cbe201809414, type: 2}
-    amount: 7
-  - item: {fileID: 11400000, guid: 796c8882e5051e3458fd3658511292ee, type: 2}
-    amount: 3
+  - amount: 7
+    item:
+      itemSO: {fileID: 11400000, guid: cf70870c58229aa4fb12cbe201809414, type: 2}
+  - amount: 3
+    item:
+      itemSO: {fileID: 11400000, guid: 796c8882e5051e3458fd3658511292ee, type: 2}
   cooldown: 10
   tickCooldown: 2
   tickCount: 3
