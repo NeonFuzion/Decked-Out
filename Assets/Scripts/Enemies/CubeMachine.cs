@@ -37,7 +37,7 @@ public class CubeMachine : Enemy
     {
         if (state != CubeMachineState.Active)
         {
-            rigidbody.linearVelocity = Vector2.zero;
+            movementScript.SetMovement(Vector2.zero);
             return;
         }
         MovementToTarget();
@@ -66,7 +66,7 @@ public class CubeMachine : Enemy
             if (!hit.collider.GetComponent<Player>()) continue;
             Vector3 laserEndPoint = hit.transform.position - transform.position;
             laser.SetPosition(1, laserEndPoint + Vector3.back);
-            hit.collider.GetComponent<Health>().TakeDamage(attack, Element.Fire, transform.position);
+            DealDamage(hit.collider.gameObject, attack, Element.Fire, transform.position);
             break;
         }
 

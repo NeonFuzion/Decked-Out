@@ -245,7 +245,7 @@ public class DungeonRoom
 }
 
 [System.Serializable]
-public class PrefabPositionPair
+public struct PrefabPositionPair
 {
     [SerializeField] GameObject prefab;
     [SerializeField] Vector2 position;

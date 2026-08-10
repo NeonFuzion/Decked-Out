@@ -109,7 +109,7 @@ public class TreeSpirit : Enemy
         foreach (Collider2D col in Physics2D.OverlapCircleAll(transform.position, slamRadius))
         {
             if (!col.GetComponent<Player>()) continue;
-            col.GetComponent<Health>()?.TakeDamage(attack, Element.Physical, transform.position);
+            DealDamage(col.gameObject, attack, Element.Physical, transform.position, knockback);
         }
     }
 
@@ -138,7 +138,7 @@ public class TreeSpirit : Enemy
         foreach (Collider2D col in colliders)
         {
             if (!col.GetComponent<Player>()) continue;
-            col.GetComponent<Health>()?.TakeDamage(attack, Element.Nature, projectile.transform.position);
+            DealDamage(col.gameObject, attack, Element.Nature, projectile.transform.position);
             Destroy(projectile.gameObject);
             return;
         }

@@ -11,13 +11,6 @@ public class StatBuffConsumableSO : ConsumablesSO
     public override void ActivateEffect(HotbarManager hotbarManager)
     {
         Player player = hotbarManager.GetComponent<Player>();
-        hotbarManager.RunCoroutine(BuffStatCoroutine(player));
-    }
-
-    IEnumerator BuffStatCoroutine(Player player)
-    {
-        player.IncrementStat(playerStat, amount, boostType);
-        yield return new WaitForSeconds(duration);
-        player.IncrementStat(playerStat, -amount, boostType);
+        player.AddTemporaryBuff(playerStat, amount, duration, boostType);
     }
 }

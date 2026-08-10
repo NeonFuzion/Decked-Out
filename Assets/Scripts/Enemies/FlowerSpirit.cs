@@ -169,7 +169,7 @@ public class FlowerSpirit : Enemy
         foreach (RaycastHit2D hit in hits)
         {
             if (!hit.collider.GetComponent<Player>()) continue;
-            hit.collider.GetComponent<Health>().TakeDamage(attack, Element.Nature, transform.position);
+            DealDamage(hit.collider.gameObject, attack, Element.Nature, transform.position);
             beamRenderer.SetPosition(1, hit.transform.position - transform.position + Vector3.back);
             break;
         }

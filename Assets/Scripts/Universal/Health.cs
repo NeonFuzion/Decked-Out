@@ -7,42 +7,32 @@ using UnityEngine.Events;
 public class Health : MonoBehaviour
 {
     [SerializeField] float damageFlashDuration = 0.1f;
-    [SerializeField] int hp, maxHp, def, defenseConstant = 100;
+    [SerializeField] int hp, def, defenseConstant = 50;
     [SerializeField] bool invincible;
-    [SerializeField] Color damageFlashColor = Color.white;
-    [SerializeField] GameObject prefabDmgObj, prefabHitEffect, prefabHealth;
-    [SerializeField] Transform healthBarTarget;
-    [SerializeField] HealthBar existingHealthBar;
+    [SerializeField] GameObject prefabDmgObj, prefabHitEffect;
     [SerializeField] UnityEvent onDeath, onHit;
+    [SerializeField] UnityEvent<float> onHealthChanged;
 
     public int HP { get => hp; }
     public int MaxHP { get => maxHp; }
-    public int Def { get => def; }
-    public bool Invincible { get => invincible; }
+    public int Defense { get => def; }
+    public bool IsInvincible { get => invincible; }
     public UnityEvent OnDeath { get => onDeath; }
+    public UnityEvent<float> OnHealthChanged => onHealthChanged;
 
-    HealthBar healthBar;
+    int maxHp;
+
     Transform healthBarCanvas;
-    List<SpriteRenderer> spriteRenderers;
 
     void Start()
     {
-		spriteRenderers = GetComponentsInChildren<SpriteRenderer>().ToList();
-
-        CreateHealthBar();
+        maxHp = hp;
     }
 
-    void Update () {
-		float emission = Mathf.PingPong (Time.time, damageFlashDuration);
-		Color baseColor = damageFlashColor; //Replace this with whatever you want for your base color at emission level '1'
-
-		Color finalColor = baseColor * Mathf.LinearToGammaSpace (emission);
-
-        spriteRenderers.ForEach(spriteRenderer => {
-		    Material mat = spriteRenderer.material;
-            mat.SetColor ("_EmissionColor", finalColor);
-        });
-	}
+    void Update()
+    {
+        
+    }
 
     public void TakeDamage(int amount, Element element, Vector2 attackOrigin)
     {
@@ -50,15 +40,13 @@ public class Health : MonoBehaviour
         if (invincible) return;
         int finalDamage = Mathf.RoundToInt(amount * defenseConstant / (defenseConstant + def));
         hp -= finalDamage;
+        onHealthChanged?.Invoke((float)hp / maxHp);
         Instantiate(prefabHitEffect).GetComponent<HitEfect>().Initialize(transform.position);
         if (prefabDmgObj) SpawnDamageNumber(attackOrigin, element, finalDamage, false);
 
         if (amount < 0) return;
-        if (healthBar) healthBar.SetFill((float)hp / maxHp);
-
         if (hp > 0) return;
         onDeath?.Invoke();
-        Debug.Log(gameObject.name);
 
         if (!healthBarCanvas) return;
         Destroy(healthBarCanvas.gameObject);
@@ -66,10 +54,7 @@ public class Health : MonoBehaviour
 
     public void Heal(int amount)
     {
-        hp += amount;
-        if (hp > maxHp) hp = maxHp;
-
-        if (healthBar) healthBar.SetFill((float)hp / maxHp);
+        hp = Mathf.Min(hp + amount, maxHp);
         if (prefabDmgObj) SpawnDamageNumber(Vector2.down, Element.Physical, amount, true);
     }
 
@@ -88,22 +73,6 @@ public class Health : MonoBehaviour
         this.def = def;
         this.maxHp = maxHp;
         hp = maxHp;
-
-        CreateHealthBar();
-    }
-
-    public void CreateHealthBar()
-    {
-        if (existingHealthBar)
-        {
-            healthBar = existingHealthBar;
-        }
-        else if (prefabHealth)
-        {
-            healthBarCanvas = Instantiate(prefabHealth, healthBarTarget.position, Quaternion.identity).transform;
-            healthBar = healthBarCanvas.GetComponentInChildren<HealthBar>();
-            healthBar.Initialize((float)hp / maxHp);
-        }
     }
 
     void SpawnDamageNumber(Vector2 incomingAttack, Element element, int amount, bool isHeal)
@@ -111,5 +80,10 @@ public class Health : MonoBehaviour
         Vector2 direction = incomingAttack == new Vector2() ? (Vector2)transform.position : (incomingAttack - (Vector2)transform.position);
         GameObject dmgObj = Instantiate(prefabDmgObj, transform.position, Quaternion.identity);
         dmgObj.GetComponent<DamageObject>().Instantiate((isHeal ? -1 : 1) * amount, isHeal, direction, element);
+    }
+
+    public void SetDefense(int def)
+    {
+        this.def = def;
     }
 }

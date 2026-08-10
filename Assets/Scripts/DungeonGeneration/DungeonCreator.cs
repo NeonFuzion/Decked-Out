@@ -124,7 +124,7 @@ public class DungeonCreator : MonoBehaviour
 #endif
 
 [Serializable]
-public class TileInfo
+public struct TileInfo
 {
     [SerializeField] TileBase tile;
     [SerializeField] Vector3Int position;

@@ -76,4 +76,9 @@ public class Stagger : MonoBehaviour
     {
         this.isInvincible = isInvincible;
     }
+
+    public void SetStaggerBar(StaggerBar staggerBar)
+    {
+        this.staggerBar = staggerBar;
+    }
 }

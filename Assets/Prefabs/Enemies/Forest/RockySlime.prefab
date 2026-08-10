@@ -10,8 +10,6 @@ GameObject:
   m_Component:
   - component: {fileID: 511545492254642276}
   - component: {fileID: 7576407757726766027}
-  - component: {fileID: 8356030759821381648}
-  - component: {fileID: 7011291108745438872}
   m_Layer: 8
   m_Name: Sprite
   m_TagString: Untagged
@@ -31,7 +29,8 @@ Transform:
   m_LocalPosition: {x: 0, y: 0, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
-  m_Children: []
+  m_Children:
+  - {fileID: 4870107874623189515}
   m_Father: {fileID: 4806834283277191559}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!212 &7576407757726766027
@@ -94,85 +93,6 @@ SpriteRenderer:
   m_WasSpriteAssigned: 1
   m_SpriteSortPoint: 0
   m_BlendShapeWeights: []
---- !u!95 &8356030759821381648
-Animator:
-  serializedVersion: 7
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 3696415697218892933}
-  m_Enabled: 1
-  m_Avatar: {fileID: 0}
-  m_Controller: {fileID: 9100000, guid: 11b4958cbe51c274c92dd8e5290afcad, type: 2}
-  m_CullingMode: 0
-  m_UpdateMode: 0
-  m_ApplyRootMotion: 0
-  m_LinearVelocityBlending: 0
-  m_StabilizeFeet: 0
-  m_AnimatePhysics: 0
-  m_WarningMessage: 
-  m_HasTransformHierarchy: 1
-  m_AllowConstantClipSamplingOptimization: 1
-  m_KeepAnimatorStateOnDisable: 0
-  m_WriteDefaultValuesOnDisable: 0
---- !u!114 &7011291108745438872
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 3696415697218892933}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: b2d684341cdafce49a1863d4f4f8737b, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: Assembly-CSharp::EventTrigger
-  onTrigger1:
-    m_PersistentCalls:
-      m_Calls:
-      - m_Target: {fileID: 1393866274245383861}
-        m_TargetAssemblyTypeName: RockySlime, Assembly-CSharp
-        m_MethodName: FireProjectiles
-        m_Mode: 1
-        m_Arguments:
-          m_ObjectArgument: {fileID: 0}
-          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
-          m_IntArgument: 0
-          m_FloatArgument: 0
-          m_StringArgument: 
-          m_BoolArgument: 0
-        m_CallState: 2
-  onTrigger2:
-    m_PersistentCalls:
-      m_Calls:
-      - m_Target: {fileID: 1393866274245383861}
-        m_TargetAssemblyTypeName: RockySlime, Assembly-CSharp
-        m_MethodName: FinishAttack
-        m_Mode: 1
-        m_Arguments:
-          m_ObjectArgument: {fileID: 0}
-          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
-          m_IntArgument: 0
-          m_FloatArgument: 0
-          m_StringArgument: 
-          m_BoolArgument: 0
-        m_CallState: 2
-  onTrigger3:
-    m_PersistentCalls:
-      m_Calls:
-      - m_Target: {fileID: 1393866274245383861}
-        m_TargetAssemblyTypeName: RockySlime, Assembly-CSharp
-        m_MethodName: OnLanding
-        m_Mode: 1
-        m_Arguments:
-          m_ObjectArgument: {fileID: 0}
-          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
-          m_IntArgument: 0
-          m_FloatArgument: 0
-          m_StringArgument: 
-          m_BoolArgument: 0
-        m_CallState: 2
 --- !u!1 &4234002200681039880
 GameObject:
   m_ObjectHideFlags: 0
@@ -204,6 +124,129 @@ Transform:
   m_Children: []
   m_Father: {fileID: 4806834283277191559}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!1 &7277329961250374342
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 4870107874623189515}
+  m_Layer: 8
+  m_Name: HealthBarTarget (1)
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &4870107874623189515
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 7277329961250374342}
+  serializedVersion: 2
+  m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
+  m_LocalPosition: {x: 0, y: 1.5, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 511545492254642276}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!1 &7646014173348764692
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 1799289240086896916}
+  - component: {fileID: 7589193286801323159}
+  m_Layer: 8
+  m_Name: FallShadow
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 0
+--- !u!4 &1799289240086896916
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 7646014173348764692}
+  serializedVersion: 2
+  m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0.1}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 4806834283277191559}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!212 &7589193286801323159
+SpriteRenderer:
+  serializedVersion: 3
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 7646014173348764692}
+  m_Enabled: 1
+  m_CastShadows: 0
+  m_ReceiveShadows: 0
+  m_DynamicOccludee: 1
+  m_StaticShadowCaster: 0
+  m_MotionVectors: 1
+  m_LightProbeUsage: 1
+  m_ReflectionProbeUsage: 1
+  m_RayTracingMode: 0
+  m_RayTraceProcedural: 0
+  m_RayTracingAccelStructBuildFlagsOverride: 0
+  m_RayTracingAccelStructBuildFlags: 1
+  m_SmallMeshCulling: 1
+  m_ForceMeshLod: -1
+  m_MeshLodSelectionBias: 0
+  m_RenderingLayerMask: 1
+  m_RendererPriority: 0
+  m_Materials:
+  - {fileID: 10754, guid: 0000000000000000f000000000000000, type: 0}
+  m_StaticBatchInfo:
+    firstSubMesh: 0
+    subMeshCount: 0
+  m_StaticBatchRoot: {fileID: 0}
+  m_ProbeAnchor: {fileID: 0}
+  m_LightProbeVolumeOverride: {fileID: 0}
+  m_ScaleInLightmap: 1
+  m_ReceiveGI: 1
+  m_PreserveUVs: 0
+  m_IgnoreNormalsForChartDetection: 0
+  m_ImportantGI: 0
+  m_StitchLightmapSeams: 1
+  m_SelectedEditorRenderState: 0
+  m_MinimumChartSize: 4
+  m_AutoUVMaxDistance: 0.5
+  m_AutoUVMaxAngle: 89
+  m_LightmapParameters: {fileID: 0}
+  m_GlobalIlluminationMeshLod: 0
+  m_SortingLayerID: 0
+  m_SortingLayer: 0
+  m_SortingOrder: 0
+  m_MaskInteraction: 0
+  m_Sprite: {fileID: 192701613, guid: 7b74588fe9ea8ab4c91bc0f18396d837, type: 3}
+  m_Color: {r: 1, g: 1, b: 1, a: 1}
+  m_FlipX: 0
+  m_FlipY: 0
+  m_DrawMode: 0
+  m_Size: {x: 1.8666667, y: 0.6666667}
+  m_AdaptiveModeThreshold: 0.5
+  m_SpriteTileMode: 0
+  m_WasSpriteAssigned: 1
+  m_SpriteSortPoint: 0
+  m_BlendShapeWeights: []
 --- !u!1001 &2140774358608608701
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -216,6 +259,10 @@ PrefabInstance:
       propertyPath: knockbackResistance
       value: 0.3
       objectReference: {fileID: 0}
+    - target: {fileID: 1065700513455816896, guid: 28ae2131f23309b4cb7b419f9cc10d23, type: 3}
+      propertyPath: m_Controller
+      value: 
+      objectReference: {fileID: 9100000, guid: 11b4958cbe51c274c92dd8e5290afcad, type: 2}
     - target: {fileID: 1227486679126910494, guid: 28ae2131f23309b4cb7b419f9cc10d23, type: 3}
       propertyPath: rareDrops.Array.size
       value: 1
@@ -232,6 +279,10 @@ PrefabInstance:
       propertyPath: 'commonDrops.Array.data[0]'
       value: 
       objectReference: {fileID: 11400000, guid: cf70870c58229aa4fb12cbe201809414, type: 2}
+    - target: {fileID: 1490180051899424924, guid: 28ae2131f23309b4cb7b419f9cc10d23, type: 3}
+      propertyPath: m_LocalPosition.y
+      value: 1.5
+      objectReference: {fileID: 0}
     - target: {fileID: 2038733839661455880, guid: 28ae2131f23309b4cb7b419f9cc10d23, type: 3}
       propertyPath: knockbackResistance
       value: 0.3
@@ -412,15 +463,18 @@ PrefabInstance:
       propertyPath: m_SpriteTilingProperty.adaptiveTilingThreshold
       value: 0.5
       objectReference: {fileID: 0}
-    m_RemovedComponents:
-    - {fileID: 1065700513455816896, guid: 28ae2131f23309b4cb7b419f9cc10d23, type: 3}
-    m_RemovedGameObjects: []
+    m_RemovedComponents: []
+    m_RemovedGameObjects:
+    - {fileID: 9191129355144991282, guid: 28ae2131f23309b4cb7b419f9cc10d23, type: 3}
     m_AddedGameObjects:
     - targetCorrespondingSourceObject: {fileID: 6845683363559863354, guid: 28ae2131f23309b4cb7b419f9cc10d23, type: 3}
       insertIndex: 0
       addedObject: {fileID: 511545492254642276}
     - targetCorrespondingSourceObject: {fileID: 6845683363559863354, guid: 28ae2131f23309b4cb7b419f9cc10d23, type: 3}
       insertIndex: 1
+      addedObject: {fileID: 1799289240086896916}
+    - targetCorrespondingSourceObject: {fileID: 6845683363559863354, guid: 28ae2131f23309b4cb7b419f9cc10d23, type: 3}
+      insertIndex: 2
       addedObject: {fileID: 6121795034197968400}
     m_AddedComponents:
     - targetCorrespondingSourceObject: {fileID: 5109368311923587848, guid: 28ae2131f23309b4cb7b419f9cc10d23, type: 3}
@@ -430,8 +484,8 @@ PrefabInstance:
       insertIndex: 5
       addedObject: {fileID: 2587637367656140370}
     - targetCorrespondingSourceObject: {fileID: 5109368311923587848, guid: 28ae2131f23309b4cb7b419f9cc10d23, type: 3}
-      insertIndex: -1
-      addedObject: {fileID: 3652973860826283459}
+      insertIndex: 7
+      addedObject: {fileID: 3395777596942460116}
   m_SourcePrefab: {fileID: 100100000, guid: 28ae2131f23309b4cb7b419f9cc10d23, type: 3}
 --- !u!114 &918002385434139555 stripped
 MonoBehaviour:
@@ -444,6 +498,11 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 365e86e98fba499489005801011a7d09, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::LootDrops
+--- !u!95 &1405033025395047805 stripped
+Animator:
+  m_CorrespondingSourceObject: {fileID: 1065700513455816896, guid: 28ae2131f23309b4cb7b419f9cc10d23, type: 3}
+  m_PrefabInstance: {fileID: 2140774358608608701}
+  m_PrefabAsset: {fileID: 0}
 --- !u!4 &4806834283277191559 stripped
 Transform:
   m_CorrespondingSourceObject: {fileID: 6845683363559863354, guid: 28ae2131f23309b4cb7b419f9cc10d23, type: 3}
@@ -468,7 +527,9 @@ MonoBehaviour:
   m_EditorClassIdentifier: Assembly-CSharp::RockySlime
   attack: 28
   detectDistance: 11
-  animator: {fileID: 8356030759821381648}
+  knockback: 10
+  healthBarTarget: {fileID: 4870107874623189515}
+  animator: {fileID: 1405033025395047805}
   projectileCount: 5
   jumpTime: 1.5
   attackCooldown: 2
@@ -493,63 +554,60 @@ MonoBehaviour:
   radialFireRadius: 0
   senderType: 2
   firePoint: {fileID: 6121795034197968400}
---- !u!212 &3652973860826283459
-SpriteRenderer:
-  serializedVersion: 3
+--- !u!114 &3395777596942460116
+MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 6583578241170589365}
   m_Enabled: 1
-  m_CastShadows: 0
-  m_ReceiveShadows: 0
-  m_DynamicOccludee: 1
-  m_StaticShadowCaster: 0
-  m_MotionVectors: 1
-  m_LightProbeUsage: 1
-  m_ReflectionProbeUsage: 1
-  m_RayTracingMode: 0
-  m_RayTraceProcedural: 0
-  m_RayTracingAccelStructBuildFlagsOverride: 0
-  m_RayTracingAccelStructBuildFlags: 1
-  m_SmallMeshCulling: 1
-  m_ForceMeshLod: -1
-  m_MeshLodSelectionBias: 0
-  m_RenderingLayerMask: 1
-  m_RendererPriority: 0
-  m_Materials:
-  - {fileID: 10754, guid: 0000000000000000f000000000000000, type: 0}
-  m_StaticBatchInfo:
-    firstSubMesh: 0
-    subMeshCount: 0
-  m_StaticBatchRoot: {fileID: 0}
-  m_ProbeAnchor: {fileID: 0}
-  m_LightProbeVolumeOverride: {fileID: 0}
-  m_ScaleInLightmap: 1
-  m_ReceiveGI: 1
-  m_PreserveUVs: 0
-  m_IgnoreNormalsForChartDetection: 0
-  m_ImportantGI: 0
-  m_StitchLightmapSeams: 1
-  m_SelectedEditorRenderState: 0
-  m_MinimumChartSize: 4
-  m_AutoUVMaxDistance: 0.5
-  m_AutoUVMaxAngle: 89
-  m_LightmapParameters: {fileID: 0}
-  m_GlobalIlluminationMeshLod: 0
-  m_SortingLayerID: 0
-  m_SortingLayer: 0
-  m_SortingOrder: 0
-  m_MaskInteraction: 0
-  m_Sprite: {fileID: 192701613, guid: 7b74588fe9ea8ab4c91bc0f18396d837, type: 3}
-  m_Color: {r: 1, g: 1, b: 1, a: 1}
-  m_FlipX: 0
-  m_FlipY: 0
-  m_DrawMode: 0
-  m_Size: {x: 1.75, y: 0.625}
-  m_AdaptiveModeThreshold: 0.5
-  m_SpriteTileMode: 0
-  m_WasSpriteAssigned: 1
-  m_SpriteSortPoint: 0
-  m_BlendShapeWeights: []
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: b2d684341cdafce49a1863d4f4f8737b, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::EventTrigger
+  onTrigger1:
+    m_PersistentCalls:
+      m_Calls:
+      - m_Target: {fileID: 1393866274245383861}
+        m_TargetAssemblyTypeName: RockySlime, Assembly-CSharp
+        m_MethodName: FireProjectiles
+        m_Mode: 1
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 2
+  onTrigger2:
+    m_PersistentCalls:
+      m_Calls:
+      - m_Target: {fileID: 1393866274245383861}
+        m_TargetAssemblyTypeName: RockySlime, Assembly-CSharp
+        m_MethodName: FinishAttack
+        m_Mode: 1
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 2
+  onTrigger3:
+    m_PersistentCalls:
+      m_Calls:
+      - m_Target: {fileID: 1393866274245383861}
+        m_TargetAssemblyTypeName: RockySlime, Assembly-CSharp
+        m_MethodName: OnLanding
+        m_Mode: 1
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 2

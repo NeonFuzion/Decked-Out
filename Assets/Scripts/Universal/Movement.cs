@@ -45,6 +45,7 @@ public class Movement : MonoBehaviour
     public void ApplyKnockback(Vector2 origin, float knockback)
     {
         if (knockbackResistance >= 1) return;
+        if (!gameObject.activeInHierarchy) return;
         StopAllCoroutines();
         StartCoroutine(KnockbackCoroutine(origin, knockback));
     }

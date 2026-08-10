@@ -29,10 +29,6 @@ PrefabInstance:
       value: 
       objectReference: {fileID: 0}
     - target: {fileID: 2634155192562098292, guid: 1ab72a7c414169e4c9d050909c12f4f4, type: 3}
-      propertyPath: hp
-      value: 60
-      objectReference: {fileID: 0}
-    - target: {fileID: 2634155192562098292, guid: 1ab72a7c414169e4c9d050909c12f4f4, type: 3}
       propertyPath: maxHp
       value: 60
       objectReference: {fileID: 0}
@@ -92,6 +88,10 @@ PrefabInstance:
       propertyPath: m_Sprite
       value: 
       objectReference: {fileID: 2332470280317142563, guid: b34349e4ba5c4bf469bf803bbf7cd987, type: 3}
+    - target: {fileID: 7064395610171987388, guid: 1ab72a7c414169e4c9d050909c12f4f4, type: 3}
+      propertyPath: m_Sprite
+      value: 
+      objectReference: {fileID: 6683615111705859281, guid: b34349e4ba5c4bf469bf803bbf7cd987, type: 3}
     - target: {fileID: 7362341658558786818, guid: 1ab72a7c414169e4c9d050909c12f4f4, type: 3}
       propertyPath: staggerBar
       value: 
@@ -167,6 +167,10 @@ PrefabInstance:
     - target: {fileID: 9173045083193340047, guid: 1ab72a7c414169e4c9d050909c12f4f4, type: 3}
       propertyPath: m_Enabled
       value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 9222362515997478100, guid: 1ab72a7c414169e4c9d050909c12f4f4, type: 3}
+      propertyPath: m_LocalPosition.y
+      value: 1.5
       objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects:

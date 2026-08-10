@@ -12,7 +12,6 @@ public class RockySlime : Enemy
         launchingAnim = Animator.StringToHash("RockyBurst"),
         bounceAnim = Animator.StringToHash("SlimeBounce");
 
-    SpriteRenderer spriteRenderer;
     Shooter shooter;
     RockySlimeState rockyState;
     Vector2 targetPos;
@@ -28,10 +27,7 @@ public class RockySlime : Enemy
         rockyState = RockySlimeState.Idle;
         targetPos = Vector2.zero;
 
-        spriteRenderer = GetComponent<SpriteRenderer>();
         shooter = GetComponent<Shooter>();
-
-        spriteRenderer.enabled = false;
     }
 
     void Update()
@@ -50,7 +46,6 @@ public class RockySlime : Enemy
                     animator.CrossFade(landingAnim, 0, 0);
                 break;
             case RockySlimeState.Idle:
-                rigidbody.linearVelocity = Vector2.zero;
                 currentAttackCooldown -= Time.deltaTime;
 
                 if (currentAttackCooldown > 0) break;
@@ -65,7 +60,6 @@ public class RockySlime : Enemy
     {
         animator.CrossFade(bounceAnim, 0, 0);
         targetPos = target.position;
-        spriteRenderer.enabled = true;
         currentJumpTime = jumpTime;
         rockyState = RockySlimeState.Jumping;
         SetInvincibility(true);
@@ -82,8 +76,6 @@ public class RockySlime : Enemy
     {
         SetInvincibility(false);
         movementScript.SetImmobile();
-        spriteRenderer.enabled = false;
-        rigidbody.linearVelocity = Vector2.zero;
         rockyState = RockySlimeState.Idle;
         currentAttackCooldown = attackCooldown;
         animator.CrossFade(IdleAnim, 0, 0);
@@ -93,8 +85,7 @@ public class RockySlime : Enemy
     {
         if (colliders.Count(collider => collider.transform == target) == 0) return;
         int damage = Mathf.RoundToInt(attack * 0.8f);
-        Health targetHealth = target.GetComponent<Health>();
-        if (targetHealth) targetHealth.TakeDamage(damage, element, projectile.transform.position);
+        DealDamage(target.gameObject, damage, element, projectile.transform.position);
 
         if (!projectile.gameObject) return;
         Destroy(projectile.gameObject);
@@ -103,13 +94,11 @@ public class RockySlime : Enemy
     public void OnLanding()
     {
         if (IsStaggered) return;
-        spriteRenderer.enabled = false;
         ResetToIdle();
 
         if (!target) return;
         if (Vector2.Distance(target.position, transform.position) > 1.5f) return;
-        Health targetHealth = target.GetComponent<Health>();
-        if (targetHealth) targetHealth.TakeDamage(attack, Element.Nature, transform.position);
+        DealDamage(target.gameObject, attack, Element.Nature, transform.position, knockback);
     }
 
     public void FireProjectiles()
@@ -144,7 +133,6 @@ public class RockySlime : Enemy
     public override void OnStagger()
     {
         base.OnStagger();
-        spriteRenderer.enabled = false;
         SetInvincibility(false);
     }
 

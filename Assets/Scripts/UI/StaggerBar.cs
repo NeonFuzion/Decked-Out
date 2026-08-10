@@ -10,8 +10,6 @@ public class StaggerBar : MonoBehaviour
 
     float targetFill;
 
-    
-
     void Start()
     {
         targetFill = 1f;

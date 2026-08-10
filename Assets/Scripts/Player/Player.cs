@@ -1,7 +1,10 @@
 using System;
+using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
+using System.Reflection.Metadata.Ecma335;
 using TMPro;
+using Unity.VisualScripting;
 using UnityEngine;
 using UnityEngine.Events;
 
@@ -14,6 +17,7 @@ public class Player : Being
     [SerializeField] UnityEvent<int, bool> onDamageInflicted;
 
     Dictionary<PlayerStat, float> resetStats, baseStats, percentageStats, flatStats;
+    List<StatBoost> temporaryPercentBuffs, temporaryFlatBuffs;
 
     int baseSpeed, curSpeed, dashSpdMulti, dashCharges;
     float curDashTime, dashChargeTime, curDashChargeTime, currentMana, perfectDodgeProgress;
@@ -21,7 +25,7 @@ public class Player : Being
 
     Vector2 direction;
     Animator animator;
-    Rigidbody2D rb;
+    Movement movementScript;
     Health health;
     SpriteRenderer spriteRenderer;
     Inventory inventory;
@@ -46,7 +50,10 @@ public class Player : Being
         perfectDodgeProgress = -1;
         curDashChargeTime = 0;
         dashing = false;
+
         inventory = Inventory.Instance;
+        temporaryFlatBuffs = new ();
+        temporaryPercentBuffs = new ();
 
         resetStats = new ()
         {
@@ -74,7 +81,7 @@ public class Player : Being
 
         spriteRenderer = sprite.GetComponent<SpriteRenderer>();
         animator = GetComponent<Animator>();
-        rb = GetComponent<Rigidbody2D>();
+        movementScript = GetComponent<Movement>();
         health = GetComponent<Health>();
 
         animator.SetFloat("MoveSpeed", curSpeed / 400f);
@@ -87,7 +94,7 @@ public class Player : Being
     void Update()
     {
         if (Time.timeScale == 0) return;
-        spriteRenderer.flipX = direction.x > 0;
+        if (direction.x != 0) spriteRenderer.flipX = direction.x > 0;
 
         HandleDash();
         HandleMana();
@@ -96,7 +103,21 @@ public class Player : Being
     void FixedUpdate()
     {
         direction = Movement;
-        rb.linearVelocity = Movement.normalized * Time.deltaTime * curSpeed;
+        movementScript.SetMovement(Movement.normalized * Time.deltaTime * curSpeed);
+    }
+
+    IEnumerator BuffCoroutine(StatBoost boost, BoostType boostType, float duration)
+    {
+        List<StatBoost> boostList = boostType == BoostType.Percentage ? temporaryPercentBuffs : temporaryFlatBuffs;
+        boostList.Add(boost);
+        yield return new WaitForSeconds(duration);
+        boostList.Remove(boost);
+    }
+
+    float GetTemporaryBuff(PlayerStat playerStat, BoostType boostType)
+    {
+        List<StatBoost> buffList = boostType == BoostType.Percentage ? temporaryPercentBuffs : temporaryFlatBuffs;
+        return buffList.Sum(buff => buff.Stat == playerStat ? buff.Amount : 0);
     }
 
     void ToggleDash()
@@ -115,13 +136,16 @@ public class Player : Being
         percentageStats = GetEmptyStats();
         baseStats = GetEmptyStats();
         flatStats = GetEmptyStats();
+
+        temporaryPercentBuffs.Clear();
+        temporaryFlatBuffs.Clear();
     }
 
     float CalculateStat(PlayerStat stat)
     {
         if (stat == PlayerStat.None) return 0;
-        if (Stats.IsPercentage(stat)) return resetStats[stat] + percentageStats[stat];
-        else return (resetStats[stat] + baseStats[stat]) * (1 + percentageStats[stat]) + flatStats[stat];
+        if (Stats.IsPercentage(stat)) return resetStats[stat] + percentageStats[stat] + GetTemporaryBuff(stat, BoostType.Percentage);
+        else return (resetStats[stat] + baseStats[stat]) * (1 + percentageStats[stat] + GetTemporaryBuff(stat, BoostType.Percentage)) + flatStats[stat] + GetTemporaryBuff(stat, BoostType.Flat);
     }
 
     void DealDamage(Collider2D[] colliders, AttackData attackData)
@@ -131,7 +155,7 @@ public class Player : Being
             if (collider.gameObject.Equals(gameObject)) return;
             if (collider.GetComponent<Health>() is Health health)
             {
-                if (health.Invincible) return;
+                if (health.IsInvincible) return;
                 int damage = Mathf.RoundToInt(attackData.Damage * damageConstant / (damageConstant + CalculateStat(PlayerStat.Attack)));
                 health.TakeDamage(damage, attackData.Element, attackData.Origin);
                 if (health.HP <= 0)
@@ -247,7 +271,7 @@ public class Player : Being
     public void OnPerfectDodge()
     {
         if (!dashing) return;
-        if (!health.Invincible) return;
+        if (!health.IsInvincible) return;
         float manaRegenRate = 1 + CalculateStat(PlayerStat.ManaRegen) / 100;
         IncrementMana(perfectDodgeResourceGain * manaRegenRate);
         Time.timeScale = perfectDodgeTimeScale;
@@ -302,11 +326,17 @@ public class Player : Being
     {
         IncrementMana(amount);
     }
+
+    public void AddTemporaryBuff(PlayerStat stat, float amount, float duration, BoostType boostType)
+    {
+        StatBoost buff = new (stat, amount);
+        StartCoroutine(BuffCoroutine(buff, boostType, duration));
+    }
 }
 
 public enum BoostType { Percentage, Flat }
 
-public class AttackData
+public struct AttackData
 {
     Element element;
     Vector2 origin;
@@ -326,11 +356,4 @@ public class AttackData
     public int Damage { get => damage; }
     public int Stagger { get => stagger; }
     public int Knockback { get => knockback; }
-}
-
-public abstract class AttackAugment
-{
-    public void Initialize() {}
-
-    public abstract void AugmentAttack(Collider2D[] colliders, Dictionary<PlayerStat, float> percentageBoosts, Dictionary<PlayerStat, float> flatBoosts);
 }

@@ -10295,6 +10295,10 @@ PrefabInstance:
       propertyPath: 'commonDrops.Array.data[0]'
       value: 
       objectReference: {fileID: 11400000, guid: 796c8882e5051e3458fd3658511292ee, type: 2}
+    - target: {fileID: 1490180051899424924, guid: 28ae2131f23309b4cb7b419f9cc10d23, type: 3}
+      propertyPath: m_LocalPosition.y
+      value: 2
+      objectReference: {fileID: 0}
     - target: {fileID: 2038733839661455880, guid: 28ae2131f23309b4cb7b419f9cc10d23, type: 3}
       propertyPath: knockbackResistance
       value: 0.5
@@ -10465,6 +10469,11 @@ PrefabInstance:
       insertIndex: -1
       addedObject: {fileID: 8754868213174066439}
   m_SourcePrefab: {fileID: 100100000, guid: 28ae2131f23309b4cb7b419f9cc10d23, type: 3}
+--- !u!4 &384037435816644303 stripped
+Transform:
+  m_CorrespondingSourceObject: {fileID: 1490180051899424924, guid: 28ae2131f23309b4cb7b419f9cc10d23, type: 3}
+  m_PrefabInstance: {fileID: 1295434566711586387}
+  m_PrefabAsset: {fileID: 0}
 --- !u!95 &2247417330120748691 stripped
 Animator:
   m_CorrespondingSourceObject: {fileID: 1065700513455816896, guid: 28ae2131f23309b4cb7b419f9cc10d23, type: 3}
@@ -10494,6 +10503,8 @@ MonoBehaviour:
   m_EditorClassIdentifier: Assembly-CSharp::TreeSpirit
   attack: 25
   detectDistance: 10
+  knockback: 10
+  healthBarTarget: {fileID: 384037435816644303}
   animator: {fileID: 2247417330120748691}
   attackCooldown: 5
   meleeRange: 2.5

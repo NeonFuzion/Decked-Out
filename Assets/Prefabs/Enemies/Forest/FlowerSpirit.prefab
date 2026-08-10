@@ -72,7 +72,7 @@ LineRenderer:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1774391653016999582}
-  m_Enabled: 1
+  m_Enabled: 0
   m_CastShadows: 1
   m_ReceiveShadows: 1
   m_DynamicOccludee: 1
@@ -5694,6 +5694,10 @@ PrefabInstance:
       propertyPath: 'commonDrops.Array.data[0]'
       value: 
       objectReference: {fileID: 11400000, guid: 796c8882e5051e3458fd3658511292ee, type: 2}
+    - target: {fileID: 1490180051899424924, guid: 28ae2131f23309b4cb7b419f9cc10d23, type: 3}
+      propertyPath: m_LocalPosition.y
+      value: 2
+      objectReference: {fileID: 0}
     - target: {fileID: 2038733839661455880, guid: 28ae2131f23309b4cb7b419f9cc10d23, type: 3}
       propertyPath: knockbackResistance
       value: 1
@@ -5838,6 +5842,10 @@ PrefabInstance:
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: 7372755613883956873, guid: 28ae2131f23309b4cb7b419f9cc10d23, type: 3}
+      propertyPath: m_LocalPosition.y
+      value: 1.5
+      objectReference: {fileID: 0}
     - target: {fileID: 8205711150073379654, guid: 28ae2131f23309b4cb7b419f9cc10d23, type: 3}
       propertyPath: m_Size.y
       value: 2
@@ -5885,6 +5893,11 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 365e86e98fba499489005801011a7d09, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::LootDrops
+--- !u!4 &498250684446867384 stripped
+Transform:
+  m_CorrespondingSourceObject: {fileID: 1490180051899424924, guid: 28ae2131f23309b4cb7b419f9cc10d23, type: 3}
+  m_PrefabInstance: {fileID: 1316188566763233060}
+  m_PrefabAsset: {fileID: 0}
 --- !u!95 &2057628806149447652 stripped
 Animator:
   m_CorrespondingSourceObject: {fileID: 1065700513455816896, guid: 28ae2131f23309b4cb7b419f9cc10d23, type: 3}
@@ -5914,6 +5927,8 @@ MonoBehaviour:
   m_EditorClassIdentifier: Assembly-CSharp::ForestSpirit
   attack: 21
   detectDistance: 8
+  knockback: 0
+  healthBarTarget: {fileID: 498250684446867384}
   animator: {fileID: 2057628806149447652}
   rootDistance: 8
   retreatDistance: 5

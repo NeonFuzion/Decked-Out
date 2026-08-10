@@ -23,6 +23,6 @@ MonoBehaviour:
     item:
       itemSO: {fileID: 11400000, guid: 796c8882e5051e3458fd3658511292ee, type: 2}
   cooldown: 10
-  tickCooldown: 2
-  tickCount: 3
-  healAmount: 10
+  tickCooldown: 1
+  tickCount: 6
+  healAmount: 5

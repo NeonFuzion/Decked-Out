@@ -2,10 +2,11 @@ using UnityEngine;
 
 public abstract class Enemy : Being
 {
-    [SerializeField] protected int attack, detectDistance;
+    [SerializeField] protected int attack, detectDistance, knockback;
+    [SerializeField] float staggerDefenseMultiplier = 0.5f;
+    [SerializeField] protected Transform healthBarTarget;
     [SerializeField] protected Animator animator;
 
-    protected new Rigidbody2D rigidbody;
     protected Transform target;
     protected Health health;
     protected Stagger stagger;
@@ -15,15 +16,20 @@ public abstract class Enemy : Being
 
     public bool IsStaggered { get; private set; }
 
+    int oldDefense;
+
+    HealthBar healthBar;
+
     // Start is called before the first frame update
     protected void Start()
     {
         BeingType = BeingType.Hostile;
 
-        rigidbody = GetComponent<Rigidbody2D>();
         stagger = GetComponent<Stagger>();
         health = GetComponent<Health>();
         movementScript = GetComponent<Movement>();
+
+        healthBar = HealthBarObjectPool.Instance.RetrieveHealthBar(healthBarTarget, health, true, stagger);
     }
 
     // Update is called once per frame
@@ -73,22 +79,32 @@ public abstract class Enemy : Being
         stagger.SetInvincibility(isInvincible);
     }
 
+    protected void DealDamage(GameObject collision, int damage, Element element, Vector2 damageOrigin, int knockback = 1)
+    {
+        collision.GetComponent<Health>()?.TakeDamage(damage, element, damageOrigin);
+        collision.GetComponent<Movement>()?.ApplyKnockback(damageOrigin, knockback);
+    }
+
     public virtual void OnStagger()
     {
         IsStaggered = true;
         StopAllCoroutines();
         animator.CrossFade(IdleAnim, 0, 0);
         movementScript.SetImmobile();
+        oldDefense = health.Defense;
+        health.SetDefense(Mathf.RoundToInt(oldDefense * staggerDefenseMultiplier));
     }
 
     public virtual void OnStaggerEnd()
     {
         IsStaggered = false;
         movementScript.SetMobile();
+        health.SetDefense(oldDefense);
     }
 
     public void OnDeath()
     {
+        HealthBarObjectPool.Instance.ReturnHealthBar(healthBar, health, stagger);
         Destroy(gameObject);
     }
 }

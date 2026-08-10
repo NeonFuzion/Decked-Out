@@ -10,7 +10,6 @@ public class Slime : Enemy
     float curJumpTime, curJumpCD;
     SlimeState slimeState;
 
-    SpriteRenderer spriteRenderer;
     Vector2 targetPos;
 
     protected override int IdleAnim => Animator.StringToHash("SlimeIdle");
@@ -25,10 +24,6 @@ public class Slime : Enemy
         slimeState = SlimeState.Idle;
 
         targetPos = Vector2.zero;
-
-        spriteRenderer = GetComponent<SpriteRenderer>();
-
-        spriteRenderer.enabled = false;
     }
 
     void Update()
@@ -39,7 +34,11 @@ public class Slime : Enemy
         switch (slimeState)
         {
             case SlimeState.Idle:
-                if (curJumpCD > 0) { curJumpCD -= Time.deltaTime; rigidbody.linearVelocity = Vector2.zero; break; }
+                if (curJumpCD > 0)
+                {
+                    curJumpCD -= Time.deltaTime;
+                    break;
+                }
                 if (!target) break;
                 Jump();
                 break;
@@ -59,7 +58,6 @@ public class Slime : Enemy
         movementScript.SetMobile();
         health.SetInvincibility(true);
         MovementToPosition(targetPos);
-        spriteRenderer.enabled = true;
         curJumpTime = jumpTime;
         slimeState = SlimeState.Jumping;
     }
@@ -67,7 +65,6 @@ public class Slime : Enemy
     public void OnLanding()
     {
         if (IsStaggered) return;
-        spriteRenderer.enabled = false;
         movementScript.SetImmobile();
         this.health.SetInvincibility(false);
         slimeState = SlimeState.Idle;
@@ -76,14 +73,12 @@ public class Slime : Enemy
 
         if (!target) return;
         if (Vector2.Distance(target.position, transform.position) > 1) return;
-        Health health = target.GetComponent<Health>();
-        if (health) health.TakeDamage(attack, Element.Water, transform.position);
+        DealDamage(target.gameObject, attack, Element.Water, transform.position, knockback);
     }
 
     public override void OnStagger()
     {
         base.OnStagger();
-        spriteRenderer.enabled = false;
     }
 
     public override void OnStaggerEnd()

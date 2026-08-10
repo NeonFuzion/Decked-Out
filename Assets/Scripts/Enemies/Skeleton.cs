@@ -38,7 +38,7 @@ public class Skeleton : Enemy
     {
         if (state != SkeletonState.Active)
         {
-            rigidbody.linearVelocity = Vector2.zero;
+            movementScript.SetMovement(Vector2.zero);
             return;
         }
         MovementToTarget();
