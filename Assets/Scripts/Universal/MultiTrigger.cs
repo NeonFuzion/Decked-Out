@@ -25,4 +25,10 @@ public class MultiTrigger : MonoBehaviour
     {
         this.triggerCount = triggerCount;
     }
+
+    public void Initialize(int triggerCount)
+    {
+        SetTriggerCount(triggerCount);
+        currentTriggerCount = 0;
+    }
 }

@@ -6,10 +6,10 @@ public class ProjectileSkillSO : SkillTomeSO
 {
     [SerializeField] GameObject prefabProjectile;
 
-    public override void ActivateEffects(SkillManager skillManager, int index)
+    public override void ActivateEffects(HotbarManager hotbarManage, int index)
     {
         Projectile projectile;
-        skillManager.Shooter.FireProjectile(prefabProjectile, MainCamera.MouseWorldPosition(), out projectile, FiringMode.Radial);
+        hotbarManage.Shooter.FireProjectile(prefabProjectile, MainCamera.MouseWorldPosition(), out projectile, FiringMode.Radial);
         projectile.OnHit.AddListener((Collider2D[] colliders, Projectile projectile) =>
         {
             DamageStaggerPair damageStaggerPair = DamageStaggerPairs[0];

@@ -7,7 +7,9 @@ using UnityEngine.Events;
 
 public class HotbarManager : MonoBehaviour
 {
-    [SerializeField] SkillManager skillManager;
+    [SerializeField] Player player;
+    [SerializeField] Shooter shooter;
+    [SerializeField] Transform skillParent;
     [SerializeField] UnityEvent<int> onActivateSkill, onUseConsumable;
 
     int hotbarIndex;
@@ -17,6 +19,10 @@ public class HotbarManager : MonoBehaviour
     Inventory inventory;
     ConsumablesSO[] hotbar;
     SkillTomeSO[] skillBar;
+
+    ParticleSystem[] particleSystems;
+
+    public Shooter Shooter => shooter;
 
     void Awake()
     {
@@ -44,7 +50,21 @@ public class HotbarManager : MonoBehaviour
         for (int i = 0; i < 4; i++)
         {
             Equipment equipInst = inventory.GetEquipmentAtIndex(i + 4);
-            skillBar[i] = equipInst?.EquipmentSO as SkillTomeSO;
+            SkillTomeSO skillTome = equipInst?.EquipmentSO as SkillTomeSO;
+            if (!skillTome) skillBar[i] = null;
+            else if (skillBar[i] != skillTome)
+            {
+                skillBar[i] = skillTome;
+
+                if (!skillTome.PrefabParticleSystem) continue;
+                GameObject particleSystemHolder = Instantiate(skillTome.PrefabParticleSystem, skillParent);
+                particleSystems[i] = particleSystemHolder.GetComponent<ParticleSystem>();
+                particleSystemHolder.transform.SetParent(skillParent);
+                
+                if (skillParent.childCount <= i) continue;
+                Destroy(skillParent.GetChild(i).gameObject);
+                particleSystemHolder.transform.SetSiblingIndex(i);
+            }
         }
         for (int i = 0; i < 4; i++)
         {
@@ -67,9 +87,9 @@ public class HotbarManager : MonoBehaviour
 
         if (skillTomeSO == null) return;
         if (skillCooldowns[index] > 0) return;
-        if (!skillManager.Player.ConsumeMana(skillTomeSO.ResourceCost)) return;
+        if (!player.ConsumeMana(skillTomeSO.ResourceCost)) return;
         skillCooldowns[index] = skillTomeSO.Cooldown;
-        skillTomeSO.ActivateEffects(skillManager, 0);
+        skillTomeSO.ActivateEffects(this, index);
         onActivateSkill?.Invoke(index);
     }
 
@@ -90,5 +110,10 @@ public class HotbarManager : MonoBehaviour
     public void RunCoroutine(IEnumerator coroutine)
     {
         StartCoroutine(coroutine);
+    }
+
+    public ParticleSystem GetParticleSystem(int index)
+    {
+        return particleSystems[index];
     }
 }

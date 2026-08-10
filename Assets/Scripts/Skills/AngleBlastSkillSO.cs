@@ -9,12 +9,14 @@ public class AngleBlastSkillSO : SkillTomeSO
     [SerializeField] Material particleMaterial;
     [SerializeField] LayerMask enemyLayer;
 
-    public override void ActivateEffects(SkillManager skillManager, int index)
+    public override void ActivateEffects(HotbarManager hotbarManager, int index)
     {
-        Vector2 playerPos = skillManager.transform.position;
+        Vector2 playerPos = hotbarManager.transform.position;
         Vector2 direction = (MainCamera.MouseWorldPosition() - playerPos).normalized;
 
-        skillManager.FireParticles(direction, coneAngle, particleMaterial);
+        ParticleSystem particleSystem = hotbarManager.GetParticleSystem(index);
+        particleSystem.transform.eulerAngles = new Vector3(0, 0, Mathf.Atan2(direction.y, direction.x) * 180 / Mathf.PI - coneAngle / 2);
+        particleSystem.Play();
 
         Collider2D[] hits = Physics2D.OverlapCircleAll(playerPos, range, enemyLayer);
 
