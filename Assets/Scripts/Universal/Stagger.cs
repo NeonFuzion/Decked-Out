@@ -4,9 +4,8 @@ using UnityEngine;
 [RequireComponent(typeof(Health))]
 public class Stagger : MonoBehaviour
 {
-    [SerializeField] int maxStaggerPoints = 100;
-    [SerializeField] int staggerDamage = 10;
-    [SerializeField] float stunDuration = 2f;
+    [SerializeField] int maxStaggerPoints = 100, staggerDamage = 10;
+    [SerializeField] float stunDuration = 2f, staggerMultiplier = 1;
     [SerializeField] Animator animator;
     [SerializeField] StaggerBar staggerBar;
 
@@ -28,7 +27,7 @@ public class Stagger : MonoBehaviour
         if (isInvincible) return;
         if (isStaggered || amount <= 0) return;
 
-        currentStaggerPoints -= amount;
+        currentStaggerPoints -= Mathf.RoundToInt(amount * staggerMultiplier);
 
         if (currentStaggerPoints <= 0)
         {
@@ -80,5 +79,10 @@ public class Stagger : MonoBehaviour
     public void SetStaggerBar(StaggerBar staggerBar)
     {
         this.staggerBar = staggerBar;
+    }
+
+    public void SetStaggerMultiplier(float staggerMultiplier)
+    {
+        this.staggerMultiplier = staggerMultiplier;
     }
 }

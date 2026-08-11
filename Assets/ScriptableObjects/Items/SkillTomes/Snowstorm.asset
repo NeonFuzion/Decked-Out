@@ -16,17 +16,17 @@ MonoBehaviour:
   description: Fires a short ranged blast of ice that slows and knocks back enemies.
   sprite: {fileID: 672505362, guid: ef34d59f4ae4b7247ac9f028d62c1c2b, type: 3}
   ingredients: []
-  combatResource: 1
-  element: 7
   resourceCost: 10
   cooldown: 4
+  combatResource: 1
+  element: 7
+  prefabParticleSystem: {fileID: 2572738600557451228, guid: 7d23f74893a31ac4aaf14487b13a240a, type: 3}
   damageStaggerPairs:
   - damage: 5
     stagger: 14
-  range: 3
+  range: 5
   coneAngle: 60
   knockbackForce: 10
-  particleMaterial: {fileID: 2100000, guid: ac6fc3cb8f08c7140a9d67e74a899043, type: 2}
   enemyLayer:
     serializedVersion: 2
     m_Bits: 256

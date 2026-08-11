@@ -21,11 +21,10 @@ MonoBehaviour:
   cooldown: 6
   combatResource: 1
   element: 3
-  prefabParticleSystem: {fileID: 0}
+  prefabParticleSystem: {fileID: 80839937966615522, guid: 26cea2151b1d03d469b086674e684d12, type: 3}
   damageStaggerPairs:
   - damage: 3
     stagger: 4
-  lingerPrefab: {fileID: 80839937966615522, guid: 26cea2151b1d03d469b086674e684d12, type: 3}
   spawnDistance: 4
   radius: 2.5
   tickInterval: 0.25

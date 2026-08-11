@@ -23,11 +23,13 @@ public class HotbarManager : MonoBehaviour
     ParticleSystem[] particleSystems;
 
     public Shooter Shooter => shooter;
+    public Transform SkillParent => skillParent;
 
     void Awake()
     {
         hotbar = new ConsumablesSO[4];
         skillBar = new SkillTomeSO[4];
+        particleSystems = new ParticleSystem[4];
         hotbarCooldowns = new float[4];
         skillCooldowns = new float[4];
         inventory = GetComponent<Inventory>();
@@ -57,13 +59,10 @@ public class HotbarManager : MonoBehaviour
                 skillBar[i] = skillTome;
 
                 if (!skillTome.PrefabParticleSystem) continue;
+                Destroy(particleSystems[i]?.gameObject);
                 GameObject particleSystemHolder = Instantiate(skillTome.PrefabParticleSystem, skillParent);
                 particleSystems[i] = particleSystemHolder.GetComponent<ParticleSystem>();
                 particleSystemHolder.transform.SetParent(skillParent);
-                
-                if (skillParent.childCount <= i) continue;
-                Destroy(skillParent.GetChild(i).gameObject);
-                particleSystemHolder.transform.SetSiblingIndex(i);
             }
         }
         for (int i = 0; i < 4; i++)

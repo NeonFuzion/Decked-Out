@@ -17,17 +17,17 @@ MonoBehaviour:
     sized area in front of you, inflicting Slowness.
   sprite: {fileID: -472735285, guid: ef34d59f4ae4b7247ac9f028d62c1c2b, type: 3}
   ingredients: []
-  combatResource: 1
-  element: 4
   resourceCost: 20
   cooldown: 4
+  combatResource: 1
+  element: 4
+  prefabParticleSystem: {fileID: 2572738600557451228, guid: f8aeb480b608bb346a425ea5c4c01975, type: 3}
   damageStaggerPairs:
   - damage: 15
     stagger: 18
-  range: 3
+  range: 5
   coneAngle: 75
   knockbackForce: 5
-  particleMaterial: {fileID: 2100000, guid: c00333a1761c0f04685f5e299c793d4e, type: 2}
   enemyLayer:
     serializedVersion: 2
     m_Bits: 256

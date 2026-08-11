@@ -13,6 +13,8 @@ public class Movement : MonoBehaviour
     Rigidbody2D rigidbody;
     Vector2 movementInput;
 
+    public float MovementSpeed => movementSpeed;
+
     void Awake()
     {
         isActive = true;
@@ -69,5 +71,10 @@ public class Movement : MonoBehaviour
     public void SetMovement(Vector2 movement)
     {
         movementInput = movement;
+    }
+
+    public void SetSpeed(float movementSpeed)
+    {
+        this.movementSpeed = movementSpeed;
     }
 }

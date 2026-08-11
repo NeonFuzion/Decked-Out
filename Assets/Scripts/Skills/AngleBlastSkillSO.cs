@@ -6,7 +6,6 @@ using UnityEngine;
 public class AngleBlastSkillSO : SkillTomeSO
 {
     [SerializeField] float range = 3f, coneAngle = 90f, knockbackForce = 5f;
-    [SerializeField] Material particleMaterial;
     [SerializeField] LayerMask enemyLayer;
 
     public override void ActivateEffects(HotbarManager hotbarManager, int index)

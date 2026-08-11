@@ -6,7 +6,7 @@ using UnityEngine.Events;
 
 public class Health : MonoBehaviour
 {
-    [SerializeField] float damageFlashDuration = 0.1f;
+    [SerializeField] float healingMultiplier = 1;
     [SerializeField] int hp, def, defenseConstant = 50;
     [SerializeField] bool invincible;
     [SerializeField] GameObject prefabDmgObj, prefabHitEffect;
@@ -16,6 +16,7 @@ public class Health : MonoBehaviour
     public int HP { get => hp; }
     public int MaxHP { get => maxHp; }
     public int Defense { get => def; }
+    public float HealingMultiplier => healingMultiplier;
     public bool IsInvincible { get => invincible; }
     public UnityEvent OnDeath { get => onDeath; }
     public UnityEvent<float> OnHealthChanged => onHealthChanged;
@@ -54,7 +55,7 @@ public class Health : MonoBehaviour
 
     public void Heal(int amount)
     {
-        hp = Mathf.Min(hp + amount, maxHp);
+        hp = Mathf.Min(hp + Mathf.RoundToInt(amount * healingMultiplier), maxHp);
         if (prefabDmgObj) SpawnDamageNumber(Vector2.down, Element.Physical, amount, true);
     }
 
@@ -85,5 +86,10 @@ public class Health : MonoBehaviour
     public void SetDefense(int def)
     {
         this.def = def;
+    }
+
+    public void SetHealingMultiplier(float healingMultiplier)
+    {
+        this.healingMultiplier = healingMultiplier;
     }
 }

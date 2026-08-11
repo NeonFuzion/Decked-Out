@@ -16,17 +16,17 @@ MonoBehaviour:
   description: Fire a stream of flames at an angle.
   sprite: {fileID: -137059578, guid: ef34d59f4ae4b7247ac9f028d62c1c2b, type: 3}
   ingredients: []
-  combatResource: 1
-  element: 1
   resourceCost: 30
   cooldown: 4
+  combatResource: 1
+  element: 1
+  prefabParticleSystem: {fileID: 2572738600557451228, guid: e5c2b3ea11562904aa72ea2857f0863c, type: 3}
   damageStaggerPairs:
   - damage: 5
     stagger: 30
-  range: 3
+  range: 5
   coneAngle: 75
   knockbackForce: 5
-  particleMaterial: {fileID: 2100000, guid: 14cba492e0d0b4d40878a3ff0e6ea864, type: 2}
   enemyLayer:
     serializedVersion: 2
     m_Bits: 256
