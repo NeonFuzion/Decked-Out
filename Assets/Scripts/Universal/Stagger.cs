@@ -14,6 +14,8 @@ public class Stagger : MonoBehaviour
 
     Health health;
 
+    public float StaggerMultiplier => staggerMultiplier;
+
     void Start()
     {
         isStaggered = false;
