@@ -1,19 +1,24 @@
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
 public class DebuffManager : MonoBehaviour
 {
-    [SerializeField] float burnTickSpeed = 0.5f, elementApplicationMultiplier = 1, electrocutedTickSpeed = 0.5f, overgrownStaggerMultiplier = 0.4f, poisonTickSpeed = 0.5f;
+    [SerializeField] float elementApplicationMultiplier = 1, bleedTickSpeed = 0.5f, bleedDuration = 7, burnTickSpeed = 0.5f, burnedDuration = 10, electrocutedTickSpeed = 0.5f, electrocutedDuration = 10, overgrownDuration = 15, dampenedDuration = 20;
     [SerializeField] int slownessMax = 1, weakenedMax = 3, crippledMax = 1, burnedMax = 1, electrocutedMax = 1, dampenedMax = 3, overgrownMax = 1, poisonedMax = 3;
     [SerializeField] Movement movementScript;
-    [SerializeField] Health health;
-    [SerializeField] Stagger stagger;
-
-    Dictionary<Element, ElementalDebuff> elementProgressList;
-    Dictionary<Debuff, int> debuffs;
+    [SerializeField] Health healthScript;
+    [SerializeField] Stagger staggerScript;
 
     int slownessCount, weakenedCount, crippledCount, burnedCount, electrocutedCount, dampenedCount, overgrownCount, poisonedCount;
+
+    Dictionary<Element, ElementProgress> elementProgressList;
+    Dictionary<Debuff, int> debuffs;
+
+    public Movement MovementScript => movementScript;
+    public Health HealthScript => healthScript;
+    public Stagger StaggerScript => staggerScript;
 
     // Start is called once before the first execution of Update after the MonoBehaviour is created
     void Start()
@@ -29,83 +34,114 @@ public class DebuffManager : MonoBehaviour
 
     IEnumerator SlowedCoroutine(float duration, float strength)
     {
+        if (slownessCount >= slownessMax) yield break;
+        slownessCount++;
         float change = movementScript.MovementSpeed * strength;
         movementScript.SetSpeed(movementScript.MovementSpeed - change);
         yield return new WaitForSeconds(duration);
         movementScript.SetSpeed(movementScript.MovementSpeed + change);
+        slownessCount--;
     }
 
     IEnumerator WeakenedCoroutine(float duration, float strength)
     {
-        int change = Mathf.RoundToInt(health.Defense * strength);
-        health.SetDefense(health.Defense - change);
+        if (weakenedCount >= weakenedMax) yield break;
+        weakenedCount++;
+        int change = Mathf.RoundToInt(healthScript.Defense * strength);
+        healthScript.SetDefense(healthScript.Defense - change);
         yield return new WaitForSeconds(duration);
-        health.SetDefense(health.Defense + change);
+        healthScript.SetDefense(healthScript.Defense + change);
+        weakenedCount--;
     }
 
     IEnumerator CrippledCoroutine(float duration, float strength)
     {
-        float change = health.HealingMultiplier * strength;
-        health.SetHealingMultiplier(health.HealingMultiplier - change);
+        if (crippledCount >= crippledMax) yield break;
+        crippledCount++;
+        float change = healthScript.HealingMultiplier * strength;
+        healthScript.SetHealingMultiplier(healthScript.HealingMultiplier - change);
         yield return new WaitForSeconds(duration);
-        health.SetHealingMultiplier(health.HealingMultiplier + change);
+        healthScript.SetHealingMultiplier(healthScript.HealingMultiplier + change);
+        crippledCount--;
     }
 
-    IEnumerator BurnedCoroutine(float duration, float strength)
+    IEnumerator BurnedCoroutine(float strength)
     {
-        float burnEndTime = Time.time + duration;
+        if (burnedCount >= burnedMax) yield break;
+        burnedCount++;
+        float burnEndTime = Time.time + burnedDuration;
         while (Time.time < burnEndTime)
         {
             yield return new WaitForSeconds(burnTickSpeed);
-            health.TakeDamage(Mathf.RoundToInt(strength), Element.Electric, transform.position - Vector3.down);
+            healthScript.TakeDamage(Mathf.RoundToInt(strength), Element.Fire, transform.position - Vector3.down);
         }
+        burnedCount--;
     }
 
-    IEnumerator ElectrocutedCoroutine(float duration, float strength)
+    IEnumerator ElectrocutedCoroutine(float strength)
     {
-        float electrocutedEndTime = Time.time + duration;
+        if (electrocutedCount >= electrocutedMax) yield break;
+        electrocutedCount++;
+        float electrocutedEndTime = Time.time + electrocutedDuration;
         while (Time.time < electrocutedEndTime)
         {
             yield return new WaitForSeconds(electrocutedTickSpeed);
-            stagger.TakeStagger(Mathf.RoundToInt(strength), transform.position - Vector3.down);
+            staggerScript.TakeStagger(Mathf.RoundToInt(strength), transform.position - Vector3.down);
         }
+        electrocutedCount--;
     }
 
-    IEnumerator DampenedCoroutine(float duration, float strength)
+    IEnumerator DampenedCoroutine(float strength)
     {
+        if (dampenedCount >= dampenedMax) yield break;
+        dampenedCount++;
         float change = elementApplicationMultiplier * strength;
         elementApplicationMultiplier -= change;
-        yield return new WaitForSeconds(duration);
+        yield return new WaitForSeconds(dampenedDuration);
         elementApplicationMultiplier += change;
+        dampenedCount--;
     }
 
-    IEnumerator OvergrownCoroutine(float duration, float strength)
+    IEnumerator OvergrownCoroutine(float strength)
     {
-        float change = stagger.StaggerMultiplier * strength;
-        stagger.SetStaggerMultiplier(stagger.StaggerMultiplier - change);
-        yield return new WaitForSeconds(duration);
-        stagger.SetStaggerMultiplier(stagger.StaggerMultiplier + change);
+        if (overgrownCount >= overgrownMax) yield break;
+        overgrownCount++;
+        float change = staggerScript.StaggerMultiplier * strength;
+        staggerScript.SetStaggerMultiplier(staggerScript.StaggerMultiplier - change);
+        yield return new WaitForSeconds(overgrownDuration);
+        staggerScript.SetStaggerMultiplier(staggerScript.StaggerMultiplier + change);
+        overgrownCount--;
     }
 
-    IEnumerator PoisonedCoroutine(float duration, float strength)
+    IEnumerator BleedCoroutine(float strength)
     {
-        float poisonEndTime = Time.time + duration;
+        poisonedCount++;
+        float poisonEndTime = Time.time + bleedDuration;
         while (Time.time < poisonEndTime)
         {
-            yield return new WaitForSeconds(poisonTickSpeed / strength);
-            health.TakeDamage(Mathf.RoundToInt(strength), Element.Electric, transform.position - Vector3.down);
+            yield return new WaitForSeconds(bleedTickSpeed / strength);
+            healthScript.TakeDamage(Mathf.RoundToInt(strength), Element.Physical, transform.position - Vector3.down);
         }
+        poisonedCount--;
     }
 
-    public void InflictElement(Element element, int amount)
+    public void InflictElement(Element element, int amount, float strength)
     {
         if (!elementProgressList.ContainsKey(element))
         {
             elementProgressList.Add(element, new ());
         }
-        ElementalDebuff debuff = elementProgressList[element];
+        ElementProgress debuff = elementProgressList[element];
 
         if (!debuff.IncrementAmount(amount)) return;
+        switch (element)
+        {
+            case Element.Fire: StartCoroutine(BurnedCoroutine(strength)); break;
+            case Element.Electric: StartCoroutine(ElectrocutedCoroutine(strength)); break;
+            case Element.Water: StartCoroutine(DampenedCoroutine(strength)); break;
+            case Element.Nature: StartCoroutine(OvergrownCoroutine(strength)); break;
+            case Element.Physical: StartCoroutine(BleedCoroutine(strength)); break;
+        }
     }
 
     public void InflictDebuff(Debuff debuff, float duration, float strength)
@@ -115,24 +151,25 @@ public class DebuffManager : MonoBehaviour
             case Debuff.Slowed: StartCoroutine(SlowedCoroutine(duration, strength)); break;
             case Debuff.Weakened: StartCoroutine(WeakenedCoroutine(duration, strength)); break;
             case Debuff.Crippled: StartCoroutine(CrippledCoroutine(duration, strength)); break;
-            case Debuff.Burned: StartCoroutine(BurnedCoroutine(duration, strength)); break;
-            case Debuff.Electrocuted: StartCoroutine(ElectrocutedCoroutine(duration, strength)); break;
-            case Debuff.Dampened: StartCoroutine(DampenedCoroutine(duration, strength)); break;
-            case Debuff.Overgrown: StartCoroutine(OvergrownCoroutine(duration, strength)); break;
         }
+    }
+
+    public void RunDebuffCoroutine(IEnumerator coroutine)
+    {
+        StartCoroutine(coroutine);
     }
 }
 
-public enum Debuff { None, Slowed, Weakened, Crippled, Burned, Electrocuted, Dampened, Overgrown, Poisoned }
+public enum Debuff { None, Slowed, Weakened, Crippled }
 
-public class ElementalDebuff
+public class ElementProgress
 {
     int progress;
     bool onCooldown;
 
     public bool OnCooldown => onCooldown;
 
-    public ElementalDebuff()
+    public ElementProgress()
     {
         progress = 0;
         onCooldown = false;
@@ -154,4 +191,22 @@ public class ElementalDebuff
         onCooldown = false;
         progress = 0;
     }
+}
+
+[Serializable]
+public struct DebuffData
+{
+    [SerializeField] float duration, strength;
+    [SerializeField] Debuff debuff;
+
+    public DebuffData(float duration, float strength, Debuff debuff)
+    {
+        this.duration = duration;
+        this.strength = strength;
+        this.debuff = debuff;
+    }
+
+    public float Duration => duration;
+    public float Strength => strength;
+    public Debuff Debuff => debuff;
 }

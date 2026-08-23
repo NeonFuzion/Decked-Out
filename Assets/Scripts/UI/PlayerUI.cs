@@ -15,7 +15,7 @@ public class PlayerUI : MonoBehaviour
         hotbarSlots = hotbarParent.GetComponentsInChildren<HotbarSlot>();
         skillBarSlots = skillBarParent.GetComponentsInChildren<SkillSlot>();
 
-        EventManager.AddOnInventoryUpdatedListener(UpdateHotbar);
+        EventManager.OnInventoryUpdated.AddListener(UpdateHotbar);
     }
 
     void Start()

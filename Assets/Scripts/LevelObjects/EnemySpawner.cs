@@ -50,7 +50,7 @@ public class EnemySpawner : RoomObject
         if (!enemySpawnerData.IsActive) return;
         dungeonGenerator.IsRoomCleared = false;
         dungeonGenerator.IncrementEnemyQuota();
-        EventManager.AddOnCombatStartedListener(SpawnEnemy);
+        EventManager.OnCombatStarted.AddListener(SpawnEnemy);
     }
 }
 

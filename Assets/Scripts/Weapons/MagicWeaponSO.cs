@@ -37,7 +37,7 @@ public class MagicWeaponSO : WeaponSO
 
         if (colliders.Length == 0) return;
         AttackSequenceData attackStage = AttackComboData[attackIndex];
-        EventManager.InvokeOnEnemyDataAcquired(colliders, new (Element, projectile.transform.position, attackStage.Damage, attackStage.Stagger));
+        EventManager.OnEnemyDataAcquired.Invoke(colliders, new (Element, projectile.transform.position, attackStage.Damage, attackStage.Stagger, 1));
 
         if (!projectile.gameObject) return;
         Destroy(projectile.gameObject);

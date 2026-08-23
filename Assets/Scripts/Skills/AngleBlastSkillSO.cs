@@ -19,14 +19,14 @@ public class AngleBlastSkillSO : SkillTomeSO
 
         Collider2D[] hits = Physics2D.OverlapCircleAll(playerPos, range, enemyLayer);
 
-        List<Collider2D> inCone = hits.Where(hit => {
+        IEnumerable<Collider2D> inCone = hits.Where(hit => {
             Vector2 toEnemy = ((Vector2)hit.transform.position - playerPos).normalized;
             return Vector2.Angle(direction, toEnemy) <= coneAngle / 2f;
-        }).ToList();
+        });
 
-        if (inCone.Count == 0) return;
-        DamageStaggerPair pair = DamageStaggerPairs[0];
-        AttackData attackData = new(Element, playerPos, pair.Damage, pair.Stagger, (int)knockbackForce);
-        EventManager.InvokeOnEnemyDataAcquired(inCone.ToArray(), attackData);
+        if (inCone.Count() == 0) return;
+        AttackBaseData pair = DamageStaggerPairs[0];
+        AttackData attackData = new(Element, playerPos, pair.Damage, pair.Stagger, (int)knockbackForce, pair.IsDebuffing ? DebuffData : new ());
+        EventManager.OnEnemyDataAcquired.Invoke(inCone.ToArray(), attackData);
     }
 }

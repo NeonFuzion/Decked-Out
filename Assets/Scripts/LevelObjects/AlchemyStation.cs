@@ -18,7 +18,7 @@ public class AlchemyStation : RoomObject
 
     public void LoadCraftingMenu()
     {
-        EventManager.InvokeOnMenuOpened(craftingMenu.gameObject);
+        EventManager.OnMenuOpened.Invoke(craftingMenu.gameObject);
         craftingMenu.Initialize();
     }
 

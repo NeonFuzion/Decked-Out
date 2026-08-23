@@ -18,11 +18,11 @@ public class InventoryInterface : MonoBehaviour
 
     void Awake()
     {
-        EventManager.AddOnInventoryUpdatedListener(UpdateInventory);
-        EventManager.AddOnPickupItemListener(PickupItem);
-        EventManager.AddOnDropItemListener((int index, SlotType slotType) => {
+        EventManager.OnInventoryUpdated.AddListener(UpdateInventory);
+        EventManager.OnPickupItem.AddListener(PickupItem);
+        EventManager.OnDropItem.AddListener((int index, SlotType slotType) => {
             DropItem(index, slotType);
-            EventManager.InvokeOnInventoryUpdated();
+            EventManager.OnInventoryUpdated.Invoke();
             });
     }
 

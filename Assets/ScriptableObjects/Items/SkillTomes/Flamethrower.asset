@@ -13,17 +13,23 @@ MonoBehaviour:
   m_Name: Flamethrower
   m_EditorClassIdentifier: Assembly-CSharp::AngleBlastSkillSO
   itemName: Flamethrower
-  description: Fire a stream of flames at an angle.
+  description: Fire a stream of flames at an angle, dealing continuous damage and
+    knockback.
   sprite: {fileID: -137059578, guid: ef34d59f4ae4b7247ac9f028d62c1c2b, type: 3}
   ingredients: []
   resourceCost: 30
   cooldown: 4
   combatResource: 1
   element: 1
+  debuffData:
+    duration: 0
+    strength: 0
+    debuff: 0
   prefabParticleSystem: {fileID: 2572738600557451228, guid: e5c2b3ea11562904aa72ea2857f0863c, type: 3}
   damageStaggerPairs:
   - damage: 5
     stagger: 30
+    isDebuffing: 0
   range: 5
   coneAngle: 75
   knockbackForce: 5

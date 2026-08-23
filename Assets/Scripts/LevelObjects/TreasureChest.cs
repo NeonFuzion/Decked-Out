@@ -65,7 +65,7 @@ public class TreasureChest : RoomObject
         switch (treasureChestData.CurrentTreasureChestState)
         {
             case TreasureChestData.TreasureChestState.Unspawned:
-                EventManager.AddOnCombatEndedListener(SpawnChest);
+                EventManager.OnCombatEnded.AddListener(SpawnChest);
                 gameObject.SetActive(false);
                 break;
             case TreasureChestData.TreasureChestState.Opened:

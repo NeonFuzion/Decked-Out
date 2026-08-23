@@ -8,6 +8,8 @@ public class MultiTrigger : MonoBehaviour
 
     int currentTriggerCount;
 
+    public int CurrentTriggerCount => currentTriggerCount;
+
     public UnityEvent OnTrigger => onTrigger;
     public UnityEvent OnFinish => onFinish; 
 

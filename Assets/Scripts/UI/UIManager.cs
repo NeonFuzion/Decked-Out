@@ -12,7 +12,7 @@ public class UIManager : MonoBehaviour
 
     void Awake()
     {
-        EventManager.AddOnMenuOpenedListener(OpenMenu);
+        EventManager.OnMenuOpened.AddListener(OpenMenu);
     }
 
     // Start is called once before the first execution of Update after the MonoBehaviour is created
@@ -39,7 +39,7 @@ public class UIManager : MonoBehaviour
     public void CloseMenu()
     {
         if (quitButton) quitButton.onClick.RemoveAllListeners();
-        EventManager.InvokeOnUnfocusItem();
+        EventManager.OnUnfocusItem.Invoke();
         menu.SetActive(false);
 
         onMenuClosed?.Invoke();

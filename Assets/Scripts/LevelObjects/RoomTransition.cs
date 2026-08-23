@@ -33,7 +33,7 @@ public class RoomTransition : MonoBehaviour
     {
         if (!other.GetComponent<Player>()) return;
         if (!boxCollider.isTrigger) return;
-        EventManager.InvokeOnRoomChanged();
+        EventManager.OnRoomChanged.Invoke();
         dungeonGenerator.LoadRoom(direction);
     }
 

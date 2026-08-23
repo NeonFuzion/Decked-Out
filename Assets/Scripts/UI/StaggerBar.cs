@@ -5,8 +5,7 @@ public class StaggerBar : MonoBehaviour
 {
     [SerializeField] Image fill;
     [SerializeField] float lerpSpeed = 10f;
-    [SerializeField] Color normalColor = Color.white;
-    [SerializeField] Color refillingColor = Color.yellow;
+    [SerializeField] Color normalColor = Color.white, refillingColor = Color.yellow;
 
     float targetFill;
 

@@ -17,7 +17,7 @@ public class MainCamera : MonoBehaviour
     // Start is called before the first frame update
     void Start()
     {
-        EventManager.AddOnRoomChangedListener(MoveCameraNonlinear);
+        EventManager.OnRoomChanged.AddListener(MoveCameraNonlinear);
 
         velocity = Vector3.zero;
     }

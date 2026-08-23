@@ -187,7 +187,7 @@ public class DungeonGenerator : MonoBehaviour
         }
 
         if (currentRoom.IsSafe) return;
-        EventManager.InvokeOnCombatStarted();
+        EventManager.OnCombatStarted.Invoke();
     }
 
     public void IncrementCurrentEnemyQuota()
@@ -197,7 +197,7 @@ public class DungeonGenerator : MonoBehaviour
         if (currentEnemyQuota < enemyQuota) return;
         currentRoom.IsSafe = true;
         onRoomCleared?.Invoke();
-        EventManager.InvokeOnCombatEnded();
+        EventManager.OnCombatEnded.Invoke();
     }
 
     public void IncrementEnemyQuota()

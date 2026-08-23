@@ -3,6 +3,7 @@ using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
 using System.Reflection.Metadata.Ecma335;
+using NUnit.Framework;
 using TMPro;
 using Unity.VisualScripting;
 using UnityEngine;
@@ -86,8 +87,8 @@ public class Player : Being
 
         animator.SetFloat("MoveSpeed", curSpeed / 400f);
         
-        EventManager.AddOnInventoryUpdatedListener(UpdateEquipmentStats);
-        EventManager.AddOnEnemyDataAcquiredListener(DealDamage);
+        EventManager.OnInventoryUpdated.AddListener(UpdateEquipmentStats);
+        EventManager.OnEnemyDataAcquired.AddListener(DealDamage);
     }
 
     // Update is called once per frame
@@ -160,7 +161,7 @@ public class Player : Being
                 health.TakeDamage(damage, attackData.Element, attackData.Origin);
                 if (health.HP <= 0)
                 {
-                    EventManager.InvokeOnKill();
+                    EventManager.OnKill.Invoke();
                 }
             }
             if (collider.GetComponent<Stagger>() is Stagger stagger)
@@ -171,6 +172,13 @@ public class Player : Being
             if (collider.GetComponent<Movement>() is Movement movement)
             {
                 movement.ApplyKnockback(attackData.Origin, attackData.Knockback);
+            }
+            if (collider.GetComponent<DebuffManager>() is DebuffManager debuffManager)
+            {
+                DebuffData data = attackData.DebuffData;
+                
+                if (data.Debuff == Debuff.None) return;
+                debuffManager.InflictDebuff(data.Debuff, data.Duration, data.Strength);
             }
         });
     }
@@ -340,12 +348,14 @@ public struct AttackData
 {
     Element element;
     Vector2 origin;
+    DebuffData debuffData;
     int damage, stagger, knockback;
 
-    public AttackData(Element element, Vector2 origin, int damage, int stagger, int knockback = 1)
+    public AttackData(Element element, Vector2 origin, int damage, int stagger, int knockback, DebuffData debuffData = new ())
     {
         this.element = element;
         this.origin = origin;
+        this.debuffData = debuffData;
         this.damage = damage;
         this.stagger = stagger;
         this.knockback = knockback;
@@ -353,6 +363,7 @@ public struct AttackData
 
     public Element Element { get => element; }
     public Vector2 Origin { get => origin; }
+    public DebuffData DebuffData => debuffData;
     public int Damage { get => damage; }
     public int Stagger { get => stagger; }
     public int Knockback { get => knockback; }

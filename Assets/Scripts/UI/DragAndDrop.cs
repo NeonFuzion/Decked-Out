@@ -19,7 +19,7 @@ public class DragAndDrop : MonoBehaviour, IEndDragHandler, IDragHandler, IBeginD
         postDragParent = transform.parent;
         transform.SetParent(transform.root);
         onStartDrag?.Invoke();
-        EventManager.InvokeOnPickupItem(index, slotType);
+        EventManager.OnPickupItem.Invoke(index, slotType);
     }
 
     public void OnDrag(PointerEventData eventData)
@@ -39,7 +39,7 @@ public class DragAndDrop : MonoBehaviour, IEndDragHandler, IDragHandler, IBeginD
     {
         image = GetComponent<Image>();
 
-        EventManager.AddOnDropItemListener((int index, SlotType slotType) =>
+        EventManager.OnDropItem.AddListener((int index, SlotType slotType) =>
         {
             if (image.raycastTarget) return;
             OnEndDrag(null);

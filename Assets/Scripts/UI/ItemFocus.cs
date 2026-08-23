@@ -14,8 +14,8 @@ public class ItemFocus : MonoBehaviour
     {
         rectTransform.GetComponent<Image>().raycastTarget = false;
 
-        EventManager.AddOnFocusItemListener(DisplayItemStats);
-        EventManager.AddOnUnfocusItemListener(() => rectTransform.gameObject.SetActive(false));
+        EventManager.OnFocusItem.AddListener(DisplayItemStats);
+        EventManager.OnUnfocusItem.AddListener(() => rectTransform.gameObject.SetActive(false));
     }
 
     // Update is called once per frame

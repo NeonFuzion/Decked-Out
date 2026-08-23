@@ -33,7 +33,7 @@ public class HotbarManager : MonoBehaviour
         hotbarCooldowns = new float[4];
         skillCooldowns = new float[4];
         inventory = GetComponent<Inventory>();
-        EventManager.AddOnInventoryUpdatedListener(UpdateHotbar);
+        EventManager.OnInventoryUpdated.AddListener(UpdateHotbar);
         UpdateHotbarIndex(0);
     }
 

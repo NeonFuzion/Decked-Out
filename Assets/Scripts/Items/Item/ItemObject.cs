@@ -41,7 +41,7 @@ public class ItemObject : MonoBehaviour
         this.item = item;
 
         GetComponent<SpriteRenderer>().sprite = item.Sprite;
-        EventManager.AddOnRoomChangedListener(() => Destroy(gameObject));
+        EventManager.OnRoomChanged.AddListener(() => Destroy(gameObject));
         playerLayer = LayerMask.GetMask("Player");
         chase = true;
     }

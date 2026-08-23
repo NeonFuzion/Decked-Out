@@ -13,6 +13,7 @@ GameObject:
   - component: {fileID: 1227486679126910494}
   - component: {fileID: 4402656590818373220}
   - component: {fileID: 368623149862603282}
+  - component: {fileID: 7234831457583896312}
   - component: {fileID: 421466296229121326}
   - component: {fileID: 8205711150073379654}
   - component: {fileID: 1065700513455816896}
@@ -52,7 +53,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 76f79341e74fef744a130bd7dcd60177, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::Health
-  damageFlashDuration: 0.1
+  healingMultiplier: 1
   hp: 60
   def: 0
   defenseConstant: 50
@@ -111,6 +112,7 @@ MonoBehaviour:
   maxStaggerPoints: 100
   staggerDamage: 10
   stunDuration: 2
+  staggerMultiplier: 1
   animator: {fileID: 7544858775805961749}
   staggerBar: {fileID: 0}
 --- !u!114 &368623149862603282
@@ -133,6 +135,38 @@ MonoBehaviour:
   onKnockbackEnded:
     m_PersistentCalls:
       m_Calls: []
+--- !u!114 &7234831457583896312
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 5109368311923587848}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 9f8c2c3d4204d9b409541560d9345858, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::DebuffManager
+  elementApplicationMultiplier: 1
+  bleedTickSpeed: 0.5
+  bleedDuration: 7
+  burnTickSpeed: 0.5
+  burnedDuration: 10
+  electrocutedTickSpeed: 0.5
+  electrocutedDuration: 10
+  overgrownDuration: 15
+  dampenedDuration: 20
+  slownessMax: 1
+  weakenedMax: 3
+  crippledMax: 1
+  burnedMax: 1
+  electrocutedMax: 1
+  dampenedMax: 3
+  overgrownMax: 1
+  poisonedMax: 3
+  movementScript: {fileID: 368623149862603282}
+  healthScript: {fileID: 5754510934464056380}
+  staggerScript: {fileID: 4402656590818373220}
 --- !u!50 &421466296229121326
 Rigidbody2D:
   serializedVersion: 5

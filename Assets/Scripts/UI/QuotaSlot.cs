@@ -26,6 +26,6 @@ public class QuotaSlot : Slot
 
     protected override void FocusOnItem()
     {
-        EventManager.InvokeOnFocusItem(itemStack);
+        EventManager.OnFocusItem.Invoke(itemStack);
     }
 }

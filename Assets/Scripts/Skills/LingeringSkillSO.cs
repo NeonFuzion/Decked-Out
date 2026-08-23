@@ -19,7 +19,6 @@ public class LingeringSkillSO : SkillTomeSO
         obj.transform.SetParent(null);
         obj.transform.position = spawnPos;
         particleSystem.Play();
-        DamageStaggerPair damagePair = DamageStaggerPairs[0];
 
         Timer timer = obj.GetComponent<Timer>();
         timer.SetTimer(tickInterval);
@@ -28,9 +27,9 @@ public class LingeringSkillSO : SkillTomeSO
         multiTrigger.Initialize(tickCount);
         multiTrigger.OnTrigger.AddListener(() => {
             Collider2D[] colliders = Physics2D.OverlapCircleAll(obj.transform.position, radius).Where(collider => collider.gameObject != obj).ToArray();
-            DamageStaggerPair damageStaggerPair = DamageStaggerPairs[0];
-            AttackData attackData = new (Element, obj.transform.position, damageStaggerPair.Damage, damageStaggerPair.Stagger, knockBack);
-            EventManager.InvokeOnEnemyDataAcquired(colliders, attackData);
+            AttackBaseData damageStaggerPair = DamageStaggerPairs[multiTrigger.CurrentTriggerCount];
+            AttackData attackData = new (Element, obj.transform.position, damageStaggerPair.Damage, damageStaggerPair.Stagger, knockBack, damageStaggerPair.IsDebuffing ? DebuffData : new ());
+            EventManager.OnEnemyDataAcquired.Invoke(colliders, attackData);
         });
 
         hotbarManager.RunCoroutine(VisualLagCoroutine(particleSystem, obj.transform, hotbarManager.SkillParent));

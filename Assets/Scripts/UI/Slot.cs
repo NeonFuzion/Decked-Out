@@ -30,7 +30,7 @@ public abstract class Slot : MonoBehaviour, IPointerEnterHandler, IPointerExitHa
         }
 
         if (output == null) return;
-        EventManager.InvokeOnFocusItem(output);
+        EventManager.OnFocusItem.Invoke(output);
     }
 
     public virtual void UpdateItem(Sprite sprite, int amount)
@@ -72,7 +72,7 @@ public abstract class Slot : MonoBehaviour, IPointerEnterHandler, IPointerExitHa
     public void OnPointerExit(PointerEventData eventData)
     {
         if (isEmpty) return;
-        EventManager.InvokeOnUnfocusItem();
+        EventManager.OnUnfocusItem.Invoke();
     }
 }
 

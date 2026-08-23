@@ -29,8 +29,8 @@ public class Inventory : MonoBehaviour
 
     private void Start()
     {
-        EventManager.AddOnInventoryUpdatedListener(UpdateInventory);
-        EventManager.InvokeOnInventoryUpdated();
+        EventManager.OnInventoryUpdated.AddListener(UpdateInventory);
+        EventManager.OnInventoryUpdated.Invoke();
     }
 
     private void OnTriggerEnter2D(Collider2D col)

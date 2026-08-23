@@ -20,10 +20,15 @@ MonoBehaviour:
   cooldown: 4
   combatResource: 1
   element: 7
+  debuffData:
+    duration: 15
+    strength: 0.4
+    debuff: 1
   prefabParticleSystem: {fileID: 2572738600557451228, guid: 7d23f74893a31ac4aaf14487b13a240a, type: 3}
   damageStaggerPairs:
   - damage: 5
     stagger: 14
+    isDebuffing: 1
   range: 5
   coneAngle: 60
   knockbackForce: 10

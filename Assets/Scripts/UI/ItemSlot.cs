@@ -15,6 +15,6 @@ public class ItemSlot : Slot, IDropHandler
 
     public void OnDrop(PointerEventData eventData)
     {
-        EventManager.InvokeOnDropItem(index, slotType);
+        EventManager.OnDropItem.Invoke(index, slotType);
     }
 }
