@@ -13,7 +13,8 @@ MonoBehaviour:
   m_Name: Snowstorm
   m_EditorClassIdentifier: Assembly-CSharp::AngleBlastSkillSO
   itemName: Snowstorm
-  description: Fires a short ranged blast of ice that slows and knocks back enemies.
+  description: Fires a short ranged blast of ice that knocks back enemies and inflicts
+    Slowed
   sprite: {fileID: 672505362, guid: ef34d59f4ae4b7247ac9f028d62c1c2b, type: 3}
   ingredients: []
   resourceCost: 10
@@ -23,7 +24,7 @@ MonoBehaviour:
   debuffData:
     duration: 15
     strength: 0.4
-    debuff: 1
+    debuff: {fileID: 11400000, guid: c6ff8d664da7f7b4dadf1f46b1051f1e, type: 2}
   prefabParticleSystem: {fileID: 2572738600557451228, guid: 7d23f74893a31ac4aaf14487b13a240a, type: 3}
   damageStaggerPairs:
   - damage: 5

@@ -776,7 +776,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 5412322040207766502, guid: b2ee695fbaf22ec429a8373efbdd8d2e, type: 3}
       propertyPath: startingEquipment.Array.size
-      value: 2
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 5412322040207766502, guid: b2ee695fbaf22ec429a8373efbdd8d2e, type: 3}
       propertyPath: 'startingEquipment.Array.data[0]'
@@ -40635,10 +40635,10 @@ MonoBehaviour:
   - {fileID: 11400000, guid: 50fa2eeffd9c7904d86f96441f805ea7, type: 2}
   - {fileID: 11400000, guid: 40a3b3a502eaae14789e8120ea513f39, type: 2}
   roomTransitions:
-  - {fileID: 821507328}
-  - {fileID: 946309898}
-  - {fileID: 1004602173}
-  - {fileID: 561930007}
+  - {fileID: 1714977158}
+  - {fileID: 1061270406}
+  - {fileID: 1593845694}
+  - {fileID: 561930009}
   layouts:
   - {fileID: 11400000, guid: fd1b16b5c67f1994681aff1c1140e1da, type: 2}
   - {fileID: 11400000, guid: 3c317dd417f8bac4889a5f01207e335c, type: 2}

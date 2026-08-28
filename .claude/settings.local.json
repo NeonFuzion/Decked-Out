@@ -1,7 +1,8 @@
 {
   "permissions": {
     "allow": [
-      "Read(//c/Users/derek/Desktop/Stuff/LibreSprite/Files/data/palettes/**)"
+      "Read(//c/Users/derek/Desktop/Stuff/LibreSprite/Files/data/palettes/**)",
+      "Bash(xargs grep *)"
     ],
     "additionalDirectories": [
       "c:\\Users\\derek\\Desktop\\Stuff\\LibreSprite\\Files\\data\\palettes"

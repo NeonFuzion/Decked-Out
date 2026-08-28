@@ -5,162 +5,74 @@ using UnityEngine;
 
 public class DebuffManager : MonoBehaviour
 {
-    [SerializeField] float elementApplicationMultiplier = 1, bleedTickSpeed = 0.5f, bleedDuration = 7, burnTickSpeed = 0.5f, burnedDuration = 10, electrocutedTickSpeed = 0.5f, electrocutedDuration = 10, overgrownDuration = 15, dampenedDuration = 20;
-    [SerializeField] int slownessMax = 1, weakenedMax = 3, crippledMax = 1, burnedMax = 1, electrocutedMax = 1, dampenedMax = 3, overgrownMax = 1, poisonedMax = 3;
+    [SerializeField] float elementApplicationMultiplier = 1;
+    [SerializeField] ElementalDebuff burnedDefinition, electrocutedDefinition, dampenedDefinition, overgrownDefinition, bleedDefinition;
+    [SerializeField] DebuffBar debuffBar;
     [SerializeField] Movement movementScript;
     [SerializeField] Health healthScript;
     [SerializeField] Stagger staggerScript;
 
-    int slownessCount, weakenedCount, crippledCount, burnedCount, electrocutedCount, dampenedCount, overgrownCount, poisonedCount;
-
+    Dictionary<Debuff, int> stackCounts;
     Dictionary<Element, ElementProgress> elementProgressList;
-    Dictionary<Debuff, int> debuffs;
 
     public Movement MovementScript => movementScript;
     public Health HealthScript => healthScript;
     public Stagger StaggerScript => staggerScript;
+    public float ElementApplicationMultiplier { get => elementApplicationMultiplier; set => elementApplicationMultiplier = value; }
 
-    // Start is called once before the first execution of Update after the MonoBehaviour is created
     void Start()
     {
+        stackCounts = new ();
         elementProgressList = new ();
     }
 
-    // Update is called once per frame
-    void Update()
+    void Update() { }
+
+    public int GetStackCount(Debuff debuff)
     {
-        
+        if (!stackCounts.ContainsKey(debuff)) return 0;
+        return stackCounts[debuff];
     }
 
-    IEnumerator SlowedCoroutine(float duration, float strength)
+    public void IncrementStackCount(Debuff debuff)
     {
-        if (slownessCount >= slownessMax) yield break;
-        slownessCount++;
-        float change = movementScript.MovementSpeed * strength;
-        movementScript.SetSpeed(movementScript.MovementSpeed - change);
-        yield return new WaitForSeconds(duration);
-        movementScript.SetSpeed(movementScript.MovementSpeed + change);
-        slownessCount--;
+        if (!stackCounts.ContainsKey(debuff)) return;
+        stackCounts[debuff]++;
+        if (debuffBar != null) debuffBar.AddDebuff(debuff.Sprite, stackCounts[debuff]);
     }
 
-    IEnumerator WeakenedCoroutine(float duration, float strength)
+    public void DecrementStackCount(Debuff debuff)
     {
-        if (weakenedCount >= weakenedMax) yield break;
-        weakenedCount++;
-        int change = Mathf.RoundToInt(healthScript.Defense * strength);
-        healthScript.SetDefense(healthScript.Defense - change);
-        yield return new WaitForSeconds(duration);
-        healthScript.SetDefense(healthScript.Defense + change);
-        weakenedCount--;
-    }
-
-    IEnumerator CrippledCoroutine(float duration, float strength)
-    {
-        if (crippledCount >= crippledMax) yield break;
-        crippledCount++;
-        float change = healthScript.HealingMultiplier * strength;
-        healthScript.SetHealingMultiplier(healthScript.HealingMultiplier - change);
-        yield return new WaitForSeconds(duration);
-        healthScript.SetHealingMultiplier(healthScript.HealingMultiplier + change);
-        crippledCount--;
-    }
-
-    IEnumerator BurnedCoroutine(float strength)
-    {
-        if (burnedCount >= burnedMax) yield break;
-        burnedCount++;
-        float burnEndTime = Time.time + burnedDuration;
-        while (Time.time < burnEndTime)
-        {
-            yield return new WaitForSeconds(burnTickSpeed);
-            healthScript.TakeDamage(Mathf.RoundToInt(strength), Element.Fire, transform.position - Vector3.down);
-        }
-        burnedCount--;
-    }
-
-    IEnumerator ElectrocutedCoroutine(float strength)
-    {
-        if (electrocutedCount >= electrocutedMax) yield break;
-        electrocutedCount++;
-        float electrocutedEndTime = Time.time + electrocutedDuration;
-        while (Time.time < electrocutedEndTime)
-        {
-            yield return new WaitForSeconds(electrocutedTickSpeed);
-            staggerScript.TakeStagger(Mathf.RoundToInt(strength), transform.position - Vector3.down);
-        }
-        electrocutedCount--;
-    }
-
-    IEnumerator DampenedCoroutine(float strength)
-    {
-        if (dampenedCount >= dampenedMax) yield break;
-        dampenedCount++;
-        float change = elementApplicationMultiplier * strength;
-        elementApplicationMultiplier -= change;
-        yield return new WaitForSeconds(dampenedDuration);
-        elementApplicationMultiplier += change;
-        dampenedCount--;
-    }
-
-    IEnumerator OvergrownCoroutine(float strength)
-    {
-        if (overgrownCount >= overgrownMax) yield break;
-        overgrownCount++;
-        float change = staggerScript.StaggerMultiplier * strength;
-        staggerScript.SetStaggerMultiplier(staggerScript.StaggerMultiplier - change);
-        yield return new WaitForSeconds(overgrownDuration);
-        staggerScript.SetStaggerMultiplier(staggerScript.StaggerMultiplier + change);
-        overgrownCount--;
-    }
-
-    IEnumerator BleedCoroutine(float strength)
-    {
-        poisonedCount++;
-        float poisonEndTime = Time.time + bleedDuration;
-        while (Time.time < poisonEndTime)
-        {
-            yield return new WaitForSeconds(bleedTickSpeed / strength);
-            healthScript.TakeDamage(Mathf.RoundToInt(strength), Element.Physical, transform.position - Vector3.down);
-        }
-        poisonedCount--;
+        if (!stackCounts.ContainsKey(debuff)) return;
+        stackCounts[debuff]--;
+        if (debuffBar != null) debuffBar.RemoveDebuff(debuff.Sprite, stackCounts[debuff]);
     }
 
     public void InflictElement(Element element, int amount, float strength)
     {
         if (!elementProgressList.ContainsKey(element))
-        {
             elementProgressList.Add(element, new ());
-        }
-        ElementProgress debuff = elementProgressList[element];
 
-        if (!debuff.IncrementAmount(amount)) return;
+        ElementProgress progress = elementProgressList[element];
+        if (!progress.IncrementAmount(amount)) return;
+
         switch (element)
         {
-            case Element.Fire: StartCoroutine(BurnedCoroutine(strength)); break;
-            case Element.Electric: StartCoroutine(ElectrocutedCoroutine(strength)); break;
-            case Element.Water: StartCoroutine(DampenedCoroutine(strength)); break;
-            case Element.Nature: StartCoroutine(OvergrownCoroutine(strength)); break;
-            case Element.Physical: StartCoroutine(BleedCoroutine(strength)); break;
+            case Element.Fire: burnedDefinition.TriggerDebuff(strength, this); break;
+            case Element.Electric: electrocutedDefinition.TriggerDebuff(strength, this); break;
+            case Element.Water: dampenedDefinition.TriggerDebuff(strength, this); break;
+            case Element.Nature: overgrownDefinition.TriggerDebuff(strength, this); break;
+            case Element.Physical: bleedDefinition.TriggerDebuff(strength, this); break;
         }
     }
 
     public void InflictDebuff(Debuff debuff, float duration, float strength)
     {
-        switch (debuff)
-        {
-            case Debuff.Slowed: StartCoroutine(SlowedCoroutine(duration, strength)); break;
-            case Debuff.Weakened: StartCoroutine(WeakenedCoroutine(duration, strength)); break;
-            case Debuff.Crippled: StartCoroutine(CrippledCoroutine(duration, strength)); break;
-        }
+        debuff.TriggerDebuff(duration, strength, this);
     }
 
-    public void RunDebuffCoroutine(IEnumerator coroutine)
-    {
-        StartCoroutine(coroutine);
-    }
+    public void RunDebuffCoroutine(IEnumerator coroutine) => StartCoroutine(coroutine);
 }
-
-public enum Debuff { None, Slowed, Weakened, Crippled }
 
 public class ElementProgress
 {

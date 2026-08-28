@@ -2,10 +2,6 @@ using System;
 using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
-using System.Reflection.Metadata.Ecma335;
-using NUnit.Framework;
-using TMPro;
-using Unity.VisualScripting;
 using UnityEngine;
 using UnityEngine.Events;
 
@@ -151,7 +147,7 @@ public class Player : Being
 
     void DealDamage(Collider2D[] colliders, AttackData attackData)
     {
-        colliders.ToList().ForEach(collider =>
+        foreach (Collider2D collider in colliders)
         {
             if (collider.gameObject.Equals(gameObject)) return;
             if (collider.GetComponent<Health>() is Health health)
@@ -177,10 +173,10 @@ public class Player : Being
             {
                 DebuffData data = attackData.DebuffData;
                 
-                if (data.Debuff == Debuff.None) return;
+                if (!data.Debuff) return;
                 debuffManager.InflictDebuff(data.Debuff, data.Duration, data.Strength);
             }
-        });
+        }
     }
 
     void HandleDash()

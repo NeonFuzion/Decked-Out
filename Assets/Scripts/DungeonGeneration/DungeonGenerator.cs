@@ -13,7 +13,7 @@ public class DungeonGenerator : MonoBehaviour
     [SerializeField] GameObject player, roomObjectParent, dungeonCreator;
     [SerializeField] GameObject[] enemies;
     [SerializeField] ItemSO[] lootPool;
-    [SerializeField] GameObject[] roomTransitions;
+    [SerializeField] RoomTransition[] roomTransitions;
     [SerializeField] DungeonRoomLayout[] layouts, specialLayouts;
     [SerializeField] UnityEvent onRoomCleared;
     [SerializeField] UnityEvent<DungeonRoom[]> onCreateRooms;
@@ -82,8 +82,7 @@ public class DungeonGenerator : MonoBehaviour
 
     void PlaceTiles(List<TileInfo> tiles, Tilemap tilemap)
     {
-        foreach (TileInfo tile in tiles)
-            tilemap.SetTile(tile.Position, tile.Tile);
+        tilemap.SetTiles(tiles.Select(t => t.Position).ToArray(), tiles.Select(t => t.Tile).ToArray());
     }
 
     void GeneratePath(DungeonRoom oldRoom, Vector2 lastDirection, int currentPathLength, int pathLength)
@@ -132,22 +131,24 @@ public class DungeonGenerator : MonoBehaviour
         DungeonRoomLayout roomLayout = currentRoom.DungeonRoomLayout;
 
         List<Vector2> transitionPositions = roomLayout.RoomTransitionPositions;
-        GameObject transition;
+        RoomTransition transition;
         for (int i = 0; i < transitionPositions.Count; i++)
         {
             transition = roomTransitions[i];
             transition.transform.position = transitionPositions[i];
-            transition.GetComponent<RoomTransition>().ResetBarrier();
+            transition.ResetBarrier();
         }
 
         wallTilemap.ClearAllTiles();
         floorTilemap.ClearAllTiles();
         PlaceTiles(roomLayout.FloorTiles, floorTilemap);
-        PlaceTiles(roomLayout.WallTiles, wallTilemap);
-        if (!exits.Contains(Direction.North)) PlaceTiles(roomLayout.NorthExitTiles, wallTilemap);
-        if (!exits.Contains(Direction.East)) PlaceTiles(roomLayout.EastExitTiles, wallTilemap);
-        if (!exits.Contains(Direction.South)) PlaceTiles(roomLayout.SouthExitTiles, wallTilemap);
-        if (!exits.Contains(Direction.West)) PlaceTiles(roomLayout.WestExitTiles, wallTilemap);
+
+        List<TileInfo> wallTiles = new(roomLayout.WallTiles);
+        if (!exits.Contains(Direction.North)) wallTiles.AddRange(roomLayout.NorthExitTiles);
+        if (!exits.Contains(Direction.East)) wallTiles.AddRange(roomLayout.EastExitTiles);
+        if (!exits.Contains(Direction.South)) wallTiles.AddRange(roomLayout.SouthExitTiles);
+        if (!exits.Contains(Direction.West)) wallTiles.AddRange(roomLayout.WestExitTiles);
+        PlaceTiles(wallTiles, wallTilemap);
 
         switch (direction)
         {
@@ -161,7 +162,7 @@ public class DungeonGenerator : MonoBehaviour
         for (int i = 0; i < 4; i++)
         {
             bool containsExit = exits.Contains((Direction)i);
-            roomTransitions[i].SetActive(containsExit);
+            roomTransitions[i].gameObject.SetActive(containsExit);
         }
 
         for (int i = roomObjectParent.transform.childCount - 1; i >= 0; i--)
@@ -179,11 +180,10 @@ public class DungeonGenerator : MonoBehaviour
             script.LoadData(currentRoom.RoomObjects[i], this);
         }
 
-        foreach (GameObject roomTransition in roomTransitions)
+        foreach (RoomTransition roomTransition in roomTransitions)
         {
-            RoomTransition script = roomTransition.GetComponent<RoomTransition>();
-            if (currentRoom.IsSafe) script.ResetBarrier();
-            else script.LockBarrier();
+            if (currentRoom.IsSafe) roomTransition.ResetBarrier();
+            else roomTransition.LockBarrier();
         }
 
         if (currentRoom.IsSafe) return;

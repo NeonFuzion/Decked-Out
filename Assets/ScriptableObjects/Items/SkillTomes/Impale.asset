@@ -13,7 +13,7 @@ MonoBehaviour:
   m_Name: Impale
   m_EditorClassIdentifier: Assembly-CSharp::ImpaleSkill
   itemName: Impale
-  description: Impale a nearby target with a large ice crystal and applies Slowness
+  description: Impale a nearby target with a large ice crystal and applies Slowed
   sprite: {fileID: 672505362, guid: ef34d59f4ae4b7247ac9f028d62c1c2b, type: 3}
   ingredients: []
   resourceCost: 25
@@ -23,7 +23,7 @@ MonoBehaviour:
   debuffData:
     duration: 15
     strength: 0.6
-    debuff: 0
+    debuff: {fileID: 11400000, guid: c6ff8d664da7f7b4dadf1f46b1051f1e, type: 2}
   prefabParticleSystem: {fileID: 0}
   damageStaggerPairs:
   - damage: 23
