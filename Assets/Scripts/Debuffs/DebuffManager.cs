@@ -7,11 +7,11 @@ public class DebuffManager : MonoBehaviour
 {
     [SerializeField] float elementApplicationMultiplier = 1;
     [SerializeField] ElementalDebuff burnedDefinition, electrocutedDefinition, dampenedDefinition, overgrownDefinition, bleedDefinition;
-    [SerializeField] DebuffBar debuffBar;
     [SerializeField] Movement movementScript;
     [SerializeField] Health healthScript;
     [SerializeField] Stagger staggerScript;
 
+    DebuffBar debuffBar;
     Dictionary<Debuff, int> stackCounts;
     Dictionary<Element, ElementProgress> elementProgressList;
 
@@ -28,50 +28,56 @@ public class DebuffManager : MonoBehaviour
 
     void Update() { }
 
-    public int GetStackCount(Debuff debuff)
+    IEnumerator DebuffCoroutine(Debuff debuff, float duration, float strength)
     {
-        if (!stackCounts.ContainsKey(debuff)) return 0;
-        return stackCounts[debuff];
-    }
+        yield return StartCoroutine(debuff.DebuffCoroutine(duration, strength, this));
 
-    public void IncrementStackCount(Debuff debuff)
-    {
-        if (!stackCounts.ContainsKey(debuff)) return;
-        stackCounts[debuff]++;
-        if (debuffBar != null) debuffBar.AddDebuff(debuff.Sprite, stackCounts[debuff]);
-    }
+        int count = --stackCounts[debuff];
+        debuffBar?.IncrementDebuff(debuff, count);
 
-    public void DecrementStackCount(Debuff debuff)
-    {
-        if (!stackCounts.ContainsKey(debuff)) return;
-        stackCounts[debuff]--;
-        if (debuffBar != null) debuffBar.RemoveDebuff(debuff.Sprite, stackCounts[debuff]);
+        if (count > 0) yield break;
+        stackCounts.Remove(debuff);
     }
 
     public void InflictElement(Element element, int amount, float strength)
     {
         if (!elementProgressList.ContainsKey(element))
             elementProgressList.Add(element, new ());
-
         ElementProgress progress = elementProgressList[element];
-        if (!progress.IncrementAmount(amount)) return;
 
-        switch (element)
+        if (!progress.IncrementAmount(amount)) return;
+        ElementalDebuff elementalDebuff = element switch 
         {
-            case Element.Fire: burnedDefinition.TriggerDebuff(strength, this); break;
-            case Element.Electric: electrocutedDefinition.TriggerDebuff(strength, this); break;
-            case Element.Water: dampenedDefinition.TriggerDebuff(strength, this); break;
-            case Element.Nature: overgrownDefinition.TriggerDebuff(strength, this); break;
-            case Element.Physical: bleedDefinition.TriggerDebuff(strength, this); break;
-        }
+            Element.Fire => burnedDefinition,
+            Element.Electric => electrocutedDefinition,
+            Element.Water => dampenedDefinition,
+            Element.Nature => overgrownDefinition,
+            Element.Physical => bleedDefinition,
+            _ => null
+        };
+
+        if (!elementalDebuff) return;
+        InflictDebuff(elementalDebuff, 0, strength);
     }
 
     public void InflictDebuff(Debuff debuff, float duration, float strength)
     {
-        debuff.TriggerDebuff(duration, strength, this);
+        if (stackCounts.ContainsKey(debuff))
+        {
+            if (stackCounts[debuff] >= debuff.MaxStackCount) return;
+            stackCounts[debuff]++;
+        }
+        else
+        {
+            stackCounts.Add(debuff, 1);
+        }
+        StartCoroutine(DebuffCoroutine(debuff, duration, strength));
     }
 
-    public void RunDebuffCoroutine(IEnumerator coroutine) => StartCoroutine(coroutine);
+    public void SetDebuffBar(DebuffBar debuffBar)
+    {
+        this.debuffBar = debuffBar;
+    }
 }
 
 public class ElementProgress

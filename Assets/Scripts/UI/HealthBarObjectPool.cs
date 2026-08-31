@@ -28,7 +28,7 @@ public class HealthBarObjectPool : MonoBehaviour
         
     }
 
-    public HealthBar RetrieveHealthBar(Transform target, Health healthScript, bool isMoving, Stagger stagger = null)
+    public HealthBar RetrieveHealthBar(Transform target, Health healthScript, bool isMoving, Stagger stagger = null, DebuffManager debuffManager = null)
     {
         HealthBar healthBar = healthBars.Find(bar => !bar.gameObject.activeInHierarchy);
         
@@ -39,6 +39,7 @@ public class HealthBarObjectPool : MonoBehaviour
         }
 
         stagger?.SetStaggerBar(healthBar.GetComponent<StaggerBar>());
+        debuffManager?.SetDebuffBar(healthBar.GetComponent<DebuffBar>());
 
         healthScript.OnHealthChanged.AddListener(healthBar.SetFill);
         healthBar.transform.position = target.position;

@@ -148,22 +148,12 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::DebuffManager
   elementApplicationMultiplier: 1
-  bleedTickSpeed: 0.5
-  bleedDuration: 7
-  burnTickSpeed: 0.5
-  burnedDuration: 10
-  electrocutedTickSpeed: 0.5
-  electrocutedDuration: 10
-  overgrownDuration: 15
-  dampenedDuration: 20
-  slownessMax: 1
-  weakenedMax: 3
-  crippledMax: 1
-  burnedMax: 1
-  electrocutedMax: 1
-  dampenedMax: 3
-  overgrownMax: 1
-  poisonedMax: 3
+  burnedDefinition: {fileID: 11400000, guid: a8e644de62a909640966a7a634f0d3c2, type: 2}
+  electrocutedDefinition: {fileID: 11400000, guid: f6f502a443c5ad94789edff7b56bd541, type: 2}
+  dampenedDefinition: {fileID: 11400000, guid: 32afd0c64d429aa4695311b1bfc5da85, type: 2}
+  overgrownDefinition: {fileID: 11400000, guid: 76aead1826721f141906960a58f9eecc, type: 2}
+  bleedDefinition: {fileID: 11400000, guid: 7c440c56d3cd0164caa336c32e669cdf, type: 2}
+  debuffBar: {fileID: 0}
   movementScript: {fileID: 368623149862603282}
   healthScript: {fileID: 5754510934464056380}
   staggerScript: {fileID: 4402656590818373220}

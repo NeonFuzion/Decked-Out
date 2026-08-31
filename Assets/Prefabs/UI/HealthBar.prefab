@@ -93,6 +93,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: af44969ed60f43f469b53939447e3e12, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::DebuffBar
+  debuffBarParent: {fileID: 4822832063914050016}
   debuffIconPrefab: {fileID: 8507605211881283916, guid: 7dd4ae13da6be134db6f204babd893a2, type: 3}
 --- !u!114 &2758543270223209409
 MonoBehaviour:

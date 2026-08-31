@@ -8,30 +8,27 @@ public class DebuffBar : MonoBehaviour
     [SerializeField] Transform debuffBarParent;
     [SerializeField] GameObject debuffIconPrefab;
 
-    readonly Dictionary<Sprite, GameObject> icons = new ();
+    readonly Dictionary<Debuff, GameObject> icons = new ();
 
-    public void AddDebuff(Sprite sprite, int stackCount)
+    public void IncrementDebuff(Debuff debuff, int stackCount)
     {
-        if (!icons.TryGetValue(sprite, out GameObject icon))
+        if (stackCount > 0)
         {
-            icon = Instantiate(debuffIconPrefab, debuffBarParent);
-            icon.GetComponent<Image>().sprite = sprite;
-            icons[sprite] = icon;
-        }
-        icon.GetComponentInChildren<TextMeshProUGUI>().text = stackCount.ToString();
-    }
-
-    public void RemoveDebuff(Sprite sprite, int stackCount)
-    {
-        if (!icons.TryGetValue(sprite, out GameObject icon)) return;
-        if (stackCount <= 0)
-        {
-            Destroy(icon);
-            icons.Remove(sprite);
+            if (!icons.TryGetValue(debuff, out GameObject icon))
+            {
+                icon = DebuffIconObjectPool.Instance.RetrieveItem();
+                icon.SetActive(true);
+                icon.transform.SetParent(debuffBarParent);
+                icon.GetComponent<Image>().sprite = debuff.Sprite;
+                icons.Add(debuff, icon);
+            }
+            icon.GetComponentInChildren<TextMeshProUGUI>().text = stackCount.ToString();
         }
         else
         {
-            icon.GetComponentInChildren<TextMeshProUGUI>().text = stackCount.ToString();
+            GameObject icon = icons[debuff];
+            icon.transform.SetParent(null);
+            DebuffIconObjectPool.Instance.ReturnItem(icon);
         }
     }
 }
