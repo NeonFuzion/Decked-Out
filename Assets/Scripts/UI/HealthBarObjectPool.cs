@@ -38,7 +38,10 @@ public class HealthBarObjectPool : MonoBehaviour
             healthBars.Add(healthBar);
         }
 
-        stagger?.SetStaggerBar(healthBar.GetComponent<StaggerBar>());
+        StaggerBar staggerBar = healthBar.GetComponent<StaggerBar>();
+        staggerBar.Initialize();
+        stagger?.SetStaggerBar(staggerBar);
+
         debuffManager?.SetDebuffBar(healthBar.GetComponent<DebuffBar>());
 
         healthScript.OnHealthChanged.AddListener(healthBar.SetFill);

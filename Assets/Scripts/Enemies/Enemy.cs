@@ -10,6 +10,7 @@ public abstract class Enemy : Being
     protected Transform target;
     protected Health health;
     protected Stagger stagger;
+    protected DebuffManager debuffManager;
     protected Movement movementScript;
 
     protected abstract int IdleAnim { get; }
@@ -26,10 +27,11 @@ public abstract class Enemy : Being
         BeingType = BeingType.Hostile;
 
         stagger = GetComponent<Stagger>();
+        debuffManager = GetComponent<DebuffManager>();
         health = GetComponent<Health>();
         movementScript = GetComponent<Movement>();
 
-        healthBar = HealthBarObjectPool.Instance.RetrieveHealthBar(healthBarTarget, health, true, stagger);
+        healthBar = HealthBarObjectPool.Instance.RetrieveHealthBar(healthBarTarget, health, true, stagger, debuffManager);
     }
 
     // Update is called once per frame

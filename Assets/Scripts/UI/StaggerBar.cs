@@ -11,8 +11,7 @@ public class StaggerBar : MonoBehaviour
 
     void Start()
     {
-        targetFill = 1f;
-        fill.fillAmount = targetFill;
+        Initialize();
     }
 
     void Update()
@@ -21,10 +20,11 @@ public class StaggerBar : MonoBehaviour
         fill.fillAmount = Mathf.Lerp(fill.fillAmount, targetFill, lerpSpeed * Time.deltaTime);
     }
 
-    public void Initialize(float fillAmount)
+    public void Initialize()
     {
-        targetFill = fillAmount;
-        fill.fillAmount = fillAmount;
+        targetFill = 1;
+        fill.color = normalColor;
+        fill.fillAmount = 1;
     }
 
     public void SetFill(float percentage)

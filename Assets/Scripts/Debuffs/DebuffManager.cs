@@ -30,12 +30,11 @@ public class DebuffManager : MonoBehaviour
 
     IEnumerator DebuffCoroutine(Debuff debuff, float duration, float strength)
     {
+        debuffBar?.IncrementDebuff(debuff, ++stackCounts[debuff]);
         yield return StartCoroutine(debuff.DebuffCoroutine(duration, strength, this));
+        debuffBar?.IncrementDebuff(debuff, --stackCounts[debuff]);
 
-        int count = --stackCounts[debuff];
-        debuffBar?.IncrementDebuff(debuff, count);
-
-        if (count > 0) yield break;
+        if (stackCounts[debuff] > 0) yield break;
         stackCounts.Remove(debuff);
     }
 

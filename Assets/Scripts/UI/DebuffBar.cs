@@ -14,13 +14,20 @@ public class DebuffBar : MonoBehaviour
     {
         if (stackCount > 0)
         {
-            if (!icons.TryGetValue(debuff, out GameObject icon))
+            GameObject icon;
+            if (icons.ContainsKey(debuff))
+            {
+                icon = icons[debuff];
+            }
+            else
             {
                 icon = DebuffIconObjectPool.Instance.RetrieveItem();
-                icon.SetActive(true);
-                icon.transform.SetParent(debuffBarParent);
-                icon.GetComponent<Image>().sprite = debuff.Sprite;
                 icons.Add(debuff, icon);
+                icon.SetActive(true);
+
+                icon.GetComponentInChildren<Image>().sprite = debuff.Sprite;
+                icon.transform.SetParent(debuffBarParent);
+                icon.transform.localScale = Vector3.one;
             }
             icon.GetComponentInChildren<TextMeshProUGUI>().text = stackCount.ToString();
         }
