@@ -107,19 +107,20 @@ public class InventoryInterface : MonoBehaviour
     void DropItem(int index, SlotType slotType)
     {
         if (index == lastHeldItemIndex && slotType == lastHeldItemSlotType) return;
-        ItemStack oldItem = null, newItem = null;
-        switch (lastHeldItemSlotType)
+        ItemStack oldItem = lastHeldItemSlotType switch
         {
-            case SlotType.Equipment: oldItem = ItemStack.ToStack(inventory.GetEquipmentAtIndex(lastHeldItemIndex)); break;
-            case SlotType.Item: oldItem = inventory.GetItemAtIndex(lastHeldItemIndex); break;
-            case SlotType.Consumable: oldItem = inventory.GetHotbarItemAtIndex(lastHeldItemIndex); break;
-        }
-        switch (slotType)
+            SlotType.Equipment => ItemStack.ToStack(inventory.GetEquipmentAtIndex(lastHeldItemIndex)),
+            SlotType.Item => inventory.GetItemAtIndex(lastHeldItemIndex),
+            SlotType.Consumable => inventory.GetHotbarItemAtIndex(lastHeldItemIndex),
+            _ => null
+        };
+        ItemStack newItem = slotType switch
         {
-            case SlotType.Equipment: newItem = ItemStack.ToStack(inventory.GetEquipmentAtIndex(index)); break;
-            case SlotType.Item: newItem = inventory.GetItemAtIndex(index); break;
-            case SlotType.Consumable: newItem = inventory.GetHotbarItemAtIndex(index); break;
-        }
+            SlotType.Equipment => ItemStack.ToStack(inventory.GetEquipmentAtIndex(index)),
+            SlotType.Item => inventory.GetItemAtIndex(index),
+            SlotType.Consumable => inventory.GetHotbarItemAtIndex(index),
+            _ => null
+        };
 
         SlotType trueOldItemSlotType = SlotType.None, trueNewItemSlotType = SlotType.None;
         switch (oldItem.Item.ItemSO)
@@ -139,13 +140,13 @@ public class InventoryInterface : MonoBehaviour
 
         bool areSlotsEqual = slotType == lastHeldItemSlotType;
         if (trueNewItemSlotType != SlotType.None && trueNewItemSlotType != trueOldItemSlotType && !areSlotsEqual) return;
-        bool isSuccessful = false;
-        switch (slotType)
+        bool isSuccessful = slotType switch
         {
-            case SlotType.Equipment: isSuccessful = inventory.AddEquipmentAtIndex(oldItem.Item as Equipment, index, out _, areSlotsEqual); break;
-            case SlotType.Consumable: isSuccessful = inventory.AddHotbarItemAtIndex(oldItem, index, out _); break;
-            case SlotType.Item: isSuccessful = inventory.AddItemAtIndex(oldItem, index, out _); break;
-        }
+            SlotType.Equipment => inventory.AddEquipmentAtIndex(oldItem.Item as Equipment, index, out _, areSlotsEqual),
+            SlotType.Consumable => inventory.AddHotbarItemAtIndex(oldItem, index, out _),
+            SlotType.Item => inventory.AddItemAtIndex(oldItem, index, out _),
+            _ => false
+        };
 
         if (!isSuccessful) return;
         if (newItem != null && newItem.Item != null)

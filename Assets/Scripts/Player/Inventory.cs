@@ -372,13 +372,12 @@ public class ItemStack
     public static ItemStack ToStack(ItemSO itemSO, int amount = 1)
     {
         if (!itemSO) return null;
-        Item item = null;
-        switch (itemSO)
+        Item item = itemSO switch
         {
-            case ArmorSO armorSO: item = new Equipment(armorSO); break;
-            case SkillTomeSO skillTomeSO: item = new SkillTome(skillTomeSO); break;
-            default: item = new (itemSO); break;
-        }
+            ArmorSO armorSO => new Equipment(armorSO),
+            SkillTomeSO skillTomeSO => new SkillTome(skillTomeSO),
+            _ => new (itemSO)
+        };
         return new (item, amount);
     }
 }

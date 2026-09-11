@@ -8,7 +8,7 @@ public abstract class SkillTomeSO : EquipmentSO
     [SerializeField] CombatResource combatResource;
     [SerializeField] Element element;
     [SerializeField] DebuffData debuffData;
-    [SerializeField] GameObject prefabParticleSystem;
+    [SerializeField] GameObject skillObjectPrefab;
     [SerializeField] AttackBaseData[] damageStaggerPairs;
 
     public int ResourceCost { get => resourceCost; }
@@ -16,10 +16,8 @@ public abstract class SkillTomeSO : EquipmentSO
     public CombatResource CombatResource { get => combatResource; }
     public Element Element { get => element; }
     public DebuffData DebuffData => debuffData;
-    public GameObject PrefabParticleSystem => prefabParticleSystem;
+    public GameObject SkillObjectPrefab => skillObjectPrefab;
     public AttackBaseData[] DamageStaggerPairs { get => damageStaggerPairs; }
-
-    public abstract void ActivateEffects(HotbarManager hotbarManager, int index);
 }
 
 public enum CombatResource { None, Mana, Soul, Adrenaline }

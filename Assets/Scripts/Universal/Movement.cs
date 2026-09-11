@@ -5,13 +5,13 @@ using UnityEngine.Events;
 
 public class Movement : MonoBehaviour
 {
-    [SerializeField] float knockbackResistance = 0, movementSpeed = 5;
+    [SerializeField] float knockbackResistance = 0, movementSpeed = 5, accelerationRate = 100, decelerationRate = 100;
     [SerializeField] UnityEvent onKnockbackStarted, onKnockbackEnded;
     
     bool isActive;
 
     Rigidbody2D rigidbody;
-    Vector2 movementInput;
+    Vector2 movementInput, currentVelocity;
 
     public float MovementSpeed => movementSpeed;
 
@@ -30,7 +30,13 @@ public class Movement : MonoBehaviour
     void FixedUpdate()
     {
         if (!isActive) return;
-        rigidbody.linearVelocity = movementInput;
+        float xAcceleration = (movementInput.x == 0 ? decelerationRate : accelerationRate) * Time.fixedDeltaTime;
+        float yAcceleration = (movementInput.y == 0 ? decelerationRate : accelerationRate) * Time.fixedDeltaTime;
+
+        currentVelocity.x = Mathf.MoveTowards(currentVelocity.x, movementInput.x, xAcceleration);
+        currentVelocity.y = Mathf.MoveTowards(currentVelocity.y, movementInput.y, yAcceleration);
+
+        rigidbody.linearVelocity = currentVelocity;
     }
 
     IEnumerator KnockbackCoroutine(Vector2 incomingAttack, float knockback)
@@ -76,5 +82,15 @@ public class Movement : MonoBehaviour
     public void SetSpeed(float movementSpeed)
     {
         this.movementSpeed = movementSpeed;
+    }
+
+    public void SetAcceleration(float accelerationRate)
+    {
+        this.accelerationRate = accelerationRate;
+    }
+
+    public void SetDeceleration(float decelerationRate)
+    {
+        this.decelerationRate = decelerationRate;
     }
 }

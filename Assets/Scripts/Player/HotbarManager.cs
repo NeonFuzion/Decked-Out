@@ -19,8 +19,7 @@ public class HotbarManager : MonoBehaviour
     Inventory inventory;
     ConsumablesSO[] hotbar;
     SkillTomeSO[] skillBar;
-
-    ParticleSystem[] particleSystems;
+    SkillObject[] skillObjects;
 
     public Shooter Shooter => shooter;
     public Transform SkillParent => skillParent;
@@ -29,7 +28,7 @@ public class HotbarManager : MonoBehaviour
     {
         hotbar = new ConsumablesSO[4];
         skillBar = new SkillTomeSO[4];
-        particleSystems = new ParticleSystem[4];
+        skillObjects = new SkillObject[4];
         hotbarCooldowns = new float[4];
         skillCooldowns = new float[4];
         inventory = GetComponent<Inventory>();
@@ -58,11 +57,10 @@ public class HotbarManager : MonoBehaviour
             {
                 skillBar[i] = skillTome;
 
-                if (!skillTome.PrefabParticleSystem) continue;
-                Destroy(particleSystems[i]?.gameObject);
-                GameObject particleSystemHolder = Instantiate(skillTome.PrefabParticleSystem, skillParent);
-                particleSystems[i] = particleSystemHolder.GetComponent<ParticleSystem>();
-                particleSystemHolder.transform.SetParent(skillParent);
+                Destroy(skillObjects[i]?.gameObject);
+                GameObject skillObject = Instantiate(skillTome.SkillObjectPrefab, skillParent);
+                skillObjects[i] = skillObject.GetComponent<SkillObject>();
+                skillObject.transform.SetParent(skillParent);
             }
         }
         for (int i = 0; i < 4; i++)
@@ -88,7 +86,7 @@ public class HotbarManager : MonoBehaviour
         if (skillCooldowns[index] > 0) return;
         if (!player.ConsumeMana(skillTomeSO.ResourceCost)) return;
         skillCooldowns[index] = skillTomeSO.Cooldown;
-        skillTomeSO.ActivateEffects(this, index);
+        skillObjects[index].ActivateSkill();
         onActivateSkill?.Invoke(index);
     }
 
@@ -109,10 +107,5 @@ public class HotbarManager : MonoBehaviour
     public void RunCoroutine(IEnumerator coroutine)
     {
         StartCoroutine(coroutine);
-    }
-
-    public ParticleSystem GetParticleSystem(int index)
-    {
-        return particleSystems[index];
     }
 }
