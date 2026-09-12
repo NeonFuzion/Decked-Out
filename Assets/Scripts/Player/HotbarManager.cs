@@ -4,6 +4,7 @@ using System.Collections.Generic;
 using System.Linq;
 using UnityEngine;
 using UnityEngine.Events;
+using UnityEngine.InputSystem;
 
 public class HotbarManager : MonoBehaviour
 {
@@ -55,11 +56,13 @@ public class HotbarManager : MonoBehaviour
             if (!skillTome) skillBar[i] = null;
             else if (skillBar[i] != skillTome)
             {
+                if (skillBar[i] == skillTome) continue;
                 skillBar[i] = skillTome;
 
                 Destroy(skillObjects[i]?.gameObject);
                 GameObject skillObject = Instantiate(skillTome.SkillObjectPrefab, skillParent);
                 skillObjects[i] = skillObject.GetComponent<SkillObject>();
+                skillObjects[i].Initialize(skillTome, this);
                 skillObject.transform.SetParent(skillParent);
             }
         }
@@ -77,7 +80,7 @@ public class HotbarManager : MonoBehaviour
         currentConsumable = hotbar[hotbarIndex];
     }
 
-    public void ActivateSkill(int index)
+    public void ActivateSkill(int index, InputActionPhase inputPhase)
     {
         if (index < 0 || index >= skillBar.Length) return;
         SkillTomeSO skillTomeSO = skillBar[index];
@@ -86,7 +89,7 @@ public class HotbarManager : MonoBehaviour
         if (skillCooldowns[index] > 0) return;
         if (!player.ConsumeMana(skillTomeSO.ResourceCost)) return;
         skillCooldowns[index] = skillTomeSO.Cooldown;
-        skillObjects[index].ActivateSkill();
+        skillObjects[index].ActivateSkill(inputPhase);
         onActivateSkill?.Invoke(index);
     }
 

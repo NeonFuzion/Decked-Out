@@ -94,6 +94,7 @@ public abstract class Enemy : Being
         animator.CrossFade(IdleAnim, 0, 0);
         movementScript.SetImmobile();
         oldDefense = health.Defense;
+        health.SetInvincibility(false);
         health.SetDefense(Mathf.RoundToInt(oldDefense * staggerDefenseMultiplier));
     }
 

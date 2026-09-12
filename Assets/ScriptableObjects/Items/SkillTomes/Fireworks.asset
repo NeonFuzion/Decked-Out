@@ -20,10 +20,15 @@ MonoBehaviour:
   cooldown: 7
   combatResource: 1
   element: 1
-  prefabParticleSystem: {fileID: 995724922430760967, guid: 9ccb9df9a5525ad4d9b7ec6c2071cf44, type: 3}
+  debuffData:
+    duration: 0
+    strength: 0
+    debuff: {fileID: 0}
+  skillObjectPrefab: {fileID: 1521144250319762862, guid: 9ccb9df9a5525ad4d9b7ec6c2071cf44, type: 3}
   damageStaggerPairs:
   - damage: 5
     stagger: 6
+    isDebuffing: 0
   spawnDistance: 4
   radius: 2.5
   tickInterval: 0.1

@@ -66,7 +66,7 @@ public class Slime : Enemy
     {
         if (IsStaggered) return;
         movementScript.SetImmobile();
-        this.health.SetInvincibility(false);
+        health.SetInvincibility(false);
         slimeState = SlimeState.Idle;
         animator.CrossFade(IdleAnim, 0, 0);
         curJumpCD = jumpCD;

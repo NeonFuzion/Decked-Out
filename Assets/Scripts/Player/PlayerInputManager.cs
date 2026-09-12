@@ -5,14 +5,15 @@ using UnityEngine.InputSystem;
 public class PlayerInputManager : MonoBehaviour, PlayerInputConfig.ICombatActions, PlayerInputConfig.IMenuActions, PlayerInputConfig.IDialogueActions, PlayerInputConfig.IPlayerActions
 {
     [SerializeField] UnityEvent onAttack, onDash, onInventory, onMenu, onQuit, onMap, onDialogue, onContinue, onUseConsumable, onMouseDown, onMouseUp;
-    [SerializeField] UnityEvent<int> onHotbar, onSkill;
+    [SerializeField] UnityEvent<int> onHotbar;
+    [SerializeField] UnityEvent<int, InputActionPhase> onSkill;
     [SerializeField] UnityEvent<Vector2> onMovement, onMouse;
 
     PlayerInputConfig config;
 
     void Awake()
     {
-        config = new PlayerInputConfig();
+        config = new ();
         config.Menu.SetCallbacks(this);
         config.Combat.SetCallbacks(this);
         config.Player.SetCallbacks(this);
@@ -46,8 +47,7 @@ public class PlayerInputManager : MonoBehaviour, PlayerInputConfig.ICombatAction
 
     void OnSkill(InputAction.CallbackContext context, int index)
     {
-        if (!IsClicked(context)) return;
-        onSkill?.Invoke(index);
+        onSkill?.Invoke(index, context.phase);
     }
 
     public void OnAttack(InputAction.CallbackContext context)

@@ -2,14 +2,14 @@ using System.Collections;
 using UnityEngine;
 
 [CreateAssetMenu(menuName = "Debuffs/Burned")]
-public class BurnedDebuff : ElementalDebuff
+public class BurnedDebuff : Debuff
 {
     [SerializeField] float tickSpeed = 1;
     float TickSpeed => tickSpeed;
 
-    public override IEnumerator ElementalDebuffCoroutine(float strength, DebuffManager manager)
+    public override IEnumerator DebuffCoroutine(float duration, float strength, DebuffManager manager)
     {
-        float endTime = Time.time + Duration;
+        float endTime = Time.time + duration;
         while (Time.time < endTime)
         {
             yield return new WaitForSeconds(TickSpeed);

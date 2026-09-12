@@ -1,6 +1,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using UnityEngine;
+using UnityEngine.InputSystem;
 
 public class AngleBlastSkillObject : SkillObject
 {
@@ -19,14 +20,15 @@ public class AngleBlastSkillObject : SkillObject
         
     }
 
-    public override void Initialize(SkillTomeSO skillTomeSO)
+    public override void Initialize(SkillTomeSO skillTomeSO, HotbarManager hotbarManager)
     {
         particleSystem = GetComponent<ParticleSystem>();
         skillSO = skillTomeSO as AngleBlastSkillSO;
     }
     
-    public override void ActivateSkill()
+    public override void ActivateSkill(InputActionPhase inputPhase)
     {
+        if (inputPhase != InputActionPhase.Started) return;
         Vector2 playerPos = transform.position;
         Vector2 direction = (MainCamera.MouseWorldPosition() - playerPos).normalized;
 
@@ -42,7 +44,7 @@ public class AngleBlastSkillObject : SkillObject
 
         if (inCone.Count() == 0) return;
         AttackBaseData pair = skillSO.DamageStaggerPairs[0];
-        AttackData attackData = new(skillSO.Element, playerPos, pair.Damage, pair.Stagger, (int)skillSO.KnockbackForce, pair.IsDebuffing ? skillSO.DebuffData : new ());
+        AttackData attackData = new(skillSO.Element, playerPos, pair.Damage, pair.Stagger, (int)skillSO.KnockbackForce, pair.DebuffData);
         EventManager.OnEnemyDataAcquired.Invoke(inCone.ToArray(), attackData);
     }
 }

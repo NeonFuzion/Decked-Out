@@ -41,6 +41,7 @@ public class Health : MonoBehaviour
         if (invincible) return;
         int finalDamage = Mathf.RoundToInt(amount * defenseConstant / (defenseConstant + def));
         hp -= finalDamage;
+        //Debug.Log($"{gameObject.name}: {amount}");
         onHealthChanged?.Invoke((float)hp / maxHp);
         Instantiate(prefabHitEffect).GetComponent<HitEfect>().Initialize(transform.position);
         if (prefabDmgObj) SpawnDamageNumber(attackOrigin, element, finalDamage, false);
@@ -56,6 +57,7 @@ public class Health : MonoBehaviour
     public void Heal(int amount)
     {
         hp = Mathf.Min(hp + Mathf.RoundToInt(amount * healingMultiplier), maxHp);
+        onHealthChanged?.Invoke((float)hp / maxHp);
         if (prefabDmgObj) SpawnDamageNumber(Vector2.down, Element.Physical, amount, true);
     }
 

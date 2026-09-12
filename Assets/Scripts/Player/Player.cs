@@ -149,16 +149,13 @@ public class Player : Being
     {
         foreach (Collider2D collider in colliders)
         {
-            if (collider.gameObject.Equals(gameObject)) return;
+            if (collider.gameObject.Equals(gameObject)) continue;
             if (collider.GetComponent<Health>() is Health health)
             {
-                if (health.IsInvincible) return;
+                if (health.IsInvincible) continue;
                 int damage = Mathf.RoundToInt(attackData.Damage * damageConstant / (damageConstant + CalculateStat(PlayerStat.Attack)));
                 health.TakeDamage(damage, attackData.Element, attackData.Origin);
-                if (health.HP <= 0)
-                {
-                    EventManager.OnKill.Invoke();
-                }
+                if (health.HP <= 0) EventManager.OnKill.Invoke();
             }
             if (collider.GetComponent<Stagger>() is Stagger stagger)
             {
@@ -173,7 +170,7 @@ public class Player : Being
             {
                 DebuffData data = attackData.DebuffData;
                 
-                if (!data.Debuff) return;
+                if (!data.Debuff) continue;
                 debuffManager.InflictDebuff(data.Debuff, data.Duration, data.Strength);
             }
         }
@@ -235,6 +232,7 @@ public class Player : Being
         {
             PlayerStat stat = (PlayerStat)i;
             string statStr = "";
+            // in case your wondering this foreach loop adds spaces before each capital letter so that we can convert "directly" from the enum to a string lol
             foreach (char str in stat.ToString())
             {
                 if (str.ToString().ToUpper().Equals(str)) statStr += " ";
@@ -256,7 +254,6 @@ public class Player : Being
         currentMana = Mathf.Clamp(amount, 0, maxMana);
         onManaChanged?.Invoke(currentMana / maxMana);
     }
-
 
     public void OnDash()
     {
@@ -296,13 +293,13 @@ public class Player : Being
             if (armor == null) continue;
             baseStats[PlayerStat.Defense] += armor.Defense;
 
-            armor.Substats.ToList().ForEach(substat =>
+            foreach (StatBoost substat in armor.Substats)
             {
                 float amount = substat.Amount;
                 PlayerStat stat = substat.Stat;
                 BoostType boostType = Stats.IsPercentage(stat) ? BoostType.Percentage : BoostType.Flat;
                 IncrementStat(stat, amount, boostType);
-            });
+            }
         }
     }
 
@@ -345,9 +342,10 @@ public struct AttackData
     Element element;
     Vector2 origin;
     DebuffData debuffData;
-    int damage, stagger, knockback;
+    int damage, stagger;
+    float knockback;
 
-    public AttackData(Element element, Vector2 origin, int damage, int stagger, int knockback, DebuffData debuffData = new ())
+    public AttackData(Element element, Vector2 origin, int damage, int stagger, float knockback, DebuffData debuffData = new ())
     {
         this.element = element;
         this.origin = origin;
@@ -362,5 +360,5 @@ public struct AttackData
     public DebuffData DebuffData => debuffData;
     public int Damage { get => damage; }
     public int Stagger { get => stagger; }
-    public int Knockback { get => knockback; }
+    public float Knockback { get => knockback; }
 }

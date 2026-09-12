@@ -31,6 +31,8 @@ public class WeaponParent : MonoBehaviour
         inventory = Inventory.Instance;
         animator = transform.GetChild(1).GetComponent<Animator>();
         shooter = GetComponent<Shooter>();
+
+        UpdateWeapon(weapon);
     }
 
     // Update is called once per frame
@@ -65,7 +67,7 @@ public class WeaponParent : MonoBehaviour
 
     public void OnAttackHit()
     {
-        weapon.AttackActionHandle(curAnimIndex, damageOrigin, mousePosition, shooter);
+        weapon.AttackActionHandle(curAnimIndex, transform, mousePosition, shooter);
     }
 
     public void OnAttackFinish()

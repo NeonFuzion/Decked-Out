@@ -1,6 +1,7 @@
 using System.Collections;
 using System.Linq;
 using UnityEngine;
+using UnityEngine.InputSystem;
 
 public class LingeringSkillObject : SkillObject
 {
@@ -20,15 +21,16 @@ public class LingeringSkillObject : SkillObject
         
     }
 
-    public override void Initialize(SkillTomeSO skillTomeSO)
+    public override void Initialize(SkillTomeSO skillTomeSO, HotbarManager hotbarManager)
     {
         particleSystem = GetComponent<ParticleSystem>();
         skillSO = skillTomeSO as LingeringSkillSO;
         skillParent = transform.parent;
     }
     
-    public override void ActivateSkill()
+    public override void ActivateSkill(InputActionPhase inputPhase)
     {
+        if (inputPhase != InputActionPhase.Started) return;
         Vector2 mousePos = MainCamera.MouseWorldPosition();
         Vector2 direction = (mousePos - (Vector2)transform.position).normalized;
         Vector2 spawnPos = (Vector2)transform.position + direction * skillSO.SpawnDistance;
@@ -44,10 +46,11 @@ public class LingeringSkillObject : SkillObject
         MultiTrigger multiTrigger = obj.GetComponent<MultiTrigger>();
         multiTrigger.Initialize(skillSO.TickCount);
         multiTrigger.OnTrigger.AddListener(() => {
-            Collider2D[] colliders = Physics2D.OverlapCircleAll(obj.transform.position, skillSO.Radius).Where(collider => collider.gameObject != obj).ToArray();
-            AttackBaseData damageStaggerPair = skillSO.DamageStaggerPairs[multiTrigger.CurrentTriggerCount];
-            AttackData attackData = new (skillSO.Element, obj.transform.position, damageStaggerPair.Damage, damageStaggerPair.Stagger, skillSO.Knockback, damageStaggerPair.IsDebuffing ? skillSO.DebuffData : new ());
-            EventManager.OnEnemyDataAcquired.Invoke(colliders, attackData);
+            AttackBaseData damageStaggerPair = skillSO.DamageStaggerPairs[0];
+            EventManager.OnEnemyDataAcquired.Invoke(
+                Physics2D.OverlapCircleAll(obj.transform.position, skillSO.Radius),
+                new (skillSO.Element, obj.transform.position, damageStaggerPair.Damage, damageStaggerPair.Stagger, skillSO.Knockback, damageStaggerPair.DebuffData)
+            );
         });
 
         StartCoroutine(VisualLagCoroutine(particleSystem, obj.transform, skillParent));

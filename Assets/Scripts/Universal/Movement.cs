@@ -14,6 +14,8 @@ public class Movement : MonoBehaviour
     Vector2 movementInput, currentVelocity;
 
     public float MovementSpeed => movementSpeed;
+    public float AccelerationRate => accelerationRate;
+    public float DecelerationRate => decelerationRate;
 
     void Awake()
     {
@@ -81,16 +83,31 @@ public class Movement : MonoBehaviour
 
     public void SetSpeed(float movementSpeed)
     {
-        this.movementSpeed = movementSpeed;
+        this.movementSpeed = Mathf.Max(movementSpeed, 0);
+    }
+
+    public void IncrementSpeed(float movementSpeedDelta)
+    {
+        movementSpeed += Mathf.Max(movementSpeedDelta, -movementSpeed);
     }
 
     public void SetAcceleration(float accelerationRate)
     {
-        this.accelerationRate = accelerationRate;
+        this.accelerationRate = Mathf.Max(accelerationRate, 0);
+    }
+
+    public void IncrementAcceleration(float accelerationRateDelta)
+    {
+        accelerationRate += Mathf.Max(accelerationRateDelta, -accelerationRate);
     }
 
     public void SetDeceleration(float decelerationRate)
     {
-        this.decelerationRate = decelerationRate;
+        this.decelerationRate = Mathf.Max(decelerationRate, 0);
+    }
+
+    public void IncrementDeceleration(float decelerationRateDelta)
+    {
+        decelerationRate += Mathf.Max(decelerationRateDelta, -decelerationRate);
     }
 }

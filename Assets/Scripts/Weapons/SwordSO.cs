@@ -20,9 +20,11 @@ public class SwordSO : WeaponSO
     public override void AttackActionHandle(int attackIndex, Transform transform, Vector2 mousePosition, Shooter shooter)
     {
         Vector3 hitPos = transform.right * attackRange;
+        //Debug.Log(hitPos);
         EventManager.OnEnemyDataAcquired.Invoke(
             Physics2D.OverlapCircleAll(transform.position + hitPos, attackRange + 0.5f),
-            new (Element, transform.position, GetDamageByIndex(attackIndex), GetStaggerByIndex(attackIndex), 1)
+            new (Element, transform.position, GetDamageByIndex(attackIndex),
+            GetStaggerByIndex(attackIndex), 1)
         );
     }
 

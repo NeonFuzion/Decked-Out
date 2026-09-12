@@ -13,7 +13,7 @@ GameObject:
   - component: {fileID: 5348578355128864521}
   - component: {fileID: 7558784936284991169}
   m_Layer: 0
-  m_Name: AngleBlast
+  m_Name: AngleBlastSkill
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -61,9 +61,9 @@ ParticleSystem:
   ringBufferMode: 0
   ringBufferLoopRange: {x: 0, y: 1}
   emitterVelocityMode: 1
-  looping: 1
+  looping: 0
   prewarm: 0
-  playOnAwake: 1
+  playOnAwake: 0
   useUnscaledTime: 0
   autoRandomSeed: 1
   startDelay:

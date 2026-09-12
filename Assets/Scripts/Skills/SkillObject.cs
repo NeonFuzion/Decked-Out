@@ -1,4 +1,5 @@
 using UnityEngine;
+using UnityEngine.InputSystem;
 
 public abstract class SkillObject : MonoBehaviour
 {
@@ -14,7 +15,7 @@ public abstract class SkillObject : MonoBehaviour
         
     }
 
-    public abstract void Initialize(SkillTomeSO skillTomeSO);
+    public abstract void Initialize(SkillTomeSO skillTomeSO, HotbarManager hotbarManager);
 
-    public abstract void ActivateSkill();
+    public abstract void ActivateSkill(InputActionPhase inputPhase);
 }
