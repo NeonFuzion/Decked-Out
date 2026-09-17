@@ -16,8 +16,8 @@ public class Player : Being
     Dictionary<PlayerStat, float> resetStats, baseStats, percentageStats, flatStats;
     List<StatBoost> temporaryPercentBuffs, temporaryFlatBuffs;
 
-    int baseSpeed, curSpeed, dashSpdMulti, dashCharges;
-    float curDashTime, dashChargeTime, curDashChargeTime, currentMana, perfectDodgeProgress;
+    int dashSpdMulti, dashCharges;
+    float baseSpeed, curDashTime, dashChargeTime, curDashChargeTime, currentMana, perfectDodgeProgress;
     bool dashing;
 
     Vector2 direction;
@@ -38,8 +38,6 @@ public class Player : Being
 
     private void Awake()
     {
-        baseSpeed = 250;
-        curSpeed = baseSpeed;
         dashSpdMulti = 3;
         curDashTime = 0;
         dashCharges = 3;
@@ -81,7 +79,8 @@ public class Player : Being
         movementScript = GetComponent<Movement>();
         health = GetComponent<Health>();
 
-        animator.SetFloat("MoveSpeed", curSpeed / 400f);
+        animator.SetFloat("MoveSpeed", movementScript.MovementSpeed / 5);
+        baseSpeed = movementScript.MovementSpeed;
         
         EventManager.OnInventoryUpdated.AddListener(UpdateEquipmentStats);
         EventManager.OnEnemyDataAcquired.AddListener(DealDamage);
@@ -100,7 +99,7 @@ public class Player : Being
     void FixedUpdate()
     {
         direction = Movement;
-        movementScript.SetMovement(Movement.normalized * Time.deltaTime * curSpeed);
+        movementScript.SetMovementDirection(Movement);
     }
 
     IEnumerator BuffCoroutine(StatBoost boost, BoostType boostType, float duration)
@@ -121,7 +120,7 @@ public class Player : Being
     {
         health.ToggleInvincibility();
         dashing = !dashing;
-        curSpeed = baseSpeed * (dashing ? dashSpdMulti : 1);
+        movementScript.IncrementSpeed((dashing ? 1 : -1) * (dashSpdMulti - 1) * baseSpeed);
 
         if (dashing) return;
         perfectDodgeProgress = -1;

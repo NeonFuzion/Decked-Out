@@ -24,7 +24,7 @@ MonoBehaviour:
   damageStaggerPairs:
   - damage: 23
     stagger: 20
-    knockback: 0
+    knockback: 2
     debuffData:
       duration: 7
       strength: 0.4

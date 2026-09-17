@@ -10,7 +10,7 @@ public class MovementSkillObject : SkillObject
     Movement movementScript;
 
     bool isActive;
-    float nextTickTime;
+    float nextTickTime, endTick;
 
     // Start is called once before the first execution of Update after the MonoBehaviour is created
     void Start()
@@ -29,6 +29,9 @@ public class MovementSkillObject : SkillObject
             Physics2D.OverlapCircleAll(transform.position, skillSO.DamageRadius),
             new (skillSO.Element, transform.position, attackBase.Damage, attackBase.Stagger, attackBase.Knockback, attackBase.DebuffData)
         );
+
+        if (Time.time < endTick) return;
+        ActivateSkill(InputActionPhase.Canceled);
     }
     
     public override void ActivateSkill(InputActionPhase inputPhase)
@@ -36,18 +39,22 @@ public class MovementSkillObject : SkillObject
         switch (inputPhase)
         {
             case InputActionPhase.Started:
+                if (isActive) break;
                 isActive = true;
                 movementScript.IncrementAcceleration(skillSO.AccelerationDelta);
                 movementScript.IncrementDeceleration(skillSO.DecelerationDelta);
-                movementScript.IncrementDeceleration(skillSO.MaxSpeedDelta);
+                movementScript.IncrementSpeed(skillSO.MaxSpeedDelta);
+                movementScript.SetMovementDirection(MainCamera.MouseWorldPosition() - (Vector2)transform.position);
                 nextTickTime = 0;
+                endTick = Time.time + skillSO.MaxDuration;
                 onActivate?.Invoke();
                 break;
             case InputActionPhase.Canceled:
+                if (!isActive) break;
                 isActive = false;
                 movementScript.IncrementAcceleration(-skillSO.AccelerationDelta);
                 movementScript.IncrementDeceleration(-skillSO.DecelerationDelta);
-                movementScript.IncrementDeceleration(-skillSO.MaxSpeedDelta);
+                movementScript.IncrementSpeed(-skillSO.MaxSpeedDelta);
                 onDeactivate?.Invoke();
                 break;
         }
@@ -57,5 +64,6 @@ public class MovementSkillObject : SkillObject
     {
         skillSO = skillTomeSO as MovementSkillSO;
         movementScript = hotbarManager.GetComponent<Movement>();
+        isActive = false;
     }
 }

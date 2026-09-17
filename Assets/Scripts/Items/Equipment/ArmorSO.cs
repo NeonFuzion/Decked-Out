@@ -15,3 +15,8 @@ public class ArmorSO : EquipmentSO
 }
 
 public enum ArmorPiece { Helmet, Chestplate, Leggings, Boots }
+
+public class Armor
+{
+    StatBoost[] randomSubstats;
+}

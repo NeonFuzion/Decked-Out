@@ -14,7 +14,7 @@ public class DungeonGenerator : MonoBehaviour
     [SerializeField] GameObject[] enemies;
     [SerializeField] ItemSO[] lootPool;
     [SerializeField] RoomTransition[] roomTransitions;
-    [SerializeField] DungeonRoomLayout[] layouts, specialLayouts;
+    [SerializeField] DungeonRoomLayout[] layouts, specialLayouts, singleSpawnLayouts;
     [SerializeField] UnityEvent onRoomCleared;
     [SerializeField] UnityEvent<DungeonRoom[]> onCreateRooms;
     [SerializeField] UnityEvent<Direction> onRoomChanged;
@@ -112,6 +112,11 @@ public class DungeonGenerator : MonoBehaviour
         if (currentPathLength >= pathLength) return;
         for (int i = 0; i < Random.Range(1, 3); i++)
             GeneratePath(newRoom, direction, currentPathLength + 1, pathLength);
+
+        foreach (DungeonRoomLayout roomLayout in singleSpawnLayouts)
+        {
+            roomList[Random.Range(1, roomList.Count)].DungeonRoomLayout = roomLayout;
+        }
     }
 
     public DungeonRoom FindRoomAtPosition(Vector2 position)

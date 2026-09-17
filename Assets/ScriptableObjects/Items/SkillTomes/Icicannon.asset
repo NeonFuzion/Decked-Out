@@ -20,13 +20,13 @@ MonoBehaviour:
   cooldown: 6
   combatResource: 1
   element: 7
-  debuffData:
-    duration: 0
-    strength: 0
-    debuff: {fileID: 0}
   skillObjectPrefab: {fileID: 4765336029870510204, guid: e0a86b3a7d5ccaf4e81c082d5032b268, type: 3}
   damageStaggerPairs:
   - damage: 19
     stagger: 16
-    isDebuffing: 0
+    knockback: 4
+    debuffData:
+      duration: 0
+      strength: 0
+      debuff: {fileID: 0}
   prefabProjectile: {fileID: 1391803176948481848, guid: f1fd91265614b0140b78fd20b7bfacc6, type: 3}

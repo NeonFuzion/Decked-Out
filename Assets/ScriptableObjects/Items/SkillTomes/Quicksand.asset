@@ -10,26 +10,27 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 752c115570a78224baaf760f981eb12a, type: 3}
-  m_Name: Fireworks
+  m_Name: Quicksand
   m_EditorClassIdentifier: Assembly-CSharp::WhirlwindSkillSO
-  itemName: Fireworks
-  description: Create multiple small explosions focused on a medium sized area.
+  itemName: Quicksand
+  description: Reduce inflicts Weakness to enemies around you and deal steady tick
+    damage.
   sprite: {fileID: -137059578, guid: ef34d59f4ae4b7247ac9f028d62c1c2b, type: 3}
   ingredients: []
-  resourceCost: 35
-  cooldown: 7
+  resourceCost: 15
+  cooldown: 5
   combatResource: 1
-  element: 1
-  skillObjectPrefab: {fileID: 1521144250319762862, guid: 9ccb9df9a5525ad4d9b7ec6c2071cf44, type: 3}
+  element: 4
+  skillObjectPrefab: {fileID: 2863966640694511010, guid: 0af424161bfb7624c99b242f403c25d2, type: 3}
   damageStaggerPairs:
   - damage: 5
-    stagger: 6
-    knockback: 2
+    stagger: 4
+    knockback: -1
     debuffData:
-      duration: 0
-      strength: 0
-      debuff: {fileID: 0}
-  spawnDistance: 4
-  radius: 2.5
-  tickInterval: 0.1
-  tickCount: 10
+      duration: 5
+      strength: 0.3
+      debuff: {fileID: 11400000, guid: 2471cec95cf9ea44e9a4a47677a7e032, type: 2}
+  spawnDistance: 0
+  radius: 5
+  tickInterval: 0.5
+  tickCount: 8

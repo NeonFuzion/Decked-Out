@@ -1,0 +1,39 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 636431d66d18c374a830e5d9919b8296, type: 3}
+  m_Name: Glide
+  m_EditorClassIdentifier: Assembly-CSharp::MovementSkillSO
+  itemName: Glide
+  description: Create ice around you for a few seconds that boosts your own movement
+    speed while slowing down enemies, but increases turning time. Can be cancelled
+    early.
+  sprite: {fileID: 672505362, guid: ef34d59f4ae4b7247ac9f028d62c1c2b, type: 3}
+  ingredients: []
+  resourceCost: 15
+  cooldown: 7
+  combatResource: 1
+  element: 7
+  skillObjectPrefab: {fileID: 7849524930877413328, guid: c3778e41f63597447aaad9efe6cffe61, type: 3}
+  damageStaggerPairs:
+  - damage: 2
+    stagger: 2
+    knockback: 1
+    debuffData:
+      duration: 5
+      strength: 0.6
+      debuff: {fileID: 11400000, guid: c6ff8d664da7f7b4dadf1f46b1051f1e, type: 2}
+  <MaxDuration>k__BackingField: 5
+  <AccelerationDelta>k__BackingField: 100
+  <DecelerationDelta>k__BackingField: -90
+  <MaxSpeedDelta>k__BackingField: 8
+  <TickDuration>k__BackingField: 0.5
+  <DamageRadius>k__BackingField: 3

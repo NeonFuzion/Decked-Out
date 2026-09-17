@@ -32,8 +32,8 @@ public class LingeringSkillObject : SkillObject
     {
         if (inputPhase != InputActionPhase.Started) return;
         Vector2 mousePos = MainCamera.MouseWorldPosition();
-        Vector2 direction = (mousePos - (Vector2)transform.position).normalized;
-        Vector2 spawnPos = (Vector2)transform.position + direction * skillSO.SpawnDistance;
+        Vector2 direction = (mousePos - (Vector2)skillParent.position).normalized;
+        Vector2 spawnPos = (Vector2)skillParent.position + direction * skillSO.SpawnDistance;
 
         GameObject obj = particleSystem.gameObject;
         obj.transform.SetParent(null);
@@ -46,19 +46,19 @@ public class LingeringSkillObject : SkillObject
         MultiTrigger multiTrigger = obj.GetComponent<MultiTrigger>();
         multiTrigger.Initialize(skillSO.TickCount);
         multiTrigger.OnTrigger.AddListener(() => {
-            AttackBaseData damageStaggerPair = skillSO.DamageStaggerPairs[0];
+            AttackBaseData attackBase = skillSO.DamageStaggerPairs[0];
             EventManager.OnEnemyDataAcquired.Invoke(
                 Physics2D.OverlapCircleAll(obj.transform.position, skillSO.Radius),
-                new (skillSO.Element, obj.transform.position, damageStaggerPair.Damage, damageStaggerPair.Stagger, skillSO.Knockback, damageStaggerPair.DebuffData)
+                new (skillSO.Element, obj.transform.position, attackBase.Damage, attackBase.Stagger, attackBase.Knockback, attackBase.DebuffData)
             );
         });
 
-        StartCoroutine(VisualLagCoroutine(particleSystem, obj.transform, skillParent));
+        StartCoroutine(VisualLagCoroutine(particleSystem, obj.transform));
     }
 
-    IEnumerator VisualLagCoroutine(ParticleSystem particleSystem, Transform visual, Transform parent)
+    IEnumerator VisualLagCoroutine(ParticleSystem particleSystem, Transform visual)
     {
         yield return new WaitWhile(() => particleSystem.isPlaying);
-        visual.SetParent(parent);
+        visual.SetParent(skillParent);
     }
 }

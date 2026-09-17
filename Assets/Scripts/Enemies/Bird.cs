@@ -31,11 +31,14 @@ public class Bird : Enemy
         {
             case BirdState.Idle:
                 if (IsStaggered) break;
-                transform.localScale = new Vector3(transform.position.x > target.position.x ? 1 : -1, 1);
-                MovementToTarget();
+                transform.localScale = new (Mathf.Sign(transform.position.x - target.position.x), 1);
 
                 if (isResting) break;
-                if (Vector2.Distance(transform.position, target.position) >= minChargeDistance) break;
+                if (Vector2.Distance(transform.position, target.position) >= minChargeDistance)
+                {
+                    MovementToTarget();
+                    break;
+                }
                 animator.CrossFade(chargingAnim, 0, 0);
                 StartCoroutine(ChargeCoroutine());
                 break;

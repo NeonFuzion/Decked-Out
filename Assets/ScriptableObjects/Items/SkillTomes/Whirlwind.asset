@@ -21,17 +21,16 @@ MonoBehaviour:
   cooldown: 6
   combatResource: 1
   element: 3
-  debuffData:
-    duration: 0
-    strength: 0
-    debuff: {fileID: 0}
   skillObjectPrefab: {fileID: 80839937966615522, guid: 26cea2151b1d03d469b086674e684d12, type: 3}
   damageStaggerPairs:
   - damage: 3
     stagger: 4
-    isDebuffing: 0
+    knockback: -5
+    debuffData:
+      duration: 0
+      strength: 0
+      debuff: {fileID: 0}
   spawnDistance: 4
   radius: 2.5
   tickInterval: 0.25
-  knockBack: -5
   tickCount: 12
